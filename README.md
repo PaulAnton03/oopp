@@ -8,7 +8,7 @@ Add your own name (do not add the names for others!) to the section below.
 
 ## Group members
 
-| Profile Picture | Name | paul.el.anton@gmail.com |
+| Profile Picture | Name | Email |
 |---|---|---|
 | ![](https://eu.ui-avatars.com/api/?name=OOPP&length=4&size=50&color=DDD&background=777&font-size=0.325) | Paul Anton | paul.el.anton@gmail.com |
 | <img src="https://c-cl.cdn.smule.com/smule-gg-s-sf-bck1/arr/90/5b/556139f8-efc1-4772-94f0-9af537f2093c_1024.jpg" width="50px"> | Błażej Łytkowski | B.Lytkowski@student.tudelft.nl |
