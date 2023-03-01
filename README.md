@@ -14,6 +14,7 @@ Add your own name (do not add the names for others!) to the section below.
 | <img src="https://c-cl.cdn.smule.com/smule-gg-s-sf-bck1/arr/90/5b/556139f8-efc1-4772-94f0-9af537f2093c_1024.jpg" width="50px"> | Błażej Łytkowski | B.Lytkowski@student.tudelft.nl |
 | <img src="https://secure.gravatar.com/avatar/7545a20464943af6a394bac6c63ec03d?s=800&d=identicon" width="50px">                 | Alex Despan      | A.Despan@student.tudelft.nl | 
 | <img src="https://gitlab.ewi.tudelft.nl/uploads/-/system/user/avatar/5864/avatar.png?width=60">                                | Yusuf Özdemir | y.ozdemir-1@student.tudelft.nl |
+| <img src="https://secure.gravatar.com/avatar/7004ebd2799efa69338653558d7a9808?s=800&d=identicon" width="50px">                 | Radu Andrei Vasile | R.A.Vasile-1@student.tudelft.nl |
 
 <!-- Instructions (remove once assignment has been completed -->
 <!-- - Add (only!) your own name to the table above (use Markdown formatting) -->
