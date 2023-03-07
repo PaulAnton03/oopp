@@ -33,19 +33,43 @@ public class Quote {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    public long id;
+    protected long id;
 
     @OneToOne(cascade = CascadeType.PERSIST)
-    public Person person;
-    public String quote;
+    private Person person;
+    private String quote;
 
     @SuppressWarnings("unused")
-    private Quote() {
+    protected Quote() {
         // for object mappers
     }
 
     public Quote(Person person, String quote) {
         this.person = person;
+        this.quote = quote;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public Person getPerson() {
+        return person;
+    }
+
+    public void setPerson(Person person) {
+        this.person = person;
+    }
+
+    public String getQuote() {
+        return quote;
+    }
+
+    public void setQuote(String quote) {
         this.quote = quote;
     }
 
