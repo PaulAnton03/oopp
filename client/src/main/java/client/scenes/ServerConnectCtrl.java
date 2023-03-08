@@ -24,4 +24,6 @@ public class ServerConnectCtrl {
         //Switch scene
 
     }
+
+    public void showAddCard() { mainCtrl.showAddCard(); }
 }

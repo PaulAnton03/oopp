@@ -10,5 +10,6 @@
       <TextField layoutX="226.0" layoutY="175.0" />
       <Button layoutX="417.0" layoutY="175.0" mnemonicParsing="false" onAction="#connect" text="Connect" />
       <Label layoutX="111.0" layoutY="179.0" text="Server Address" />
+      <Button layoutX="21.0" layoutY="359.0" mnemonicParsing="false" onAction="#showAddCard" prefHeight="27.0" prefWidth="82.0" text="Add Card" />
    </children>
 </AnchorPane>

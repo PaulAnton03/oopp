@@ -6,6 +6,7 @@ import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 
 public class MainViewCtrl {
+    private final MainCtrl mainCtrl;
 
     @FXML
     private Button navbarAddButton;
@@ -22,9 +23,14 @@ public class MainViewCtrl {
     @FXML
     private Button navbarJoinButton;
 
+    public MainViewCtrl(MainCtrl mainCtrl, Button navbarAddButton) {
+        this.mainCtrl = mainCtrl;
+        this.navbarAddButton = navbarAddButton;
+    }
+
     @FXML
     void btnAddClicked(ActionEvent event) {
-        /*showAdd();*/
+        mainCtrl.showAddCard();
     }
 
     @FXML

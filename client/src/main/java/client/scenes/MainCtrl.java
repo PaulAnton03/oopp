@@ -38,10 +38,14 @@ public class MainCtrl {
     private AddQuoteCtrl addCtrl;
     private Scene add;
 
+    private AddCardCtrl addCardCtrl;
+    private Scene addCard;
+
     public void initialize(Stage primaryStage, Pair<ServerConnectCtrl, Parent> connect,
                            Pair<BoardSettingsCtrl, Parent> settings,
                            Pair<QuoteOverviewCtrl, Parent> overview,
-                           Pair<AddQuoteCtrl, Parent> add) {
+                           Pair<AddQuoteCtrl, Parent> add,
+                           Pair<AddCardCtrl, Parent> addCard) {
         this.primaryStage = primaryStage;
         this.serverConnectCtrl = connect.getKey();
         this.connect = new Scene(connect.getValue());
@@ -52,6 +56,9 @@ public class MainCtrl {
 
         this.addCtrl = add.getKey();
         this.add = new Scene(add.getValue());
+
+        this.addCardCtrl = addCard.getKey();
+        this.addCard = new Scene(addCard.getValue());
 
         showConnect();
         primaryStage.show();
@@ -78,6 +85,11 @@ public class MainCtrl {
         primaryStage.setTitle("Quotes: Adding Quote");
         primaryStage.setScene(add);
         add.setOnKeyPressed(e -> addCtrl.keyPressed(e));
+    }
+
+    public void showAddCard(){
+        primaryStage.setTitle("Add card");
+        primaryStage.setScene(addCard);
     }
 
     public Stage getPrimaryStage() {
