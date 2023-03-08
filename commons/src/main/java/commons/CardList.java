@@ -3,6 +3,9 @@ package commons;
 import lombok.Data;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,6 +13,9 @@ import java.util.List;
 @Entity
 public class CardList {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    protected long id;
     private List<Card> cardList;
     private String title;
 
@@ -18,6 +24,7 @@ public class CardList {
      */
     public CardList() {
         this.cardList = new ArrayList<>();
+        this.title = "New Card List";
     }
     /**
      * Constructor for a card list with a given title
@@ -28,12 +35,8 @@ public class CardList {
         this.cardList = new ArrayList<>();
     }
 
-    public List<Card> getCardList() {
-        return cardList;
-    }
-
-    public void removeCard(int index){
-        this.cardList.remove(index);
+    public void removeCard(Card card){
+        this.cardList.remove(card);
     }
 
     public void addCard(Card card){
