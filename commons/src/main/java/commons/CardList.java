@@ -1,6 +1,9 @@
 package commons;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,29 +14,17 @@ import java.util.List;
 
 @Data
 @Entity
+@RequiredArgsConstructor
+@NoArgsConstructor
 public class CardList {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected long id;
-    private List<Card> cardList;
-    private String title;
+    private List<Card> cardList = new ArrayList<>();
+    @NonNull
+    private String title = "New Card List";
 
-    /**
-     * Constructor for a card list without a title
-     */
-    public CardList() {
-        this.cardList = new ArrayList<>();
-        this.title = "New Card List";
-    }
-    /**
-     * Constructor for a card list with a given title
-     * @param title title of the card list
-     */
-    public CardList(String title) {
-        this.title = title;
-        this.cardList = new ArrayList<>();
-    }
 
     public void removeCard(Card card){
         this.cardList.remove(card);
