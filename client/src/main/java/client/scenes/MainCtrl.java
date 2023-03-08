@@ -25,45 +25,41 @@ public class MainCtrl {
     private Stage primaryStage;
 
     private ServerConnectCtrl serverConnectCtrl;
-
     private Scene connect;
 
     private BoardSettingsCtrl boardSettingsCtrl;
-
     private Scene settings;
 
-    private QuoteOverviewCtrl overviewCtrl;
-    private Scene overview;
-
-    private AddQuoteCtrl addCtrl;
-    private Scene add;
-
     private MainViewCtrl mainViewCtrl;
-
     private Scene main;
 
     private CreateBoard createBoardCtrl;
     private Scene create;
 
-    public void initialize(Stage primaryStage, Pair<ServerConnectCtrl, Parent> connect,
+    private AddCardCtrl addCardCtrl;
+    private Scene add;
+
+    public void initialize(Stage primaryStage,
+                           Pair<ServerConnectCtrl, Parent> connect,
                            Pair<BoardSettingsCtrl, Parent> settings,
-                           Pair<QuoteOverviewCtrl, Parent> overview,
-                           Pair<AddQuoteCtrl, Parent> add,
+                           Pair<AddCardCtrl, Parent> add,
                            Pair<MainViewCtrl, Parent> main,
-                           Pair<CreateBoard, Parent> create) {
+                           Pair<CreateBoard, Parent> create
+    ) {
         this.primaryStage = primaryStage;
+
         this.serverConnectCtrl = connect.getKey();
         this.connect = new Scene(connect.getValue());
+
         this.boardSettingsCtrl = settings.getKey();
         this.settings = new Scene(settings.getValue());
-        this.overviewCtrl = overview.getKey();
-        this.overview = new Scene(overview.getValue());
 
-        this.addCtrl = add.getKey();
+        this.addCardCtrl = add.getKey();
         this.add = new Scene(add.getValue());
 
         this.mainViewCtrl = main.getKey();
         this.main = new Scene(main.getValue());
+
         this.createBoardCtrl = create.getKey();
         this.create = new Scene(create.getValue());
 
@@ -82,29 +78,22 @@ public class MainCtrl {
         primaryStage.setScene(settings);
     }
 
-    public void showOverview() {
-        primaryStage.setTitle("Quotes: Overview");
-        primaryStage.setScene(overview);
-        overviewCtrl.refresh();
-    }
-
-    public void showAdd() {
-        primaryStage.setTitle("Quotes: Adding Quote");
+    public void showAddCard(){
+        primaryStage.setTitle("Add card");
         primaryStage.setScene(add);
-        add.setOnKeyPressed(e -> addCtrl.keyPressed(e));
     }
 
-    public Stage getPrimaryStage() {
-        return primaryStage;
-    }
-
-    public void showMain() {
-        primaryStage.setTitle("Main page");
+    public void showMainView() {
+        primaryStage.setTitle("Main view");
         primaryStage.setScene(main);
     }
 
     public void showCreate() {
         primaryStage.setTitle("Create board");
         primaryStage.setScene(create);
+    }
+
+    public Stage getPrimaryStage() {
+        return primaryStage;
     }
 }

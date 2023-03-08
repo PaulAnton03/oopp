@@ -34,7 +34,7 @@ public class MainViewCtrl {
 
     @FXML
     void btnAddClicked(ActionEvent event) {
-        System.out.println("Add page not added yet!!");
+        mainCtrl.showAddCard();
     }
 
     @FXML
