@@ -5,7 +5,6 @@ import com.google.inject.Inject;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.input.MouseEvent;
 
 public class MainViewCtrl {
 
@@ -35,7 +34,7 @@ public class MainViewCtrl {
 
     @FXML
     void btnAddClicked(ActionEvent event) {
-        System.out.println("Add page not added yet!!");
+        mainCtrl.showAddCard();
     }
 
     @FXML

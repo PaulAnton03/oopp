@@ -88,6 +88,11 @@ public class MainCtrl {
         primaryStage.setScene(main);
     }
 
+    public void showCreate() {
+        primaryStage.setTitle("Create board");
+        primaryStage.setScene(create);
+    }
+
     public Stage getPrimaryStage() {
         return primaryStage;
     }
