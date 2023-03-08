@@ -3,7 +3,7 @@ package commons;
 import javax.persistence.Entity;
 
 @Entity
-public class List {
+public class CardList {
 
-    
+
 }
