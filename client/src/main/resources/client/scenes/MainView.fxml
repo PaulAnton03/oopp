@@ -24,7 +24,7 @@
                   <Font size="16.0" />
                </font>
             </Button>
-            <Button fx:id="navbarJoinButton" layoutX="166.0" layoutY="10.0" mnemonicParsing="false" onAction="#btnJoinClicked" onMouseEntered="#testHover" prefHeight="60.0" prefWidth="2000.0" style="-fx-background-color: transparent;" text="Join Boards">
+            <Button fx:id="navbarJoinButton" layoutX="166.0" layoutY="10.0" mnemonicParsing="false" onAction="#btnJoinClicked" prefHeight="60.0" prefWidth="2000.0" style="-fx-background-color: transparent;" text="Join Boards">
                <font>
                   <Font size="16.0" />
                </font>
