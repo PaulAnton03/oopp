@@ -35,18 +35,29 @@ public class Board {
 
     /**
      * Adds an empty {@link CardList} to the board.
+     * 
+     * @return a {@link Boolean} indicating whether or not the {@link CardList} was
+     *         added
      */
-    public void addCardList() {
-        this.cards.add(new CardList());
+    public boolean addCardList() {
+        return addCardList(new CardList());
     }
 
     /**
      * Adds a {@link CardList} to the board.
      * 
      * @param cardList the {@link CardList} to add
+     * @return a {@link Boolean} indicating whether or not the {@link CardList} was
+     *         added
+     * 
      */
-    public void addCardList(CardList cardList) {
-        this.cards.add(new CardList());
+    public boolean addCardList(CardList cardList) {
+        if (cardList == null)
+            return false;
+        if (this.cards.contains(cardList))
+            return false;
+        this.cards.add(cardList);
+        return true;
     }
 
     /**
