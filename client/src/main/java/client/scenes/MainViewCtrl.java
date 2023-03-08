@@ -1,13 +1,15 @@
 package client.scenes;
 
+import client.utils.ServerUtils;
+import com.google.inject.Inject;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 
-import javax.inject.Inject;
-
 public class MainViewCtrl {
+
+    private final ServerUtils server;
     private final MainCtrl mainCtrl;
 
     @FXML
@@ -26,39 +28,34 @@ public class MainViewCtrl {
     private Button navbarJoinButton;
 
     @Inject
-    public MainViewCtrl(MainCtrl mainCtrl, Button navbarAddButton) {
+    public MainViewCtrl(ServerUtils server, MainCtrl mainCtrl) {
+        this.server = server;
         this.mainCtrl = mainCtrl;
-        this.navbarAddButton = navbarAddButton;
     }
 
     @FXML
     void btnAddClicked(ActionEvent event) {
-        mainCtrl.showAddCard();
+        System.out.println("Add page not added yet!!");
     }
 
     @FXML
     void btnBackClicked(ActionEvent event) {
-        /*showBack();*/
+        mainCtrl.showConnect();
     }
 
     @FXML
     void btnCreateClicked(ActionEvent event) {
-        /*showCreate();*/
+        mainCtrl.showCreate();
     }
 
     @FXML
     void btnJoinClicked(ActionEvent event) {
-        /*showJoin();*/
+        System.out.println("Join page not added yet!!");
     }
 
     @FXML
     void btnSettingsClicked(ActionEvent event) {
-        /*showSettings();*/
-    }
-
-    @FXML
-    void testHover(MouseEvent event) {
-        navbarJoinButton.setStyle("-fx-background-color: #000000");
+        mainCtrl.showSettings();
     }
 
 }

@@ -20,7 +20,7 @@ public class ServerConnectCtrl {
         //Connect to server
 
         mainCtrl.getPrimaryStage().setResizable(true);
-
+        mainCtrl.showMain();
         //Switch scene
 
     }
