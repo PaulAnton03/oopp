@@ -1,10 +1,22 @@
 package client.scenes;
 
+import client.utils.ServerUtils;
+import com.google.inject.Inject;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 
 public class CreateBoard {
+
+    private final ServerUtils server;
+    private final MainCtrl mainCtrl;
+
+    @Inject
+    public CreateBoard(ServerUtils server, MainCtrl mainCtrl) {
+        this.mainCtrl = mainCtrl;
+        this.server = server;
+
+    }
 
     @FXML
     private TextField boardName;
