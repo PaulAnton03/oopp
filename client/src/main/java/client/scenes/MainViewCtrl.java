@@ -54,7 +54,7 @@ public class MainViewCtrl {
 
     @FXML
     void btnSettingsClicked(ActionEvent event) {
-        System.out.println("Settings page not added yet!!");
+        mainCtrl.showSettings();
     }
 
 }

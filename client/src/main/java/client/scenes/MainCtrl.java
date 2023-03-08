@@ -28,6 +28,10 @@ public class MainCtrl {
 
     private Scene connect;
 
+    private BoardSettingsCtrl boardSettingsCtrl;
+
+    private Scene settings;
+
     private QuoteOverviewCtrl overviewCtrl;
     private Scene overview;
 
@@ -42,6 +46,7 @@ public class MainCtrl {
     private Scene create;
 
     public void initialize(Stage primaryStage, Pair<ServerConnectCtrl, Parent> connect,
+                           Pair<BoardSettingsCtrl, Parent> settings,
                            Pair<QuoteOverviewCtrl, Parent> overview,
                            Pair<AddQuoteCtrl, Parent> add,
                            Pair<MainViewCtrl, Parent> main,
@@ -49,6 +54,8 @@ public class MainCtrl {
         this.primaryStage = primaryStage;
         this.serverConnectCtrl = connect.getKey();
         this.connect = new Scene(connect.getValue());
+        this.boardSettingsCtrl = settings.getKey();
+        this.settings = new Scene(settings.getValue());
         this.overviewCtrl = overview.getKey();
         this.overview = new Scene(overview.getValue());
 
@@ -68,6 +75,11 @@ public class MainCtrl {
         primaryStage.setTitle("Connect: Talio server");
         primaryStage.setResizable(false);
         primaryStage.setScene(connect);
+    }
+
+    public void showSettings(){
+        primaryStage.setTitle("Board Settings");
+        primaryStage.setScene(settings);
     }
 
     public void showOverview() {
