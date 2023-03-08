@@ -31,7 +31,7 @@ public class BoardController {
     }
 
     @GetMapping("/find/{id}")
-    public Board getBoardByName(@PathVariable("id") long id) {
+    public Board getBoardById(@PathVariable("id") long id) {
         return boardRepository.findById(id).orElse(null);
     }
 
