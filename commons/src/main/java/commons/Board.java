@@ -1,24 +1,28 @@
 package commons;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
-import lombok.Data;
+import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-@Data
 @Entity
 public class Board {
     @Id
+    @Getter
     @NonNull
     private String name;
 
+    @Getter
     /* If null the board will not have a password. */
     private String password;
 
-    // TODO: Implement the list of list of cards.
+    private List<CardList> cards = new ArrayList<>();
 
     /**
      * Return whether or not the board is password protected.
@@ -27,5 +31,46 @@ public class Board {
      */
     public boolean isPasswordProtected() {
         return password != null;
+    }
+
+    /**
+     * Adds an empty {@link CardList} to the board.
+     */
+    public void addCardList() {
+        this.cards.add(new CardList());
+    }
+
+    /**
+     * Adds a {@link CardList} to the board.
+     * 
+     * @param cardList the {@link CardList} to add
+     */
+    public void addCardList(CardList cardList) {
+        this.cards.add(new CardList());
+    }
+
+    /**
+     * Removes a {@link CardList} from the board.
+     * 
+     * @param cardList the {@link CardList} to remove
+     * @return a {@link Boolean} indicating whether or not the {@link CardList} was
+     *         removed
+     */
+    public boolean removeCardList(CardList cardList) {
+        return this.cards.remove(cardList);
+    }
+
+    /**
+     * Removes a {@link CardList} from the board.
+     * 
+     * @param id the id of the {@link CardList} to remove
+     * @return a {@link Boolean} indicating whether or not the {@link CardList} was
+     *         removed
+     */
+    public boolean removeCardList(long id) {
+        CardList cardList = this.cards.stream().filter(c -> c.getId() == id).findFirst().orElse(null);
+        if (cardList == null)
+            return false;
+        return removeCardList(cardList);
     }
 }
