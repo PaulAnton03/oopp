@@ -21,6 +21,7 @@ public class CardList {
     }
     /**
      * Constructor for a card list with a given title
+     * @param title title of the card list
      */
     public CardList(String title) {
         this.title = title;
