@@ -15,7 +15,7 @@ import java.util.List;
 @Data
 @Entity
 @RequiredArgsConstructor
-@NoArgsConstructor
+
 public class CardList {
 
     @Id
@@ -23,8 +23,11 @@ public class CardList {
     protected long id;
     private List<Card> cardList = new ArrayList<>();
     @NonNull
-    private String title = "New Card List";
+    private String title ;
 
+    public CardList() {
+        this.title= "New Card List";
+    }
 
     public void removeCard(Card card){
         this.cardList.remove(card);
