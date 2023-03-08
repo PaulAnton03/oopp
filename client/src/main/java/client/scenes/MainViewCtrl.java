@@ -5,6 +5,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 
+import javax.inject.Inject;
+
 public class MainViewCtrl {
     private final MainCtrl mainCtrl;
 
@@ -23,6 +25,7 @@ public class MainViewCtrl {
     @FXML
     private Button navbarJoinButton;
 
+    @Inject
     public MainViewCtrl(MainCtrl mainCtrl, Button navbarAddButton) {
         this.mainCtrl = mainCtrl;
         this.navbarAddButton = navbarAddButton;

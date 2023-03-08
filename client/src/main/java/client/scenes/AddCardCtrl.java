@@ -32,6 +32,6 @@ public class AddCardCtrl {
 
     public void goBack() {
         handleClear();
-        mainCtrl.showConnect();
+        mainCtrl.showMainView();
     }
 }

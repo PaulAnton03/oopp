@@ -25,5 +25,5 @@ public class ServerConnectCtrl {
 
     }
 
-    public void showAddCard() { mainCtrl.showAddCard(); }
+    public void showMainView() { mainCtrl.showMainView(); }
 }
