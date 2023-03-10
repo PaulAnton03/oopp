@@ -20,18 +20,19 @@ public class AddCardCtrl {
         this.mainCtrl = mainCtrl;
     }
 
-    public void handleAdd() {
+    public void addCard() {
+        // TODO add the new card
         System.out.println("Title: " + title.getText());
         System.out.println("Description: " + description.getText());
     }
 
-    public void handleClear() {
+    public void clearForm() {
         title.setText("Title");
         description.setText("Description");
     }
 
     public void goBack() {
-        handleClear();
+        clearForm();
         mainCtrl.showMainView();
     }
 }
