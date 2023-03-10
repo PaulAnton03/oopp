@@ -33,7 +33,7 @@ public class MainCtrl {
     private MainViewCtrl mainViewCtrl;
     private Scene main;
 
-    private CreateBoard createBoardCtrl;
+    private CreateBoardCtrl createBoardCtrl;
     private Scene create;
 
     private AddCardCtrl addCardCtrl;
@@ -44,7 +44,7 @@ public class MainCtrl {
                            Pair<BoardSettingsCtrl, Parent> settings,
                            Pair<AddCardCtrl, Parent> add,
                            Pair<MainViewCtrl, Parent> main,
-                           Pair<CreateBoard, Parent> create
+                           Pair<CreateBoardCtrl, Parent> create
     ) {
         this.primaryStage = primaryStage;
 

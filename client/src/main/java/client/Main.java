@@ -40,7 +40,7 @@ public class Main extends Application {
 
         var connect = FXML.load(ServerConnectCtrl.class, "client", "scenes", "ServerConnect.fxml");
         var main = FXML.load(MainViewCtrl.class, "client", "scenes", "MainView.fxml");
-        var create = FXML.load(CreateBoard.class, "client", "scenes", "CreateBoard.fxml");
+        var create = FXML.load(CreateBoardCtrl.class, "client", "scenes", "CreateBoard.fxml");
         var settings = FXML.load(BoardSettingsCtrl.class, "client", "scenes", "BoardSettings.fxml");
         var add = FXML.load(AddCardCtrl.class, "client", "scenes", "AddCard.fxml");
 

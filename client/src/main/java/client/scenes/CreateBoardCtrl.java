@@ -7,37 +7,29 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.TextField;
 
-public class BoardSettingsCtrl {
+public class CreateBoardCtrl {
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
 
+    @FXML private TextField boardName;
     @FXML private ColorPicker boardColor;
     @FXML private TextField boardPassword;
     @FXML private CheckBox passwordUsed;
 
     @Inject
-    public BoardSettingsCtrl(ServerUtils server, MainCtrl mainCtrl) {
+    public CreateBoardCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
         this.server = server;
     }
 
-    public void saveChanges() {
-        // TODO detect changes
-        // TODO apply changes
+    public void createBoard() {
+        // TODO create a new board
+        System.out.println("Board name: " + boardName.getText());
         System.out.println("Board color: " + boardColor.getValue());
         System.out.println("Board password: " + boardPassword.getText());
         System.out.println("Password used: " + passwordUsed.isSelected());
     }
 
-    public void deleteBoard() {
-        // TODO ask user for password (if there is one)
-        System.out.println("Board deleted");
-    }
-
-    public void goBack() {
-        // TODO clear the form to current settings
-        mainCtrl.showMainView();
-    }
-
+    public void goBack() { mainCtrl.showMainView(); }
 }
