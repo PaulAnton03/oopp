@@ -25,5 +25,8 @@ public class ServerConnectCtrl {
 
     }
 
-    public void showMainView() { mainCtrl.showMainView(); }
+    public void showMainView() {
+        mainCtrl.getPrimaryStage().setResizable(true);
+        mainCtrl.showMainView();
+    }
 }
