@@ -1,9 +1,13 @@
 package client.scenes;
 
 import client.utils.ServerUtils;
+import commons.Card;
+import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.stage.Modality;
 
 import javax.inject.Inject;
 
@@ -11,8 +15,10 @@ public class AddCardCtrl {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
 
-    @FXML private TextField title;
-    @FXML private TextArea description;
+    @FXML
+    private TextField title;
+    @FXML
+    private TextArea description;
 
     @Inject
     public AddCardCtrl(ServerUtils server, MainCtrl mainCtrl) {
@@ -20,10 +26,24 @@ public class AddCardCtrl {
         this.mainCtrl = mainCtrl;
     }
 
-    public void addCard() {
-        // TODO add the new card
-        System.out.println("Title: " + title.getText());
-        System.out.println("Description: " + description.getText());
+    private Card getCard() {
+        return new Card(title.getText(), description.getText());
+    }
+
+    public void ok() {
+        try {
+            server.addCard(getCard());
+        } catch (WebApplicationException e) {
+
+            var alert = new Alert(Alert.AlertType.ERROR);
+            alert.initModality(Modality.APPLICATION_MODAL);
+            alert.setContentText(e.getMessage());
+            alert.showAndWait();
+            return;
+        }
+
+        clearForm();
+        mainCtrl.showMainView();
     }
 
     public void clearForm() {
