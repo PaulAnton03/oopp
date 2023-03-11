@@ -23,9 +23,10 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.List;
 
-import commons.Card;
 import org.glassfish.jersey.client.ClientConfig;
 
+import commons.Card;
+import commons.CardList;
 import commons.Quote;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
@@ -50,7 +51,8 @@ public class ServerUtils {
                 .target(SERVER).path("api/quotes") //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
-                .get(new GenericType<List<Quote>>() {});
+                .get(new GenericType<List<Quote>>() {
+                });
     }
 
     public Quote addQuote(Quote quote) {
@@ -74,6 +76,24 @@ public class ServerUtils {
                 .target(SERVER).path("api/cards") //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
-                .get(new GenericType<List<Card>>() {});
+                .get(new GenericType<List<Card>>() {
+                });
+    }
+
+    public CardList addCardList(CardList cardList) {
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(SERVER).path("api/list") //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .post(Entity.entity(cardList, APPLICATION_JSON), CardList.class);
+    }
+
+    public List<CardList> getCardLists() {
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(SERVER).path("api/list") //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .get(new GenericType<List<CardList>>() {
+                });
     }
 }
