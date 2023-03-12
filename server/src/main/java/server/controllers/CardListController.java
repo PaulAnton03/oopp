@@ -16,7 +16,7 @@ import server.database.CardListRepository;
 @RestController
 @RequestMapping("/list")
 public class CardListController {
-    private CardListRepository cardListRepository;
+    private final CardListRepository cardListRepository;
 
     public CardListController(CardListRepository cardListRepository) {
         this.cardListRepository = cardListRepository;
@@ -35,8 +35,8 @@ public class CardListController {
         return ResponseEntity.ok(cardListRepository.findById(id).get());
     }
 
-    @PostMapping(path = { "", "/" })
-    public ResponseEntity<CardList> add(@RequestBody CardList cardList) {
+    @PostMapping(path = {"/create"})
+    public ResponseEntity<CardList> create(@RequestBody CardList cardList) {
 
         if (cardList.getTitle() == null || cardList.getTitle().isEmpty()) {
             return ResponseEntity.badRequest().build();
