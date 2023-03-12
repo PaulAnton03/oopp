@@ -15,7 +15,15 @@
  */
 package client.utils;
 
-import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
+import commons.Card;
+import commons.CardList;
+import commons.Quote;
+import jakarta.ws.rs.client.ClientBuilder;
+import jakarta.ws.rs.client.Entity;
+import jakarta.ws.rs.core.GenericType;
+import lombok.Getter;
+import lombok.Setter;
+import org.glassfish.jersey.client.ClientConfig;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -23,18 +31,13 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.List;
 
-import org.glassfish.jersey.client.ClientConfig;
-
-import commons.Card;
-import commons.CardList;
-import commons.Quote;
-import jakarta.ws.rs.client.ClientBuilder;
-import jakarta.ws.rs.client.Entity;
-import jakarta.ws.rs.core.GenericType;
+import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
 public class ServerUtils {
 
-    public static String SERVER = "http://localhost:8080/";
+    @Setter
+    @Getter
+    private String serverPath = "http://localhost:8080/";
 
     public void getQuotesTheHardWay() throws IOException {
         var url = new URL("http://localhost:8080/api/quotes");
@@ -48,7 +51,7 @@ public class ServerUtils {
 
     public List<Quote> getQuotes() {
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/quotes") //
+                .target(serverPath).path("api/quotes") //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .get(new GenericType<List<Quote>>() {
@@ -57,7 +60,7 @@ public class ServerUtils {
 
     public Quote addQuote(Quote quote) {
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/quotes") //
+                .target(serverPath).path("api/quotes") //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .post(Entity.entity(quote, APPLICATION_JSON), Quote.class);
@@ -65,7 +68,7 @@ public class ServerUtils {
 
     public Card addCard(Card card) {
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/cards") //
+                .target(serverPath).path("api/cards") //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .post(Entity.entity(card, APPLICATION_JSON), Card.class);
@@ -73,7 +76,7 @@ public class ServerUtils {
 
     public List<Card> getCards() {
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/cards") //
+                .target(serverPath).path("api/cards") //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .get(new GenericType<List<Card>>() {
@@ -82,7 +85,7 @@ public class ServerUtils {
 
     public CardList addCardList(CardList cardList) {
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/list") //
+                .target(serverPath).path("api/list") //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .post(Entity.entity(cardList, APPLICATION_JSON), CardList.class);
@@ -90,7 +93,7 @@ public class ServerUtils {
 
     public List<CardList> getCardLists() {
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/list") //
+                .target(serverPath).path("api/list") //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .get(new GenericType<List<CardList>>() {
