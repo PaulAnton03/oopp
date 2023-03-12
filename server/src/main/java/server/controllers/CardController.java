@@ -1,4 +1,4 @@
-package server.api;
+package server.controllers;
 
 import commons.Card;
 import org.springframework.http.ResponseEntity;
@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Random;
 
 @RestController
-@RequestMapping("/api/cards")
+@RequestMapping("/cards")
 public class CardController {
     private final Random random;
     private final CardRepository repo;
@@ -34,7 +34,6 @@ public class CardController {
 
     @PostMapping(path = { "", "/" })
     public ResponseEntity<Card> add(@RequestBody Card card) {
-
         if (card.getCardList() == null || isNullOrEmpty(card.getTitle()) || isNullOrEmpty(card.getDescription())) {
             return ResponseEntity.badRequest().build();
         }

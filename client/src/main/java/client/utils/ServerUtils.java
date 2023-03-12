@@ -67,8 +67,9 @@ public class ServerUtils {
     }
 
     public Card addCard(Card card) {
+        // System.out.println(Entity.entity(card, APPLICATION_JSON), Card.class);
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(serverPath).path("api/cards") //
+                .target(serverPath).path("/cards") //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .post(Entity.entity(card, APPLICATION_JSON), Card.class);
@@ -76,7 +77,7 @@ public class ServerUtils {
 
     public List<Card> getCards() {
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(serverPath).path("api/cards") //
+                .target(serverPath).path("/cards") //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .get(new GenericType<List<Card>>() {
