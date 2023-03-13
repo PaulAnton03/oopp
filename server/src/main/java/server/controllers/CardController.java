@@ -8,7 +8,7 @@ import server.database.CardRepository;
 import java.util.List;
 
 @RestController
-@RequestMapping("/card")
+@RequestMapping("/cards")
 public class CardController {
     private final CardRepository repo;
 
