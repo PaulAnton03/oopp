@@ -37,7 +37,11 @@ public class ServerUtils {
 
     @Setter
     @Getter
-    private String serverPath = "http://localhost:8080/";
+    private static String serverPath = "http://localhost:8080/";
+
+    @Getter
+    @Setter
+    private static Board selectedBoard;
 
     public void getQuotesTheHardWay() throws IOException {
         var url = new URL("http://localhost:8080/api/quotes");

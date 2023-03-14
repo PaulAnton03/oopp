@@ -36,7 +36,11 @@ public class CreateBoardCtrl {
             board.setPassword(boardPassword.getText());
         }
 
-        System.out.println(server.addBoard(board));
+        board = server.addBoard(board);
+        mainCtrl.showMainView();
+
+        server.setSelectedBoard(board);
+        System.out.println("Saved board " + board);
     }
 
     public void goBack() {

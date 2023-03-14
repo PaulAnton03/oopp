@@ -13,11 +13,11 @@ import java.util.List;
 public class Board {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Getter
     private long id;
 
     @Getter
     @NonNull
-    @Column(unique = true)
     private String name;
 
     @Getter
@@ -78,5 +78,10 @@ public class Board {
         if (cardList == null)
             return false;
         return removeCardList(cardList);
+    }
+
+    @Override
+    public String toString() {
+        return "Board [id=" + id + ", name=" + name + ", password=" + password + ", cards=" + cards + "]";
     }
 }
