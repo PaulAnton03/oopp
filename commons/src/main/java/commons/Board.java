@@ -41,7 +41,7 @@ public class Board {
 
     /**
      * Return whether or not the board is password protected.
-     * 
+     *
      * @return a {@link Boolean}
      */
     public boolean isPasswordProtected() {
@@ -50,7 +50,7 @@ public class Board {
 
     /**
      * Adds an empty {@link CardList} to the board.
-     * 
+     *
      * @return a {@link Boolean} indicating whether or not the {@link CardList} was
      *         added
      */
@@ -60,11 +60,11 @@ public class Board {
 
     /**
      * Adds a {@link CardList} to the board.
-     * 
+     *
      * @param cardList the {@link CardList} to add
      * @return a {@link Boolean} indicating whether or not the {@link CardList} was
      *         added
-     * 
+     *
      */
     public boolean addCardList(CardList cardList) {
         if (cardList == null)
@@ -77,7 +77,7 @@ public class Board {
 
     /**
      * Removes a {@link CardList} from the board.
-     * 
+     *
      * @param cardList the {@link CardList} to remove
      * @return a {@link Boolean} indicating whether or not the {@link CardList} was
      *         removed
@@ -88,7 +88,7 @@ public class Board {
 
     /**
      * Removes a {@link CardList} from the board.
-     * 
+     *
      * @param id the id of the {@link CardList} to remove
      * @return a {@link Boolean} indicating whether or not the {@link CardList} was
      *         removed
@@ -98,5 +98,14 @@ public class Board {
         if (cardList == null)
             return false;
         return removeCardList(cardList);
+    }
+
+    public boolean isValid() {
+        return this.cards != null
+            && !isNullOrEmpty(this.getName());
+    }
+
+    private static boolean isNullOrEmpty(String s) {
+        return s == null || s.isEmpty();
     }
 }

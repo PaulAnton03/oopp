@@ -3,8 +3,10 @@ package server.controllers;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -34,19 +36,28 @@ public class BoardController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Board> getById(@PathVariable("id") long id) {
-        if (id < 0 || !boardRepository.existsById(id)) {
+        if (!boardRepository.existsById(id)) {
             return ResponseEntity.badRequest().build();
         }
         return ResponseEntity.ok(boardRepository.findById(id).get());
     }
 
-    @GetMapping("/create")
+    @PostMapping("/create")
     public ResponseEntity<Board> create(@RequestBody Board board) {
-        if (board.getName() == null || board.getName().isEmpty()) {
+        if (!board.isValid()) {
             return ResponseEntity.badRequest().build();
         }
 
         Board boardSaved = boardRepository.save(board);
         return ResponseEntity.ok(boardSaved);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<String> delete(@PathVariable("id") long id) {
+        if (!boardRepository.existsById(id)) {
+            return ResponseEntity.badRequest().build();
+        }
+        boardRepository.deleteById(id);
+        return ResponseEntity.ok().build();
     }
 }
