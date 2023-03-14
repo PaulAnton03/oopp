@@ -2,6 +2,7 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
+import commons.Board;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ColorPicker;
@@ -12,10 +13,14 @@ public class CreateBoardCtrl {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
 
-    @FXML private TextField boardName;
-    @FXML private ColorPicker boardColor;
-    @FXML private TextField boardPassword;
-    @FXML private CheckBox passwordUsed;
+    @FXML
+    private TextField boardName;
+    @FXML
+    private ColorPicker boardColor;
+    @FXML
+    private TextField boardPassword;
+    @FXML
+    private CheckBox passwordUsed;
 
     @Inject
     public CreateBoardCtrl(ServerUtils server, MainCtrl mainCtrl) {
@@ -24,12 +29,17 @@ public class CreateBoardCtrl {
     }
 
     public void createBoard() {
-        // TODO create a new board
-        System.out.println("Board name: " + boardName.getText());
-        System.out.println("Board color: " + boardColor.getValue());
-        System.out.println("Board password: " + boardPassword.getText());
-        System.out.println("Password used: " + passwordUsed.isSelected());
+        // TODO: Implement board colors.
+
+        Board board = new Board(boardName.getText());
+        if (passwordUsed.isSelected()) {
+            board.setPassword(boardPassword.getText());
+        }
+
+        System.out.println(server.addBoard(board));
     }
 
-    public void goBack() { mainCtrl.showMainView(); }
+    public void goBack() {
+        mainCtrl.showMainView();
+    }
 }

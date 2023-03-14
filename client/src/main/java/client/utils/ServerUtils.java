@@ -15,9 +15,9 @@
  */
 package client.utils;
 
+import commons.Board;
 import commons.Card;
 import commons.CardList;
-import commons.Quote;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
@@ -49,8 +49,24 @@ public class ServerUtils {
         }
     }
 
+    public List<Board> getBoards() {
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(serverPath).path("/board") //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .get(new GenericType<List<Board>>() {
+                });
+    }
+
+    public Board addBoard(Board board) {
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(serverPath).path("/board/create") //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .post(Entity.entity(board, APPLICATION_JSON), Board.class);
+    }
+
     public Card addCard(Card card) {
-        // System.out.println(Entity.entity(card, APPLICATION_JSON), Card.class);
         return ClientBuilder.newClient(new ClientConfig()) //
                 .target(serverPath).path("/cards") //
                 .request(APPLICATION_JSON) //
