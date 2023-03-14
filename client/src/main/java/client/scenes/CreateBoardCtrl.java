@@ -31,5 +31,9 @@ public class CreateBoardCtrl {
         System.out.println("Password used: " + passwordUsed.isSelected());
     }
 
-    public void goBack() { mainCtrl.showMainView(); }
+    public void goBack() {
+        boardName.setText("");
+        boardPassword.setText("");
+        mainCtrl.showMainView();
+    }
 }

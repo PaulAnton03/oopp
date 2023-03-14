@@ -49,12 +49,11 @@ public class MainViewCtrl {
 
     @FXML
     void btnJoinClicked(ActionEvent event) {
-        System.out.println("Join page not added yet!!");
+        mainCtrl.showJoin();
     }
 
     @FXML
     void btnSettingsClicked(ActionEvent event) {
         mainCtrl.showSettings();
     }
-
 }

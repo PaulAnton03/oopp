@@ -1,0 +1,11 @@
+.navbar {
+    -fx-background-color: #D9D9D9;
+}
+
+.navbar > Button {
+    -fx-background-color: null;
+}
+
+.navbar > Button:hover {
+    -fx-background-color: #d2d2d2;
+}
