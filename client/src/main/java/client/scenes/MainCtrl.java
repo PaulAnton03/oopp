@@ -17,6 +17,7 @@ package client.scenes;
 
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
@@ -39,12 +40,16 @@ public class MainCtrl {
     private AddCardCtrl addCardCtrl;
     private Scene add;
 
+    private JoinBoardsCtrl joinBoardsCtrl;
+    private Scene join;
+
     public void initialize(Stage primaryStage,
                            Pair<ServerConnectCtrl, Parent> connect,
                            Pair<BoardSettingsCtrl, Parent> settings,
                            Pair<AddCardCtrl, Parent> add,
                            Pair<MainViewCtrl, Parent> main,
-                           Pair<CreateBoardCtrl, Parent> create
+                           Pair<CreateBoardCtrl, Parent> create,
+                           Pair<JoinBoardsCtrl, Parent> join
     ) {
         this.primaryStage = primaryStage;
 
@@ -62,6 +67,9 @@ public class MainCtrl {
 
         this.createBoardCtrl = create.getKey();
         this.create = new Scene(create.getValue());
+
+        this.joinBoardsCtrl = join.getKey();
+        this.join = new Scene(join.getValue());
 
         showConnect();
         primaryStage.show();
@@ -91,6 +99,19 @@ public class MainCtrl {
     public void showCreate() {
         primaryStage.setTitle("Create board");
         primaryStage.setScene(create);
+    }
+
+    public void showJoin() {
+        primaryStage.setTitle("Join boards");
+        primaryStage.setScene(join);
+    }
+
+    public void onButtonHover(Button button) {
+        button.setStyle("-fx-background-color: #d2d2d2;");
+    }
+
+    public void onButtonExitHover(Button button) {
+        button.setStyle("-fx-background-color: transparent;");
     }
 
     public Stage getPrimaryStage() {

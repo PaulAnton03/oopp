@@ -45,6 +45,7 @@ public class BoardSettingsCtrl {
     }
 
     public void goBack() {
+        boardPassword.setText("");
         // TODO clear the form to current settings
         mainCtrl.showMainView();
     }

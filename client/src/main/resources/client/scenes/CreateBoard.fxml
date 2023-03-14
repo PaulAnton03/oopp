@@ -17,19 +17,19 @@
 
 <BorderPane prefHeight="400.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.CreateBoardCtrl">
    <top>
-      <HBox prefHeight="50.0" prefWidth="600.0" style="-fx-background-color: #d9d9d9;" BorderPane.alignment="CENTER">
+      <HBox prefHeight="50.0" prefWidth="600.0" styleClass="navbar" stylesheets="@../styles/navbar.css" BorderPane.alignment="CENTER">
          <children>
-            <Button mnemonicParsing="false" onAction="#goBack" prefHeight="50.0" prefWidth="200.0" style="-fx-background-color: transparent;" text="Back">
+            <Button mnemonicParsing="false" onAction="#goBack" prefHeight="50.0" prefWidth="200.0" text="Back">
                <font>
                   <Font size="16.0" />
                </font>
             </Button>
-            <Button mnemonicParsing="false" prefHeight="60.0" prefWidth="200.0" style="-fx-background-color: transparent;" text="Create Board">
+            <Button mnemonicParsing="false" prefHeight="60.0" prefWidth="200.0" text="Create Board">
                <font>
                   <Font size="16.0" />
                </font>
             </Button>
-            <Button mnemonicParsing="false" prefHeight="50.0" prefWidth="200.0" style="-fx-background-color: transparent;" text="Join Boards">
+            <Button mnemonicParsing="false" prefHeight="50.0" prefWidth="200.0" text="Join Boards">
                <font>
                   <Font size="16.0" />
                </font>
@@ -64,7 +64,7 @@
             </AnchorPane>
             <AnchorPane maxHeight="30.0" maxWidth="300.0" prefHeight="30.0" prefWidth="300.0" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER">
                <children>
-                  <TextField fx:id="boardPassword" layoutX="150.0" minHeight="30.0" prefHeight="28.0" prefWidth="145.0" text="Password" AnchorPane.rightAnchor="0.0" />
+                  <TextField fx:id="boardPassword" layoutX="150.0" minHeight="30.0" prefHeight="28.0" prefWidth="145.0" promptText="Password" AnchorPane.rightAnchor="0.0" />
                   <Label prefHeight="32.0" prefWidth="106.0" text="Access password" AnchorPane.leftAnchor="0.0" />
                   <CheckBox fx:id="passwordUsed" layoutX="133.0" mnemonicParsing="false" prefHeight="30.0" AnchorPane.rightAnchor="155.0" />
                </children>
@@ -78,7 +78,7 @@
             <AnchorPane maxHeight="30.0" maxWidth="300.0" prefHeight="30.0" prefWidth="300.0" GridPane.rowIndex="1">
                <children>
                   <Label contentDisplay="CENTER" layoutX="24.0" minHeight="30.0" prefHeight="33.0" prefWidth="80.0" text="Board name" textAlignment="CENTER" AnchorPane.leftAnchor="0.0" />
-                  <TextField fx:id="boardName" minHeight="30.0" prefHeight="28.0" prefWidth="145.0" text="Name" AnchorPane.rightAnchor="0.0" />
+                  <TextField fx:id="boardName" minHeight="30.0" prefHeight="28.0" prefWidth="145.0" promptText="Name" AnchorPane.rightAnchor="0.0" />
                </children>
             </AnchorPane>
          </children>
