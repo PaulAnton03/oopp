@@ -11,29 +11,29 @@
 
 <BorderPane xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.MainViewCtrl">
    <top>
-      <HBox prefHeight="50.0" prefWidth="600.0" style="-fx-background-color: #D9D9D9;" BorderPane.alignment="CENTER">
+      <HBox prefHeight="50.0" prefWidth="600.0" styleClass="navbar" stylesheets="@../styles/navbar.css" BorderPane.alignment="CENTER">
          <children>
-            <Button fx:id="navbarBackButton" mnemonicParsing="false" onAction="#btnBackClicked" prefHeight="60.0" prefWidth="2000.0" style="-fx-background-color: transparent;" text="Back">
+            <Button fx:id="navbarBackButton" mnemonicParsing="false" onAction="#btnBackClicked" prefHeight="60.0" prefWidth="2000.0" text="Back">
                <font>
                   <Font size="16.0" />
                </font>
             </Button>
-            <Button fx:id="navbarCreateButton" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#btnCreateClicked" prefHeight="60.0" prefWidth="2000.0" style="-fx-background-color: transparent;" text="Create Board">
+            <Button fx:id="navbarCreateButton" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#btnCreateClicked" prefHeight="60.0" prefWidth="2000.0" text="Create Board">
                <font>
                   <Font size="16.0" />
                </font>
             </Button>
-            <Button fx:id="navbarJoinButton" layoutX="166.0" layoutY="10.0" mnemonicParsing="false" onAction="#btnJoinClicked" prefHeight="60.0" prefWidth="2000.0" style="-fx-background-color: transparent;" text="Join Boards">
+            <Button fx:id="navbarJoinButton" layoutX="166.0" layoutY="10.0" mnemonicParsing="false" onAction="#btnJoinClicked" prefHeight="60.0" prefWidth="2000.0" text="Join Boards">
                <font>
                   <Font size="16.0" />
                </font>
             </Button>
-            <Button fx:id="navbarAddButton" mnemonicParsing="false" onAction="#btnAddClicked" prefHeight="100.0" prefWidth="2000.0" style="-fx-background-color: transparent;" text="Add Card">
+            <Button fx:id="navbarAddButton" mnemonicParsing="false" onAction="#btnAddClicked" prefHeight="100.0" prefWidth="2000.0" text="Add Card">
                <font>
                   <Font size="16.0" />
                </font>
             </Button>
-            <Button fx:id="navbarBoardSettings" mnemonicParsing="false" onAction="#btnSettingsClicked" prefHeight="100.0" prefWidth="2000.0" style="-fx-background-color: transparent;" text="Board settings">
+            <Button fx:id="navbarBoardSettings" mnemonicParsing="false" onAction="#btnSettingsClicked" prefHeight="100.0" prefWidth="2000.0" text="Board settings">
                <font>
                   <Font size="16.0" />
                </font>

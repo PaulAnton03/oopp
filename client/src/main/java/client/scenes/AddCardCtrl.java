@@ -47,8 +47,8 @@ public class AddCardCtrl {
     }
 
     public void clearForm() {
-        title.setText("Title");
-        description.setText("Description");
+        title.setText("");
+        description.setText("");
     }
 
     public void goBack() {

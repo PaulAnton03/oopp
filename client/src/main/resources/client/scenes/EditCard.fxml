@@ -29,19 +29,19 @@
       </AnchorPane>
    </center>
    <top>
-      <HBox prefHeight="50.0" prefWidth="600.0" style="-fx-background-color: #d9d9d9;" BorderPane.alignment="CENTER">
+      <HBox prefHeight="50.0" prefWidth="600.0" styleClass="navbar" stylesheets="@../styles/navbar.css" BorderPane.alignment="CENTER">
          <children>
-            <Button mnemonicParsing="false" prefHeight="50.0" prefWidth="200.0" style="-fx-background-color: transparent;" text="Back">
+            <Button mnemonicParsing="false" prefHeight="50.0" prefWidth="200.0" text="Back">
                <font>
                   <Font size="16.0" />
                </font>
             </Button>
-            <Button mnemonicParsing="false" prefHeight="60.0" prefWidth="200.0" style="-fx-background-color: transparent;" text="Create Board">
+            <Button mnemonicParsing="false" prefHeight="60.0" prefWidth="200.0" text="Create Board">
                <font>
                   <Font size="16.0" />
                </font>
             </Button>
-            <Button mnemonicParsing="false" prefHeight="50.0" prefWidth="200.0" style="-fx-background-color: transparent;" text="Join Boards">
+            <Button mnemonicParsing="false" prefHeight="50.0" prefWidth="200.0" text="Join Boards">
                <font>
                   <Font size="16.0" />
                </font>
