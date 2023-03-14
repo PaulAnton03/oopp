@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -17,6 +16,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 @RequiredArgsConstructor
 @Entity
@@ -25,28 +25,20 @@ import lombok.RequiredArgsConstructor;
 public class Board {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Getter
     private long id;
 
     @Getter
     @NonNull
-    @Column(unique = true)
     private String name;
 
     @Getter
+    @Setter
     /* If null the board will not have a password. */
     private String password;
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<CardList> cards = new ArrayList<>();
-
-    /**
-     * Return whether or not the board is password protected.
-     *
-     * @return a {@link Boolean}
-     */
-    public boolean isPasswordProtected() {
-        return password != null;
-    }
 
     /**
      * Adds an empty {@link CardList} to the board.
@@ -98,6 +90,11 @@ public class Board {
         if (cardList == null)
             return false;
         return removeCardList(cardList);
+    }
+
+    @Override
+    public String toString() {
+        return "Board [id=" + id + ", name=" + name + ", password=" + password + ", cards=" + cards + "]";
     }
 
     public boolean isValid() {

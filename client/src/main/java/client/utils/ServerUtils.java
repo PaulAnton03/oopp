@@ -15,9 +15,9 @@
  */
 package client.utils;
 
+import commons.Board;
 import commons.Card;
 import commons.CardList;
-import commons.Quote;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
@@ -37,7 +37,11 @@ public class ServerUtils {
 
     @Setter
     @Getter
-    private String serverPath = "http://localhost:8080/";
+    private static String serverPath = "http://localhost:8080/";
+
+    @Getter
+    @Setter
+    private static Board selectedBoard;
 
     public void getQuotesTheHardWay() throws IOException {
         var url = new URL("http://localhost:8080/api/quotes");
@@ -49,25 +53,24 @@ public class ServerUtils {
         }
     }
 
-    public List<Quote> getQuotes() {
+    public List<Board> getBoards() {
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(serverPath).path("api/quotes") //
+                .target(serverPath).path("/board") //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
-                .get(new GenericType<List<Quote>>() {
+                .get(new GenericType<List<Board>>() {
                 });
     }
 
-    public Quote addQuote(Quote quote) {
+    public Board addBoard(Board board) {
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(serverPath).path("api/quotes") //
+                .target(serverPath).path("/board/create") //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
-                .post(Entity.entity(quote, APPLICATION_JSON), Quote.class);
+                .post(Entity.entity(board, APPLICATION_JSON), Board.class);
     }
 
     public Card addCard(Card card) {
-        // System.out.println(Entity.entity(card, APPLICATION_JSON), Card.class);
         return ClientBuilder.newClient(new ClientConfig()) //
                 .target(serverPath).path("/cards") //
                 .request(APPLICATION_JSON) //
