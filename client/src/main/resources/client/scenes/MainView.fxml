@@ -42,7 +42,7 @@
       </HBox>
    </top>
    <center>
-      <HBox fx:id="cardLists" prefHeight="400.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+      <HBox fx:id="cardLists" alignment="CENTER" prefHeight="400.0" prefWidth="600.0" spacing="1.0" BorderPane.alignment="CENTER">
          <children>
             <AnchorPane prefHeight="200.0" prefWidth="200.0">
                <children>
@@ -97,7 +97,7 @@
    <right>
       <AnchorPane prefHeight="200.0" prefWidth="150.0" BorderPane.alignment="CENTER">
          <children>
-            <Button layoutX="49.0" layoutY="2.0" mnemonicParsing="false" prefHeight="30.0" style="fx-background-color: #d9d9d9;" text="Add List" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="0.0">
+            <Button layoutX="49.0" layoutY="2.0" mnemonicParsing="false" prefHeight="30.0" style="fx-background-color: #d9d9d9;" text="New list" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="10.0">
                <font>
                   <Font size="16.0" />
                </font>

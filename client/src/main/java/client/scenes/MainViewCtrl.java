@@ -79,6 +79,8 @@ public class MainViewCtrl {
             AnchorPane top = new AnchorPane(text, cancel);
             top.setPrefHeight(50.0);
             top.setPrefWidth(200.0);
+            top.setStyle("-fx-border-color:#000000;-fx-border-width: 1px 1px 1px 1px;-fx-background-color: #d9d9d9;");
+            cancel.setStyle("-fx-background-color:#ffcccb;");
 
             AnchorPane.setTopAnchor(text, 10.0);
             AnchorPane.setLeftAnchor(text, 5.0);
@@ -91,13 +93,17 @@ public class MainViewCtrl {
             }
             ObservableList<String> tasks = FXCollections.observableList(taskList);
             ListView<String> cardList = new ListView<>(tasks);
+            cardList.setPrefWidth(200.0);
 
-            AnchorPane displayList = new AnchorPane(top, cardList);
+            AnchorPane displayList = new AnchorPane(cardList, top);
+            displayList.setPrefWidth(200.0);
             AnchorPane.setTopAnchor(top, 0.0);
             AnchorPane.setRightAnchor(top, 0.0);
             AnchorPane.setLeftAnchor(top, 0.0);
             AnchorPane.setTopAnchor(cardList, 50.0);
             AnchorPane.setBottomAnchor(cardList, 10.0);
+            AnchorPane.setLeftAnchor(cardList, 0.0);
+            AnchorPane.setRightAnchor(cardList, 0.0);
 
             children.add(displayList);
         }
