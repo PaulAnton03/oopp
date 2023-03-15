@@ -30,6 +30,6 @@ public class ServerConnectCtrl {
 
         // Switching the scene
         mainCtrl.getPrimaryStage().setResizable(true);
-        mainCtrl.showMainView();
+        mainCtrl.showMainView(serverUtils.getSelectedBoard());
     }
 }

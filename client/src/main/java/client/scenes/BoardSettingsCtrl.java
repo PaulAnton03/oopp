@@ -35,7 +35,7 @@ public class BoardSettingsCtrl {
         }
         board.setPassword(passwordUsed.isSelected() ? boardPassword.getText() : null);
         server.addBoard(board);
-        mainCtrl.showMainView();
+        mainCtrl.showMainView(board);
 
     }
 
@@ -47,7 +47,7 @@ public class BoardSettingsCtrl {
     public void goBack() {
         boardPassword.setText("");
         // TODO clear the form to current settings
-        mainCtrl.showMainView();
+        mainCtrl.showMainView(server.getSelectedBoard());
     }
 
 }

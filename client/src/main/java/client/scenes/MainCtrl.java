@@ -15,6 +15,7 @@
  */
 package client.scenes;
 
+import commons.Board;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -91,9 +92,10 @@ public class MainCtrl {
         primaryStage.setScene(add);
     }
 
-    public void showMainView() {
+    public void showMainView(Board board) {
         primaryStage.setTitle("Main view");
         primaryStage.setScene(main);
+        mainViewCtrl.onSetup(board);
     }
 
     public void showCreate() {
@@ -104,14 +106,6 @@ public class MainCtrl {
     public void showJoin() {
         primaryStage.setTitle("Join boards");
         primaryStage.setScene(join);
-    }
-
-    public void onButtonHover(Button button) {
-        button.setStyle("-fx-background-color: #d2d2d2;");
-    }
-
-    public void onButtonExitHover(Button button) {
-        button.setStyle("-fx-background-color: transparent;");
     }
 
     public Stage getPrimaryStage() {

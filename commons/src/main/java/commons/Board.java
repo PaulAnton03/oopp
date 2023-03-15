@@ -38,6 +38,7 @@ public class Board {
     private String password;
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @Getter
     private List<CardList> cards = new ArrayList<>();
 
     /**

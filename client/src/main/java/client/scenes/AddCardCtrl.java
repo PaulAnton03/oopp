@@ -43,7 +43,7 @@ public class AddCardCtrl {
         }
 
         clearForm();
-        mainCtrl.showMainView();
+        mainCtrl.showMainView(server.getSelectedBoard());
     }
 
     public void clearForm() {
@@ -53,6 +53,6 @@ public class AddCardCtrl {
 
     public void goBack() {
         clearForm();
-        mainCtrl.showMainView();
+        mainCtrl.showMainView(server.getSelectedBoard());
     }
 }

@@ -34,7 +34,7 @@ public class JoinBoardsCtrl {
     @FXML
     void btnBackClicked(ActionEvent event) {
         boardPasswordField.setText("");
-        mainCtrl.showMainView();
+        mainCtrl.showMainView(server.getSelectedBoard());
     }
 
     @FXML
