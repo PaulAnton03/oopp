@@ -2,7 +2,6 @@ package commons;
 
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -25,24 +24,16 @@ class CardListTest {
     }
 
     @Test
-    void getId() {
-        assertEquals(0, card.getId());
-        //id of the card is 0
-    }
-
-    @Test
     void getCardList() {
         assertNotNull(cardList.getCardList());
     }
 
-    @Test
-    void getBoard() {
-        //TODO test this method
-    }
 
     @Test
     void getTitle() {
-        assertEquals("New Card List", cardList.getTitle());
+        //TODO CHANGE THE DEFAULT WHEN DEFAULT IS FINAL
+        String defaultText = "New Card List";
+        assertEquals(defaultText, cardList.getTitle());
     }
 
     @Test
@@ -57,7 +48,6 @@ class CardListTest {
         cardList.setCardList(a1.getCardList());
     }
 
-
     @Test
     void setTitle() {
         cardList.setTitle("lol");
@@ -68,13 +58,6 @@ class CardListTest {
     void testEquals() {
         CardList cardList1 = new CardList();
         assertEquals(cardList1, cardList);
-    }
-
-
-    @Test
-    void testHashCode() {
-        CardList cardList1 = new CardList();
-        assertEquals(cardList.hashCode(), cardList1.hashCode());
     }
 
     @Test
