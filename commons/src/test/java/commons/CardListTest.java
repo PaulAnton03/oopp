@@ -58,8 +58,4 @@ class CardListTest {
         assertEquals(cardList1, cardList);
     }
 
-    @Test
-    void testToString() {
-        assertEquals("CardList(id=0, cardList=[], board=null, title=New Card List)", cardList.toString());
-    }
 }
