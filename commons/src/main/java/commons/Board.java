@@ -10,6 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import lombok.Data;
@@ -24,7 +25,8 @@ import lombok.RequiredArgsConstructor;
 @Table(name = "boards")
 public class Board {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @SequenceGenerator(name="boards_seq", sequenceName="BOARDS_SEQ")
+    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="boards_seq")
     protected long id;
 
     @NonNull
