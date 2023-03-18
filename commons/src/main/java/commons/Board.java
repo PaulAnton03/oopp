@@ -12,12 +12,12 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 
+@Data
 @RequiredArgsConstructor
 @Entity
 @NoArgsConstructor
@@ -25,15 +25,11 @@ import lombok.Setter;
 public class Board {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Getter
-    private long id;
+    protected long id;
 
-    @Getter
     @NonNull
     private String name;
 
-    @Getter
-    @Setter
     /* If null the board will not have a password. */
     private String password;
 
