@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class CardListTest {
 
-    CardList cardList = new CardList();
+    CardList cardList = new CardList("MyList");
     Card card = new Card("Do the dishes", "I need to do the dishes before I go out tonight");
 
     @Test
@@ -31,9 +31,7 @@ class CardListTest {
 
     @Test
     void getTitle() {
-        //TODO CHANGE THE DEFAULT WHEN DEFAULT IS FINAL
-        String defaultText = "New Card List";
-        assertEquals(defaultText, cardList.getTitle());
+        assertEquals("MyList", cardList.getTitle());
     }
 
     @Test
