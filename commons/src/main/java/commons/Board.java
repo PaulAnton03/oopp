@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -13,11 +12,12 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
+@Data
 @RequiredArgsConstructor
 @Entity
 @NoArgsConstructor
@@ -25,14 +25,11 @@ import lombok.RequiredArgsConstructor;
 public class Board {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    protected long id;
 
-    @Getter
     @NonNull
-    @Column(unique = true)
     private String name;
 
-    @Getter
     /* If null the board will not have a password. */
     private String password;
 
@@ -40,17 +37,8 @@ public class Board {
     private List<CardList> cards = new ArrayList<>();
 
     /**
-     * Return whether or not the board is password protected.
-     * 
-     * @return a {@link Boolean}
-     */
-    public boolean isPasswordProtected() {
-        return password != null;
-    }
-
-    /**
      * Adds an empty {@link CardList} to the board.
-     * 
+     *
      * @return a {@link Boolean} indicating whether or not the {@link CardList} was
      *         added
      */
@@ -60,11 +48,11 @@ public class Board {
 
     /**
      * Adds a {@link CardList} to the board.
-     * 
+     *
      * @param cardList the {@link CardList} to add
      * @return a {@link Boolean} indicating whether or not the {@link CardList} was
      *         added
-     * 
+     *
      */
     public boolean addCardList(CardList cardList) {
         if (cardList == null)
@@ -77,7 +65,7 @@ public class Board {
 
     /**
      * Removes a {@link CardList} from the board.
-     * 
+     *
      * @param cardList the {@link CardList} to remove
      * @return a {@link Boolean} indicating whether or not the {@link CardList} was
      *         removed
@@ -88,7 +76,7 @@ public class Board {
 
     /**
      * Removes a {@link CardList} from the board.
-     * 
+     *
      * @param id the id of the {@link CardList} to remove
      * @return a {@link Boolean} indicating whether or not the {@link CardList} was
      *         removed
@@ -98,5 +86,19 @@ public class Board {
         if (cardList == null)
             return false;
         return removeCardList(cardList);
+    }
+
+    @Override
+    public String toString() {
+        return "Board [id=" + id + ", name=" + name + ", password=" + password + ", cards=" + cards + "]";
+    }
+
+    public boolean isValid() {
+        return this.cards != null
+            && !isNullOrEmpty(this.getName());
+    }
+
+    private static boolean isNullOrEmpty(String s) {
+        return s == null || s.isEmpty();
     }
 }

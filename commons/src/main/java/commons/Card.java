@@ -36,4 +36,14 @@ public class Card {
         this.title = "TITLE";
         this.description = "...";
     }
+
+    public boolean isValid() {
+        return this.getCardList() != null
+            && !isNullOrEmpty(this.getTitle())
+            && !isNullOrEmpty(this.getDescription());
+    }
+
+    private static boolean isNullOrEmpty(String s) {
+        return s == null || s.isEmpty();
+    }
 }

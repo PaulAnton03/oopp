@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.AddCardCtrl">
+   <top>
+      <HBox prefHeight="50.0" prefWidth="600.0" styleClass="navbar" stylesheets="@../styles/navbar.css" BorderPane.alignment="CENTER">
+         <children>
+            <Button mnemonicParsing="false" onAction="#goBack" prefHeight="50.0" prefWidth="200.0" text="Back">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Button>
+            <Button mnemonicParsing="false" prefHeight="60.0" prefWidth="200.0" text="Create Board">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Button>
+            <Button mnemonicParsing="false" prefHeight="50.0" prefWidth="200.0" text="Join Boards">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Button>
+         </children>
+      </HBox>
+   </top>
+   <center>
+      <GridPane alignment="TOP_CENTER" prefHeight="219.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+         <columnConstraints>
+            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="313.7398491623794" minWidth="10.0" percentWidth="100.0" prefWidth="305.195914042958" />
+            <ColumnConstraints />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="70.0" valignment="CENTER" vgrow="NEVER" />
+            <RowConstraints maxHeight="50.0" minHeight="50.0" prefHeight="50.0" valignment="CENTER" vgrow="NEVER" />
+            <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="100.0" valignment="CENTER" vgrow="NEVER" />
+            <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="50.0" valignment="CENTER" vgrow="NEVER" />
+         </rowConstraints>
+         <children>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Add New Card" textAlignment="CENTER" wrappingWidth="291.56552734374986" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+               <font>
+                  <Font size="32.0" />
+               </font>
+            </Text>
+            <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="300.0" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+               <children>
+                  <TextField fx:id="title" prefHeight="30.0" prefWidth="300.0" promptText="Title" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
+               </children>
+            </AnchorPane>
+            <AnchorPane maxHeight="30.0" maxWidth="300.0" prefHeight="30.0" prefWidth="300.0" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+               <children>
+                  <Label prefHeight="32.0" prefWidth="110.0" text="Access password" AnchorPane.leftAnchor="0.0" />
+                  <TextArea fx:id="description" prefHeight="80.0" prefWidth="300.0" promptText="Description" />
+               </children>
+            </AnchorPane>
+            <AnchorPane maxHeight="31.0" maxWidth="300.0" minHeight="30.0" minWidth="300.0" prefHeight="30.0" prefWidth="413.0" GridPane.rowIndex="3">
+               <children>
+                  <Button mnemonicParsing="false" onAction="#ok" prefHeight="30.0" prefWidth="145.0" text="Add Card" AnchorPane.leftAnchor="0.0" />
+                  <Button layoutX="195.0" maxWidth="130.0" minWidth="145.0" mnemonicParsing="false" onAction="#clearForm" prefHeight="30.0" prefWidth="145.0" text="Clear" AnchorPane.rightAnchor="0.0" />
+               </children>
+            </AnchorPane>
+         </children>
+         <padding>
+            <Insets top="20.0" />
+         </padding>
+      </GridPane>
+   </center>
+</BorderPane>

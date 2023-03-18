@@ -49,4 +49,14 @@ public class CardList {
     public void addCard(Card card) {
         this.cardList.add(card);
     }
+
+    public boolean isValid() {
+        return this.getCardList() != null
+            && this.getBoard() != null
+            && !isNullOrEmpty(this.getTitle());
+    }
+
+    private static boolean isNullOrEmpty(String s) {
+        return s == null || s.isEmpty();
+    }
 }

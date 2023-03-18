@@ -1,43 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ColorPicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.BoardSettingsCtrl">
-   <center>
-      <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0">
-         <children>
-            <Button layoutX="123.0" layoutY="286.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="354.0" text="Delete Board" />
-            <Button layoutX="123.0" layoutY="219.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="354.0" text="Edit Password" />
-            <Button layoutX="123.0" layoutY="151.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="207.0" text="Change Color" />
-            <Text layoutX="122.0" layoutY="107.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Settings" textAlignment="CENTER" wrappingWidth="354.39999999999986">
-               <font>
-                  <Font size="42.0" />
-               </font>
-            </Text>
-            <ColorPicker layoutX="351.0" layoutY="151.0" />
-         </children>
-      </AnchorPane>
-   </center>
+<BorderPane prefHeight="400.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.BoardSettingsCtrl">
    <top>
-      <HBox prefHeight="50.0" prefWidth="600.0" style="-fx-background-color: #d9d9d9;" BorderPane.alignment="CENTER">
+      <HBox prefHeight="50.0" prefWidth="600.0" styleClass="navbar" stylesheets="@../styles/navbar.css" BorderPane.alignment="TOP_LEFT">
          <children>
-            <Button mnemonicParsing="false" prefHeight="50.0" prefWidth="200.0" style="-fx-background-color: transparent;" text="Back">
+            <Button mnemonicParsing="false" onAction="#goBack" prefHeight="50.0" prefWidth="200.0" text="Back">
                <font>
                   <Font size="16.0" />
                </font>
             </Button>
-            <Button mnemonicParsing="false" prefHeight="60.0" prefWidth="200.0" style="-fx-background-color: transparent;" text="Create Board">
+            <Button mnemonicParsing="false" prefHeight="60.0" prefWidth="200.0" text="Create Board">
                <font>
                   <Font size="16.0" />
                </font>
             </Button>
-            <Button mnemonicParsing="false" prefHeight="50.0" prefWidth="200.0" style="-fx-background-color: transparent;" text="Join Boards">
+            <Button mnemonicParsing="false" prefHeight="50.0" prefWidth="200.0" text="Join Boards">
                <font>
                   <Font size="16.0" />
                </font>
@@ -45,4 +37,49 @@
          </children>
       </HBox>
    </top>
+   <center>
+      <GridPane alignment="TOP_CENTER" prefHeight="219.0" prefWidth="600.0" BorderPane.alignment="TOP_LEFT">
+        <columnConstraints>
+          <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="313.7398491623794" minWidth="10.0" percentWidth="100.0" prefWidth="305.195914042958" />
+            <ColumnConstraints />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="70.0" vgrow="NEVER" />
+          <RowConstraints maxHeight="50.0" minHeight="50.0" prefHeight="50.0" vgrow="NEVER" />
+            <RowConstraints maxHeight="50.0" minHeight="41.88963733181953" prefHeight="50.0" vgrow="NEVER" />
+            <RowConstraints maxHeight="50.0" minHeight="41.88963733181953" prefHeight="50.0" vgrow="NEVER" />
+            <RowConstraints maxHeight="50.0" minHeight="50.0" prefHeight="30.0" vgrow="NEVER" />
+        </rowConstraints>
+         <children>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Board Settings" textAlignment="CENTER" wrappingWidth="291.56552734374986" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+               <font>
+                  <Font size="32.0" />
+               </font>
+            </Text>
+            <Button mnemonicParsing="false" onAction="#deleteBoard" prefHeight="30.0" prefWidth="145.0" text="Delete board" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="4" />
+            <AnchorPane maxHeight="30.0" maxWidth="300.0" prefHeight="30.0" prefWidth="300.0" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+               <children>
+                  <ColorPicker fx:id="boardColor" layoutX="150.0" maxHeight="30.0" minHeight="30.0" prefWidth="145.0" AnchorPane.rightAnchor="0.0" />
+                  <Label contentDisplay="CENTER" layoutX="24.0" minHeight="30.0" prefHeight="33.0" prefWidth="80.0" text="Board color" textAlignment="CENTER" AnchorPane.leftAnchor="0.0" />
+               </children>
+            </AnchorPane>
+            <AnchorPane maxHeight="30.0" maxWidth="300.0" prefHeight="30.0" prefWidth="300.0" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+               <children>
+                  <TextField fx:id="boardPassword" layoutX="150.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="145.0" promptText="New Password" AnchorPane.rightAnchor="0.0" />
+                  <Label prefHeight="32.0" prefWidth="110.0" text="Access password" AnchorPane.leftAnchor="0.0" />
+                  <CheckBox fx:id="passwordUsed" layoutX="132.0" mnemonicParsing="false" prefHeight="30.0" AnchorPane.rightAnchor="155.0" />
+               </children>
+            </AnchorPane>
+            <AnchorPane maxHeight="31.0" maxWidth="300.0" minHeight="30.0" minWidth="300.0" prefHeight="30.0" prefWidth="413.0" GridPane.rowIndex="3">
+               <children>
+                  <Button mnemonicParsing="false" onAction="#saveChanges" prefHeight="30.0" prefWidth="145.0" text="Save changes" AnchorPane.leftAnchor="0.0" />
+                  <Button layoutX="195.0" maxWidth="130.0" minWidth="145.0" mnemonicParsing="false" onAction="#goBack" prefHeight="30.0" prefWidth="145.0" text="Cancel" AnchorPane.rightAnchor="0.0" />
+               </children>
+            </AnchorPane>
+         </children>
+         <padding>
+            <Insets top="20.0" />
+         </padding>
+      </GridPane>
+   </center>
 </BorderPane>

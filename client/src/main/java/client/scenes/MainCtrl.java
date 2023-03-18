@@ -17,6 +17,7 @@ package client.scenes;
 
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
@@ -25,33 +26,50 @@ public class MainCtrl {
     private Stage primaryStage;
 
     private ServerConnectCtrl serverConnectCtrl;
-
     private Scene connect;
 
     private BoardSettingsCtrl boardSettingsCtrl;
-
     private Scene settings;
 
-    private QuoteOverviewCtrl overviewCtrl;
-    private Scene overview;
+    private MainViewCtrl mainViewCtrl;
+    private Scene main;
 
-    private AddQuoteCtrl addCtrl;
+    private CreateBoardCtrl createBoardCtrl;
+    private Scene create;
+
+    private AddCardCtrl addCardCtrl;
     private Scene add;
 
-    public void initialize(Stage primaryStage, Pair<ServerConnectCtrl, Parent> connect,
+    private JoinBoardsCtrl joinBoardsCtrl;
+    private Scene join;
+
+    public void initialize(Stage primaryStage,
+                           Pair<ServerConnectCtrl, Parent> connect,
                            Pair<BoardSettingsCtrl, Parent> settings,
-                           Pair<QuoteOverviewCtrl, Parent> overview,
-                           Pair<AddQuoteCtrl, Parent> add) {
+                           Pair<AddCardCtrl, Parent> add,
+                           Pair<MainViewCtrl, Parent> main,
+                           Pair<CreateBoardCtrl, Parent> create,
+                           Pair<JoinBoardsCtrl, Parent> join
+    ) {
         this.primaryStage = primaryStage;
+
         this.serverConnectCtrl = connect.getKey();
         this.connect = new Scene(connect.getValue());
+
         this.boardSettingsCtrl = settings.getKey();
         this.settings = new Scene(settings.getValue());
-        this.overviewCtrl = overview.getKey();
-        this.overview = new Scene(overview.getValue());
 
-        this.addCtrl = add.getKey();
+        this.addCardCtrl = add.getKey();
         this.add = new Scene(add.getValue());
+
+        this.mainViewCtrl = main.getKey();
+        this.main = new Scene(main.getValue());
+
+        this.createBoardCtrl = create.getKey();
+        this.create = new Scene(create.getValue());
+
+        this.joinBoardsCtrl = join.getKey();
+        this.join = new Scene(join.getValue());
 
         showConnect();
         primaryStage.show();
@@ -63,21 +81,37 @@ public class MainCtrl {
         primaryStage.setScene(connect);
     }
 
-    public void showSettigns(){
+    public void showSettings(){
         primaryStage.setTitle("Board Settings");
         primaryStage.setScene(settings);
     }
 
-    public void showOverview() {
-        primaryStage.setTitle("Quotes: Overview");
-        primaryStage.setScene(overview);
-        overviewCtrl.refresh();
+    public void showAddCard(){
+        primaryStage.setTitle("Add card");
+        primaryStage.setScene(add);
     }
 
-    public void showAdd() {
-        primaryStage.setTitle("Quotes: Adding Quote");
-        primaryStage.setScene(add);
-        add.setOnKeyPressed(e -> addCtrl.keyPressed(e));
+    public void showMainView() {
+        primaryStage.setTitle("Main view");
+        primaryStage.setScene(main);
+    }
+
+    public void showCreate() {
+        primaryStage.setTitle("Create board");
+        primaryStage.setScene(create);
+    }
+
+    public void showJoin() {
+        primaryStage.setTitle("Join boards");
+        primaryStage.setScene(join);
+    }
+
+    public void onButtonHover(Button button) {
+        button.setStyle("-fx-background-color: #d2d2d2;");
+    }
+
+    public void onButtonExitHover(Button button) {
+        button.setStyle("-fx-background-color: transparent;");
     }
 
     public Stage getPrimaryStage() {
