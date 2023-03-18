@@ -54,7 +54,7 @@ class CardListTest {
 
     @Test
     void testEquals() {
-        CardList cardList1 = new CardList();
+        CardList cardList1 = new CardList("MyList");
         assertEquals(cardList1, cardList);
     }
 
