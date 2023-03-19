@@ -7,6 +7,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -22,7 +23,8 @@ import lombok.RequiredArgsConstructor;
 public class Card {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @SequenceGenerator(name="cards_seq", sequenceName="CARDS_SEQ")
+    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="cards_seq")
     protected long id;
 
     @JsonIgnore

@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -27,7 +28,8 @@ import lombok.RequiredArgsConstructor;
 public class CardList {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @SequenceGenerator(name="card_lists_seq", sequenceName="CARD_LISTS_SEQ")
+    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="card_lists_seq")
     protected long id;
 
     @OneToMany(mappedBy = "cardList", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
