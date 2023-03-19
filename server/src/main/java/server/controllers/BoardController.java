@@ -26,13 +26,17 @@ public class BoardController {
     }
 
     @GetMapping(path = { "", "/" })
-    public List<Board> getAll() {
-        return boardRepository.findAll();
+    public ResponseEntity<List<Board>> getAll() {
+        return ResponseEntity.ok(boardRepository.findAll());
     }
 
     @GetMapping("/name/{name}")
-    public Board getByName(@PathVariable("name") String name) {
-        return boardRepository.findByName(name);
+    public ResponseEntity<Board> getByName(@PathVariable("name") String name) {
+        final Optional<Board> board = boardRepository.findByName(name);
+        if (board.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(board.get());
     }
 
     @GetMapping("/{id}")

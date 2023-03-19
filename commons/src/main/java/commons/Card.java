@@ -13,12 +13,14 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 @Data
 @Entity
 @RequiredArgsConstructor
+@NoArgsConstructor
 @Table(name = "cards")
 public class Card {
 
@@ -36,11 +38,6 @@ public class Card {
     private String title;
     @NonNull
     private String description;
-
-    public Card() {
-        this.title = "TITLE";
-        this.description = "...";
-    }
 
     /**
      * cardList is not serialized for network transfer, so this method must be used to get cardList's id by client
