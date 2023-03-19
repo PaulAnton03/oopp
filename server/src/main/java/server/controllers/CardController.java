@@ -23,8 +23,8 @@ public class CardController {
     }
 
     @GetMapping(path = { "", "/" })
-    public List<Card> getAll() {
-        return cardRepository.findAll();
+    public ResponseEntity<List<Card>> getAll() {
+        return ResponseEntity.ok(cardRepository.findAll());
     }
 
     @GetMapping("/{id}")
@@ -38,9 +38,11 @@ public class CardController {
 
     @PostMapping("/create")
     public ResponseEntity<Card> create(@RequestBody Card card, @RequestParam long cardListId) {
+        System.out.println(card);
         if (!card.isNetworkValid()) {
             return ResponseEntity.badRequest().build();
         }
+        System.out.println("Card data valid");
 
         Optional<CardList> cardList = cardListRepository.findById(cardListId);
         if (cardList.isEmpty()) {
