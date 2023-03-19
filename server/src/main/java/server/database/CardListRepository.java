@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface CardListRepository extends JpaRepository<CardList, Long>{
     /**
-     * Delete a {@link CardList}, only propagating changes down to {@link Card}s
+     * Delete a {@link CardList cardList}, only propagating changes down to {@link Card}s
      * @param cardList
      * @param cardRepository
      */

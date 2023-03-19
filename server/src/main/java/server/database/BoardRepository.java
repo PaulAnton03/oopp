@@ -12,7 +12,7 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
     Optional<Board> findByName(String name);
 
     /**
-     * Delete a {@link Board}, propagating changes down to {@link CardLists}s
+     * Delete a {@link Board board}, propagating changes down to {@link CardLists}s
      * @param board
      * @param cardListRepository
      * @param cardRepository

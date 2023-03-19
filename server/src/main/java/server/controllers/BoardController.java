@@ -66,11 +66,12 @@ public class BoardController {
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Board> delete(@PathVariable("id") long id) {
-        final Optional<Board> board = boardRepository.findById(id);
-        if (board.isEmpty()) {
+        final Optional<Board> optBoard = boardRepository.findById(id);
+        if (optBoard.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
-        board.ifPresent(b -> {boardRepository.deleteDownProp(b, cardListRepository, cardRepository);});
-        return ResponseEntity.ok(board.get());
+        final Board board = optBoard.get();
+        boardRepository.deleteDownProp(board, cardListRepository, cardRepository);
+        return ResponseEntity.ok(board);
     }
 }

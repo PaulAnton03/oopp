@@ -59,16 +59,16 @@ public class CardListController {
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<CardList> delete(@PathVariable("id") long id) {
-        final Optional<CardList> cardList = cardListRepository.findById(id);
-        if (cardList.isEmpty()) {
+        final Optional<CardList> optCardList = cardListRepository.findById(id);
+        if (optCardList.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
-        cardList.ifPresent(cL -> {
-            if (cL.getBoard() != null) {
-                cL.getBoard().removeCardList(cL.getId());
-            }
-            cardListRepository.deleteDownProp(cL, cardRepository);});
-        return ResponseEntity.ok(cardList.get());
+        final CardList cardList = optCardList.get();
+        if (cardList.getBoard() != null) {
+            cardList.getBoard().removeCardList(cardList.getId());
+        }
+        cardListRepository.deleteDownProp(cardList, cardRepository);
+        return ResponseEntity.ok(cardList);
     }
 
 
