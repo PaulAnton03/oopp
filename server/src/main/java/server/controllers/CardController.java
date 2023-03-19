@@ -56,11 +56,15 @@ public class CardController {
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Card> delete(@PathVariable("id") long id) {
-        final Optional<Card> card = cardRepository.findById(id);
-        if (card.isEmpty()) {
+        final Optional<Card> optCard = cardRepository.findById(id);
+        if (optCard.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
-        cardRepository.deleteById(id);
-        return ResponseEntity.ok(card.get());
+        Card card = optCard.get();
+        if (card.getCardList() != null) {
+            card.getCardList().removeCard(card.getId());
+        }
+        cardRepository.deleteDownProp(card);
+        return ResponseEntity.ok(card);
     }
 }
