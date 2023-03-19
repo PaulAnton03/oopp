@@ -1,6 +1,7 @@
 package server.controllers;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,7 +16,7 @@ import commons.Board;
 import server.database.BoardRepository;
 
 @RestController
-@RequestMapping("/board")
+@RequestMapping("/boards")
 public class BoardController {
 
     private final BoardRepository boardRepository;
@@ -36,15 +37,16 @@ public class BoardController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Board> getById(@PathVariable("id") long id) {
-        if (!boardRepository.existsById(id)) {
-            return ResponseEntity.badRequest().build();
+        final Optional<Board> board = boardRepository.findById(id);
+        if (board.isEmpty()) {
+            return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(boardRepository.findById(id).get());
+        return ResponseEntity.ok(board.get());
     }
 
     @PostMapping("/create")
     public ResponseEntity<Board> create(@RequestBody Board board) {
-        if (!board.isValid()) {
+        if (!board.isNetworkValid()) {
             return ResponseEntity.badRequest().build();
         }
 
