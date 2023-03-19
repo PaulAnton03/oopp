@@ -11,6 +11,9 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
 
     /**
      * Delete a {@link Board}, propagating changes down to {@link CardLists}s
+     * @param board
+     * @param cardListRepository
+     * @param cardRepository
      */
     default void deleteDownProp(Board board, CardListRepository cardListRepository, CardRepository cardRepository) {
         if (board.getCardLists() != null) {

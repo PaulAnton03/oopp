@@ -3,7 +3,6 @@ package server.controllers;
 import java.util.List;
 import java.util.Optional;
 import commons.Board;
-import commons.Card;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -65,11 +64,10 @@ public class CardListController {
             return ResponseEntity.notFound().build();
         }
         cardList.ifPresent(cL -> {
-                if (cL.getBoard() != null) {
-                    cL.getBoard().getCardLists().remove(cL);
-                }
-                cardListRepository.deleteDownProp(cL, cardRepository);
-            });
+            if (cL.getBoard() != null) {
+                cL.getBoard().removeCardList(cL.getId());
+            }
+            cardListRepository.deleteDownProp(cL, cardRepository);});
         return ResponseEntity.ok(cardList.get());
     }
 

@@ -66,9 +66,7 @@ public class BoardController {
         if (board.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
-        board.ifPresent(b -> {
-                boardRepository.deleteDownProp(b, cardListRepository, cardRepository);
-            });
+        board.ifPresent(b -> {boardRepository.deleteDownProp(b, cardListRepository, cardRepository);});
         return ResponseEntity.ok(board.get());
     }
 }

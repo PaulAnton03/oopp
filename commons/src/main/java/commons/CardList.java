@@ -47,8 +47,15 @@ public class CardList {
         this.title = "New Card List";
     }
 
-    public void removeCard(Card card) {
-        this.cardList.remove(card);
+    public boolean removeCard(Card card) {
+        return this.cardList.remove(card);
+    }
+
+    public boolean removeCard(long id) {
+        Card card = this.getCardList().stream().filter(c -> c.getId() == id).findFirst().orElse(null);
+        if (card == null)
+            return false;
+        return removeCard(card);
     }
 
     public void addCard(Card card) {
