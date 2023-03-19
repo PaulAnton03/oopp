@@ -58,7 +58,12 @@ public class CardController {
         if (card.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
-        cardRepository.deleteById(id);
+        card.ifPresent(c -> {
+                if (c.getCardList() != null) {
+                    c.getCardList().getCardList().remove(c);
+                }
+                cardRepository.deleteDownProp(c);
+            });
         return ResponseEntity.ok(card.get());
     }
 }

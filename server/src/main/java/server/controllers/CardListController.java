@@ -3,23 +3,28 @@ package server.controllers;
 import java.util.List;
 import java.util.Optional;
 import commons.Board;
+import commons.Card;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import commons.CardList;
 import server.database.BoardRepository;
 import server.database.CardListRepository;
+import server.database.CardRepository;
 
 @RestController
 @RequestMapping("/lists")
 public class CardListController {
+    private final CardRepository cardRepository;
     private final CardListRepository cardListRepository;
     private final BoardRepository boardRepository;
 
     @Autowired
-    public CardListController(CardListRepository cardListRepository, BoardRepository boardRepository) {
+    public CardListController(CardListRepository cardListRepository, BoardRepository boardRepository, CardRepository cardRepository) {
         this.cardListRepository = cardListRepository;
         this.boardRepository = boardRepository;
+        this.cardRepository = cardRepository;
     }
 
     @GetMapping(path = { "", "/" })
@@ -59,7 +64,14 @@ public class CardListController {
         if (cardList.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
-        cardListRepository.deleteById(id);
+        cardList.ifPresent(cL -> {
+                if (cL.getBoard() != null) {
+                    cL.getBoard().getCardLists().remove(cL);
+                }
+                cardListRepository.deleteDownProp(cL, cardRepository);
+            });
         return ResponseEntity.ok(cardList.get());
     }
+
+
 }
