@@ -33,18 +33,18 @@ class BoardTest {
     }
 
     @Test
-    void setgetCards() {
+    void setgetCardLists() {
         List<CardList> cards = new ArrayList<>();
-        board.setCards(cards);
-        assertSame(board.getCards(), cards);
+        board.setCardLists(cards);
+        assertSame(board.getCardLists(), cards);
     }
 
     @Test
     void addCardListDefault() {
         assertTrue(board.addCardList());
-        assertNotNull(board.getCards());
-        assertEquals(board.getCards().size(), 1);
-        assertTrue(board.getCards().get(0) instanceof CardList);
+        assertNotNull(board.getCardLists());
+        assertEquals(board.getCardLists().size(), 1);
+        assertTrue(board.getCardLists().get(0) instanceof CardList);
     }
 
     @Test
@@ -52,9 +52,9 @@ class BoardTest {
         CardList list = new CardList();
         assertTrue(board.addCardList(list));
         assertFalse(board.addCardList(list));
-        assertNotNull(board.getCards());
-        assertEquals(board.getCards().size(), 1);
-        assertSame(board.getCards().get(0), list);
+        assertNotNull(board.getCardLists());
+        assertEquals(board.getCardLists().size(), 1);
+        assertSame(board.getCardLists().get(0), list);
     }
 
     @Test
@@ -63,18 +63,18 @@ class BoardTest {
         board.addCardList(list);
         assertFalse(board.removeCardList(new CardList()));
         assertTrue(board.removeCardList(list));
-        assertEquals(board.getCards().size(), 0);
+        assertEquals(board.getCardLists().size(), 0);
     }
 
     @Test
-    void isValid() {
-        board.setCards(null);
-        assertFalse(board.isValid());
+    void isNetworkValid() {
+        board.setCardLists(null);
+        assertFalse(board.isNetworkValid());
 
-        board.setCards(new ArrayList<CardList>());
-        assertTrue(board.isValid());
+        board.setCardLists(new ArrayList<CardList>());
+        assertTrue(board.isNetworkValid());
 
         board.setName("");
-        assertFalse(board.isValid());
+        assertFalse(board.isNetworkValid());
     }
 }

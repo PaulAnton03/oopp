@@ -14,6 +14,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.Data;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -28,10 +30,11 @@ public class CardList {
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected long id;
 
-    @OneToMany(mappedBy = "cardList", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "cardList", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Card> cardList = new ArrayList<>();
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "board_id", nullable = false)
     private Board board;
 
@@ -50,9 +53,19 @@ public class CardList {
         this.cardList.add(card);
     }
 
-    public boolean isValid() {
+    /**
+     * board is not serialized for network transfer, so this method must be used to get board's id by client
+     * @return boardId
+     */
+    public long getBoardId() {
+        return board.getId();
+    }
+
+    /**
+     * @return Is {@link CardList} valid for network transfer
+     */
+    public boolean isNetworkValid() {
         return this.getCardList() != null
-            && this.getBoard() != null
             && !isNullOrEmpty(this.getTitle());
     }
 

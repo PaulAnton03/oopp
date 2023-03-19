@@ -33,8 +33,8 @@ public class Board {
     /* If null the board will not have a password. */
     private String password;
 
-    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<CardList> cards = new ArrayList<>();
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<CardList> cardLists = new ArrayList<>();
 
     /**
      * Adds an empty {@link CardList} to the board.
@@ -57,9 +57,9 @@ public class Board {
     public boolean addCardList(CardList cardList) {
         if (cardList == null)
             return false;
-        if (this.cards.contains(cardList))
+        if (this.cardLists.contains(cardList))
             return false;
-        this.cards.add(cardList);
+        this.cardLists.add(cardList);
         return true;
     }
 
@@ -71,7 +71,7 @@ public class Board {
      *         removed
      */
     public boolean removeCardList(CardList cardList) {
-        return this.cards.remove(cardList);
+        return this.cardLists.remove(cardList);
     }
 
     /**
@@ -82,7 +82,7 @@ public class Board {
      *         removed
      */
     public boolean removeCardList(long id) {
-        CardList cardList = this.cards.stream().filter(c -> c.getId() == id).findFirst().orElse(null);
+        CardList cardList = this.cardLists.stream().filter(c -> c.getId() == id).findFirst().orElse(null);
         if (cardList == null)
             return false;
         return removeCardList(cardList);
@@ -90,11 +90,14 @@ public class Board {
 
     @Override
     public String toString() {
-        return "Board [id=" + id + ", name=" + name + ", password=" + password + ", cards=" + cards + "]";
+        return "Board [id=" + id + ", name=" + name + ", password=" + password + ", cards=" + cardLists + "]";
     }
 
-    public boolean isValid() {
-        return this.cards != null
+    /**
+     * @return Is {@link Board} valid for network transfer
+     */
+    public boolean isNetworkValid() {
+        return this.cardLists != null
             && !isNullOrEmpty(this.getName());
     }
 

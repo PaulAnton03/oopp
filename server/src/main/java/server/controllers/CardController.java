@@ -1,26 +1,25 @@
 package server.controllers;
 
 import commons.Card;
+import commons.CardList;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import server.database.CardListRepository;
 import server.database.CardRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/cards")
 public class CardController {
     private final CardRepository cardRepository;
+    private final CardListRepository cardListRepository;
 
-    public CardController(CardRepository repo) {
-        this.cardRepository = repo;
+    public CardController(CardRepository cardRepository, CardListRepository cardListRepository) {
+        this.cardRepository = cardRepository;
+        this.cardListRepository = cardListRepository;
     }
 
     @GetMapping(path = { "", "/" })
@@ -30,28 +29,36 @@ public class CardController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Card> getById(@PathVariable("id") long id) {
-        if (!cardRepository.existsById(id)) {
-            return ResponseEntity.badRequest().build();
+        final Optional<Card> card = cardRepository.findById(id);
+        if (card.isEmpty()) {
+            return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(cardRepository.findById(id).get());
+        return ResponseEntity.ok(card.get());
     }
 
     @PostMapping("/create")
-    public ResponseEntity<Card> create(@RequestBody Card card) {
-        if (!card.isValid()) {
+    public ResponseEntity<Card> create(@RequestBody Card card, @RequestParam long cardListId) {
+        if (!card.isNetworkValid()) {
             return ResponseEntity.badRequest().build();
         }
 
-        Card saved = cardRepository.save(card);
-        return ResponseEntity.ok(saved);
+        Optional<CardList> cardList = cardListRepository.findById(cardListId);
+        if (cardList.isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        card.setCardList(cardList.get());
+        cardRepository.save(card);
+        return ResponseEntity.ok(card);
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> delete(@PathVariable("id") long id) {
-        if (!cardRepository.existsById(id)) {
-            return ResponseEntity.badRequest().build();
+    public ResponseEntity<Card> delete(@PathVariable("id") long id) {
+        final Optional<Card> card = cardRepository.findById(id);
+        if (card.isEmpty()) {
+            return ResponseEntity.notFound().build();
         }
         cardRepository.deleteById(id);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(card.get());
     }
 }
