@@ -15,13 +15,17 @@
  */
 package client.scenes;
 
+import client.utils.ClientUtils;
 import commons.Board;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
+import javax.inject.Inject;
+
 public class MainCtrl {
+    private ClientUtils client;
 
     private Stage primaryStage;
 
@@ -42,6 +46,11 @@ public class MainCtrl {
 
     private JoinBoardsCtrl joinBoardsCtrl;
     private Scene join;
+
+    @Inject
+    public MainCtrl(ClientUtils client) {
+        this.client = client;
+    }
 
     public void initialize(Stage primaryStage,
                            Pair<ServerConnectCtrl, Parent> connect,
@@ -95,6 +104,10 @@ public class MainCtrl {
         primaryStage.setTitle("Main view");
         primaryStage.setScene(main);
         mainViewCtrl.onSetup(board);
+    }
+
+    public void showMainView() {
+        showMainView(client.getSelectedBoard());
     }
 
     public void showCreate() {

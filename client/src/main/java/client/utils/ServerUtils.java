@@ -34,10 +34,6 @@ public class ServerUtils {
     @Getter
     private static String serverPath = "http://localhost:8080/";
 
-    @Getter
-    @Setter
-    private static Board selectedBoard;
-
     public List<Board> getBoards() {
         return ClientBuilder.newClient(new ClientConfig()) //
                 .target(serverPath).path("/boards") //
@@ -45,6 +41,25 @@ public class ServerUtils {
                 .accept(APPLICATION_JSON) //
                 .get(new GenericType<>() {
                 });
+    }
+
+    // For TESTING purpose
+    public Board getBoardTest(long boardId) {
+        if (boardId == 1) {
+
+            Board board = new Board("Testing board");
+            CardList list1 = new CardList("List 1");
+            CardList list2 = new CardList("List 2");
+            list1.addCard(new Card("Do the dishes", "In kitchen"));
+            list1.addCard(new Card("Do the homework", "Maths, Biology"));
+            list2.addCard(new Card("Title", "Only card in list 2"));
+            return board;
+
+        } else {
+
+            Board board = new Board("Default empty board");
+            return board;
+        }
     }
 
     public Board addBoard(Board board) {

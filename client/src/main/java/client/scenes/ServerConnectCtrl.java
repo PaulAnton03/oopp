@@ -2,8 +2,6 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
-import commons.Board;
-import commons.CardList;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 
@@ -31,12 +29,6 @@ public class ServerConnectCtrl {
         System.out.println("Connecting to server: " + server);
 
         // Switching the scene
-        mainCtrl.getPrimaryStage().setResizable(true);
-        // Todo - this is a test for generating card lists with a board that contains a list "test". Feel free to remove it.
-        Board testBoard = new Board();
-        CardList cardList = new CardList("test");
-        testBoard.addCardList(cardList);
-        mainCtrl.showMainView(testBoard);
-        //mainCtrl.showMainView(serverUtils.getSelectedBoard());
+        mainCtrl.showMainView();
     }
 }

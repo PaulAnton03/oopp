@@ -60,13 +60,13 @@ public class MainViewCtrl {
 
     /**
      * Initializes the main view with the board provided
-     * @param board - Board for which card lists are displayed. If null, empty board is displayed.
+     * @param board board for which card lists are displayed. If null, empty board is displayed.
      */
     void onSetup(Board board) {
         List<Node> children = cardLists.getChildren();
         List<CardList> cards;
         if(board != null)
-            cards = board.getCards();
+            cards = board.getCardLists();
         else
             cards = new ArrayList<>();
 
