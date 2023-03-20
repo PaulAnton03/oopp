@@ -37,18 +37,14 @@ class CardTest {
     }
 
     @Test
-    void isValid() {
-        card.setCardList(null);
-        assertFalse(card.isValid());
-
-        card.setCardList(new CardList());
-        assertTrue(card.isValid());
+    void isNetworkValid() {
+        assertTrue(card.isNetworkValid());
 
         card.setTitle("");
-        assertFalse(card.isValid());
+        assertFalse(card.isNetworkValid());
 
         card.setTitle("task");
         card.setDescription("");
-        assertFalse(card.isValid());
+        assertFalse(card.isNetworkValid());
     }
 }

@@ -7,23 +7,30 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 @Data
 @Entity
 @RequiredArgsConstructor
+@NoArgsConstructor
 @Table(name = "cards")
 public class Card {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @SequenceGenerator(name="cards_seq", sequenceName="CARDS_SEQ")
+    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="cards_seq")
     protected long id;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "card_list_id", nullable = false)
     private CardList cardList;
 
@@ -32,14 +39,19 @@ public class Card {
     @NonNull
     private String description;
 
-    public Card() {
-        this.title = "TITLE";
-        this.description = "...";
+    /**
+     * cardList is not serialized for network transfer, so this method must be used to get cardList's id by client
+     * @return boardId
+     */
+    public long getCardListId() {
+        return cardList.getId();
     }
 
-    public boolean isValid() {
-        return this.getCardList() != null
-            && !isNullOrEmpty(this.getTitle())
+    /**
+     * @return Is {@link Card} valid for network transfer
+     */
+    public boolean isNetworkValid() {
+        return !isNullOrEmpty(this.getTitle())
             && !isNullOrEmpty(this.getDescription());
     }
 
