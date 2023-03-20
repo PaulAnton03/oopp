@@ -10,36 +10,33 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 
+@Data
 @RequiredArgsConstructor
 @Entity
 @NoArgsConstructor
 @Table(name = "boards")
 public class Board {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Getter
-    private long id;
+    @SequenceGenerator(name="boards_seq", sequenceName="BOARDS_SEQ")
+    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="boards_seq")
+    protected long id;
 
-    @Getter
     @NonNull
     private String name;
 
-    @Getter
-    @Setter
     /* If null the board will not have a password. */
     private String password;
 
-    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @Getter
-    private List<CardList> cards = new ArrayList<>();
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<CardList> cardLists = new ArrayList<>();
 
     /**
      * Adds an empty {@link CardList} to the board.
@@ -62,9 +59,9 @@ public class Board {
     public boolean addCardList(CardList cardList) {
         if (cardList == null)
             return false;
-        if (this.cards.contains(cardList))
+        if (this.cardLists.contains(cardList))
             return false;
-        this.cards.add(cardList);
+        this.cardLists.add(cardList);
         return true;
     }
 
@@ -76,7 +73,7 @@ public class Board {
      *         removed
      */
     public boolean removeCardList(CardList cardList) {
-        return this.cards.remove(cardList);
+        return this.cardLists.remove(cardList);
     }
 
     /**
@@ -87,7 +84,7 @@ public class Board {
      *         removed
      */
     public boolean removeCardList(long id) {
-        CardList cardList = this.cards.stream().filter(c -> c.getId() == id).findFirst().orElse(null);
+        CardList cardList = this.cardLists.stream().filter(c -> c.getId() == id).findFirst().orElse(null);
         if (cardList == null)
             return false;
         return removeCardList(cardList);
@@ -95,11 +92,14 @@ public class Board {
 
     @Override
     public String toString() {
-        return "Board [id=" + id + ", name=" + name + ", password=" + password + ", cards=" + cards + "]";
+        return "Board [id=" + id + ", name=" + name + ", password=" + password + ", cards=" + cardLists + "]";
     }
 
-    public boolean isValid() {
-        return this.cards != null
+    /**
+     * @return Is {@link Board} valid for network transfer
+     */
+    public boolean isNetworkValid() {
+        return this.cardLists != null
             && !isNullOrEmpty(this.getName());
     }
 

@@ -12,7 +12,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 import lombok.NonNull;
@@ -25,13 +28,15 @@ import lombok.RequiredArgsConstructor;
 public class CardList {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @SequenceGenerator(name="card_lists_seq", sequenceName="CARD_LISTS_SEQ")
+    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="card_lists_seq")
     protected long id;
 
-    @OneToMany(mappedBy = "cardList", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "cardList", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Card> cardList = new ArrayList<>();
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "board_id", nullable = false)
     private Board board;
 
@@ -42,17 +47,34 @@ public class CardList {
         this.title = "New Card List";
     }
 
-    public void removeCard(Card card) {
-        this.cardList.remove(card);
+    public boolean removeCard(Card card) {
+        return this.cardList.remove(card);
+    }
+
+    public boolean removeCard(long id) {
+        Card card = this.getCardList().stream().filter(c -> c.getId() == id).findFirst().orElse(null);
+        if (card == null)
+            return false;
+        return removeCard(card);
     }
 
     public void addCard(Card card) {
         this.cardList.add(card);
     }
 
-    public boolean isValid() {
+    /**
+     * board is not serialized for network transfer, so this method must be used to get board's id by client
+     * @return boardId
+     */
+    public long getBoardId() {
+        return board.getId();
+    }
+
+    /**
+     * @return Is {@link CardList} valid for network transfer
+     */
+    public boolean isNetworkValid() {
         return this.getCardList() != null
-            && this.getBoard() != null
             && !isNullOrEmpty(this.getTitle());
     }
 
