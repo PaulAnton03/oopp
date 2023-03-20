@@ -16,9 +16,13 @@
 package client;
 
 import client.scenes.*;
+import client.utils.ClientUtils;
+import client.utils.ServerUtils;
 import com.google.inject.Binder;
 import com.google.inject.Module;
 import com.google.inject.Scopes;
+
+import java.util.prefs.Preferences;
 
 public class MyModule implements Module {
 
@@ -29,5 +33,8 @@ public class MyModule implements Module {
         binder.bind(BoardSettingsCtrl.class).in(Scopes.SINGLETON);
         binder.bind(AddCardCtrl.class).in(Scopes.SINGLETON);
         binder.bind(MainViewCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(ServerUtils.class).in(Scopes.SINGLETON);
+        binder.bind(Preferences.class).toInstance(Preferences.userRoot());
+        binder.bind(ClientUtils.class).in(Scopes.SINGLETON);
     }
 }
