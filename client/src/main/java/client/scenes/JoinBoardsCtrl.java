@@ -1,7 +1,5 @@
 package client.scenes;
 
-import javax.inject.Inject;
-
 import client.Main;
 import client.MyFXML;
 import client.components.BoardJoinCtrl;
@@ -12,6 +10,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
+
+import javax.inject.Inject;
 
 public class JoinBoardsCtrl {
 
@@ -36,6 +36,7 @@ public class JoinBoardsCtrl {
     private VBox boardPopulation;
 
     public void populateBoards() {
+        boardPopulation.getChildren().clear();
         for (Board b : server.getBoards()) {
             var pair = myFXML.load(BoardJoinCtrl.class, "client", "components", "BoardJoin.fxml");
             BoardJoinCtrl ctrl = pair.getKey();
