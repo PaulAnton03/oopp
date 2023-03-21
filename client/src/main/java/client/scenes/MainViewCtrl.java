@@ -1,6 +1,5 @@
 package client.scenes;
 
-import client.components.CardListCtrl;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Board;
@@ -46,13 +45,8 @@ public class MainViewCtrl {
         // System.out.println("Displaying board " + board.getId());
         // final List<CardList> cardLists = board == null ? new ArrayList<>() : board.getCardLists();
 
-        for(CardList cardList : board.getCardLists()) {
-            var pairList = mainCtrl.createNewCardList();
-            CardListCtrl cardListCtrl = pairList.getKey();
-            var newCardList = pairList.getValue();
-            cardListCtrl.loadData(cardList);
-            boardView.getChildren().add(newCardList);
-        }
+        for(CardList cardList : board.getCardLists())
+            boardView.getChildren().add(mainCtrl.createCardList(cardList));
 
     }
 }

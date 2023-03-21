@@ -29,12 +29,7 @@ public class CardListCtrl {
     public void loadData(CardList cardList) {
         this.cardList = cardList;
         title.setText(cardList.getTitle());
-        for(Card card : cardList.getCardList()) {
-            var pair = mainCtrl.createNewCard();
-            CardCtrl cardCtrl = pair.getKey();
-            var newCard = pair.getValue();
-            cardCtrl.loadData(card);
-            cardListView.getChildren().add(newCard);
-        }
+        for(Card card : cardList.getCardList())
+            cardListView.getChildren().add(mainCtrl.createCard(card));
     }
 }
