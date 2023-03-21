@@ -123,6 +123,7 @@ public class MainCtrl {
     public void showJoin() {
         primaryStage.setTitle("Join boards");
         primaryStage.setScene(join);
+        joinBoardsCtrl.populateBoards();
     }
 
     public Pair<CardCtrl, Parent> createNewCard() {

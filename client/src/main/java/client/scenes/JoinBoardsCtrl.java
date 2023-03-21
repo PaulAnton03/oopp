@@ -1,10 +1,18 @@
 package client.scenes;
 
+import client.Main;
+import client.MyFXML;
+import client.components.BoardJoinCtrl;
+import client.components.CardCtrl;
 import client.utils.ServerUtils;
+import commons.Board;
+import commons.Card;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
 
 import javax.inject.Inject;
 
@@ -14,11 +22,33 @@ public class JoinBoardsCtrl {
 
     private final MainCtrl mainCtrl;
 
-    @FXML private TextField boardPasswordField;
-    @FXML private Button btnClear;
-    @FXML private Button btnOk;
-    @FXML private Button navbarBackButton;
-    @FXML private Button navbarCreateButton;
+    private static MyFXML myFXML = Main.getFXML();
+
+    @FXML
+    private TextField boardPasswordField;
+    @FXML
+    private Button btnClear;
+    @FXML
+    private Button btnOk;
+    @FXML
+    private Button navbarBackButton;
+    @FXML
+    private Button navbarCreateButton;
+
+    @FXML
+    private VBox boardPopulation;
+
+    public void populateBoards() {
+        for (Board b : server.getBoards()) {
+            var pair = myFXML.load(BoardJoinCtrl.class, "client", "components", "BoardJoin.fxml");
+            BoardJoinCtrl ctrl = pair.getKey();
+            var board = pair.getValue();
+
+            ctrl.loadData(mainCtrl, b);
+
+            boardPopulation.getChildren().add(board);
+        }
+    }
 
     @Inject
     public JoinBoardsCtrl(ServerUtils server, MainCtrl mainCtrl) {

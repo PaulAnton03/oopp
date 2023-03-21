@@ -2,7 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ScrollBar?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
@@ -10,6 +10,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
@@ -32,17 +33,12 @@
    <center>
       <HBox prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
-            <AnchorPane prefHeight="2000.0" prefWidth="2000.0" style="-fx-background-color: #ffcccb;">
-               <children>
-                  <Text boundsType="VISUAL" layoutX="39.0" layoutY="38.0" strokeType="OUTSIDE" strokeWidth="0.0" text="BOARDS" textAlignment="CENTER" textOrigin="TOP" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
-                     <font>
-                        <Font size="20.0" />
-                     </font>
-                  </Text>
-                  <ScrollBar layoutX="100.0" orientation="VERTICAL" prefHeight="205.0" prefWidth="14.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-               </children>
-            </AnchorPane>
-             <GridPane alignment="TOP_CENTER" prefHeight="200.0" prefWidth="2500.0" BorderPane.alignment="CENTER">
+            <ScrollPane prefHeight="270.0" prefWidth="1000.0">
+               <content>
+                  <VBox fx:id="boardPopulation" prefHeight="200.0" prefWidth="100.0" />
+               </content>
+            </ScrollPane>
+             <GridPane alignment="TOP_CENTER" prefHeight="200.0" prefWidth="1000.0" BorderPane.alignment="CENTER">
                  <columnConstraints>
                      <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="313.7398491623794" minWidth="10.0" percentWidth="100.0" prefWidth="305.195914042958" />
                      <ColumnConstraints />
