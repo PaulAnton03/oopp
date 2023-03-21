@@ -1,7 +1,6 @@
 package client.components;
 
 import client.scenes.MainCtrl;
-import client.utils.ServerUtils;
 import commons.Board;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
