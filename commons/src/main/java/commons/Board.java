@@ -13,6 +13,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
@@ -95,15 +96,18 @@ public class Board {
         return "Board [id=" + id + ", name=" + name + ", password=" + password + ", cards=" + cardLists + "]";
     }
 
+
+    @JsonIgnore
+    private static boolean isNullOrEmpty(String s) {
+        return s == null || s.isEmpty();
+    }
+
     /**
      * @return Is {@link Board} valid for network transfer
      */
+    @JsonIgnore
     public boolean isNetworkValid() {
         return this.cardLists != null
-            && !isNullOrEmpty(this.getName());
-    }
-
-    private static boolean isNullOrEmpty(String s) {
-        return s == null || s.isEmpty();
+                && !isNullOrEmpty(this.getName());
     }
 }
