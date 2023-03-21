@@ -44,6 +44,7 @@ class CardListTest {
     void setCardList() {
         CardList a1 = new CardList();
         cardList.setCardList(a1.getCardList());
+        assertSame(a1.getCardList(), cardList.getCardList());
     }
 
     @Test
