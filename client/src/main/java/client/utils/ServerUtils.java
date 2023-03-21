@@ -20,6 +20,8 @@ import commons.Card;
 import commons.CardList;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
+import jakarta.ws.rs.client.Invocation;
+import jakarta.ws.rs.client.WebTarget;
 import jakarta.ws.rs.core.GenericType;
 import lombok.Getter;
 import lombok.Setter;
@@ -34,13 +36,79 @@ public class ServerUtils {
     @Getter
     private static String serverPath = "http://localhost:8080/";
 
+    private WebTarget webTargetFromPath(String path) {
+        return ClientBuilder.newClient(new ClientConfig())
+            .target(serverPath).path(path);
+    }
+
+    private Invocation.Builder webTargetAddDefault(WebTarget webTarget) {
+        return webTarget.request(APPLICATION_JSON)
+            .accept(APPLICATION_JSON);
+    }
+
     public List<Board> getBoards() {
-        return ClientBuilder.newClient(new ClientConfig()) //
-                .target(serverPath).path("/boards") //
-                .request(APPLICATION_JSON) //
-                .accept(APPLICATION_JSON) //
-                .get(new GenericType<>() {
-                });
+        WebTarget webTarget = webTargetFromPath("/boards");
+        return webTargetAddDefault(webTarget).get(new GenericType<>() {});
+    }
+
+    public Board addBoard(Board board) {
+        WebTarget webTarget = webTargetFromPath("/boards/create");
+        return webTargetAddDefault(webTarget).post(Entity.entity(board, APPLICATION_JSON), Board.class);
+    }
+
+    public Board getBoard(long id) {
+        WebTarget webTarget = webTargetFromPath("/boards/{id}").resolveTemplate("id", id);
+        return webTargetAddDefault(webTarget).get(new GenericType<>() {});
+    }
+
+    public Board getBoard(String name) {
+        WebTarget webTarget = webTargetFromPath("/board/name/{name}").resolveTemplate("name", name);
+        return webTargetAddDefault(webTarget).get(new GenericType<>() {});
+    }
+
+    public Board deleteBoard(long id) {
+        WebTarget webTarget = webTargetFromPath("/boards/delete/{id}").resolveTemplate("id", id);
+        return webTargetAddDefault(webTarget).delete(new GenericType<> () {});
+    }
+
+    public List<Card> getCards() {
+        WebTarget webTarget = webTargetFromPath("/cards");
+        return webTargetAddDefault(webTarget).get(new GenericType<>() {});
+    }
+
+    public Card getCard(long id) {
+        WebTarget webTarget = webTargetFromPath("/cards/{id}").resolveTemplate("id", id);
+        return webTargetAddDefault(webTarget).get(new GenericType<>() {});
+    }
+
+    public Card addCard(Card card) {
+        WebTarget webTarget = webTargetFromPath("/cards/create?cardListId={cardListId}").resolveTemplate("cardListId", card.getCardListId());
+        return webTargetAddDefault(webTarget).post(Entity.entity(card, APPLICATION_JSON), Card.class);
+    }
+
+    public Card deleteCard(long id) {
+        WebTarget webTarget = webTargetFromPath("/cards/delete/{id}").resolveTemplate("id", id);
+        return webTargetAddDefault(webTarget).delete(new GenericType<>() {});
+    }
+
+    public List<CardList> getCardLists() {
+        WebTarget webTarget = webTargetFromPath("/lists");
+        return webTargetAddDefault(webTarget).get(new GenericType<>() {});
+    }
+
+    public CardList getCardList(long id) {
+        WebTarget webTarget = webTargetFromPath("/lists/{id}").resolveTemplate("id", id);
+        return webTargetAddDefault(webTarget).get(new GenericType<>() {});
+    }
+
+    public CardList addCardList(CardList cardList) {
+        WebTarget webTarget = webTargetFromPath("/lists/create?boardId={boardId}").resolveTemplate("boardId", cardList.getBoardId());
+        return webTargetAddDefault(webTarget).post(Entity.entity(cardList, APPLICATION_JSON), CardList.class);
+    }
+
+    public CardList deleteCardList(long id) {
+        WebTarget webTarget = webTargetFromPath("/lists/delete/{id}").resolveTemplate("id", id);
+        return webTargetAddDefault(webTarget).delete(new GenericType<>() {});
     }
 
     // For TESTING purpose
@@ -60,47 +128,5 @@ public class ServerUtils {
             Board board = new Board("Default empty board");
             return board;
         }
-    }
-
-    public Board addBoard(Board board) {
-        return ClientBuilder.newClient(new ClientConfig()) //
-                .target(serverPath).path("/boards/create") //
-                .request(APPLICATION_JSON) //
-                .accept(APPLICATION_JSON) //
-                .post(Entity.entity(board, APPLICATION_JSON), Board.class);
-    }
-
-    public Card addCard(Card card) {
-        return ClientBuilder.newClient(new ClientConfig()) //
-                .target(serverPath).path("/cards") //
-                .request(APPLICATION_JSON) //
-                .accept(APPLICATION_JSON) //
-                .post(Entity.entity(card, APPLICATION_JSON), Card.class);
-    }
-
-    public List<Card> getCards() {
-        return ClientBuilder.newClient(new ClientConfig()) //
-                .target(serverPath).path("/cards") //
-                .request(APPLICATION_JSON) //
-                .accept(APPLICATION_JSON) //
-                .get(new GenericType<>() {
-                });
-    }
-
-    public CardList addCardList(CardList cardList) {
-        return ClientBuilder.newClient(new ClientConfig()) //
-                .target(serverPath).path("/lists") //
-                .request(APPLICATION_JSON) //
-                .accept(APPLICATION_JSON) //
-                .post(Entity.entity(cardList, APPLICATION_JSON), CardList.class);
-    }
-
-    public List<CardList> getCardLists() {
-        return ClientBuilder.newClient(new ClientConfig()) //
-                .target(serverPath).path("/lists") //
-                .request(APPLICATION_JSON) //
-                .accept(APPLICATION_JSON) //
-                .get(new GenericType<>() {
-                });
     }
 }
