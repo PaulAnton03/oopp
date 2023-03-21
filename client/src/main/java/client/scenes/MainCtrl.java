@@ -15,6 +15,8 @@
  */
 package client.scenes;
 
+import javax.inject.Inject;
+
 import client.Main;
 import client.MyFXML;
 import client.components.CardCtrl;
@@ -27,8 +29,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.util.Pair;
-
-import javax.inject.Inject;
 
 public class MainCtrl {
     private ClientUtils client;
@@ -125,6 +125,7 @@ public class MainCtrl {
     public void showJoin() {
         primaryStage.setTitle("Join boards");
         primaryStage.setScene(join);
+        joinBoardsCtrl.populateBoards();
     }
 
     public Pair<CardCtrl, Parent> createNewCard() {

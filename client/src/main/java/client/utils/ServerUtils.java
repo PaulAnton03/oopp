@@ -15,6 +15,12 @@
  */
 package client.utils;
 
+import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
+
+import java.util.List;
+
+import org.glassfish.jersey.client.ClientConfig;
+
 import commons.Board;
 import commons.Card;
 import commons.CardList;
@@ -25,10 +31,6 @@ import jakarta.ws.rs.client.WebTarget;
 import jakarta.ws.rs.core.GenericType;
 import lombok.Getter;
 import lombok.Setter;
-import org.glassfish.jersey.client.ClientConfig;
-import java.util.List;
-
-import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
 public class ServerUtils {
 
