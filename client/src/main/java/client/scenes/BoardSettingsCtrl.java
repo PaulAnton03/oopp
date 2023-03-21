@@ -1,5 +1,6 @@
 package client.scenes;
 
+import client.utils.ClientUtils;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Board;
@@ -11,6 +12,7 @@ import javafx.scene.control.TextField;
 public class BoardSettingsCtrl {
 
     private final ServerUtils server;
+    private final ClientUtils client;
     private final MainCtrl mainCtrl;
 
     @FXML
@@ -21,13 +23,14 @@ public class BoardSettingsCtrl {
     private CheckBox passwordUsed;
 
     @Inject
-    public BoardSettingsCtrl(ServerUtils server, MainCtrl mainCtrl) {
+    public BoardSettingsCtrl(ServerUtils server, ClientUtils client, MainCtrl mainCtrl) {
+        this.client = client;
         this.mainCtrl = mainCtrl;
         this.server = server;
     }
 
     public void saveChanges() {
-        Board board = server.getSelectedBoard();
+        Board board = client.getSelectedBoard();
         if(board == null) {
             //TODO: Shouldn't reach this point without a board selected.
             System.out.println("No board selected");

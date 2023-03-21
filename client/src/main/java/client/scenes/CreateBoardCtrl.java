@@ -1,5 +1,6 @@
 package client.scenes;
 
+import client.utils.ClientUtils;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Board;
@@ -11,6 +12,7 @@ import javafx.scene.control.TextField;
 public class CreateBoardCtrl {
 
     private final ServerUtils server;
+    private final ClientUtils client;
     private final MainCtrl mainCtrl;
 
     @FXML
@@ -23,7 +25,8 @@ public class CreateBoardCtrl {
     private CheckBox passwordUsed;
 
     @Inject
-    public CreateBoardCtrl(ServerUtils server, MainCtrl mainCtrl) {
+    public CreateBoardCtrl(ServerUtils server, ClientUtils client, MainCtrl mainCtrl) {
+        this.client = client;
         this.mainCtrl = mainCtrl;
         this.server = server;
     }
@@ -37,15 +40,14 @@ public class CreateBoardCtrl {
         }
 
         board = server.addBoard(board);
-        mainCtrl.showMainView();
+        mainCtrl.showMainView(board);
 
-        server.setSelectedBoard(board);
         System.out.println("Saved board " + board);
     }
 
     public void goBack() {
         boardName.setText("");
         boardPassword.setText("");
-        mainCtrl.showMainView();
+        mainCtrl.showMainView(client.getSelectedBoard());
     }
 }

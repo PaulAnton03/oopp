@@ -29,7 +29,6 @@ public class ServerConnectCtrl {
         System.out.println("Connecting to server: " + server);
 
         // Switching the scene
-        mainCtrl.getPrimaryStage().setResizable(true);
         mainCtrl.showMainView();
     }
 }

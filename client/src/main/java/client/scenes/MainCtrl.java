@@ -15,13 +15,22 @@
  */
 package client.scenes;
 
+import client.Main;
+import client.MyFXML;
+import client.components.CardCtrl;
+import client.components.CardListCtrl;
+import client.utils.ClientUtils;
+import commons.Board;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
+import javax.inject.Inject;
+
 public class MainCtrl {
+    private ClientUtils client;
+    private static MyFXML myFXML = Main.getFXML();
 
     private Stage primaryStage;
 
@@ -42,6 +51,11 @@ public class MainCtrl {
 
     private JoinBoardsCtrl joinBoardsCtrl;
     private Scene join;
+
+    @Inject
+    public MainCtrl(ClientUtils client) {
+        this.client = client;
+    }
 
     public void initialize(Stage primaryStage,
                            Pair<ServerConnectCtrl, Parent> connect,
@@ -91,9 +105,14 @@ public class MainCtrl {
         primaryStage.setScene(add);
     }
 
-    public void showMainView() {
+    public void showMainView(Board board) {
         primaryStage.setTitle("Main view");
         primaryStage.setScene(main);
+        mainViewCtrl.onSetup(board);
+    }
+
+    public void showMainView() {
+        showMainView(client.getSelectedBoard());
     }
 
     public void showCreate() {
@@ -106,12 +125,14 @@ public class MainCtrl {
         primaryStage.setScene(join);
     }
 
-    public void onButtonHover(Button button) {
-        button.setStyle("-fx-background-color: #d2d2d2;");
+    public Pair<CardCtrl, Parent> createNewCard() {
+        var card = myFXML.load(CardCtrl.class, "client", "components", "Card.fxml");
+        return card;
     }
 
-    public void onButtonExitHover(Button button) {
-        button.setStyle("-fx-background-color: transparent;");
+    public Pair<CardListCtrl, Parent> createNewCardList() {
+        var cardList = myFXML.load(CardListCtrl.class, "client", "components", "CardList.fxml");
+        return cardList;
     }
 
     public Stage getPrimaryStage() {
