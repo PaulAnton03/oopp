@@ -21,6 +21,8 @@ import client.components.CardCtrl;
 import client.components.CardListCtrl;
 import client.utils.ClientUtils;
 import commons.Board;
+import commons.Card;
+import commons.CardList;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -126,13 +128,27 @@ public class MainCtrl {
     }
 
     public Pair<CardCtrl, Parent> createNewCard() {
-        var card = myFXML.load(CardCtrl.class, "client", "components", "Card.fxml");
-        return card;
+        return myFXML.load(CardCtrl.class, "client", "components", "Card.fxml");
     }
 
     public Pair<CardListCtrl, Parent> createNewCardList() {
-        var cardList = myFXML.load(CardListCtrl.class, "client", "components", "CardList.fxml");
-        return cardList;
+        return myFXML.load(CardListCtrl.class, "client", "components", "CardList.fxml");
+    }
+
+    public Parent createCard(Card card) {
+        var pair = createNewCard();
+        CardCtrl cardCtrl = pair.getKey();
+        var newCard = pair.getValue();
+        cardCtrl.loadData(card);
+        return newCard;
+    }
+
+    public Parent createCardList(CardList cardList) {
+        var pair = createNewCardList();
+        CardListCtrl cardListCtrl = pair.getKey();
+        var newCardList = pair.getValue();
+        cardListCtrl.loadData(cardList);
+        return newCardList;
     }
 
     public Stage getPrimaryStage() {
