@@ -9,7 +9,7 @@
 
 <BorderPane xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.MainViewCtrl">
    <top>
-      <HBox prefHeight="50.0" prefWidth="600.0" styleClass="navbar" stylesheets="@../styles/navbar.css" BorderPane.alignment="CENTER">
+      <HBox prefHeight="50.0" prefWidth="600.0" styleClass="navbar" stylesheets="@../main/client/styles/navbar.css" BorderPane.alignment="CENTER">
          <children>
             <Button fx:id="navbarBackButton" mnemonicParsing="false" onAction="#btnBackClicked" prefHeight="60.0" prefWidth="2000.0" text="Back">
                <font>

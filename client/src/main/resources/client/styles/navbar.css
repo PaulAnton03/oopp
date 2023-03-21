@@ -3,7 +3,7 @@
 }
 
 .navbar > Button {
-    -fx-background-color: null;
+    -fx-background-color: transparent;
 }
 
 .navbar > Button:hover {
