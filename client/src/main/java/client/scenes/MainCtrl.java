@@ -15,6 +15,10 @@
  */
 package client.scenes;
 
+import client.Main;
+import client.MyFXML;
+import client.components.CardCtrl;
+import client.components.CardListCtrl;
 import client.utils.ClientUtils;
 import commons.Board;
 import javafx.scene.Parent;
@@ -26,6 +30,7 @@ import javax.inject.Inject;
 
 public class MainCtrl {
     private ClientUtils client;
+    private static MyFXML myFXML = Main.getFXML();
 
     private Stage primaryStage;
 
@@ -118,6 +123,16 @@ public class MainCtrl {
     public void showJoin() {
         primaryStage.setTitle("Join boards");
         primaryStage.setScene(join);
+    }
+
+    public Pair<CardCtrl, Parent> createNewCard() {
+        var card = myFXML.load(CardCtrl.class, "client", "components", "Card.fxml");
+        return card;
+    }
+
+    public Pair<CardListCtrl, Parent> createNewCardList() {
+        var cardList = myFXML.load(CardListCtrl.class, "client", "components", "CardList.fxml");
+        return cardList;
     }
 
     public Stage getPrimaryStage() {

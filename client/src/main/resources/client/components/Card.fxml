@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="200.0" spacing="5.0" styleClass="card" stylesheets="@../styles/card.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.components.CardCtrl">
+   <children>
+      <Text fx:id="title" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="title" text="Title" />
+      <Text fx:id="description" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="description" text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod" wrappingWidth="200.0" />
+   </children>
+   <opaqueInsets>
+      <Insets />
+   </opaqueInsets>
+   <padding>
+      <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+   </padding>
+</VBox>

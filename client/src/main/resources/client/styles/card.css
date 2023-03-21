@@ -1,0 +1,11 @@
+.card {
+
+}
+
+.card > .title {
+    -fx-font-size: 20px;
+}
+
+.card > .description {
+    /* set the text color */
+}

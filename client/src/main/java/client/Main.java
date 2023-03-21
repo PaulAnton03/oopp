@@ -25,10 +25,12 @@ import com.google.inject.Injector;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
+import lombok.Getter;
 
 public class Main extends Application {
 
     private static final Injector INJECTOR = createInjector(new MyModule());
+    @Getter
     private static final MyFXML FXML = new MyFXML(INJECTOR);
 
     public static void main(String[] args) throws URISyntaxException, IOException {
