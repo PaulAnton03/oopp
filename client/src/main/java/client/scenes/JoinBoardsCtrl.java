@@ -1,20 +1,17 @@
 package client.scenes;
 
+import javax.inject.Inject;
+
 import client.Main;
 import client.MyFXML;
 import client.components.BoardJoinCtrl;
-import client.components.CardCtrl;
 import client.utils.ServerUtils;
 import commons.Board;
-import commons.Card;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
-
-import javax.inject.Inject;
 
 public class JoinBoardsCtrl {
 

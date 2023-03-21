@@ -15,6 +15,8 @@
  */
 package client.scenes;
 
+import javax.inject.Inject;
+
 import client.Main;
 import client.MyFXML;
 import client.components.CardCtrl;
@@ -25,8 +27,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.util.Pair;
-
-import javax.inject.Inject;
 
 public class MainCtrl {
     private ClientUtils client;
