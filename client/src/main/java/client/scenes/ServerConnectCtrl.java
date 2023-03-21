@@ -7,7 +7,6 @@ import commons.Card;
 import commons.CardList;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
-import org.checkerframework.checker.units.qual.C;
 
 public class ServerConnectCtrl {
 

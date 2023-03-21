@@ -1,17 +1,13 @@
 package client.scenes;
 
-import client.components.CardCtrl;
 import client.components.CardListCtrl;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Board;
-import commons.Card;
 import commons.CardList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
-import org.checkerframework.checker.units.qual.C;
 
 public class MainViewCtrl {
 

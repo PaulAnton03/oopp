@@ -1,17 +1,14 @@
 package client.components;
 
 import client.scenes.MainCtrl;
-import client.scenes.MainViewCtrl;
 import commons.Card;
 import commons.CardList;
 import javafx.fxml.FXML;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import lombok.Getter;
 
 import javax.inject.Inject;
-import java.util.List;
 
 public class CardListCtrl {
     private final MainCtrl mainCtrl;
