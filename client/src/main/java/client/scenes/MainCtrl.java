@@ -126,13 +126,11 @@ public class MainCtrl {
     }
 
     public Pair<CardCtrl, Parent> createNewCard() {
-        var card = myFXML.load(CardCtrl.class, "client", "components", "Card.fxml");
-        return card;
+        return myFXML.load(CardCtrl.class, "client", "components", "Card.fxml");
     }
 
     public Pair<CardListCtrl, Parent> createNewCardList() {
-        var cardList = myFXML.load(CardListCtrl.class, "client", "components", "CardList.fxml");
-        return cardList;
+        return myFXML.load(CardListCtrl.class, "client", "components", "CardList.fxml");
     }
 
     public Stage getPrimaryStage() {
