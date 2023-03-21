@@ -15,7 +15,7 @@
             <Button layoutX="122.0" layoutY="13.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="68.0" text="Settings" AnchorPane.bottomAnchor="12.931679243688016" AnchorPane.rightAnchor="9.653140775646847" AnchorPane.topAnchor="13.0" />
          </children>
       </AnchorPane>
-      <VBox fx:id="cardListView" layoutY="54.0" prefHeight="350.0" prefWidth="200.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0">
+      <VBox fx:id="cardListView" layoutY="54.0" prefHeight="350.0" prefWidth="200.0" spacing="10.0" styleClass="cardList" stylesheets="@../styles/cardList.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0">
          <padding>
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
          </padding>
