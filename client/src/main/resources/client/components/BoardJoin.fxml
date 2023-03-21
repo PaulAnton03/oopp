@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+
+
+<Button fx:id="button" mnemonicParsing="false" onAction="#onSelect" prefWidth="250.0" text="BOARD NAME" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.components.BoardJoinCtrl" />
