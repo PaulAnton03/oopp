@@ -30,7 +30,7 @@ public class BoardSettingsCtrl {
     }
 
     public void saveChanges() {
-        Board board = client.getSelectedBoard();
+        Board board = client.getActiveBoard();
         if(board == null) {
             //TODO: Shouldn't reach this point without a board selected.
             System.out.println("No board selected");

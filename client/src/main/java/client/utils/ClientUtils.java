@@ -2,15 +2,21 @@ package client.utils;
 
 import commons.Board;
 import javax.inject.Inject;
+
+import commons.CardList;
+import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Optional;
 
 public class ClientUtils {
-    private ServerUtils server;
-    private ClientPreferences preferences;
+    private final ServerUtils server;
+    private final ClientPreferences preferences;
     @Setter
-    private Board selectedBoard;
+    private Board activeBoard;
+    @Getter
+    @Setter
+    private CardList activeCardList;
 
     @Inject
     public ClientUtils(ServerUtils server, ClientPreferences preferences) {
@@ -18,11 +24,13 @@ public class ClientUtils {
         this.preferences = preferences;
     }
 
-    public Board getSelectedBoard() {
-        if (selectedBoard == null) {
+    public Board getActiveBoard() {
+        if (activeBoard == null) {
             Optional<Long> boardId = preferences.getDefaultBoardId();
-            selectedBoard = server.getBoardTest(boardId.orElse(0L));
+            activeBoard = boardId.isPresent() ?  server.getBoard(boardId.get()) : null;
+        } else {
+            activeBoard = server.getBoard(activeBoard.getId());
         }
-        return selectedBoard;
+        return activeBoard;
     }
 }

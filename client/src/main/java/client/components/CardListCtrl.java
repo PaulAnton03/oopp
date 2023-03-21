@@ -32,4 +32,8 @@ public class CardListCtrl {
         for(Card card : cardList.getCardList())
             cardListView.getChildren().add(mainCtrl.createCard(card));
     }
+
+    public void addCard() {
+        mainCtrl.showAddCard();
+    }
 }

@@ -4,6 +4,7 @@ import client.utils.ClientUtils;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Board;
+import commons.CardList;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ColorPicker;
@@ -34,20 +35,24 @@ public class CreateBoardCtrl {
     public void createBoard() {
         // TODO: Implement board colors.
 
-        Board board = new Board(boardName.getText());
+        final Board newBoard = new Board(boardName.getText());
         if (passwordUsed.isSelected()) {
-            board.setPassword(boardPassword.getText());
+            newBoard.setPassword(boardPassword.getText());
         }
+        final Board addedBoard = server.addBoard(newBoard);
+        System.out.println("Added board " + addedBoard);
 
-        board = server.addBoard(board);
-        mainCtrl.showMainView(board);
+        final CardList cardList = new CardList("TODO");
+        cardList.setBoard(addedBoard);
+        final CardList addedCardList = server.addCardList(cardList);
+        addedBoard.addCardList(addedCardList);
 
-        System.out.println("Saved board " + board);
+        mainCtrl.showMainView(addedBoard);
     }
 
     public void goBack() {
         boardName.setText("");
         boardPassword.setText("");
-        mainCtrl.showMainView(client.getSelectedBoard());
+        mainCtrl.showMainView(client.getActiveBoard());
     }
 }
