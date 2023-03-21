@@ -13,7 +13,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
@@ -24,6 +26,7 @@ import lombok.RequiredArgsConstructor;
 @Entity
 @NoArgsConstructor
 @Table(name = "boards")
+@JsonIdentityInfo(scope = Board.class, generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Board {
     @Id
     @SequenceGenerator(name="boards_seq", sequenceName="BOARDS_SEQ")
@@ -111,3 +114,4 @@ public class Board {
                 && !isNullOrEmpty(this.getName());
     }
 }
+
