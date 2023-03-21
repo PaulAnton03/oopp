@@ -42,7 +42,7 @@ public class JoinBoardsCtrl {
             BoardJoinCtrl ctrl = pair.getKey();
             var board = pair.getValue();
 
-            ctrl.loadData(mainCtrl, b);
+            ctrl.loadData(b);
 
             boardPopulation.getChildren().add(board);
         }
