@@ -7,8 +7,12 @@ import commons.Board;
 import commons.CardList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
+
+import java.awt.*;
 
 public class MainViewCtrl {
 
@@ -41,6 +45,19 @@ public class MainViewCtrl {
     @FXML
     void btnSettingsClicked(ActionEvent event) { mainCtrl.showSettings(); }
 
+    public void scrollHandler(ScrollEvent event) {
+        double scrollAmount = 0.3;
+        ScrollPane pane = (ScrollPane) event.getSource();
+
+        if (event.getDeltaY() > 0 && pane.getHvalue() != pane.getHmax()) {
+            pane.setHvalue(pane.getHvalue() + scrollAmount);
+        }
+        if (event.getDeltaY() < 0 && pane.getHvalue() != pane.getHmin()) {
+            pane.setHvalue(pane.getHvalue() - scrollAmount);
+        }
+        event.consume();
+    }
+
     /**
      * Initializes the main view with the board provided
      * @param board board for which card lists are displayed. If null, empty board is displayed.
@@ -56,6 +73,15 @@ public class MainViewCtrl {
         }
         displayBoardName.setText(board.getName());
 
+        for (CardList cardList : board.getCardLists()) {
+            boardView.getChildren().add(mainCtrl.createCardList(cardList));
+        }
+        for (CardList cardList : board.getCardLists()) {
+            boardView.getChildren().add(mainCtrl.createCardList(cardList));
+        }
+        for (CardList cardList : board.getCardLists()) {
+            boardView.getChildren().add(mainCtrl.createCardList(cardList));
+        }
         for (CardList cardList : board.getCardLists()) {
             boardView.getChildren().add(mainCtrl.createCardList(cardList));
         }

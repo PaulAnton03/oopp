@@ -4,7 +4,6 @@ import commons.Board;
 import javax.inject.Inject;
 
 import commons.CardList;
-import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Optional;
@@ -14,7 +13,6 @@ public class ClientUtils {
     private final ClientPreferences preferences;
     @Setter
     private Board activeBoard;
-    @Getter
     @Setter
     private CardList activeCardList;
 
@@ -25,12 +23,19 @@ public class ClientUtils {
     }
 
     public Board getActiveBoard() {
-        if (activeBoard == null || activeBoard.getId() == 1L) {
+        if (activeBoard == null || activeBoard.getName().equals("Empty Board")) {
             Optional<Long> boardId = preferences.getDefaultBoardId();
             return boardId.isPresent() ? server.getBoard(boardId.get()) : null;
         } else {
             activeBoard = server.getBoard(activeBoard.getId());
             return activeBoard;
         }
+    }
+
+    public CardList getActiveCardList() {
+        if (activeCardList == null) {
+            activeCardList = getActiveBoard().getCardLists().stream().findFirst().orElseGet(null);
+        }
+        return activeCardList;
     }
 }
