@@ -5,6 +5,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
@@ -53,9 +54,16 @@
       </AnchorPane>
    </right>
    <center>
-      <ScrollPane hbarPolicy="ALWAYS" prefHeight="500.0" prefWidth="800.0" vbarPolicy="NEVER" BorderPane.alignment="CENTER">
+      <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="ALWAYS" onScroll="#scrollHandler" prefHeight="500.0" prefWidth="800.0" vbarPolicy="NEVER" vmax="0.0" BorderPane.alignment="CENTER">
          <content>
-            <HBox fx:id="boardView" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="501.0" prefWidth="800.0" spacing="20.0" />
+            <HBox fx:id="boardView" fillHeight="false" maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="485.0" spacing="20.0">
+               <children>
+                  <Pane minHeight="-Infinity" prefHeight="684.0" prefWidth="200.0" style="-fx-background-color: blue;" />
+                  <Pane maxHeight="-Infinity" prefHeight="258.0" prefWidth="200.0" style="-fx-background-color: red;" />
+                  <Pane layoutX="230.0" layoutY="10.0" maxHeight="-Infinity" prefHeight="258.0" prefWidth="200.0" style="-fx-background-color: red;" />
+                  <Pane layoutX="451.0" layoutY="10.0" maxHeight="-Infinity" prefHeight="258.0" prefWidth="200.0" style="-fx-background-color: red;" />
+                  <Pane layoutX="625.0" layoutY="10.0" maxHeight="-Infinity" prefHeight="258.0" prefWidth="200.0" style="-fx-background-color: red;" />
+               </children></HBox>
          </content>
       </ScrollPane>
    </center>

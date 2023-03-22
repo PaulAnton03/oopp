@@ -29,6 +29,9 @@ public class AddCardCtrl {
     private Card getCard() {
         Card newCard = new Card(title.getText(), description.getText());
         newCard.setCardList(client.getActiveCardList());
+        if (newCard.getCardList() == null) {
+            throw new IllegalStateException("There is no card list specified");
+        }
         return newCard;
     }
 
