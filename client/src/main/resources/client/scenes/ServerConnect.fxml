@@ -10,5 +10,7 @@
       <TextField fx:id="serverInput" layoutX="226.0" layoutY="175.0" />
       <Button layoutX="417.0" layoutY="175.0" mnemonicParsing="false" onAction="#connect" text="Connect" />
       <Label layoutX="111.0" layoutY="179.0" text="Server Address" />
+      <TextField fx:id="boardInput" layoutX="226.0" layoutY="220.0" />
+      <Label layoutX="111.0" layoutY="224.0" text="Board name" />
    </children>
 </AnchorPane>

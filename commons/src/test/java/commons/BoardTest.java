@@ -5,7 +5,9 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 class BoardTest {
     Board board = new Board("title");
@@ -34,7 +36,7 @@ class BoardTest {
 
     @Test
     void setgetCardLists() {
-        List<CardList> cards = new ArrayList<>();
+        Set<CardList> cards = new HashSet<>();
         board.setCardLists(cards);
         assertSame(board.getCardLists(), cards);
     }
@@ -44,7 +46,7 @@ class BoardTest {
         assertTrue(board.addCardList());
         assertNotNull(board.getCardLists());
         assertEquals(board.getCardLists().size(), 1);
-        assertTrue(board.getCardLists().get(0) instanceof CardList);
+        assertTrue(board.getCardLists().stream().findFirst().get() instanceof CardList);
     }
 
     @Test
@@ -54,7 +56,7 @@ class BoardTest {
         assertFalse(board.addCardList(list));
         assertNotNull(board.getCardLists());
         assertEquals(board.getCardLists().size(), 1);
-        assertSame(board.getCardLists().get(0), list);
+        assertSame(board.getCardLists().stream().findFirst().get(), list);
     }
 
     @Test
@@ -71,7 +73,7 @@ class BoardTest {
         board.setCardLists(null);
         assertFalse(board.isNetworkValid());
 
-        board.setCardLists(new ArrayList<CardList>());
+        board.setCardLists(new HashSet<>());
         assertTrue(board.isNetworkValid());
 
         board.setName("");

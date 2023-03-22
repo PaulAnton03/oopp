@@ -26,8 +26,7 @@ public class ClientPreferences {
      * @return optional of the id, empty optional if not set
      */
     public Optional<Long> getDefaultBoardId() {
-        // This is for TESTING purposes, default boardId should be -1 invalid
-        long boardId = commonPrefs.getLong(DEFAULT_BOARD_KEY, 1);
+        long boardId = commonPrefs.getLong(DEFAULT_BOARD_KEY, -1);
         return boardId == -1 ? Optional.empty() : Optional.of(boardId);
     }
 

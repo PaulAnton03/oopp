@@ -1,7 +1,7 @@
 package commons;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -15,9 +15,11 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
@@ -25,6 +27,7 @@ import lombok.RequiredArgsConstructor;
 @Entity
 @RequiredArgsConstructor
 @Table(name = "card_lists")
+@JsonIdentityInfo(scope = CardList.class, generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class CardList {
 
     @Id
@@ -33,11 +36,11 @@ public class CardList {
     protected long id;
 
     @OneToMany(mappedBy = "cardList", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<Card> cardList = new ArrayList<>();
+    private Set<Card> cardList = new HashSet<>();
 
-    @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "board_id", nullable = false)
+    @EqualsAndHashCode.Exclude
     private Board board;
 
     @NonNull
@@ -62,17 +65,15 @@ public class CardList {
         this.cardList.add(card);
     }
 
-    /**
-     * board is not serialized for network transfer, so this method must be used to get board's id by client
-     * @return boardId
-     */
-    public long getBoardId() {
-        return board.getId();
+    @Override
+    public String toString() {
+        return "CardList [id=" + id + ", title=" + title + ", cards=" + cardList + "]";
     }
 
     /**
      * @return Is {@link CardList} valid for network transfer
      */
+    @JsonIgnore
     public boolean isNetworkValid() {
         return this.getCardList() != null
             && !isNullOrEmpty(this.getTitle());

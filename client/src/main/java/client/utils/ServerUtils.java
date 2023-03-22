@@ -36,7 +36,7 @@ public class ServerUtils {
 
     @Setter
     @Getter
-    private static String serverPath = "http://localhost:8080/";
+    private String serverPath = "http://localhost:8080/";
 
     private WebTarget webTargetFromPath(String path) {
         return ClientBuilder.newClient(new ClientConfig())
@@ -64,7 +64,7 @@ public class ServerUtils {
     }
 
     public Board getBoard(String name) {
-        WebTarget webTarget = webTargetFromPath("/board/name/{name}").resolveTemplate("name", name);
+        WebTarget webTarget = webTargetFromPath("/boards/name/{name}").resolveTemplate("name", name);
         return webTargetAddDefault(webTarget).get(new GenericType<>() {});
     }
 
@@ -84,7 +84,8 @@ public class ServerUtils {
     }
 
     public Card addCard(Card card) {
-        WebTarget webTarget = webTargetFromPath("/cards/create?cardListId={cardListId}").resolveTemplate("cardListId", card.getCardListId());
+        WebTarget webTarget = webTargetFromPath("/cards/create")
+                .queryParam("cardListId", card.getCardList().getId());
         return webTargetAddDefault(webTarget).post(Entity.entity(card, APPLICATION_JSON), Card.class);
     }
 
@@ -104,7 +105,8 @@ public class ServerUtils {
     }
 
     public CardList addCardList(CardList cardList) {
-        WebTarget webTarget = webTargetFromPath("/lists/create?boardId={boardId}").resolveTemplate("boardId", cardList.getBoardId());
+        WebTarget webTarget = webTargetFromPath("/lists/create")
+                .queryParam("boardId", cardList.getBoard().getId());
         return webTargetAddDefault(webTarget).post(Entity.entity(cardList, APPLICATION_JSON), CardList.class);
     }
 
@@ -127,8 +129,7 @@ public class ServerUtils {
 
         } else {
 
-            Board board = new Board("Default empty board");
-            return board;
+            return new Board("Default empty board");
         }
     }
 }

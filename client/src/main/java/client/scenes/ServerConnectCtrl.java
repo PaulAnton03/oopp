@@ -14,6 +14,8 @@ public class ServerConnectCtrl {
     private final MainCtrl mainCtrl;
     @FXML
     private TextField serverInput;
+    @FXML
+    private TextField boardInput;
 
     @Inject
     public ServerConnectCtrl(ServerUtils server, MainCtrl mainCtrl) {
@@ -22,21 +24,20 @@ public class ServerConnectCtrl {
     }
 
     public void connect() {
-        String server = serverInput.getText();
-        if (server == null || server.isEmpty()) {
-            server = serverUtils.getServerPath();
+        String serverPath = serverInput.getText();
+        if (!serverPath.isEmpty()) {
+            serverUtils.setServerPath(serverPath);
         }
+        System.out.println("Connecting to server: " + serverUtils.getServerPath());
 
-        // Connect to server
-        serverUtils.setServerPath(server);
-        System.out.println("Connecting to server: " + server);
-
-        /* Original code, altering it in order to create a test for auto generation.
-        // Switching the scene
-        mainCtrl.showMainView();
-
-         */
-        mainCtrl.showMainView(generateTestBoard());
+        String boardName = boardInput.getText();
+        if (boardName.equals("Test Board")) {
+            mainCtrl.showMainView(generateTestBoard());
+        } else if (!boardName.isEmpty()) {
+            mainCtrl.showMainView(serverUtils.getBoard(boardName));
+        } else {
+            mainCtrl.showMainView();
+        }
     }
 
     /**
@@ -51,7 +52,7 @@ public class ServerConnectCtrl {
         cardList1.addCard(card1);cardList1.addCard(card2);
         CardList cardList2 = new CardList("TestList1");
         cardList2.addCard(card1);cardList2.addCard(card2);cardList2.addCard(card1);
-        Board board = new Board();
+        Board board = new Board("Test Board");
         board.addCardList(cardList1);board.addCardList(cardList2);
         return board;
     }
