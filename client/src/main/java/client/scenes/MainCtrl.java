@@ -155,4 +155,8 @@ public class MainCtrl {
     public Stage getPrimaryStage() {
         return primaryStage;
     }
+
+    public void stop() {
+        this.client.getServer().stop();
+    }
 }
