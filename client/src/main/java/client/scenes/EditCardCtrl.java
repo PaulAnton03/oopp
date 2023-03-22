@@ -3,7 +3,7 @@ package client.scenes;
 import client.components.CardCtrl;
 import client.utils.ClientUtils;
 import client.utils.ServerUtils;
-import commons.Card;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
@@ -12,7 +12,7 @@ import javafx.scene.control.TextField;
 import lombok.Setter;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
+
 
 public class EditCardCtrl {
 
