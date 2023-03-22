@@ -1,5 +1,6 @@
 package client.scenes;
 
+import client.utils.ClientUtils;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Board;
@@ -7,17 +8,21 @@ import commons.CardList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.layout.HBox;
+import javafx.scene.text.Text;
 
 public class MainViewCtrl {
 
     private final ServerUtils server;
+    private final ClientUtils client;
     private final MainCtrl mainCtrl;
 
     @FXML private HBox boardView;
+    @FXML private Text displayBoardName;
 
     @Inject
-    public MainViewCtrl(ServerUtils server, MainCtrl mainCtrl) {
+    public MainViewCtrl(ServerUtils server, ClientUtils client, MainCtrl mainCtrl) {
         this.server = server;
+        this.client = client;
         this.mainCtrl = mainCtrl;
     }
 
@@ -41,12 +46,18 @@ public class MainViewCtrl {
      * @param board board for which card lists are displayed. If null, empty board is displayed.
      */
     void onSetup(Board board) {
+        // Clear everything
+        boardView.getChildren().clear();
 
-        // System.out.println("Displaying board " + board.getId());
-        // final List<CardList> cardLists = board == null ? new ArrayList<>() : board.getCardLists();
+        if (board == null) {
+            board = new Board("Empty board");
+        } else {
+            client.setActiveBoard(board);
+        }
+        displayBoardName.setText(board.getName());
 
-        for(CardList cardList : board.getCardLists())
+        for (CardList cardList : board.getCardLists()) {
             boardView.getChildren().add(mainCtrl.createCardList(cardList));
-
+        }
     }
 }

@@ -31,8 +31,8 @@ import javafx.stage.Stage;
 import javafx.util.Pair;
 
 public class MainCtrl {
-    private ClientUtils client;
-    private static MyFXML myFXML = Main.getFXML();
+    private final ClientUtils client;
+    private final MyFXML myFXML = Main.getFXML();
 
     private Stage primaryStage;
 
@@ -114,7 +114,7 @@ public class MainCtrl {
     }
 
     public void showMainView() {
-        showMainView(client.getSelectedBoard());
+        showMainView(client.getActiveBoard());
     }
 
     public void showCreate() {

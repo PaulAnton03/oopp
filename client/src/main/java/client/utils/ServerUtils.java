@@ -111,9 +111,8 @@ public class ServerUtils {
     }
 
     public Board getBoard(String name) {
-        WebTarget webTarget = webTargetFromPath("/board/name/{name}").resolveTemplate("name", name);
-        return webTargetAddDefault(webTarget).get(new GenericType<>() {
-        });
+        WebTarget webTarget = webTargetFromPath("/boards/name/{name}").resolveTemplate("name", name);
+        return webTargetAddDefault(webTarget).get(new GenericType<>() {});
     }
 
     public Board deleteBoard(long id) {
@@ -135,7 +134,8 @@ public class ServerUtils {
     }
 
     public Card addCard(Card card) {
-        WebTarget webTarget = webTargetFromPath("/cards/create?cardListId={cardListId}").resolveTemplate("cardListId", card.getCardListId());
+        WebTarget webTarget = webTargetFromPath("/cards/create")
+                .queryParam("cardListId", card.getCardList().getId());
         return webTargetAddDefault(webTarget).post(Entity.entity(card, APPLICATION_JSON), Card.class);
     }
 
@@ -158,7 +158,8 @@ public class ServerUtils {
     }
 
     public CardList addCardList(CardList cardList) {
-        WebTarget webTarget = webTargetFromPath("/lists/create?boardId={boardId}").resolveTemplate("boardId", cardList.getBoardId());
+        WebTarget webTarget = webTargetFromPath("/lists/create")
+                .queryParam("boardId", cardList.getBoard().getId());
         return webTargetAddDefault(webTarget).post(Entity.entity(cardList, APPLICATION_JSON), CardList.class);
     }
 
@@ -182,8 +183,7 @@ public class ServerUtils {
 
         } else {
 
-            Board board = new Board("Default empty board");
-            return board;
+            return new Board("Default empty board");
         }
     }
 }
