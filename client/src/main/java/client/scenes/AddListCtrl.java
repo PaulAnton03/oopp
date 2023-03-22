@@ -1,11 +1,8 @@
 package client.scenes;
 
-import client.Main;
-import client.components.CardListCtrl;
 import client.utils.ClientUtils;
 import client.utils.ServerUtils;
 import commons.CardList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 
