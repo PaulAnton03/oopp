@@ -32,6 +32,7 @@ public class Main extends Application {
     private static final Injector INJECTOR = createInjector(new MyModule());
     @Getter
     private static final MyFXML FXML = new MyFXML(INJECTOR);
+    private MainCtrl mainCtrl = null;
 
     public static void main(String[] args) throws URISyntaxException, IOException {
         launch();
@@ -47,7 +48,12 @@ public class Main extends Application {
         var add = FXML.load(AddCardCtrl.class, "client", "scenes", "AddCard.fxml");
         var join = FXML.load(JoinBoardsCtrl.class, "client", "scenes", "JoinBoards.fxml");
 
-        var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
-        mainCtrl.initialize(primaryStage, connect, settings, add, main, create, join);
+        this.mainCtrl = INJECTOR.getInstance(MainCtrl.class);
+        this.mainCtrl.initialize(primaryStage, connect, settings, add, main, create, join);
+    }
+
+    @Override
+    public void stop() {
+        mainCtrl.stop();
     }
 }

@@ -29,6 +29,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.util.Pair;
+import lombok.Getter;
 
 public class MainCtrl {
     private final ClientUtils client;
@@ -154,5 +155,9 @@ public class MainCtrl {
 
     public Stage getPrimaryStage() {
         return primaryStage;
+    }
+
+    public void stop() {
+        this.client.getServer().stop();
     }
 }

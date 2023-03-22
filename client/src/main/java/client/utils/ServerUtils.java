@@ -48,15 +48,17 @@ public class ServerUtils {
     @Getter
     private static String serverPath = "localhost:8080";
 
+    private WebSocketStompClient stomp = null;
     private StompSession session = null;
 
     public void connect() {
         var client = new StandardWebSocketClient();
-        var stomp = new WebSocketStompClient(client);
         stomp.setMessageConverter(new MappingJackson2MessageConverter());
-        if(session != null){
+        if(session != null) {
             stomp.stop();
+            session = null;
         }
+        stomp = new WebSocketStompClient(client);
         try {
             session = stomp.connect("ws://" + serverPath + "/websocket", new StompSessionHandlerAdapter() {
             }).get();
@@ -189,6 +191,12 @@ public class ServerUtils {
         } else {
 
             return new Board("Default empty board");
+        }
+    }
+
+    public void stop() {
+        if(session != null) {
+            stomp.stop();
         }
     }
 }
