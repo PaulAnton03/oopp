@@ -29,6 +29,7 @@ public class ServerConnectCtrl {
 
         // Connect to server
         serverUtils.setServerPath(server);
+        serverUtils.connect();
         System.out.println("Connecting to server: " + server);
 
         /* Original code, altering it in order to create a test for auto generation.

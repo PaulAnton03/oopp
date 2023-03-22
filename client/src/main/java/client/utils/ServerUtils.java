@@ -18,6 +18,7 @@ package client.utils;
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
 import java.lang.reflect.Type;
+import java.nio.channels.UnresolvedAddressException;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Consumer;
@@ -46,16 +47,16 @@ public class ServerUtils {
 
     @Setter
     @Getter
-    private static String serverPath = "http://localhost:8080/";
+    private static String serverPath = "localhost:8080";
 
-    private StompSession session = connect("ws://localhost:8080/websocket");
+    private StompSession session = null;
 
-    private StompSession connect(String url) {
+    public StompSession connect() {
         var client = new StandardWebSocketClient();
         var stomp = new WebSocketStompClient(client);
         stomp.setMessageConverter(new MappingJackson2MessageConverter());
         try {
-            return stomp.connect(url, new StompSessionHandlerAdapter() {
+            return stomp.connect("ws://" + serverPath + "/websocket", new StompSessionHandlerAdapter() {
             }).get();
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
