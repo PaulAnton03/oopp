@@ -53,12 +53,13 @@ public class ServerUtils {
 
     public void connect() {
         var client = new StandardWebSocketClient();
-        stomp.setMessageConverter(new MappingJackson2MessageConverter());
         if(session != null) {
             stomp.stop();
+            stomp = null;
             session = null;
         }
         stomp = new WebSocketStompClient(client);
+        stomp.setMessageConverter(new MappingJackson2MessageConverter());
         try {
             session = stomp.connect("ws://" + serverPath + "/websocket", new StompSessionHandlerAdapter() {
             }).get();
@@ -197,6 +198,8 @@ public class ServerUtils {
     public void stop() {
         if(session != null) {
             stomp.stop();
+            stomp = null;
+            session = null;
         }
     }
 }
