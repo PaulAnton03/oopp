@@ -53,9 +53,9 @@
       </AnchorPane>
    </right>
    <center>
-      <ScrollPane hbarPolicy="ALWAYS" prefHeight="500.0" prefWidth="800.0" vbarPolicy="NEVER" BorderPane.alignment="CENTER">
+      <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="ALWAYS" onScroll="#scrollHandler" prefHeight="500.0" prefWidth="800.0" vbarPolicy="NEVER" vmax="0.0" BorderPane.alignment="CENTER">
          <content>
-            <HBox fx:id="boardView" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="501.0" prefWidth="800.0" spacing="20.0" />
+            <HBox fx:id="boardView" fillHeight="false" maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="485.0" spacing="20.0" />
          </content>
       </ScrollPane>
    </center>

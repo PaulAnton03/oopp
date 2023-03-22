@@ -28,7 +28,7 @@ public class ServerConnectCtrl {
         if (!serverPath.isEmpty()) {
             serverUtils.setServerPath(serverPath);
         }
-        System.out.println("Connecting to server: " + serverUtils.getServerPath());
+        System.out.println("Connecting to server: " + serverUtils.getServerPath() + "first");
 
         String boardName = boardInput.getText();
         if (boardName.equals("Test Board")) {
@@ -38,6 +38,19 @@ public class ServerConnectCtrl {
         } else {
             mainCtrl.showMainView();
         }
+
+        // Connect to server
+        serverUtils.connect();
+        System.out.println("Connecting to server: " + serverPath);
+
+        /* Original code, altering it in order to create a test for auto generation.
+        // Switching the scene
+        mainCtrl.showMainView();
+
+         */
+
+        mainCtrl.getPrimaryStage().setResizable(true);
+        mainCtrl.showMainView(generateTestBoard());
     }
 
     /**

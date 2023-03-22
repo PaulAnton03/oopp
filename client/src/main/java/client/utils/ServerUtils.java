@@ -17,7 +17,10 @@ package client.utils;
 
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
+import java.lang.reflect.Type;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.function.Consumer;
 
 import org.glassfish.jersey.client.ClientConfig;
 
@@ -31,26 +34,76 @@ import jakarta.ws.rs.client.WebTarget;
 import jakarta.ws.rs.core.GenericType;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.messaging.converter.MappingJackson2MessageConverter;
+import org.springframework.messaging.simp.stomp.StompFrameHandler;
+import org.springframework.messaging.simp.stomp.StompHeaders;
+import org.springframework.messaging.simp.stomp.StompSession;
+import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter;
+import org.springframework.web.socket.client.standard.StandardWebSocketClient;
+import org.springframework.web.socket.messaging.WebSocketStompClient;
 
 public class ServerUtils {
 
     @Setter
     @Getter
-    private String serverPath = "http://localhost:8080/";
+    private static String serverPath = "localhost:8080";
+
+    private WebSocketStompClient stomp = null;
+    private StompSession session = null;
+
+    public void connect() {
+        var client = new StandardWebSocketClient();
+        if(session != null) {
+            stomp.stop();
+            stomp = null;
+            session = null;
+        }
+        stomp = new WebSocketStompClient(client);
+        stomp.setMessageConverter(new MappingJackson2MessageConverter());
+        try {
+            session = stomp.connect("ws://" + serverPath + "/websocket", new StompSessionHandlerAdapter() {
+            }).get();
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        } catch (ExecutionException e) {
+            throw new RuntimeException(e);
+        }
+//        throw new IllegalStateException();
+    }
+
+    public <T> void registerForMessages(String dest, Class<T> type, Consumer<T> consumer) {
+        session.subscribe(dest, new StompFrameHandler() {
+            @Override
+            public Type getPayloadType(StompHeaders headers) {
+                return type;
+            }
+
+            @Override
+            public void handleFrame(StompHeaders headers, Object payload) {
+                consumer.accept((T) payload);
+            }
+        });
+    }
+
+    public void send(String dest, Object o) {
+        session.send(dest, o);
+    }
 
     private WebTarget webTargetFromPath(String path) {
         return ClientBuilder.newClient(new ClientConfig())
-            .target(serverPath).path(path);
+                .target("http://" + serverPath).path(path);
+
     }
 
     private Invocation.Builder webTargetAddDefault(WebTarget webTarget) {
         return webTarget.request(APPLICATION_JSON)
-            .accept(APPLICATION_JSON);
+                .accept(APPLICATION_JSON);
     }
 
     public List<Board> getBoards() {
         WebTarget webTarget = webTargetFromPath("/boards");
-        return webTargetAddDefault(webTarget).get(new GenericType<>() {});
+        return webTargetAddDefault(webTarget).get(new GenericType<>() {
+        });
     }
 
     public Board addBoard(Board board) {
@@ -59,8 +112,10 @@ public class ServerUtils {
     }
 
     public Board getBoard(long id) {
+        System.out.println(id);
         WebTarget webTarget = webTargetFromPath("/boards/{id}").resolveTemplate("id", id);
-        return webTargetAddDefault(webTarget).get(new GenericType<>() {});
+        return webTargetAddDefault(webTarget).get(new GenericType<>() {
+        });
     }
 
     public Board getBoard(String name) {
@@ -70,17 +125,20 @@ public class ServerUtils {
 
     public Board deleteBoard(long id) {
         WebTarget webTarget = webTargetFromPath("/boards/delete/{id}").resolveTemplate("id", id);
-        return webTargetAddDefault(webTarget).delete(new GenericType<> () {});
+        return webTargetAddDefault(webTarget).delete(new GenericType<>() {
+        });
     }
 
     public List<Card> getCards() {
         WebTarget webTarget = webTargetFromPath("/cards");
-        return webTargetAddDefault(webTarget).get(new GenericType<>() {});
+        return webTargetAddDefault(webTarget).get(new GenericType<>() {
+        });
     }
 
     public Card getCard(long id) {
         WebTarget webTarget = webTargetFromPath("/cards/{id}").resolveTemplate("id", id);
-        return webTargetAddDefault(webTarget).get(new GenericType<>() {});
+        return webTargetAddDefault(webTarget).get(new GenericType<>() {
+        });
     }
 
     public Card addCard(Card card) {
@@ -91,17 +149,20 @@ public class ServerUtils {
 
     public Card deleteCard(long id) {
         WebTarget webTarget = webTargetFromPath("/cards/delete/{id}").resolveTemplate("id", id);
-        return webTargetAddDefault(webTarget).delete(new GenericType<>() {});
+        return webTargetAddDefault(webTarget).delete(new GenericType<>() {
+        });
     }
 
     public List<CardList> getCardLists() {
         WebTarget webTarget = webTargetFromPath("/lists");
-        return webTargetAddDefault(webTarget).get(new GenericType<>() {});
+        return webTargetAddDefault(webTarget).get(new GenericType<>() {
+        });
     }
 
     public CardList getCardList(long id) {
         WebTarget webTarget = webTargetFromPath("/lists/{id}").resolveTemplate("id", id);
-        return webTargetAddDefault(webTarget).get(new GenericType<>() {});
+        return webTargetAddDefault(webTarget).get(new GenericType<>() {
+        });
     }
 
     public CardList addCardList(CardList cardList) {
@@ -112,7 +173,8 @@ public class ServerUtils {
 
     public CardList deleteCardList(long id) {
         WebTarget webTarget = webTargetFromPath("/lists/delete/{id}").resolveTemplate("id", id);
-        return webTargetAddDefault(webTarget).delete(new GenericType<>() {});
+        return webTargetAddDefault(webTarget).delete(new GenericType<>() {
+        });
     }
 
     // For TESTING purpose
@@ -130,6 +192,14 @@ public class ServerUtils {
         } else {
 
             return new Board("Default empty board");
+        }
+    }
+
+    public void stop() {
+        if(session != null) {
+            stomp.stop();
+            stomp = null;
+            session = null;
         }
     }
 }

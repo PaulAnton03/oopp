@@ -21,6 +21,8 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 
 import client.scenes.*;
+import client.utils.ExceptionHandler;
+
 import com.google.inject.Injector;
 
 import javafx.application.Application;
@@ -32,6 +34,7 @@ public class Main extends Application {
     private static final Injector INJECTOR = createInjector(new MyModule());
     @Getter
     private static final MyFXML FXML = new MyFXML(INJECTOR);
+    private MainCtrl mainCtrl = null;
 
     public static void main(String[] args) throws URISyntaxException, IOException {
         launch();
@@ -39,6 +42,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException {
+        Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler());
 
         var connect = FXML.load(ServerConnectCtrl.class, "client", "scenes", "ServerConnect.fxml");
         var main = FXML.load(MainViewCtrl.class, "client", "scenes", "MainView.fxml");
@@ -48,7 +52,12 @@ public class Main extends Application {
         var join = FXML.load(JoinBoardsCtrl.class, "client", "scenes", "JoinBoards.fxml");
         var editCard = FXML.load(EditCardCtrl.class, "client", "scenes", "EditCard.fxml");
 
-        var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
-        mainCtrl.initialize(primaryStage, connect, settings, add, main, create, join, editCard);
+        this.mainCtrl = INJECTOR.getInstance(MainCtrl.class);
+        this.mainCtrl.initialize(primaryStage, connect, settings, add, main, create, join);
+    }
+
+    @Override
+    public void stop() {
+        mainCtrl.stop();
     }
 }
