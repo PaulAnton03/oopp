@@ -1,5 +1,6 @@
 package client.scenes;
 
+import client.components.CardCtrl;
 import client.utils.ClientUtils;
 import client.utils.ServerUtils;
 import commons.Card;
@@ -8,8 +9,10 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import lombok.Setter;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 public class EditCardCtrl {
 
@@ -22,7 +25,7 @@ public class EditCardCtrl {
     @FXML
     private TextField changeTitle;
     @FXML
-    private TextField changeDesc;
+    private TextArea changeDesc;
 
     @FXML
     private Button saveButton;
@@ -39,16 +42,24 @@ public class EditCardCtrl {
     @FXML
     private CheckBox checkBoxOpt;
 
+    @Setter
+    private CardCtrl cardCtrl;
+
     @Inject
     public EditCardCtrl(ServerUtils server, ClientUtils client, MainCtrl mainCtrl) {
         this.server = server;
         this.client = client;
         this.mainCtrl = mainCtrl;
+        this.cardCtrl = null;
     }
 
 
     public void saveCardChanges(){
-
+        cardCtrl.getCard().setTitle(changeTitle.getText());
+        cardCtrl.getCard().setDescription(changeDesc.getText());
+        server.addCard(cardCtrl.getCard());
+        cardCtrl.loadData(cardCtrl.getCard());
+        mainCtrl.showMainView();
     }
 
     public void cancel() {

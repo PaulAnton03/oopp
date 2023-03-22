@@ -98,7 +98,8 @@ public class MainCtrl {
         primaryStage.show();
     }
 
-    public void showEditCard(){
+    public void showEditCard(CardCtrl cardCtrl){
+        editCardCtrl.setCardCtrl(cardCtrl);
         primaryStage.setTitle("Edit Card");
         primaryStage.setScene(editCard);
     }
