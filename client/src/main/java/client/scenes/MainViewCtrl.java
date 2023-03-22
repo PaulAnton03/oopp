@@ -76,14 +76,5 @@ public class MainViewCtrl {
         for (CardList cardList : board.getCardLists()) {
             boardView.getChildren().add(mainCtrl.createCardList(cardList));
         }
-        for (CardList cardList : board.getCardLists()) {
-            boardView.getChildren().add(mainCtrl.createCardList(cardList));
-        }
-        for (CardList cardList : board.getCardLists()) {
-            boardView.getChildren().add(mainCtrl.createCardList(cardList));
-        }
-        for (CardList cardList : board.getCardLists()) {
-            boardView.getChildren().add(mainCtrl.createCardList(cardList));
-        }
     }
 }
