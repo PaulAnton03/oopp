@@ -65,7 +65,7 @@ public class ServerConnectCtrl {
         cardList1.addCard(card1);cardList1.addCard(card2);
         CardList cardList2 = new CardList("TestList1");
         cardList2.addCard(card1);cardList2.addCard(card2);cardList2.addCard(card1);
-        Board board = new Board("Test Board");
+        Board board = new Board("Empty Board");
         board.addCardList(cardList1);board.addCardList(cardList2);
         return board;
     }

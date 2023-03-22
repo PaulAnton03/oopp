@@ -54,6 +54,9 @@ public class MainCtrl {
     private JoinBoardsCtrl joinBoardsCtrl;
     private Scene join;
 
+    private AddListCtrl addListCtrl;
+    private Scene addList;
+
     @Inject
     public MainCtrl(ClientUtils client) {
         this.client = client;
@@ -65,7 +68,8 @@ public class MainCtrl {
                            Pair<AddCardCtrl, Parent> add,
                            Pair<MainViewCtrl, Parent> main,
                            Pair<CreateBoardCtrl, Parent> create,
-                           Pair<JoinBoardsCtrl, Parent> join
+                           Pair<JoinBoardsCtrl, Parent> join,
+                           Pair<AddListCtrl, Parent> list
     ) {
         this.primaryStage = primaryStage;
 
@@ -86,6 +90,9 @@ public class MainCtrl {
 
         this.joinBoardsCtrl = join.getKey();
         this.join = new Scene(join.getValue());
+
+        this.addListCtrl = list.getKey();
+        this.addList = new Scene(list.getValue());
 
         showConnect();
         primaryStage.show();
@@ -126,6 +133,11 @@ public class MainCtrl {
         primaryStage.setTitle("Join boards");
         primaryStage.setScene(join);
         joinBoardsCtrl.populateBoards();
+    }
+
+    public void showAddList() {
+        primaryStage.setTitle("Add list");
+        primaryStage.setScene(addList);
     }
 
     public Pair<CardCtrl, Parent> createNewCard() {
