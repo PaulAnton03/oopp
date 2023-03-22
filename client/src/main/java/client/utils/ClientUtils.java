@@ -4,11 +4,13 @@ import commons.Board;
 import javax.inject.Inject;
 
 import commons.CardList;
+import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Optional;
 
 public class ClientUtils {
+    @Getter
     private final ServerUtils server;
     private final ClientPreferences preferences;
     @Setter
