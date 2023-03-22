@@ -53,7 +53,7 @@ public class Main extends Application {
         var editCard = FXML.load(EditCardCtrl.class, "client", "scenes", "EditCard.fxml");
 
         this.mainCtrl = INJECTOR.getInstance(MainCtrl.class);
-        this.mainCtrl.initialize(primaryStage, connect, settings, add, main, create, join);
+        this.mainCtrl.initialize(primaryStage, connect, settings, add, main, create, join, editCard);
     }
 
     @Override
