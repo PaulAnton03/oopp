@@ -1,7 +1,7 @@
 package commons;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -17,9 +17,9 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
@@ -36,10 +36,11 @@ public class CardList {
     protected long id;
 
     @OneToMany(mappedBy = "cardList", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<Card> cardList = new ArrayList<>();
+    private Set<Card> cardList = new HashSet<>();
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "board_id", nullable = false)
+    @EqualsAndHashCode.Exclude
     private Board board;
 
     @NonNull
@@ -64,6 +65,10 @@ public class CardList {
         this.cardList.add(card);
     }
 
+    @Override
+    public String toString() {
+        return "CardList [id=" + id + ", title=" + title + ", cards=" + cardList + "]";
+    }
 
     /**
      * @return Is {@link CardList} valid for network transfer

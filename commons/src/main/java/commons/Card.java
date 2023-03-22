@@ -14,10 +14,7 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 @Data
 @Entity
@@ -34,12 +31,18 @@ public class Card {
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "card_list_id", nullable = false)
+    @EqualsAndHashCode.Exclude
     private CardList cardList;
 
     @NonNull
     private String title;
     @NonNull
     private String description;
+
+    @Override
+    public String toString() {
+        return "Card [id=" + id + ", title=" + title + ", description=" + description + "]";
+    }
 
     /**
      * @return Is {@link Card} valid for network transfer

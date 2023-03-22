@@ -1,7 +1,7 @@
 package commons;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -16,10 +16,7 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 @Data
 @RequiredArgsConstructor
@@ -40,7 +37,7 @@ public class Board {
     private String password;
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<CardList> cardLists = new ArrayList<>();
+    private Set<CardList> cardLists = new HashSet<>();
 
     /**
      * Adds an empty {@link CardList} to the board.
@@ -96,7 +93,7 @@ public class Board {
 
     @Override
     public String toString() {
-        return "Board [id=" + id + ", name=" + name + ", password=" + password + ", cards=" + cardLists + "]";
+        return "Board [id=" + id + ", name=" + name + ", password=" + password + ", cardLists=" + cardLists + "]";
     }
 
 
