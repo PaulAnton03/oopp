@@ -40,9 +40,9 @@ public class ServerConnectCtrl {
         }
 
         // Connect to server
-        serverUtils.setServerPath(server);
+        serverUtils.setServerPath(serverPath);
         serverUtils.connect();
-        System.out.println("Connecting to server: " + server);
+        System.out.println("Connecting to server: " + serverPath);
 
         /* Original code, altering it in order to create a test for auto generation.
         // Switching the scene
