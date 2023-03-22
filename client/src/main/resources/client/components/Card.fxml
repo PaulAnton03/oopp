@@ -18,7 +18,7 @@
                </font>
             </Text>
             <Pane prefHeight="26.0" prefWidth="114.0" />
-            <Button fx:id="EditCardButton" mnemonicParsing="false" style="-fx-background-color: 0;" text="..." />
+            <Button fx:id="editCardButton" mnemonicParsing="false" onAction="#editCard" style="-fx-background-color: 0;" text="..." />
             <Button fx:id="DeleteButton" mnemonicParsing="false" text="X" />
          </children>
       </HBox>
