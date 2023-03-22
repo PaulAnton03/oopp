@@ -36,6 +36,8 @@ public class ServerConnectCtrl {
         mainCtrl.showMainView();
 
          */
+
+        mainCtrl.getPrimaryStage().setResizable(true);
         mainCtrl.showMainView(generateTestBoard());
     }
 
