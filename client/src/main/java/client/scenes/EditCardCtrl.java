@@ -59,7 +59,6 @@ public class EditCardCtrl {
         cardCtrl.getCard().setTitle(changeTitle.getText());
         cardCtrl.getCard().setDescription(changeDesc.getText());
         server.addCard(cardCtrl.getCard());
-
         cardCtrl.loadData(cardCtrl.getCard());
         mainCtrl.showMainView();
     }
