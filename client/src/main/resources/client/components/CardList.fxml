@@ -11,7 +11,7 @@
       <AnchorPane maxHeight="-Infinity" minHeight="-Infinity" prefHeight="50.0" prefWidth="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <Text fx:id="title" layoutX="14.0" layoutY="31.0" strokeType="OUTSIDE" strokeWidth="0.0" text="TODO" wrappingWidth="79.91095733642578" AnchorPane.bottomAnchor="17.86073076597942" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="17.0" />
-            <Button layoutX="79.0" layoutY="13.0" mnemonicParsing="false" text="Add" AnchorPane.bottomAnchor="12.931679243688016" AnchorPane.rightAnchor="78.58482001933487" AnchorPane.topAnchor="13.0" />
+            <Button layoutX="79.0" layoutY="13.0" mnemonicParsing="false" onAction="#addCard" text="Add" AnchorPane.bottomAnchor="12.931679243688016" AnchorPane.rightAnchor="78.58482001933487" AnchorPane.topAnchor="13.0" />
             <Button layoutX="122.0" layoutY="13.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="68.0" text="Settings" AnchorPane.bottomAnchor="12.931679243688016" AnchorPane.rightAnchor="9.653140775646847" AnchorPane.topAnchor="13.0" />
          </children>
       </AnchorPane>

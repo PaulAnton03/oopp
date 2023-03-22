@@ -51,8 +51,9 @@ public class MainViewCtrl {
 
         if (board == null) {
             board = new Board("Empty board");
+        } else {
+            client.setActiveBoard(board);
         }
-        client.setActiveBoard(board);
         displayBoardName.setText(board.getName());
 
         for (CardList cardList : board.getCardLists()) {

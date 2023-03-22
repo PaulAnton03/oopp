@@ -25,12 +25,12 @@ public class ClientUtils {
     }
 
     public Board getActiveBoard() {
-        if (activeBoard == null) {
+        if (activeBoard == null || activeBoard.getId() == 1L) {
             Optional<Long> boardId = preferences.getDefaultBoardId();
-            activeBoard = boardId.isPresent() ?  server.getBoard(boardId.get()) : null;
+            return boardId.isPresent() ? server.getBoard(boardId.get()) : null;
         } else {
             activeBoard = server.getBoard(activeBoard.getId());
+            return activeBoard;
         }
-        return activeBoard;
     }
 }
