@@ -12,7 +12,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.BoardSettingsCtrl">
+<BorderPane xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.EditCardCtrl">
    <center>
       <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0">
          <children>
@@ -23,8 +23,8 @@
                </font>
             </Text>
             <TextArea fx:id="changeDesc" layoutX="102.0" layoutY="178.0" prefHeight="79.0" prefWidth="400.0" />
-            <Button layoutX="102.0" layoutY="342.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="70.0" text="Cancel" />
-            <Button layoutX="432.0" layoutY="341.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="70.0" text="Save" />
+            <Button fx:id="cancelButton" layoutX="102.0" layoutY="342.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="70.0" text="Cancel" />
+            <Button fx:id="saveButton" layoutX="432.0" layoutY="341.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="70.0" text="Save" />
             <Label layoutX="102.0" layoutY="78.0" text="Title" />
             <Label layoutX="100.0" layoutY="160.0" text="Description" />
             <Label layoutX="100.0" layoutY="272.0" text="Tags" />

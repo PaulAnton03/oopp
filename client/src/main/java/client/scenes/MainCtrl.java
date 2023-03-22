@@ -54,6 +54,9 @@ public class MainCtrl {
     private JoinBoardsCtrl joinBoardsCtrl;
     private Scene join;
 
+    private EditCardCtrl editCardCtrl;
+    private Scene editCard;
+
     @Inject
     public MainCtrl(ClientUtils client) {
         this.client = client;
@@ -65,7 +68,8 @@ public class MainCtrl {
                            Pair<AddCardCtrl, Parent> add,
                            Pair<MainViewCtrl, Parent> main,
                            Pair<CreateBoardCtrl, Parent> create,
-                           Pair<JoinBoardsCtrl, Parent> join
+                           Pair<JoinBoardsCtrl, Parent> join,
+                           Pair<EditCardCtrl, Parent> editCard
     ) {
         this.primaryStage = primaryStage;
 
@@ -87,8 +91,16 @@ public class MainCtrl {
         this.joinBoardsCtrl = join.getKey();
         this.join = new Scene(join.getValue());
 
+        this.editCardCtrl = editCard.getKey();
+        this.editCard = new Scene(editCard.getValue());
+
         showConnect();
         primaryStage.show();
+    }
+
+    public void showEditCard(){
+        primaryStage.setTitle("Edit Card");
+        primaryStage.setScene(editCard);
     }
 
     public void showConnect() {
