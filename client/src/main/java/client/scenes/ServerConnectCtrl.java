@@ -28,7 +28,7 @@ public class ServerConnectCtrl {
         if (!serverPath.isEmpty()) {
             serverUtils.setServerPath(serverPath);
         }
-        System.out.println("Connecting to server: " + serverUtils.getServerPath());
+        System.out.println("Connecting to server: " + serverUtils.getServerPath() + "first");
 
         String boardName = boardInput.getText();
         if (boardName.equals("Test Board")) {
@@ -40,7 +40,6 @@ public class ServerConnectCtrl {
         }
 
         // Connect to server
-        serverUtils.setServerPath(serverPath);
         serverUtils.connect();
         System.out.println("Connecting to server: " + serverPath);
 

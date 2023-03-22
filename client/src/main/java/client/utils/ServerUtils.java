@@ -50,19 +50,22 @@ public class ServerUtils {
 
     private StompSession session = null;
 
-    public StompSession connect() {
+    public void connect() {
         var client = new StandardWebSocketClient();
         var stomp = new WebSocketStompClient(client);
         stomp.setMessageConverter(new MappingJackson2MessageConverter());
+        if(session != null){
+            stomp.stop();
+        }
         try {
-            return stomp.connect("ws://" + serverPath + "/websocket", new StompSessionHandlerAdapter() {
+            session = stomp.connect("ws://" + serverPath + "/websocket", new StompSessionHandlerAdapter() {
             }).get();
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         } catch (ExecutionException e) {
             throw new RuntimeException(e);
         }
-        throw new IllegalStateException();
+//        throw new IllegalStateException();
     }
 
     public <T> void registerForMessages(String dest, Class<T> type, Consumer<T> consumer) {
@@ -85,7 +88,8 @@ public class ServerUtils {
 
     private WebTarget webTargetFromPath(String path) {
         return ClientBuilder.newClient(new ClientConfig())
-                .target(serverPath).path(path);
+                .target("http://" + serverPath).path(path);
+
     }
 
     private Invocation.Builder webTargetAddDefault(WebTarget webTarget) {
@@ -105,6 +109,7 @@ public class ServerUtils {
     }
 
     public Board getBoard(long id) {
+        System.out.println(id);
         WebTarget webTarget = webTargetFromPath("/boards/{id}").resolveTemplate("id", id);
         return webTargetAddDefault(webTarget).get(new GenericType<>() {
         });
