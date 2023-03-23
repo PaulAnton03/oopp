@@ -50,9 +50,10 @@ public class Main extends Application {
         var join = FXML.load(JoinBoardsCtrl.class, "client", "scenes", "JoinBoards.fxml");
         var addList = FXML.load(AddListCtrl.class, "client", "scenes", "AddList.fxml");
         var editList = FXML.load(ListSettingsCtrl.class, "client", "scenes", "ListSettings.fxml");
+        var pswProtected = FXML.load(PasswordProtectedCtrl.class, "client", "scenes", "PasswordProtected.fxml");
 
         mainCtrl = INJECTOR.getInstance(MainCtrl.class);
-        mainCtrl.initialize(primaryStage, connect, settings, add, main, create, join, addList, editList);
+        mainCtrl.initialize(primaryStage, connect, settings, add, main, create, join, addList, editList, pswProtected);
     }
 
     @Override

@@ -44,6 +44,7 @@ public class MyModule implements Module {
         binder.bind(CreateBoardCtrl.class).in(Scopes.SINGLETON);
         binder.bind(JoinBoardsCtrl.class).in(Scopes.SINGLETON);
         binder.bind(ListSettingsCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(PasswordProtectedCtrl.class).in(Scopes.SINGLETON);
 
         // Components
         binder.bind(CardCtrl.class);

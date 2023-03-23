@@ -168,6 +168,8 @@ public class ServerUtils {
     public CardList addCardList(CardList cardList) {
         WebTarget webTarget = webTargetFromPath("/lists/create")
                 .queryParam("boardId", cardList.getBoard().getId());
+        System.out.println(webTarget);
+        System.out.println(cardList);
         return webTargetAddDefault(webTarget).post(Entity.entity(cardList, APPLICATION_JSON), CardList.class);
     }
 

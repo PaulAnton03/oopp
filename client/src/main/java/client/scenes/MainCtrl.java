@@ -17,11 +17,8 @@ package client.scenes;
 
 import javax.inject.Inject;
 
-import client.Main;
-import client.MyFXML;
-import client.components.CardCtrl;
-import client.components.CardListCtrl;
 import client.utils.ClientUtils;
+import client.utils.ComponentFactory;
 import client.utils.ServerUtils;
 import client.utils.Logger;
 import commons.Board;
@@ -31,11 +28,10 @@ import javafx.stage.Stage;
 import javafx.util.Pair;
 import lombok.Getter;
 
-import javax.inject.Inject;
-
 public class MainCtrl {
     private final ServerUtils server;
     private final ClientUtils client;
+    private final ComponentFactory factory;
 
     @Getter
     private Stage primaryStage;
@@ -64,10 +60,14 @@ public class MainCtrl {
     private ListSettingsCtrl editListCtrl;
     private Scene editList;
 
+    private PasswordProtectedCtrl passwordProtectedCtrl;
+    private Scene passwordProtected;
+
     @Inject
-    public MainCtrl(ServerUtils server, ClientUtils client) {
+    public MainCtrl(ServerUtils server, ClientUtils client, ComponentFactory factory) {
         this.server = server;
         this.client = client;
+        this.factory = factory;
     }
 
     public void initialize(Stage primaryStage,
@@ -78,7 +78,8 @@ public class MainCtrl {
                            Pair<CreateBoardCtrl, Parent> create,
                            Pair<JoinBoardsCtrl, Parent> join,
                            Pair<AddListCtrl, Parent> list,
-                           Pair<ListSettingsCtrl, Parent> edit
+                           Pair<ListSettingsCtrl, Parent> edit,
+                           Pair<PasswordProtectedCtrl, Parent> pswProtected
     ) {
         this.primaryStage = primaryStage;
 
@@ -106,6 +107,10 @@ public class MainCtrl {
         this.editListCtrl = edit.getKey();
         this.editList = new Scene(edit.getValue());
 
+        this.passwordProtectedCtrl = pswProtected.getKey();
+        this.passwordProtected = new Scene(pswProtected.getValue());
+
+        primaryStage.setResizable(true);
         showConnect();
         primaryStage.show();
     }
@@ -163,6 +168,12 @@ public class MainCtrl {
     public void showListSettings() {
         primaryStage.setTitle("Edit list");
         primaryStage.setScene(editList);
+    }
+
+    public void showPasswordProtected(Board pswProtectedBoard) {
+        primaryStage.setTitle("Password Protected Board");
+        passwordProtectedCtrl.loadData(pswProtectedBoard);
+        primaryStage.setScene(passwordProtected);
     }
 
     public Stage getPrimaryStage() {

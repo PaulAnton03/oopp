@@ -3,7 +3,6 @@ package client.scenes;
 import client.components.BoardCtrl;
 import client.utils.ClientUtils;
 import client.utils.ComponentFactory;
-import client.utils.Logger;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Board;

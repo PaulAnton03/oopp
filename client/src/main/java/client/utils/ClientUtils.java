@@ -35,10 +35,8 @@ public class ClientUtils {
     public BoardCtrl getActiveBoardCtrl() {
         if (activeBoardCtrl == null) {
             // Load default board
-            preferences.getDefaultBoardId().ifPresentOrElse(boardId -> {
+            preferences.getDefaultBoardId().ifPresent(boardId -> {
                 activeBoardCtrl = factory.create(BoardCtrl.class, server.getBoard(boardId));
-            }, () -> {
-                activeBoardCtrl = factory.create(BoardCtrl.class, server.getBoardTest());
             });
         }
         return activeBoardCtrl;

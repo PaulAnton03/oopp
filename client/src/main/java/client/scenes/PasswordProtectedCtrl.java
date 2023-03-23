@@ -1,9 +1,7 @@
-package client.components;
+package client.scenes;
 
-import client.scenes.MainCtrl;
 import client.utils.ExceptionHandler;
 import commons.Board;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import lombok.Setter;
@@ -26,12 +24,20 @@ public class PasswordProtectedCtrl {
         this.exceptionHandler = exceptionHandler;
     }
 
-    public void buttonCancelClicked(ActionEvent actionEvent) {
+    public void loadData(Board passwordBoard) {
+        this.passwordBoard = passwordBoard;
+    }
+
+    public void buttonCancelClicked() {
+        passwordField.clear();
         this.mainCtrl.showJoin();
     }
 
-    public void checkPassword(ActionEvent actionEvent) {
-        if (!passwordField.getText().equals(passwordBoard.getPassword())) {
+    public void checkPassword() {
+        final String inputtedPassword = passwordField.getText();
+        passwordField.clear();
+
+        if (!inputtedPassword.equals(passwordBoard.getPassword())) {
             exceptionHandler.clientException("Incorrect Password!");
             return;
         }

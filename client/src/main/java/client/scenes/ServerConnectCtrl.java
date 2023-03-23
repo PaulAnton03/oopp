@@ -33,17 +33,14 @@ public class ServerConnectCtrl {
         String boardName = boardInput.getText();
         if (boardName.equals("Test Board")) {
             mainCtrl.showMainView(generateTestBoard());
-        } else if (!boardName.isEmpty()) {
+        } else {
             mainCtrl.showMainView();
         }
 
         // Connect to server
         serverUtils.connect();
-
         Logger.log("Connecting to server: " + serverUtils.getServerPath());
 
-        mainCtrl.getPrimaryStage().setResizable(true);
-        mainCtrl.showMainView();
     }
 
     /**
