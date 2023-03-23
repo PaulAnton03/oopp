@@ -31,7 +31,13 @@ public class MainViewCtrl {
     }
 
     @FXML
-    void btnAddClicked(ActionEvent event) { mainCtrl.showAddCard(); }
+    void btnAddClicked(ActionEvent event) {
+        if(client.getActiveBoard() != null)
+            mainCtrl.showAddList();
+        else {
+            throw new IllegalStateException("You cannot add lists to the empty board. Please select a board to operate on");
+        }
+    }
 
     @FXML
     void btnBackClicked(ActionEvent event) { mainCtrl.showConnect(); }

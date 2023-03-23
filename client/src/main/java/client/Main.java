@@ -50,9 +50,11 @@ public class Main extends Application {
         var settings = FXML.load(BoardSettingsCtrl.class, "client", "scenes", "BoardSettings.fxml");
         var add = FXML.load(AddCardCtrl.class, "client", "scenes", "AddCard.fxml");
         var join = FXML.load(JoinBoardsCtrl.class, "client", "scenes", "JoinBoards.fxml");
+        var addList = FXML.load(AddListCtrl.class, "client", "scenes", "AddList.fxml");
+        var editList = FXML.load(ListSettingsCtrl.class, "client", "scenes", "ListSettings.fxml");
 
-        this.mainCtrl = INJECTOR.getInstance(MainCtrl.class);
-        this.mainCtrl.initialize(primaryStage, connect, settings, add, main, create, join);
+        mainCtrl = INJECTOR.getInstance(MainCtrl.class);
+        mainCtrl.initialize(primaryStage, connect, settings, add, main, create, join, addList, editList);
     }
 
     @Override
