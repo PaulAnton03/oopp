@@ -67,7 +67,9 @@ public class MainCtrl {
         this.client = client;
     }
 
-    public void initialize(Stage primaryStage, Pair<ServerConnectCtrl, Parent> connect, Pair<BoardSettingsCtrl, Parent> settings, Pair<AddCardCtrl, Parent> add, Pair<MainViewCtrl, Parent> main, Pair<CreateBoardCtrl, Parent> create, Pair<JoinBoardsCtrl, Parent> join, Pair<AddListCtrl, Parent> list, Pair<ListSettingsCtrl, Parent> edit) {
+    public void initialize(Stage primaryStage, Pair<ServerConnectCtrl, Parent> connect, Pair<BoardSettingsCtrl, Parent> settings,
+                           Pair<AddCardCtrl, Parent> add, Pair<MainViewCtrl, Parent> main, Pair<CreateBoardCtrl, Parent> create,
+                           Pair<JoinBoardsCtrl, Parent> join, Pair<AddListCtrl, Parent> list, Pair<ListSettingsCtrl, Parent> edit) {
         this.primaryStage = primaryStage;
 
         this.serverConnectCtrl = connect.getKey();
@@ -122,7 +124,7 @@ public class MainCtrl {
     }
 
     public void showMainView() {
-        if(client.getActiveBoard() == null) {
+        if (client.getActiveBoard() == null) {
             Logger.log("No active board, cannot show main view");
             this.showJoin();
             return;
