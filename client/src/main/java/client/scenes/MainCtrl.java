@@ -24,7 +24,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.util.Pair;
-import lombok.Getter;
 
 public class MainCtrl {
     private final ServerUtils server;
