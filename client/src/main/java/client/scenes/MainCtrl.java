@@ -15,13 +15,12 @@
  */
 package client.scenes;
 
-import javax.inject.Inject;
-
 import client.Main;
 import client.MyFXML;
 import client.components.CardCtrl;
 import client.components.CardListCtrl;
 import client.utils.ClientUtils;
+import client.utils.Logger;
 import commons.Board;
 import commons.Card;
 import commons.CardList;
@@ -29,11 +28,14 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.util.Pair;
+import lombok.Getter;
+
+import javax.inject.Inject;
 
 public class MainCtrl {
     private final ClientUtils client;
     private final MyFXML myFXML = Main.getFXML();
-
+    @Getter
     private Stage primaryStage;
 
     private ServerConnectCtrl serverConnectCtrl;
@@ -124,23 +126,29 @@ public class MainCtrl {
         primaryStage.setScene(connect);
     }
 
-    public void showSettings(){
+    public void showSettings() {
         primaryStage.setTitle("Board Settings");
         primaryStage.setScene(settings);
     }
 
-    public void showAddCard(){
+    public void showAddCard() {
         primaryStage.setTitle("Add card");
         primaryStage.setScene(add);
     }
 
     public void showMainView(Board board) {
         primaryStage.setTitle("Main view");
-        primaryStage.setScene(main);
         mainViewCtrl.onSetup(board);
+        primaryStage.setScene(main);
+        Logger.log("Showing main view for board " + board);
     }
 
     public void showMainView() {
+        if (client.getActiveBoard() == null) {
+            Logger.log("No active board, cannot show main view");
+            this.showJoin();
+            return;
+        }
         showMainView(client.getActiveBoard());
     }
 
@@ -187,10 +195,6 @@ public class MainCtrl {
         var newCardList = pair.getValue();
         cardListCtrl.loadData(cardList);
         return newCardList;
-    }
-
-    public Stage getPrimaryStage() {
-        return primaryStage;
     }
 
     public void stop() {
