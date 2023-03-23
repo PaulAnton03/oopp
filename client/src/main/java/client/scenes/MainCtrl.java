@@ -54,6 +54,9 @@ public class MainCtrl {
     private JoinBoardsCtrl joinBoardsCtrl;
     private Scene join;
 
+    private EditCardCtrl editCardCtrl;
+    private Scene editCard;
+
     private AddListCtrl addListCtrl;
     private Scene addList;
 
@@ -79,6 +82,7 @@ public class MainCtrl {
                            Pair<JoinBoardsCtrl, Parent> join,
                            Pair<AddListCtrl, Parent> list,
                            Pair<ListSettingsCtrl, Parent> edit,
+                           Pair<EditCardCtrl, Parent> editCard,
                            Pair<PasswordProtectedCtrl, Parent> pswProtected
     ) {
         this.primaryStage = primaryStage;
@@ -101,6 +105,9 @@ public class MainCtrl {
         this.joinBoardsCtrl = join.getKey();
         this.join = new Scene(join.getValue());
 
+        this.editCardCtrl = editCard.getKey();
+        this.editCard = new Scene(editCard.getValue());
+
         this.addListCtrl = list.getKey();
         this.addList = new Scene(list.getValue());
 
@@ -113,6 +120,12 @@ public class MainCtrl {
         primaryStage.setResizable(true);
         showConnect();
         primaryStage.show();
+    }
+
+    public void showEditCard(CardCtrl cardCtrl){
+        editCardCtrl.setCardCtrl(cardCtrl);
+        primaryStage.setTitle("Edit Card");
+        primaryStage.setScene(editCard);
     }
 
     public void showConnect() {
