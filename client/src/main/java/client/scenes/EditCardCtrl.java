@@ -55,6 +55,7 @@ public class EditCardCtrl {
 
 
     public void saveCardChanges(){
+        //todo update the card instead of deleting and adding again
         server.deleteCard(cardCtrl.getCard().getId());
         cardCtrl.getCard().setTitle(changeTitle.getText());
         cardCtrl.getCard().setDescription(changeDesc.getText());
