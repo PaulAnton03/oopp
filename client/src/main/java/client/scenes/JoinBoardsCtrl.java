@@ -3,12 +3,15 @@ package client.scenes;
 import client.Main;
 import client.MyFXML;
 import client.components.BoardJoinCtrl;
+import client.components.PasswordProtectedCtrl;
 import client.utils.ServerUtils;
 import commons.Board;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 import javax.inject.Inject;
@@ -31,6 +34,8 @@ public class JoinBoardsCtrl {
     private Button navbarBackButton;
     @FXML
     private Button navbarCreateButton;
+    @FXML
+    private HBox grid;
 
     @FXML
     private VBox boardPopulation;
@@ -55,11 +60,6 @@ public class JoinBoardsCtrl {
     }
 
     @FXML
-    void addCardClicked(ActionEvent event) {
-        System.out.println("Password set: " + boardPasswordField.getText());
-    }
-
-    @FXML
     void btnBackClicked(ActionEvent event) {
         boardPasswordField.setText("");
         mainCtrl.showMainView();
@@ -68,7 +68,6 @@ public class JoinBoardsCtrl {
     @FXML
     void btnClearClicked(ActionEvent event) {
         boardPasswordField.setText("");
-        System.out.println("Cleared!");
     }
 
     @FXML
@@ -76,4 +75,18 @@ public class JoinBoardsCtrl {
         mainCtrl.showCreate();
     }
 
+    private Board requestedPassword;
+
+    public void requestPassword(Board requestedPassword) {
+        this.requestedPassword = requestedPassword;
+
+        var pair = myFXML.load(PasswordProtectedCtrl.class, "client", "components", "PasswordProtected.fxml");
+        PasswordProtectedCtrl ctrl = pair.getKey();
+        var component = pair.getValue();
+
+        mainCtrl.getPrimaryStage().setTitle("Password Protected Board");
+        mainCtrl.getPrimaryStage().setScene(new Scene(component));
+
+        ctrl.setPasswordBoard(requestedPassword);
+    }
 }

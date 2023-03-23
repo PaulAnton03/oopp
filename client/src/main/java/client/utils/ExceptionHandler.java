@@ -1,10 +1,10 @@
 package client.utils;
 
-import java.net.ConnectException;
-
 import jakarta.ws.rs.BadRequestException;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+
+import java.net.ConnectException;
 
 public class ExceptionHandler implements Thread.UncaughtExceptionHandler {
     public void uncaughtException(Thread t, Throwable e) {
@@ -25,6 +25,12 @@ public class ExceptionHandler implements Thread.UncaughtExceptionHandler {
         errorAlert.setHeaderText(msg);
 
         errorAlert.setContentText(e.getClass().getSimpleName());
+        errorAlert.showAndWait();
+    }
+
+    public void clientException(String msg) {
+        Alert errorAlert = new Alert(AlertType.ERROR);
+        errorAlert.setHeaderText(msg);
         errorAlert.showAndWait();
     }
 }

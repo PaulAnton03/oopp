@@ -1,6 +1,8 @@
 package client.scenes;
 
 import client.utils.ClientUtils;
+import client.utils.ExceptionHandler;
+import client.utils.Logger;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Board;
@@ -15,6 +17,8 @@ public class BoardSettingsCtrl {
     private final ClientUtils client;
     private final MainCtrl mainCtrl;
 
+    private final ExceptionHandler exceptionHandler;
+
     @FXML
     private ColorPicker boardColor;
     @FXML
@@ -23,17 +27,18 @@ public class BoardSettingsCtrl {
     private CheckBox passwordUsed;
 
     @Inject
-    public BoardSettingsCtrl(ServerUtils server, ClientUtils client, MainCtrl mainCtrl) {
+    public BoardSettingsCtrl(ServerUtils server, ClientUtils client, MainCtrl mainCtrl, ExceptionHandler exceptionHandler) {
         this.client = client;
         this.mainCtrl = mainCtrl;
         this.server = server;
+        this.exceptionHandler = exceptionHandler;
     }
 
     public void saveChanges() {
         Board board = client.getActiveBoard();
-        if(board == null) {
-            //TODO: Shouldn't reach this point without a board selected.
-            System.out.println("No board selected");
+        if (board == null) {
+            exceptionHandler.clientException("Something went wrong, no board selected!");
+            Logger.log("No board selected", Logger.LogLevel.ERROR);
             return;
         }
         board.setPassword(passwordUsed.isSelected() ? boardPassword.getText() : null);
@@ -43,8 +48,16 @@ public class BoardSettingsCtrl {
     }
 
     public void deleteBoard() {
-        // TODO ask user for password (if there is one)
-        System.out.println("Board deleted");
+        Board board = client.getActiveBoard();
+        if (board == null) {
+            exceptionHandler.clientException("Something went wrong, no board selected!");
+            Logger.log("No board selected", Logger.LogLevel.ERROR);
+            return;
+        }
+        server.deleteBoard(board.getId());
+        Logger.log("Deleted board " + board);
+
+        mainCtrl.showJoin();
     }
 
     public void goBack() {

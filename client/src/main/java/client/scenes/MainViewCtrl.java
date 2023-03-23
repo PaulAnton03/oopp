@@ -1,6 +1,7 @@
 package client.scenes;
 
 import client.utils.ClientUtils;
+import client.utils.Logger;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Board;
@@ -12,16 +13,16 @@ import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 
-import java.awt.*;
-
 public class MainViewCtrl {
 
     private final ServerUtils server;
     private final ClientUtils client;
     private final MainCtrl mainCtrl;
 
-    @FXML private HBox boardView;
-    @FXML private Text displayBoardName;
+    @FXML
+    private HBox boardView;
+    @FXML
+    private Text displayBoardName;
 
     @Inject
     public MainViewCtrl(ServerUtils server, ClientUtils client, MainCtrl mainCtrl) {
@@ -32,7 +33,7 @@ public class MainViewCtrl {
 
     @FXML
     void btnAddClicked(ActionEvent event) {
-        if(client.getActiveBoard() != null)
+        if (client.getActiveBoard() != null)
             mainCtrl.showAddList();
         else {
             throw new IllegalStateException("You cannot add lists to the empty board. Please select a board to operate on");
@@ -40,16 +41,24 @@ public class MainViewCtrl {
     }
 
     @FXML
-    void btnBackClicked(ActionEvent event) { mainCtrl.showConnect(); }
+    void btnBackClicked(ActionEvent event) {
+        mainCtrl.showConnect();
+    }
 
     @FXML
-    void btnCreateClicked(ActionEvent event) { mainCtrl.showCreate(); }
+    void btnCreateClicked(ActionEvent event) {
+        mainCtrl.showCreate();
+    }
 
     @FXML
-    void btnJoinClicked(ActionEvent event) { mainCtrl.showJoin(); }
+    void btnJoinClicked(ActionEvent event) {
+        mainCtrl.showJoin();
+    }
 
     @FXML
-    void btnSettingsClicked(ActionEvent event) { mainCtrl.showSettings(); }
+    void btnSettingsClicked(ActionEvent event) {
+        mainCtrl.showSettings();
+    }
 
     public void scrollHandler(ScrollEvent event) {
         double scrollAmount = 0.3;
@@ -66,6 +75,7 @@ public class MainViewCtrl {
 
     /**
      * Initializes the main view with the board provided
+     *
      * @param board board for which card lists are displayed. If null, empty board is displayed.
      */
     void onSetup(Board board) {
@@ -73,14 +83,16 @@ public class MainViewCtrl {
         boardView.getChildren().clear();
 
         if (board == null) {
-            board = new Board("Empty board");
-        } else {
-            client.setActiveBoard(board);
+            mainCtrl.showJoin();
+            Logger.log("No board selected, displaying join screen", Logger.LogLevel.WARN);
+            return;
         }
+        client.setActiveBoard(board);
         displayBoardName.setText(board.getName());
 
         for (CardList cardList : board.getCardLists()) {
             boardView.getChildren().add(mainCtrl.createCardList(cardList));
         }
+        Logger.log("Main view initialized with board " + board.getName(), Logger.LogLevel.INFO);
     }
 }
