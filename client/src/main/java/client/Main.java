@@ -28,6 +28,8 @@ import com.google.inject.Injector;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
+import static client.scenes.MainCtrl.ScenesBuilder;
+
 public class Main extends Application {
 
     public static final Injector INJECTOR = createInjector(new MyModule());
@@ -42,23 +44,23 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws IOException {
         Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler());
 
-        var connect = FXML.load(ServerConnectCtrl.class, "client", "scenes", "ServerConnect.fxml");
-        var main = FXML.load(MainViewCtrl.class, "client", "scenes", "MainView.fxml");
-        var create = FXML.load(CreateBoardCtrl.class, "client", "scenes", "CreateBoard.fxml");
-        var settings = FXML.load(BoardSettingsCtrl.class, "client", "scenes", "BoardSettings.fxml");
-        var add = FXML.load(AddCardCtrl.class, "client", "scenes", "AddCard.fxml");
-        var join = FXML.load(JoinBoardsCtrl.class, "client", "scenes", "JoinBoards.fxml");
-        var editCard = FXML.load(EditCardCtrl.class, "client", "scenes", "EditCard.fxml");
-        var addList = FXML.load(AddListCtrl.class, "client", "scenes", "AddList.fxml");
-        var editList = FXML.load(ListSettingsCtrl.class, "client", "scenes", "ListSettings.fxml");
-        var pswProtected = FXML.load(PasswordProtectedCtrl.class, "client", "scenes", "PasswordProtected.fxml");
+        ScenesBuilder builder = new ScenesBuilder();
+
+        builder.setConnect(FXML.load(ServerConnectCtrl.class, "client", "scenes", "ServerConnect.fxml"));
+        builder.setMain(FXML.load(MainViewCtrl.class, "client", "scenes", "MainView.fxml"));
+        builder.setCreate(FXML.load(CreateBoardCtrl.class, "client", "scenes", "CreateBoard.fxml"));
+        builder.setSettings(FXML.load(BoardSettingsCtrl.class, "client", "scenes", "BoardSettings.fxml"));
+        builder.setAddCard(FXML.load(AddCardCtrl.class, "client", "scenes", "AddCard.fxml"));
+        builder.setJoin(FXML.load(JoinBoardsCtrl.class, "client", "scenes", "JoinBoards.fxml"));
+        builder.setEditCard(FXML.load(EditCardCtrl.class, "client", "scenes", "EditCard.fxml"));
+        builder.setAddList(FXML.load(AddListCtrl.class, "client", "scenes", "AddList.fxml"));
+        builder.setEditList(FXML.load(ListSettingsCtrl.class, "client", "scenes", "ListSettings.fxml"));
+        builder.setPswProtected(FXML.load(PasswordProtectedCtrl.class, "client", "scenes", "PasswordProtected.fxml"));
 
         mainCtrl = INJECTOR.getInstance(MainCtrl.class);
-        mainCtrl.initialize(primaryStage, connect, settings, add, main, create, join, addList, editList, editCard, pswProtected);
+        mainCtrl.initialize(primaryStage, builder);
     }
 
     @Override
-    public void stop() {
-        mainCtrl.stop();
-    }
+    public void stop() { mainCtrl.stop(); }
 }

@@ -26,6 +26,7 @@ public class CardCtrl implements Component<Card> {
     @FXML
     private Text description;
 
+    @Inject
     public CardCtrl(MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
         FXMLLoader loader = new FXMLLoader(getClass().getResource("Card.fxml"));
@@ -33,9 +34,8 @@ public class CardCtrl implements Component<Card> {
         loader.setRoot(this);
     }
 
-    public Parent getNode() {
-        return cardView;
-    }
+    @Override
+    public Parent getNode() { return cardView; }
 
     @Override
     public void loadData(Card card) {
@@ -44,6 +44,6 @@ public class CardCtrl implements Component<Card> {
         description.setText(card.getDescription());
     }
 
-    public void editCard(){ mainCtrl.showEditCard(this); }
+    public void editCard() { mainCtrl.showEditCard(this); }
 
 }
