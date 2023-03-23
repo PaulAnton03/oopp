@@ -53,6 +53,6 @@ public class CreateBoardCtrl {
     public void goBack() {
         boardName.setText("");
         boardPassword.setText("");
-        mainCtrl.showMainView(client.getActiveBoard());
+        mainCtrl.showMainView();
     }
 }

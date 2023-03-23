@@ -43,15 +43,11 @@
    <right>
       <AnchorPane prefHeight="449.0" prefWidth="152.0" BorderPane.alignment="CENTER">
          <children>
-            <Text fx:id="displayBoardName" layoutX="63.0" layoutY="42.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+            <Text fx:id="displayBoardName" layoutX="63.0" layoutY="42.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="boardName" text="Text" />
          </children>
       </AnchorPane>
    </right>
    <center>
-      <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="ALWAYS" onScroll="#scrollHandler" prefHeight="500.0" prefWidth="800.0" vbarPolicy="NEVER" vmax="0.0" BorderPane.alignment="CENTER">
-         <content>
-            <HBox fx:id="boardView" fillHeight="false" maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="485.0" spacing="20.0" />
-         </content>
-      </ScrollPane>
+      <ScrollPane fx:id="boardContainer" fitToHeight="true" fitToWidth="true" hbarPolicy="ALWAYS" onScroll="#scrollHandler" prefHeight="500.0" prefWidth="800.0" vbarPolicy="NEVER" vmax="0.0" BorderPane.alignment="CENTER" />
    </center>
 </BorderPane>

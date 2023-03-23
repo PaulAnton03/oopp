@@ -1,38 +1,47 @@
 package client.scenes;
 
+import client.components.BoardCtrl;
 import client.utils.ClientUtils;
+import client.utils.ComponentFactory;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Board;
-import commons.CardList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.ScrollEvent;
-import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
+import lombok.Getter;
+import lombok.Setter;
 
-import java.awt.*;
 
 public class MainViewCtrl {
 
     private final ServerUtils server;
     private final ClientUtils client;
     private final MainCtrl mainCtrl;
+    private final ComponentFactory factory;
 
-    @FXML private HBox boardView;
-    @FXML private Text displayBoardName;
+    @Getter
+    @Setter
+    private BoardCtrl boardCtrl;
+
+    @FXML
+    private ScrollPane boardContainer;
+    @FXML
+    private Text displayBoardName;
 
     @Inject
-    public MainViewCtrl(ServerUtils server, ClientUtils client, MainCtrl mainCtrl) {
+    public MainViewCtrl(ServerUtils server, ClientUtils client, MainCtrl mainCtrl, ComponentFactory factory) {
         this.server = server;
         this.client = client;
         this.mainCtrl = mainCtrl;
+        this.factory = factory;
     }
 
     @FXML
     void btnAddClicked(ActionEvent event) {
-        if(client.getActiveBoard() != null)
+        if (client.getActiveBoardCtrl() != null)
             mainCtrl.showAddList();
         else {
             throw new IllegalStateException("You cannot add lists to the empty board. Please select a board to operate on");
@@ -64,23 +73,10 @@ public class MainViewCtrl {
         event.consume();
     }
 
-    /**
-     * Initializes the main view with the board provided
-     * @param board board for which card lists are displayed. If null, empty board is displayed.
-     */
-    void onSetup(Board board) {
-        // Clear everything
-        boardView.getChildren().clear();
-
-        if (board == null) {
-            board = new Board("Empty board");
-        } else {
-            client.setActiveBoard(board);
-        }
+    public void loadData(Board board) {
+        this.boardCtrl = factory.create(BoardCtrl.class, board);
+        client.setActiveBoardCtrl(boardCtrl);
+        boardContainer.setContent(boardCtrl.getScene());
         displayBoardName.setText(board.getName());
-
-        for (CardList cardList : board.getCardLists()) {
-            boardView.getChildren().add(mainCtrl.createCardList(cardList));
-        }
     }
 }
