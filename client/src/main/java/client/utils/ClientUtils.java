@@ -1,43 +1,61 @@
 package client.utils;
 
+import client.components.BoardCtrl;
+import client.components.CardCtrl;
+import client.components.CardListCtrl;
 import commons.Board;
-import javax.inject.Inject;
-
+import commons.Card;
 import commons.CardList;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Optional;
+import javax.inject.Inject;
 
 public class ClientUtils {
-    @Getter
     private final ServerUtils server;
     private final ClientPreferences preferences;
+    private final ComponentFactory factory;
+
     @Setter
-    private Board activeBoard;
+    private BoardCtrl activeBoardCtrl;
+    @Getter
     @Setter
-    private CardList activeCardList;
+    private CardListCtrl activeCardListCtrl;
+    @Getter
+    @Setter
+    private CardCtrl activeCardCtrl;
 
     @Inject
-    public ClientUtils(ServerUtils server, ClientPreferences preferences) {
+    public ClientUtils(ServerUtils server, ClientPreferences preferences, ComponentFactory factory) {
         this.server = server;
         this.preferences = preferences;
+        this.factory = factory;
+    }
+
+    public BoardCtrl getActiveBoardCtrl() {
+        if (activeBoardCtrl == null) {
+            // Load default board
+            preferences.getDefaultBoardId().ifPresentOrElse(boardId -> {
+                activeBoardCtrl = factory.create(BoardCtrl.class, server.getBoard(boardId));
+            }, () -> {
+                activeBoardCtrl = factory.create(BoardCtrl.class, server.getBoardTest());
+            });
+        }
+        return activeBoardCtrl;
     }
 
     public Board getActiveBoard() {
-        if (activeBoard == null || activeBoard.getName().equals("Empty Board")) {
-            Optional<Long> boardId = preferences.getDefaultBoardId();
-            return boardId.isPresent() ? server.getBoard(boardId.get()) : null;
-        } else {
-            activeBoard = server.getBoard(activeBoard.getId());
-            return activeBoard;
-        }
+        if (getActiveBoardCtrl() == null) return null;
+        return getActiveBoardCtrl().getBoard();
     }
 
     public CardList getActiveCardList() {
-        if (activeCardList == null) {
-            activeCardList = getActiveBoard().getCardLists().stream().findFirst().orElseGet(null);
-        }
-        return activeCardList;
+        if (getActiveCardListCtrl() == null) return null;
+        return getActiveCardListCtrl().getCardList();
+    }
+
+    public Card getActiveCard() {
+        if (getActiveCardCtrl() == null) return null;
+        return getActiveCardCtrl().getCard();
     }
 }

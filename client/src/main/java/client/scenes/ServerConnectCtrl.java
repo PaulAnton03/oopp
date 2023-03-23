@@ -34,20 +34,12 @@ public class ServerConnectCtrl {
         if (boardName.equals("Test Board")) {
             mainCtrl.showMainView(generateTestBoard());
         } else if (!boardName.isEmpty()) {
-            mainCtrl.showMainView(serverUtils.getBoard(boardName));
-        } else {
             mainCtrl.showMainView();
         }
 
         // Connect to server
         serverUtils.connect();
         System.out.println("Connecting to server: " + serverPath);
-
-        /* Original code, altering it in order to create a test for auto generation.
-        // Switching the scene
-        mainCtrl.showMainView();
-
-         */
 
         mainCtrl.getPrimaryStage().setResizable(true);
         mainCtrl.showMainView(generateTestBoard());

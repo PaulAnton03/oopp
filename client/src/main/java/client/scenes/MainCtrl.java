@@ -17,22 +17,18 @@ package client.scenes;
 
 import javax.inject.Inject;
 
-import client.Main;
-import client.MyFXML;
-import client.components.CardCtrl;
-import client.components.CardListCtrl;
 import client.utils.ClientUtils;
+import client.utils.ServerUtils;
 import commons.Board;
-import commons.Card;
-import commons.CardList;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.util.Pair;
+import lombok.Getter;
 
 public class MainCtrl {
+    private final ServerUtils server;
     private final ClientUtils client;
-    private final MyFXML myFXML = Main.getFXML();
 
     private Stage primaryStage;
 
@@ -61,7 +57,8 @@ public class MainCtrl {
     private Scene editList;
 
     @Inject
-    public MainCtrl(ClientUtils client) {
+    public MainCtrl(ServerUtils server, ClientUtils client) {
+        this.server = server;
         this.client = client;
     }
 
@@ -122,13 +119,15 @@ public class MainCtrl {
     }
 
     public void showMainView(Board board) {
+        mainViewCtrl.loadData(board);
         primaryStage.setTitle("Main view");
         primaryStage.setScene(main);
-        mainViewCtrl.onSetup(board);
     }
 
     public void showMainView() {
-        showMainView(client.getActiveBoard());
+        client.getActiveBoardCtrl().refresh();
+        primaryStage.setTitle("Main view");
+        primaryStage.setScene(main);
     }
 
     public void showCreate() {
@@ -152,35 +151,11 @@ public class MainCtrl {
         primaryStage.setScene(editList);
     }
 
-    public Pair<CardCtrl, Parent> createNewCard() {
-        return myFXML.load(CardCtrl.class, "client", "components", "Card.fxml");
-    }
-
-    public Pair<CardListCtrl, Parent> createNewCardList() {
-        return myFXML.load(CardListCtrl.class, "client", "components", "CardList.fxml");
-    }
-
-    public Parent createCard(Card card) {
-        var pair = createNewCard();
-        CardCtrl cardCtrl = pair.getKey();
-        var newCard = pair.getValue();
-        cardCtrl.loadData(card);
-        return newCard;
-    }
-
-    public Parent createCardList(CardList cardList) {
-        var pair = createNewCardList();
-        CardListCtrl cardListCtrl = pair.getKey();
-        var newCardList = pair.getValue();
-        cardListCtrl.loadData(cardList);
-        return newCardList;
-    }
-
     public Stage getPrimaryStage() {
         return primaryStage;
     }
 
     public void stop() {
-        this.client.getServer().stop();
+        server.stop();
     }
 }
