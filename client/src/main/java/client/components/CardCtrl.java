@@ -3,15 +3,19 @@ package client.components;
 import commons.Card;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
-
-public class CardCtrl {
+@EqualsAndHashCode
+public class CardCtrl implements Component<Card> {
     @Getter
-    private VBox cardView;
     private Card card;
+
+    @FXML
+    private VBox cardView;
     @FXML
     private Text title;
     @FXML
@@ -23,6 +27,11 @@ public class CardCtrl {
         loader.setRoot(this);
     }
 
+    public Parent getScene() {
+        return cardView;
+    }
+
+    @Override
     public void loadData(Card card) {
         this.card = card;
         title.setText(card.getTitle());
