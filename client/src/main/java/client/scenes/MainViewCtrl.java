@@ -35,8 +35,7 @@ public class MainViewCtrl {
         if(client.getActiveBoard() != null)
             mainCtrl.showAddList();
         else {
-            //Todo- better error handling =)
-            System.out.println("You cannot add lists to the empty board. Please select a board to operate on");
+            throw new IllegalStateException("You cannot add lists to the empty board. Please select a board to operate on");
         }
     }
 
