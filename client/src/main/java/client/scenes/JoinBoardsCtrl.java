@@ -3,6 +3,7 @@ package client.scenes;
 import client.Main;
 import client.MyFXML;
 import client.components.BoardJoinCtrl;
+import client.utils.Logger;
 import client.utils.ServerUtils;
 import commons.Board;
 import javafx.event.ActionEvent;
@@ -57,6 +58,7 @@ public class JoinBoardsCtrl {
     @FXML
     void addCardClicked(ActionEvent event) {
         System.out.println("Password set: " + boardPasswordField.getText());
+        Logger.log("Updated password for selected board to " + boardPasswordField.getText());
     }
 
     @FXML
@@ -68,7 +70,6 @@ public class JoinBoardsCtrl {
     @FXML
     void btnClearClicked(ActionEvent event) {
         boardPasswordField.setText("");
-        System.out.println("Cleared!");
     }
 
     @FXML
