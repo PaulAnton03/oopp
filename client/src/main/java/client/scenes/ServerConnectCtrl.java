@@ -1,5 +1,6 @@
 package client.scenes;
 
+import client.utils.Logger;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Board;
@@ -28,7 +29,6 @@ public class ServerConnectCtrl {
         if (!serverPath.isEmpty()) {
             serverUtils.setServerPath(serverPath);
         }
-        System.out.println("Connecting to server: " + serverUtils.getServerPath() + "first");
 
         String boardName = boardInput.getText();
         if (boardName.equals("Test Board")) {
@@ -39,10 +39,11 @@ public class ServerConnectCtrl {
 
         // Connect to server
         serverUtils.connect();
-        System.out.println("Connecting to server: " + serverPath);
+
+        Logger.log("Connecting to server: " + serverUtils.getServerPath());
 
         mainCtrl.getPrimaryStage().setResizable(true);
-        mainCtrl.showMainView(generateTestBoard());
+        mainCtrl.showMainView();
     }
 
     /**
