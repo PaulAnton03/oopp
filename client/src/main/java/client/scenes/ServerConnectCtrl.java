@@ -30,7 +30,6 @@ public class ServerConnectCtrl {
             serverUtils.setServerPath(serverPath);
         }
 
-
         String boardName = boardInput.getText();
         if (boardName.equals("Test Board")) {
             mainCtrl.showMainView(generateTestBoard());
@@ -40,7 +39,7 @@ public class ServerConnectCtrl {
 
         // Connect to server
         serverUtils.connect();
-        Logger.log("Connecting to server: " + serverPath);
+        Logger.log("Connecting to server: " + serverUtils.getServerPath());
 
         mainCtrl.getPrimaryStage().setResizable(true);
         mainCtrl.showMainView();

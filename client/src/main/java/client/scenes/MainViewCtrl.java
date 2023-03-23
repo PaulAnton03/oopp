@@ -93,5 +93,6 @@ public class MainViewCtrl {
         for (CardList cardList : board.getCardLists()) {
             boardView.getChildren().add(mainCtrl.createCardList(cardList));
         }
+        Logger.log("Main view initialized with board " + board.getName(), Logger.LogLevel.INFO);
     }
 }

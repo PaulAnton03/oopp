@@ -1,5 +1,6 @@
 package client.components;
 
+import client.scenes.JoinBoardsCtrl;
 import client.scenes.MainCtrl;
 import commons.Board;
 import javafx.event.ActionEvent;
@@ -16,6 +17,7 @@ public class BoardJoinCtrl {
     private Board board;
 
     private MainCtrl mainCtrl;
+    private JoinBoardsCtrl joinBoardsCtrl;
 
     public void loadData(Board b) {
         this.board = b;
@@ -23,15 +25,19 @@ public class BoardJoinCtrl {
     }
 
     @Inject
-    public BoardJoinCtrl(MainCtrl mainCtrl) {
+    public BoardJoinCtrl(MainCtrl mainCtrl, JoinBoardsCtrl joinBoardsCtrl) {
         this.mainCtrl = mainCtrl;
+        this.joinBoardsCtrl = joinBoardsCtrl;
         FXMLLoader loader = new FXMLLoader(getClass().getResource("BoardJoin.fxml"));
         loader.setController(this);
         loader.setRoot(this);
     }
 
     public void onSelect(ActionEvent actionEvent) {
-        System.out.println("Selected board " + board);
+        if (board.getPassword() != null) {
+            joinBoardsCtrl.requestPassword(board);
+            return;
+        }
         mainCtrl.showMainView(board);
     }
 }
