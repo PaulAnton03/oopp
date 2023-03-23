@@ -17,7 +17,7 @@
 
 <BorderPane prefHeight="400.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.CreateBoardCtrl">
    <top>
-      <HBox prefHeight="50.0" prefWidth="600.0" styleClass="navbar" stylesheets="@../styles/navbar.css" BorderPane.alignment="CENTER">
+      <HBox prefHeight="50.0" prefWidth="600.0" styleClass="navbar" stylesheets="/client/styles/navbar.css" BorderPane.alignment="CENTER">
          <children>
             <Button mnemonicParsing="false" onAction="#goBack" prefHeight="50.0" prefWidth="200.0" text="Back">
                <font>
