@@ -38,7 +38,7 @@ public class CardListCtrl implements Component<CardList> {
         this.factory = factory;
     }
 
-    public Parent getScene() {
+    public Parent getNode() {
         return cardListView.getParent();
     }
 
@@ -50,7 +50,7 @@ public class CardListCtrl implements Component<CardList> {
         for (Card card : cardList.getCardList()) {
             CardCtrl cardCtrl = factory.create(CardCtrl.class, card);
             cardCtrls.put(cardCtrl.getCard().getId(), cardCtrl);
-            cardListView.getChildren().add(cardCtrl.getScene());
+            cardListView.getChildren().add(cardCtrl.getNode());
         }
     }
 

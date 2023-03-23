@@ -27,7 +27,7 @@ public class CardCtrl implements Component<Card> {
         loader.setRoot(this);
     }
 
-    public Parent getScene() {
+    public Parent getNode() {
         return cardView;
     }
 

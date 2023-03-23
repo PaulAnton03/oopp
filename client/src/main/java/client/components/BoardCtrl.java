@@ -36,7 +36,7 @@ public class BoardCtrl implements Component<Board> {
         this.server = server;
     }
 
-    public Parent getScene() {
+    public Parent getNode() {
         return boardView;
     }
 
@@ -54,7 +54,7 @@ public class BoardCtrl implements Component<Board> {
         for (CardList cardList : sortedLists) {
             CardListCtrl cardListCtrl = factory.create(CardListCtrl.class, cardList);
             cardListCtrls.put(cardList.getId(), cardListCtrl);
-            boardView.getChildren().add(cardListCtrl.getScene());
+            boardView.getChildren().add(cardListCtrl.getNode());
         }
     }
 

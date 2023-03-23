@@ -25,7 +25,7 @@ public class BoardJoinCtrl implements Component<Board> {
     }
 
     @Override
-    public Parent getScene() {
+    public Parent getNode() {
         return button;
     }
 

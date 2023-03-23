@@ -26,7 +26,7 @@ public class JoinBoardsCtrl {
         boardPopulation.getChildren().clear();
 
         var boardJoinNodes = server.getBoards().stream()
-                .map(board -> factory.create(BoardJoinCtrl.class, board).getScene())
+                .map(board -> factory.create(BoardJoinCtrl.class, board).getNode())
                 .collect(Collectors.toList());
         boardPopulation.getChildren().addAll(boardJoinNodes);
     }

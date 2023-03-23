@@ -76,7 +76,7 @@ public class MainViewCtrl {
     public void loadData(Board board) {
         this.boardCtrl = factory.create(BoardCtrl.class, board);
         client.setActiveBoardCtrl(boardCtrl);
-        boardContainer.setContent(boardCtrl.getScene());
+        boardContainer.setContent(boardCtrl.getNode());
         displayBoardName.setText(board.getName());
     }
 }
