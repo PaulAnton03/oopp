@@ -43,7 +43,7 @@
       </AnchorPane>
    </center>
    <top>
-      <HBox prefHeight="50.0" prefWidth="600.0" styleClass="navbar" stylesheets="@../styles/navbar.css" BorderPane.alignment="CENTER">
+      <HBox prefHeight="50.0" prefWidth="600.0" styleClass="navbar" stylesheets="/client/styles/navbar.css" BorderPane.alignment="CENTER">
          <children>
             <Button mnemonicParsing="false" prefHeight="50.0" prefWidth="200.0" text="Back">
                <font>
