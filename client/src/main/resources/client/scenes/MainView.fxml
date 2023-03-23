@@ -43,11 +43,6 @@
    <right>
       <AnchorPane prefHeight="449.0" prefWidth="152.0" BorderPane.alignment="CENTER">
          <children>
-            <Button layoutX="34.0" layoutY="67.0" mnemonicParsing="false" prefHeight="30.0" style="fx-background-color: #d9d9d9;" text="New list" AnchorPane.leftAnchor="34.0" AnchorPane.topAnchor="67.0">
-               <font>
-                  <Font size="16.0" />
-               </font>
-            </Button>
             <Text fx:id="displayBoardName" layoutX="63.0" layoutY="42.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
          </children>
       </AnchorPane>

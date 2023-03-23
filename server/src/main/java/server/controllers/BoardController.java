@@ -31,7 +31,7 @@ public class BoardController {
         this.cardRepository = cardRepository;
     }
 
-    @GetMapping(path = { "", "/" })
+    @GetMapping(path = {"", "/"})
     public ResponseEntity<List<Board>> getAll() {
         return ResponseEntity.ok(boardRepository.findAll());
     }
@@ -60,6 +60,9 @@ public class BoardController {
             return ResponseEntity.badRequest().build();
         }
 
+        if (boardRepository.findByName(board.getName()).isPresent()) {
+            return ResponseEntity.badRequest().build();
+        }
         Board boardSaved = boardRepository.save(board);
         return ResponseEntity.ok(boardSaved);
     }

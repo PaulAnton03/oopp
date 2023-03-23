@@ -41,4 +41,9 @@ public class CardListCtrl {
         client.setActiveCardList(cardList);
         mainCtrl.showAddCard();
     }
+
+    public void listSettings() {
+        client.setActiveCardList(cardList);
+        mainCtrl.showListSettings();
+    }
 }
