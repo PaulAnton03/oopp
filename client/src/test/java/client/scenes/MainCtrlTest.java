@@ -16,6 +16,7 @@
 package client.scenes;
 
 import client.utils.ClientUtils;
+import client.utils.ServerUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -23,13 +24,15 @@ import javax.inject.Inject;
 
 public class MainCtrlTest {
     @Inject
+    private ServerUtils server;
+    @Inject
     private ClientUtils client;
 
     private MainCtrl sut;
 
     @BeforeEach
     public void setup() {
-        sut = new MainCtrl(client);
+        sut = new MainCtrl(server, client);
     }
 
     @Test
