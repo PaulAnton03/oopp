@@ -56,6 +56,9 @@ public class MainCtrl {
     private JoinBoardsCtrl joinBoardsCtrl;
     private Scene join;
 
+    private EditCardCtrl editCardCtrl;
+    private Scene editCard;
+
     private AddListCtrl addListCtrl;
     private Scene addList;
 
@@ -67,9 +70,17 @@ public class MainCtrl {
         this.client = client;
     }
 
-    public void initialize(Stage primaryStage, Pair<ServerConnectCtrl, Parent> connect, Pair<BoardSettingsCtrl, Parent> settings,
-                           Pair<AddCardCtrl, Parent> add, Pair<MainViewCtrl, Parent> main, Pair<CreateBoardCtrl, Parent> create,
-                           Pair<JoinBoardsCtrl, Parent> join, Pair<AddListCtrl, Parent> list, Pair<ListSettingsCtrl, Parent> edit) {
+    public void initialize(Stage primaryStage,
+                           Pair<ServerConnectCtrl, Parent> connect,
+                           Pair<BoardSettingsCtrl, Parent> settings,
+                           Pair<AddCardCtrl, Parent> add,
+                           Pair<MainViewCtrl, Parent> main,
+                           Pair<CreateBoardCtrl, Parent> create,
+                           Pair<JoinBoardsCtrl, Parent> join,
+                           Pair<AddListCtrl, Parent> list,
+                           Pair<ListSettingsCtrl, Parent> edit,
+                           Pair<EditCardCtrl, Parent> editCard
+    ) {
         this.primaryStage = primaryStage;
 
         this.serverConnectCtrl = connect.getKey();
@@ -90,6 +101,9 @@ public class MainCtrl {
         this.joinBoardsCtrl = join.getKey();
         this.join = new Scene(join.getValue());
 
+        this.editCardCtrl = editCard.getKey();
+        this.editCard = new Scene(editCard.getValue());
+
         this.addListCtrl = list.getKey();
         this.addList = new Scene(list.getValue());
 
@@ -98,6 +112,12 @@ public class MainCtrl {
 
         showConnect();
         primaryStage.show();
+    }
+
+    public void showEditCard(CardCtrl cardCtrl){
+        editCardCtrl.setCardCtrl(cardCtrl);
+        primaryStage.setTitle("Edit Card");
+        primaryStage.setScene(editCard);
     }
 
     public void showConnect() {
