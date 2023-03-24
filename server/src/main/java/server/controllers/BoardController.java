@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -76,5 +78,11 @@ public class BoardController {
         final Board board = optBoard.get();
         boardRepository.deleteDownProp(board, cardListRepository, cardRepository);
         return ResponseEntity.ok(board);
+    }
+
+    @MessageMapping("/boards")
+    @SendTo("/topic/boards")
+    public Board addMessage(Board board) {
+        return board;
     }
 }

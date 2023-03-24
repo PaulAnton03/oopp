@@ -2,10 +2,13 @@ package server.controllers;
 
 import java.util.List;
 import java.util.Optional;
+
 import commons.Board;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.*;
 import commons.CardList;
 import server.database.BoardRepository;
@@ -26,7 +29,7 @@ public class CardListController {
         this.cardRepository = cardRepository;
     }
 
-    @GetMapping(path = { "", "/" })
+    @GetMapping(path = {"", "/"})
     public ResponseEntity<List<CardList>> getAllLists() {
         var list = cardListRepository.findAll();
         return ResponseEntity.ok(list);
@@ -69,6 +72,12 @@ public class CardListController {
         }
         cardListRepository.deleteDownProp(cardList, cardRepository);
         return ResponseEntity.ok(cardList);
+    }
+
+    @MessageMapping("/lists")
+    @SendTo("/topic/lists")
+    public CardList addMessage(CardList list) {
+        return list;
     }
 
 

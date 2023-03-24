@@ -3,6 +3,8 @@ package server.controllers;
 import commons.Card;
 import commons.CardList;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.*;
 
 import server.database.CardListRepository;
@@ -22,7 +24,7 @@ public class CardController {
         this.cardListRepository = cardListRepository;
     }
 
-    @GetMapping(path = { "", "/" })
+    @GetMapping(path = {"", "/"})
     public ResponseEntity<List<Card>> getAll() {
         return ResponseEntity.ok(cardRepository.findAll());
     }
@@ -66,5 +68,11 @@ public class CardController {
         }
         cardRepository.deleteDownProp(card);
         return ResponseEntity.ok(card);
+    }
+
+    @MessageMapping("/cards")
+    @SendTo("/topic/cards")
+    public Card addMessage(Card card) {
+        return card;
     }
 }

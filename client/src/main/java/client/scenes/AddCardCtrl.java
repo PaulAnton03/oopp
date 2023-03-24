@@ -36,7 +36,9 @@ public class AddCardCtrl {
     }
 
     public void ok() {
-        server.addCard(getCard());
+        Card card = getCard();
+        server.addCard(card);
+        server.send("/app/cards", card);
         goBack();
     }
 

@@ -26,14 +26,17 @@ public class AddListCtrl {
     public CardList getList() {
         CardList cardList = new CardList(title.getText());
         cardList.setBoard(client.getActiveBoard());
-        if(cardList.getBoard() == null) {
+        if (cardList.getBoard() == null) {
             throw new IllegalStateException("No board selected");
         }
         return cardList;
     }
+
     @FXML
     void addList() {
-        server.addCardList(getList());
+        CardList cardList = getList();
+        server.addCardList(cardList);
+        server.send("/app/lists", cardList);
         goBack();
     }
 

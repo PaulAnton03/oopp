@@ -6,6 +6,8 @@ import client.utils.ComponentFactory;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Board;
+import commons.Card;
+import commons.CardList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ScrollPane;
@@ -49,16 +51,24 @@ public class MainViewCtrl {
     }
 
     @FXML
-    void btnBackClicked(ActionEvent event) { mainCtrl.showConnect(); }
+    void btnBackClicked(ActionEvent event) {
+        mainCtrl.showConnect();
+    }
 
     @FXML
-    void btnCreateClicked(ActionEvent event) { mainCtrl.showCreate(); }
+    void btnCreateClicked(ActionEvent event) {
+        mainCtrl.showCreate();
+    }
 
     @FXML
-    void btnJoinClicked(ActionEvent event) { mainCtrl.showJoin(); }
+    void btnJoinClicked(ActionEvent event) {
+        mainCtrl.showJoin();
+    }
 
     @FXML
-    void btnSettingsClicked(ActionEvent event) { mainCtrl.showSettings(); }
+    void btnSettingsClicked(ActionEvent event) {
+        mainCtrl.showSettings();
+    }
 
     public void scrollHandler(ScrollEvent event) {
         double scrollAmount = 0.3;
@@ -78,5 +88,15 @@ public class MainViewCtrl {
         client.setActiveBoardCtrl(boardCtrl);
         boardContainer.setContent(boardCtrl.getNode());
         displayBoardName.setText(board.getName());
+        server.registerForMessages("/topic/lists", CardList.class, l -> {
+            if (client.getActiveBoard().getId() == l.getBoard().getId()) {
+                System.out.println("INCOMING LIST: " + l);
+            }
+        });
+        server.registerForMessages("/topic/cards", Card.class, c -> {
+            if (c.getCardList().getBoard().getId() == client.getActiveBoard().getId()) {
+                System.out.println("INCOMING CARD: " + c);
+            }
+        });
     }
 }
