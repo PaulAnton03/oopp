@@ -15,26 +15,27 @@
  */
 package client.scenes;
 
-import client.Main;
-import client.MyFXML;
+import javax.inject.Inject;
+
 import client.components.CardCtrl;
-import client.components.CardListCtrl;
 import client.utils.ClientUtils;
+import client.utils.ComponentFactory;
+import client.utils.ServerUtils;
 import client.utils.Logger;
 import commons.Board;
-import commons.Card;
-import commons.CardList;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 import lombok.Getter;
-
-import javax.inject.Inject;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 public class MainCtrl {
+    private final ServerUtils server;
     private final ClientUtils client;
-    private final MyFXML myFXML = Main.getFXML();
+    private final ComponentFactory factory;
+
     @Getter
     private Stage primaryStage;
 
@@ -65,57 +66,73 @@ public class MainCtrl {
     private ListSettingsCtrl editListCtrl;
     private Scene editList;
 
+    private PasswordProtectedCtrl passwordProtectedCtrl;
+    private Scene passwordProtected;
+
     @Inject
-    public MainCtrl(ClientUtils client) {
+    public MainCtrl(ServerUtils server, ClientUtils client, ComponentFactory factory) {
+        this.server = server;
         this.client = client;
+        this.factory = factory;
     }
 
-    public void initialize(Stage primaryStage,
-                           Pair<ServerConnectCtrl, Parent> connect,
-                           Pair<BoardSettingsCtrl, Parent> settings,
-                           Pair<AddCardCtrl, Parent> add,
-                           Pair<MainViewCtrl, Parent> main,
-                           Pair<CreateBoardCtrl, Parent> create,
-                           Pair<JoinBoardsCtrl, Parent> join,
-                           Pair<AddListCtrl, Parent> list,
-                           Pair<ListSettingsCtrl, Parent> edit,
-                           Pair<EditCardCtrl, Parent> editCard
-    ) {
+    @NoArgsConstructor
+    @Getter
+    @Setter
+    public static class ScenesBuilder {
+        private Pair<ServerConnectCtrl, Parent> connect;
+        private Pair<BoardSettingsCtrl, Parent> settings;
+        private Pair<AddCardCtrl, Parent> addCard;
+        private Pair<MainViewCtrl, Parent> main;
+        private Pair<CreateBoardCtrl, Parent> create;
+        private Pair<JoinBoardsCtrl, Parent> join;
+        private Pair<AddListCtrl, Parent> addList;
+        private Pair<ListSettingsCtrl, Parent> editList;
+        private Pair<EditCardCtrl, Parent> editCard;
+        private Pair<PasswordProtectedCtrl, Parent> pswProtected;
+    }
+
+    public void initialize(Stage primaryStage, ScenesBuilder builder) {
         this.primaryStage = primaryStage;
 
-        this.serverConnectCtrl = connect.getKey();
-        this.connect = new Scene(connect.getValue());
+        this.serverConnectCtrl = builder.getConnect().getKey();
+        this.connect = new Scene(builder.getConnect().getValue());
 
-        this.boardSettingsCtrl = settings.getKey();
-        this.settings = new Scene(settings.getValue());
+        this.boardSettingsCtrl = builder.getSettings().getKey();
+        this.settings = new Scene(builder.getSettings().getValue());
 
-        this.addCardCtrl = add.getKey();
-        this.add = new Scene(add.getValue());
+        this.addCardCtrl = builder.getAddCard().getKey();
+        this.add = new Scene(builder.getAddCard().getValue());
 
-        this.mainViewCtrl = main.getKey();
-        this.main = new Scene(main.getValue());
+        this.mainViewCtrl = builder.getMain().getKey();
+        this.main = new Scene(builder.getMain().getValue());
 
-        this.createBoardCtrl = create.getKey();
-        this.create = new Scene(create.getValue());
+        this.createBoardCtrl = builder.getCreate().getKey();
+        this.create = new Scene(builder.getCreate().getValue());
 
-        this.joinBoardsCtrl = join.getKey();
-        this.join = new Scene(join.getValue());
+        this.joinBoardsCtrl = builder.getJoin().getKey();
+        this.join = new Scene(builder.getJoin().getValue());
 
-        this.editCardCtrl = editCard.getKey();
-        this.editCard = new Scene(editCard.getValue());
+        this.editCardCtrl = builder.getEditCard().getKey();
+        this.editCard = new Scene(builder.getEditCard().getValue());
 
-        this.addListCtrl = list.getKey();
-        this.addList = new Scene(list.getValue());
+        this.addListCtrl = builder.getAddList().getKey();
+        this.addList = new Scene(builder.getAddList().getValue());
 
-        this.editListCtrl = edit.getKey();
-        this.editList = new Scene(edit.getValue());
+        this.editListCtrl = builder.getEditList().getKey();
+        this.editList = new Scene(builder.getEditList().getValue());
 
+        this.passwordProtectedCtrl = builder.getPswProtected().getKey();
+        this.passwordProtected = new Scene(builder.getPswProtected().getValue());
+
+        primaryStage.setResizable(true);
         showConnect();
         primaryStage.show();
     }
 
+
     public void showEditCard(CardCtrl cardCtrl){
-        editCardCtrl.setCardCtrl(cardCtrl);
+        client.setActiveCardCtrl(cardCtrl);
         primaryStage.setTitle("Edit Card");
         primaryStage.setScene(editCard);
     }
@@ -137,8 +154,8 @@ public class MainCtrl {
     }
 
     public void showMainView(Board board) {
+        mainViewCtrl.loadData(board);
         primaryStage.setTitle("Main view");
-        mainViewCtrl.onSetup(board);
         primaryStage.setScene(main);
         Logger.log("Showing main view for board " + board);
     }
@@ -149,7 +166,9 @@ public class MainCtrl {
             this.showJoin();
             return;
         }
-        showMainView(client.getActiveBoard());
+        client.getActiveBoardCtrl().refresh();
+        primaryStage.setTitle("Main view");
+        primaryStage.setScene(main);
     }
 
     public void showCreate() {
@@ -173,31 +192,17 @@ public class MainCtrl {
         primaryStage.setScene(editList);
     }
 
-    public Pair<CardCtrl, Parent> createNewCard() {
-        return myFXML.load(CardCtrl.class, "client", "components", "Card.fxml");
+    public void showPasswordProtected(Board pswProtectedBoard) {
+        primaryStage.setTitle("Password Protected Board");
+        passwordProtectedCtrl.loadData(pswProtectedBoard);
+        primaryStage.setScene(passwordProtected);
     }
 
-    public Pair<CardListCtrl, Parent> createNewCardList() {
-        return myFXML.load(CardListCtrl.class, "client", "components", "CardList.fxml");
-    }
-
-    public Parent createCard(Card card) {
-        var pair = createNewCard();
-        CardCtrl cardCtrl = pair.getKey();
-        var newCard = pair.getValue();
-        cardCtrl.loadData(card);
-        return newCard;
-    }
-
-    public Parent createCardList(CardList cardList) {
-        var pair = createNewCardList();
-        CardListCtrl cardListCtrl = pair.getKey();
-        var newCardList = pair.getValue();
-        cardListCtrl.loadData(cardList);
-        return newCardList;
+    public Stage getPrimaryStage() {
+        return primaryStage;
     }
 
     public void stop() {
-        this.client.getServer().stop();
+        server.stop();
     }
 }

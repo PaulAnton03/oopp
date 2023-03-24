@@ -46,7 +46,7 @@ public class ServerUtils {
 
     @Setter
     @Getter
-    private static String serverPath = "localhost:8080";
+    private String serverPath = "localhost:8080";
 
     private WebSocketStompClient stomp = null;
     private StompSession session = null;
@@ -168,6 +168,8 @@ public class ServerUtils {
     public CardList addCardList(CardList cardList) {
         WebTarget webTarget = webTargetFromPath("/lists/create")
                 .queryParam("boardId", cardList.getBoard().getId());
+        System.out.println(webTarget);
+        System.out.println(cardList);
         return webTargetAddDefault(webTarget).post(Entity.entity(cardList, APPLICATION_JSON), CardList.class);
     }
 
@@ -178,21 +180,14 @@ public class ServerUtils {
     }
 
     // For TESTING purpose
-    public Board getBoardTest(long boardId) {
-        if (boardId == 1) {
-
-            Board board = new Board("Testing board");
-            CardList list1 = new CardList("List 1");
-            CardList list2 = new CardList("List 2");
-            list1.addCard(new Card("Do the dishes", "In kitchen"));
-            list1.addCard(new Card("Do the homework", "Maths, Biology"));
-            list2.addCard(new Card("Title", "Only card in list 2"));
-            return board;
-
-        } else {
-
-            return new Board("Default empty board");
-        }
+    public Board getBoardTest() {
+        Board board = new Board("Testing board");
+        CardList list1 = new CardList("List 1");
+        CardList list2 = new CardList("List 2");
+        list1.addCard(new Card("Do the dishes", "In kitchen"));
+        list1.addCard(new Card("Do the homework", "Maths, Biology"));
+        list2.addCard(new Card("Title", "Only card in list 2"));
+        return board;
     }
 
     public void stop() {

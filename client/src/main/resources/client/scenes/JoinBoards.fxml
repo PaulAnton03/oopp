@@ -11,12 +11,12 @@
     <top>
         <HBox prefHeight="50.0" prefWidth="600.0" styleClass="navbar" stylesheets="/client/styles/navbar.css" BorderPane.alignment="CENTER">
             <children>
-                <Button fx:id="navbarBackButton" mnemonicParsing="false" onAction="#btnBackClicked" prefHeight="100.0" prefWidth="2000.0" text="Back">
+                <Button mnemonicParsing="false" onAction="#btnBackClicked" prefHeight="100.0" prefWidth="2000.0" text="Back">
                     <font>
                         <Font size="16.0" />
                     </font>
                 </Button>
-                <Button fx:id="navbarCreateButton" mnemonicParsing="false" onAction="#btnCreateClicked" prefHeight="100.0" prefWidth="2000.0" text="Create board">
+                <Button mnemonicParsing="false" onAction="#btnCreateClicked" prefHeight="100.0" prefWidth="2000.0" text="Create board">
                     <font>
                         <Font size="16.0" />
                     </font>
