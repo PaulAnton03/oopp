@@ -1,7 +1,7 @@
 package client.components;
 
 import client.scenes.MainCtrl;
-import client.scenes.MainCtrl;
+import client.utils.ServerUtils;
 import commons.Card;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -15,6 +15,7 @@ import javax.inject.Inject;
 @EqualsAndHashCode
 public class CardCtrl implements Component<Card> {
     private final MainCtrl mainCtrl;
+    private final ServerUtils serverUtils;
 
     @Getter
     private Card card;
@@ -27,8 +28,9 @@ public class CardCtrl implements Component<Card> {
     private Text description;
 
     @Inject
-    public CardCtrl(MainCtrl mainCtrl) {
+    public CardCtrl(MainCtrl mainCtrl, ServerUtils serverUtils) {
         this.mainCtrl = mainCtrl;
+        this.serverUtils = serverUtils;
         FXMLLoader loader = new FXMLLoader(getClass().getResource("Card.fxml"));
         loader.setController(this);
         loader.setRoot(this);
@@ -45,5 +47,10 @@ public class CardCtrl implements Component<Card> {
     }
 
     public void editCard() { mainCtrl.showEditCard(this); }
+
+    public void delete() {
+        serverUtils.deleteCard(card.getId());
+        ((VBox)cardView.getParent()).getChildren().remove(cardView);
+    }
 
 }

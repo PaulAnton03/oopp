@@ -19,7 +19,7 @@
             </Text>
             <Pane prefHeight="30.0" prefWidth="13.0" />
             <Button fx:id="editCardButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#editCard" prefHeight="30.0" prefWidth="37.0" style="-fx-background-color: 0; -fx-font-size: 20; -fx-padding: 0;" text="•••" />
-            <Button fx:id="DeleteButton" mnemonicParsing="false" prefHeight="33.0" prefWidth="30.0" text="X" />
+            <Button fx:id="DeleteButton" mnemonicParsing="false" onAction="#delete" prefHeight="33.0" prefWidth="30.0" text="X" />
          </children>
       </HBox>
       <Text fx:id="description" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="description" text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod" wrappingWidth="200.0" />

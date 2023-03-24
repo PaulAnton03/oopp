@@ -49,6 +49,8 @@ subprojects {
 
 		implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.14.2'
 
+		implementation 'org.slf4j:slf4j-api'
+
 		implementation 'org.springframework.boot:spring-boot-starter-websocket:2.6.3'
 
 		testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
