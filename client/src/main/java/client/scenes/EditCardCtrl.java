@@ -1,14 +1,15 @@
 package client.scenes;
 
+import javax.inject.Inject;
+
 import client.utils.ClientUtils;
 import client.utils.ServerUtils;
-
 import commons.Card;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-
-import javax.inject.Inject;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 
 
 public class EditCardCtrl {
@@ -46,4 +47,10 @@ public class EditCardCtrl {
         mainCtrl.showMainView();
     }
 
+    @FXML
+    public void onKeyPressed(KeyEvent e) {
+        if (KeyCode.ESCAPE == e.getCode()) {
+            cancel();
+        }
+    }
 }
