@@ -67,4 +67,14 @@ public class CardController {
         cardRepository.deleteDownProp(card);
         return ResponseEntity.ok(card);
     }
+
+    @PutMapping("/update/{id}")
+    public ResponseEntity<Card> update(@RequestBody Card card) {
+        final Optional<Card> optionalCard = cardRepository.findById(card.getId());
+        if(optionalCard.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        Card updated = cardRepository.save(card);
+        return ResponseEntity.ok(updated);
+    }
 }

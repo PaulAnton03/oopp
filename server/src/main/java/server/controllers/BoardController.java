@@ -4,13 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import commons.Board;
 import server.database.BoardRepository;
@@ -76,5 +70,15 @@ public class BoardController {
         final Board board = optBoard.get();
         boardRepository.deleteDownProp(board, cardListRepository, cardRepository);
         return ResponseEntity.ok(board);
+    }
+
+    @PutMapping("/update/{id}")
+    public ResponseEntity<Board> update(@RequestBody Board board) {
+        final Optional<Board> optionalBoard = boardRepository.findById(board.getId());
+        if(optionalBoard.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        Board updated = boardRepository.save(board);
+        return ResponseEntity.ok(updated);
     }
 }
