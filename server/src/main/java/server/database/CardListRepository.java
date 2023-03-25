@@ -11,8 +11,8 @@ public interface CardListRepository extends JpaRepository<CardList, Long>{
      * @param cardRepository
      */
     default void deleteDownProp(CardList cardList, CardRepository cardRepository) {
-        if (cardList.getCardList() != null) {
-            for (Card card: cardList.getCardList()) {
+        if (cardList.getCards() != null) {
+            for (Card card: cardList.getCards()) {
                 cardRepository.deleteDownProp(card);
             }
         }

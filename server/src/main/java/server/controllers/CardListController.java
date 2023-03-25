@@ -1,16 +1,18 @@
 package server.controllers;
 
-import java.util.List;
-import java.util.Optional;
 import commons.Board;
-
+import commons.CardList;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import commons.CardList;
+import org.springframework.web.server.ResponseStatusException;
 import server.database.BoardRepository;
 import server.database.CardListRepository;
 import server.database.CardRepository;
+
+import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/lists")
@@ -36,7 +38,7 @@ public class CardListController {
     public ResponseEntity<CardList> getById(@PathVariable long id) {
         final Optional<CardList> cardList = cardListRepository.findById(id);
         if (cardList.isEmpty()) {
-            return ResponseEntity.notFound().build();
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Card list with id " + id + " not found");
         }
         return ResponseEntity.ok(cardList.get());
     }
@@ -44,15 +46,16 @@ public class CardListController {
     @PostMapping("/create")
     public ResponseEntity<CardList> create(@RequestBody CardList cardList, @RequestParam long boardId) {
         if (!cardList.isNetworkValid()) {
-            return ResponseEntity.badRequest().build();
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Card list data is invalid");
         }
 
         Optional<Board> board = boardRepository.findById(boardId);
         if (board.isEmpty()) {
-            return ResponseEntity.badRequest().build();
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Board with id " + boardId + " not found");
         }
 
         cardList.setBoard(board.get());
+        board.get().getCardLists().add(cardList);
         cardListRepository.save(cardList);
         return ResponseEntity.ok(cardList);
     }
@@ -61,13 +64,13 @@ public class CardListController {
     public ResponseEntity<CardList> delete(@PathVariable("id") long id) {
         final Optional<CardList> optCardList = cardListRepository.findById(id);
         if (optCardList.isEmpty()) {
-            return ResponseEntity.notFound().build();
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Card list with id " + id + " not found");
         }
         final CardList cardList = optCardList.get();
         if (cardList.getBoard() != null) {
             cardList.getBoard().removeCardList(cardList.getId());
         }
-        cardListRepository.deleteDownProp(cardList, cardRepository);
+        cardListRepository.deleteById(cardList.getId());
         return ResponseEntity.ok(cardList);
     }
 

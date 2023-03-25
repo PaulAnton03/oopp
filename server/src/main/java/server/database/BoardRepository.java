@@ -1,18 +1,16 @@
 package server.database;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-
 import commons.Board;
 import commons.CardList;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
 public interface BoardRepository extends JpaRepository<Board, Long> {
-
     Optional<Board> findByName(String name);
 
     /**
-     * Delete a {@link Board board}, propagating changes down to {@link CardLists}s
+     * Delete a {@link Board board}, propagating changes down to {@link CardList CardLists}
      * @param board
      * @param cardListRepository
      * @param cardRepository
