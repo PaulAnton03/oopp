@@ -7,7 +7,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 import server.database.BoardRepository;
 import server.database.CardListRepository;
 
@@ -15,7 +15,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -51,7 +52,7 @@ public class CardListControllerTest {
         final long Id = 12;
         when(cardListRepoMock.findById(Id)).thenReturn(Optional.empty());
 
-        assertEquals(HttpStatus.NOT_FOUND, controller.getById(Id).getStatusCode());
+        assertThrows(ResponseStatusException.class, () -> controller.getById(Id));
     }
 
     @Test
@@ -81,9 +82,7 @@ public class CardListControllerTest {
         board.setId(12);
         final CardList supplyList = new CardList();
 
-        var response = controller.create(supplyList, board.getId());
-
-        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertThrows(ResponseStatusException.class, () -> controller.create(supplyList, board.getId()));
     }
 
     @Test
@@ -92,8 +91,6 @@ public class CardListControllerTest {
 
         when(boardRepoMock.findById(anyLong())).thenReturn(Optional.empty());
 
-        var response = controller.create(supplyList, 10L);
-
-        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertThrows(ResponseStatusException.class, () -> controller.create(supplyList, 10L));
     }
 }
