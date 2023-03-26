@@ -1,5 +1,9 @@
 package client.components;
 
+import java.util.HashMap;
+
+import javax.inject.Inject;
+
 import client.scenes.MainCtrl;
 import client.utils.ClientUtils;
 import client.utils.ComponentFactory;
@@ -11,9 +15,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-
-import javax.inject.Inject;
-import java.util.HashMap;
 
 
 @EqualsAndHashCode

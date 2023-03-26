@@ -1,16 +1,18 @@
 package client.components;
 
+import javax.inject.Inject;
+
 import client.scenes.MainCtrl;
 import client.utils.ServerUtils;
 import commons.Card;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.effect.ColorAdjust;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import javax.inject.Inject;
 
 @EqualsAndHashCode
 public class CardCtrl implements Component<Card> {
@@ -50,7 +52,18 @@ public class CardCtrl implements Component<Card> {
 
     public void delete() {
         serverUtils.deleteCard(card.getId());
-        ((VBox)cardView.getParent()).getChildren().remove(cardView);
+        mainCtrl.showMainView();
+    }
+
+    public void highlight() {
+        // TODO: change how highlighted card is displayed
+        ColorAdjust colorAdjust = new ColorAdjust();
+        colorAdjust.setBrightness(0.6);
+        getNode().setEffect(colorAdjust);
+    }
+
+    public void unhighlight() {
+        getNode().setEffect(null);
     }
 
 }
