@@ -73,6 +73,9 @@ public class CardListController {
 
     @PutMapping("/update/{id}")
     public ResponseEntity<CardList> update(@RequestBody CardList cardList) {
+        if(!cardList.isNetworkValid()) {
+            return ResponseEntity.badRequest().build();
+        }
         final Optional<CardList> optionalCardList = cardListRepository.findById(cardList.getId());
         if(optionalCardList.isEmpty()) {
             return ResponseEntity.notFound().build();

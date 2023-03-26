@@ -74,6 +74,9 @@ public class BoardController {
 
     @PutMapping("/update/{id}")
     public ResponseEntity<Board> update(@RequestBody Board board) {
+        if(!board.isNetworkValid()) {
+            return ResponseEntity.badRequest().build();
+        }
         final Optional<Board> optionalBoard = boardRepository.findById(board.getId());
         if(optionalBoard.isEmpty()) {
             return ResponseEntity.notFound().build();

@@ -70,6 +70,9 @@ public class CardController {
 
     @PutMapping("/update/{id}")
     public ResponseEntity<Card> update(@RequestBody Card card) {
+        if(!card.isNetworkValid()) {
+            return ResponseEntity.badRequest().build();
+        }
         final Optional<Card> optionalCard = cardRepository.findById(card.getId());
         if(optionalCard.isEmpty()) {
             return ResponseEntity.notFound().build();
