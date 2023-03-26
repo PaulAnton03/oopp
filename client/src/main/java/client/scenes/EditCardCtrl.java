@@ -30,20 +30,17 @@ public class EditCardCtrl {
     }
 
     public void saveCardChanges(){
-        //todo update the card instead of deleting and adding again
-        final Card card = client.getActiveCardCtrl().getCard();
-
-        server.deleteCard(card.getId());
+        Card card = client.getActiveCardCtrl().getCard();
         card.setTitle(changeTitle.getText());
         card.setDescription(changeDesc.getText());
-        server.addCard(card);
+        server.updateCard(card);
         client.getActiveCardCtrl().loadData(card);
+        resetState();
         mainCtrl.showMainView();
     }
 
     public void cancel() {
-        changeTitle.setText("");
-        changeDesc.setText("");
+        resetState();
         mainCtrl.showMainView();
     }
 
@@ -52,5 +49,10 @@ public class EditCardCtrl {
         if (KeyCode.ESCAPE == e.getCode()) {
             cancel();
         }
+    }
+
+    public void resetState() {
+        this.changeTitle.setText("");
+        this.changeDesc.setText("");
     }
 }

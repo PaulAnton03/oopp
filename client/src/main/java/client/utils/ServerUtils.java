@@ -111,6 +111,11 @@ public class ServerUtils {
         return webTargetAddDefault(webTarget).post(Entity.entity(board, APPLICATION_JSON), Board.class);
     }
 
+    public Board updateBoard(Board board) {
+        WebTarget webTarget = webTargetFromPath("/boards/update/{id}").resolveTemplate("id", board.getId());
+        return webTargetAddDefault(webTarget).put(Entity.entity(board, APPLICATION_JSON), Board.class);
+    }
+
     public Board getBoard(long id) {
         System.out.println(id);
         WebTarget webTarget = webTargetFromPath("/boards/{id}").resolveTemplate("id", id);
@@ -147,6 +152,11 @@ public class ServerUtils {
         return webTargetAddDefault(webTarget).post(Entity.entity(card, APPLICATION_JSON), Card.class);
     }
 
+    public Card updateCard(Card card) {
+        WebTarget webTarget = webTargetFromPath("/cards/update/{id}").resolveTemplate("id", card.getId());
+        return webTargetAddDefault(webTarget).put(Entity.entity(card, APPLICATION_JSON), Card.class);
+    }
+
     public Card deleteCard(long id) {
         WebTarget webTarget = webTargetFromPath("/cards/delete/{id}").resolveTemplate("id", id);
         return webTargetAddDefault(webTarget).delete(new GenericType<>() {
@@ -171,6 +181,11 @@ public class ServerUtils {
         System.out.println(webTarget);
         System.out.println(cardList);
         return webTargetAddDefault(webTarget).post(Entity.entity(cardList, APPLICATION_JSON), CardList.class);
+    }
+
+    public CardList updateCardList(CardList cardList) {
+        WebTarget webTarget = webTargetFromPath("/lists/update/{id}").resolveTemplate("id", cardList.getId());
+        return webTargetAddDefault(webTarget).put(Entity.entity(cardList, APPLICATION_JSON), CardList.class);
     }
 
     public CardList deleteCardList(long id) {
