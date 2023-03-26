@@ -2,7 +2,6 @@ package commons;
 
 import org.junit.jupiter.api.Test;
 
-
 import static org.junit.jupiter.api.Assertions.*;
 
 class CardListTest {
@@ -14,18 +13,18 @@ class CardListTest {
     void removeCard() {
         cardList.addCard(card);
         cardList.removeCard(card);
-        assertTrue(cardList.getCardList().isEmpty());
+        assertTrue(cardList.getCards().isEmpty());
     }
 
     @Test
     void addCard() {
         cardList.addCard(card);
-        assertFalse(cardList.getCardList().isEmpty());
+        assertFalse(cardList.getCards().isEmpty());
     }
 
     @Test
     void getCardList() {
-        assertNotNull(cardList.getCardList());
+        assertNotNull(cardList.getCards());
     }
 
 
@@ -43,8 +42,8 @@ class CardListTest {
     @Test
     void setCardList() {
         CardList a1 = new CardList();
-        cardList.setCardList(a1.getCardList());
-        assertSame(a1.getCardList(), cardList.getCardList());
+        cardList.setCards(a1.getCards());
+        assertSame(a1.getCards(), cardList.getCards());
     }
 
     @Test

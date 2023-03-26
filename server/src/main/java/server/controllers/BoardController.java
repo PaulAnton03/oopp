@@ -7,6 +7,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import commons.Board;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 import server.database.BoardRepository;
 import server.database.CardListRepository;
 import server.database.CardRepository;
@@ -34,7 +36,7 @@ public class BoardController {
     public ResponseEntity<Board> getByName(@PathVariable("name") String name) {
         final Optional<Board> board = boardRepository.findByName(name);
         if (board.isEmpty()) {
-            return ResponseEntity.notFound().build();
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Board with name " + name + " not found");
         }
         return ResponseEntity.ok(board.get());
     }
@@ -43,7 +45,7 @@ public class BoardController {
     public ResponseEntity<Board> getById(@PathVariable("id") long id) {
         final Optional<Board> board = boardRepository.findById(id);
         if (board.isEmpty()) {
-            return ResponseEntity.notFound().build();
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Board with id " + id + " not found");
         }
         return ResponseEntity.ok(board.get());
     }
@@ -51,11 +53,11 @@ public class BoardController {
     @PostMapping("/create")
     public ResponseEntity<Board> create(@RequestBody Board board) {
         if (!board.isNetworkValid()) {
-            return ResponseEntity.badRequest().build();
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Board data is invalid");
         }
 
         if (boardRepository.findByName(board.getName()).isPresent()) {
-            return ResponseEntity.badRequest().build();
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Board with name " + board.getName() + " already exists");
         }
         Board boardSaved = boardRepository.save(board);
         return ResponseEntity.ok(boardSaved);
@@ -65,10 +67,10 @@ public class BoardController {
     public ResponseEntity<Board> delete(@PathVariable("id") long id) {
         final Optional<Board> optBoard = boardRepository.findById(id);
         if (optBoard.isEmpty()) {
-            return ResponseEntity.notFound().build();
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Board with id " + id + " not found");
         }
         final Board board = optBoard.get();
-        boardRepository.deleteDownProp(board, cardListRepository, cardRepository);
+        boardRepository.deleteById(board.getId());
         return ResponseEntity.ok(board);
     }
 

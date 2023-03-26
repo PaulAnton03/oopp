@@ -2,12 +2,10 @@ package commons;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 class BoardTest {
     Board board = new Board("title");
@@ -36,7 +34,7 @@ class BoardTest {
 
     @Test
     void setgetCardLists() {
-        Set<CardList> cards = new HashSet<>();
+        List<CardList> cards = new ArrayList<>();
         board.setCardLists(cards);
         assertSame(board.getCardLists(), cards);
     }
@@ -73,7 +71,7 @@ class BoardTest {
         board.setCardLists(null);
         assertFalse(board.isNetworkValid());
 
-        board.setCardLists(new HashSet<>());
+        board.setCardLists(new ArrayList<>());
         assertTrue(board.isNetworkValid());
 
         board.setName("");

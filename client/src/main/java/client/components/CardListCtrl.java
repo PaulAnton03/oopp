@@ -47,7 +47,7 @@ public class CardListCtrl implements Component<CardList> {
         this.cardList = cardList;
         title.setText(cardList.getTitle());
 
-        for (Card card : cardList.getCardList()) {
+        for (Card card : cardList.getCards()) {
             CardCtrl cardCtrl = factory.create(CardCtrl.class, card);
             cardCtrls.put(cardCtrl.getCard().getId(), cardCtrl);
             cardListView.getChildren().add(cardCtrl.getNode());
