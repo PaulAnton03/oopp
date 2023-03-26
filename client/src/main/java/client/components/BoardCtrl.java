@@ -92,12 +92,13 @@ public class BoardCtrl implements Component<Board> {
     }
 
     private CardCtrl getSelectedCardCtrl() {
-        return getCardListCtrls().get(selectedCardListId).getCardCtrls().get(selectedCardId);
+        CardListCtrl cardListCtrl = getCardListCtrls().get(selectedCardListId);
+        return (cardListCtrl == null) ? null : cardListCtrl.getCardCtrls().get(selectedCardId);
     }
 
     private void switchSelectedCardList(int diff) {
         int cardListIdx = 0;
-        if (selectedCardId != -1) {
+        if (getSelectedCardCtrl() != null) {
             cardListIdx = board.getCardLists().indexOf(getCardListCtrls().get(selectedCardListId).getCardList()) + diff;
         }
         if (cardListIdx < 0 || cardListIdx >= board.getCardLists().size()) {
@@ -108,7 +109,7 @@ public class BoardCtrl implements Component<Board> {
             switchSelectedCardList(diff + Integer.signum(diff));
             return;
         }
-        if (selectedCardId != -1) {
+        if (getSelectedCardCtrl() != null) {
             getSelectedCardCtrl().unhighlight();
         }
         selectedCardListId = cardList.getId();
@@ -119,7 +120,7 @@ public class BoardCtrl implements Component<Board> {
     private void switchSelectedCard(int diff) {
         int cardIdx = 0;
         CardListCtrl cardListCtrl;
-        if (selectedCardId == -1) {
+        if (getSelectedCardCtrl() != null) {
             cardListCtrl = getCardListCtrls().get(board.getCardLists().get(0).getId());
         } else {
             cardListCtrl = getCardListCtrls().get(selectedCardListId);
@@ -128,7 +129,7 @@ public class BoardCtrl implements Component<Board> {
         if (cardListCtrl.getCardList().getCards().size() == 0 || cardIdx < 0 || cardIdx >= cardListCtrl.getCardList().getCards().size()) {
             return;
         }
-        if (selectedCardId != -1) {
+        if (getSelectedCardCtrl() != null) {
             getSelectedCardCtrl().unhighlight();
         }
         selectedCardId = cardListCtrl.getCardList().getCards().get(cardIdx).getId();
@@ -137,7 +138,6 @@ public class BoardCtrl implements Component<Board> {
     }
 
     public void handleKeyEvent(KeyEvent e) {
-        // NOTE: All the card selection code assumes that loadData is called after every change to the board state
         if (getCardListCtrls().size() == 0)
             return;
         switch (e.getCode()) {
