@@ -9,14 +9,15 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import org.opentest4j.TestAbortedException;
-import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 import server.database.BoardRepository;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.AdditionalMatchers.not;
 import static org.mockito.Mockito.*;
 
@@ -46,7 +47,7 @@ public class BoardControllerTest {
         when(boardRepoMock.findById(not(eq(10L)))).thenReturn(Optional.empty());
 
         assertEquals(board, controller.getById(10L).getBody());
-        assertNull(controller.getById(10000L).getBody());
+        assertThrows(ResponseStatusException.class, () -> controller.getById(10000L));
     }
 
     @Test
@@ -57,7 +58,7 @@ public class BoardControllerTest {
         when(boardRepoMock.findByName(not(eq("name")))).thenReturn(Optional.empty());
 
         assertEquals(board, controller.getByName("name").getBody());
-        assertNull(controller.getByName("invalid").getBody());
+        assertThrows(ResponseStatusException.class, () -> controller.getByName("invalid"));
     }
 
     @Test
@@ -77,7 +78,7 @@ public class BoardControllerTest {
 
         when(boardRepoMock.save(any())).thenThrow(new TestAbortedException("Method shouldn't save"));
 
-        assertEquals(HttpStatus.BAD_REQUEST, controller.create(invalidBoard).getStatusCode());
+        assertThrows(ResponseStatusException.class, () -> controller.create(invalidBoard));
     }
 
 }

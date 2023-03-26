@@ -9,7 +9,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
-import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 import server.database.CardListRepository;
 import server.database.CardRepository;
 
@@ -17,7 +17,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.AdditionalMatchers.not;
 import static org.mockito.Mockito.*;
 
@@ -49,7 +50,7 @@ public class CardControllerTest {
         when(cardRepoMock.findById(not(eq(1L)))).thenReturn(Optional.empty());
 
         assertEquals(card, controller.getById(1L).getBody());
-        assertNull(controller.getById(0L).getBody());
+        assertThrows(ResponseStatusException.class, () -> controller.getById(0L));
     }
 
     @Test
@@ -69,7 +70,7 @@ public class CardControllerTest {
             return null;
         }).when(cardRepoMock).save(any());
 
-        var response = controller.create(suppliedCard, 10L);
+        var response = controller.create(suppliedCard, 10L, Optional.empty());
 
         assertEquals(savedCard, response.getBody());
     }
@@ -85,7 +86,8 @@ public class CardControllerTest {
         when(cardListRepoMock.findById(invalidCardListId)).thenReturn(Optional.empty());
         when(cardListRepoMock.findById(validCardListId)).thenReturn(Optional.of(new CardList()));
 
-        assertEquals(HttpStatus.BAD_REQUEST, controller.create(invalidCard, validCardListId).getStatusCode());
-        assertEquals(HttpStatus.BAD_REQUEST, controller.create(validCard, invalidCardListId).getStatusCode());
+        assertThrows(ResponseStatusException.class, () -> controller.create(invalidCard, validCardListId, Optional.empty()));
+        assertThrows(ResponseStatusException.class, () -> controller.create(validCard, invalidCardListId, Optional.empty()));
+        assertThrows(ResponseStatusException.class, () -> controller.create(validCard, validCardListId, Optional.of(-1)));
     }
 }
