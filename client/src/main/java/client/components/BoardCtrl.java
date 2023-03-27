@@ -1,5 +1,13 @@
 package client.components;
 
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import javax.inject.Inject;
+
 import client.utils.ClientUtils;
 import client.utils.ComponentFactory;
 import client.utils.ServerUtils;
@@ -7,15 +15,9 @@ import commons.Board;
 import commons.CardList;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import lombok.Getter;
-
-import javax.inject.Inject;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 public class BoardCtrl implements Component<Board> {
     private final ClientUtils client;
@@ -28,6 +30,9 @@ public class BoardCtrl implements Component<Board> {
     private final Map<Long, CardListCtrl> cardListCtrls = new HashMap<>();
     @FXML
     private HBox boardView;
+
+    private long selectedCardListId = -1;
+    private long selectedCardId = -1;
 
     @Inject
     public BoardCtrl(ClientUtils client, ComponentFactory factory, ServerUtils server) {
@@ -56,6 +61,25 @@ public class BoardCtrl implements Component<Board> {
             cardListCtrls.put(cardList.getId(), cardListCtrl);
             boardView.getChildren().add(cardListCtrl.getNode());
         }
+
+        // Find new controller assigned to selected card and highlight
+        if (selectedCardId != -1) {
+            boolean foundCardCtrl = false;
+            for (CardListCtrl cardListCtrl : cardListCtrls.values()) {
+                CardCtrl cardCtrl = cardListCtrl.getCardCtrls().get(selectedCardId);
+                if (cardCtrl != null) {
+                    selectedCardId = cardCtrl.getCard().getId();
+                    selectedCardListId = cardListCtrl.getCardList().getId();
+                    cardCtrl.highlight();
+                    foundCardCtrl = true;
+                    break;
+                }
+            }
+            if (!foundCardCtrl) {
+                selectedCardId = -1;
+                selectedCardListId = -1;
+            }
+        }
     }
 
     public void refresh() {
@@ -65,6 +89,72 @@ public class BoardCtrl implements Component<Board> {
         } catch (Exception e) {
             System.out.println("Refreshed unsuccessfully");
         }
+    }
 
+    private CardCtrl getSelectedCardCtrl() {
+        CardListCtrl cardListCtrl = getCardListCtrls().get(selectedCardListId);
+        return (cardListCtrl == null) ? null : cardListCtrl.getCardCtrls().get(selectedCardId);
+    }
+
+    private void switchSelectedCardList(int diff) {
+        int cardListIdx = 0;
+        if (getSelectedCardCtrl() != null) {
+            cardListIdx = board.getCardLists().indexOf(getCardListCtrls().get(selectedCardListId).getCardList()) + diff;
+        }
+        if (cardListIdx < 0 || cardListIdx >= board.getCardLists().size()) {
+            return;
+        }
+        CardList cardList = board.getCardLists().get(cardListIdx);
+        if (cardList.getCards().size() == 0) { // If empty list, try next
+            switchSelectedCardList(diff + Integer.signum(diff));
+            return;
+        }
+        if (getSelectedCardCtrl() != null) {
+            getSelectedCardCtrl().unhighlight();
+        }
+        selectedCardListId = cardList.getId();
+        selectedCardId = cardList.getCards().get(0).getId();
+        getSelectedCardCtrl().highlight();
+    }
+
+    private void switchSelectedCard(int diff) {
+        int cardIdx = 0;
+        CardListCtrl cardListCtrl;
+        if (getSelectedCardCtrl() != null) {
+            cardListCtrl = getCardListCtrls().get(board.getCardLists().get(0).getId());
+        } else {
+            cardListCtrl = getCardListCtrls().get(selectedCardListId);
+            cardIdx = cardListCtrl.getCardList().getCards().indexOf(cardListCtrl.getCardCtrls().get(selectedCardId).getCard()) + diff;
+        }
+        if (cardListCtrl.getCardList().getCards().size() == 0 || cardIdx < 0 || cardIdx >= cardListCtrl.getCardList().getCards().size()) {
+            return;
+        }
+        if (getSelectedCardCtrl() != null) {
+            getSelectedCardCtrl().unhighlight();
+        }
+        selectedCardId = cardListCtrl.getCardList().getCards().get(cardIdx).getId();
+        selectedCardListId = cardListCtrl.getCardList().getId();
+        getSelectedCardCtrl().highlight();
+    }
+
+    public void handleKeyEvent(KeyEvent e) {
+        if (getCardListCtrls().size() == 0)
+            return;
+        switch (e.getCode()) {
+            case LEFT:
+                switchSelectedCardList(-1);
+                break;
+            case RIGHT:
+                switchSelectedCardList(1);
+                break;
+            case UP:
+                switchSelectedCard(-1);
+                break;
+            case DOWN:
+                switchSelectedCard(1);
+                break;
+            default:
+                break;
+        }
     }
 }

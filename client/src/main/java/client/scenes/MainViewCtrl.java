@@ -3,6 +3,7 @@ package client.scenes;
 import client.components.BoardCtrl;
 import client.utils.ClientUtils;
 import client.utils.ComponentFactory;
+import client.utils.MainViewKeyEventHandler;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Board;
@@ -11,7 +12,9 @@ import commons.CardList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.ScrollEvent;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.text.Text;
 import lombok.Getter;
 import lombok.Setter;
@@ -32,6 +35,8 @@ public class MainViewCtrl {
     private ScrollPane boardContainer;
     @FXML
     private Text displayBoardName;
+    @FXML
+    private BorderPane root;
 
     @Inject
     public MainViewCtrl(ServerUtils server, ClientUtils client, MainCtrl mainCtrl, ComponentFactory factory) {
@@ -81,6 +86,11 @@ public class MainViewCtrl {
             pane.setHvalue(pane.getHvalue() - scrollAmount);
         }
         event.consume();
+    }
+
+    @FXML
+    public void initialize() {
+        root.addEventFilter(KeyEvent.KEY_PRESSED, new MainViewKeyEventHandler(this));
     }
 
     public void loadData(Board board) {
