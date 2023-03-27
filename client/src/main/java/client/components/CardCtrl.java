@@ -1,18 +1,19 @@
 package client.components;
 
-import javax.inject.Inject;
-
 import client.scenes.MainCtrl;
 import client.utils.ServerUtils;
 import commons.Card;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.control.Label;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+
+import javax.inject.Inject;
 
 @EqualsAndHashCode
 public class CardCtrl implements Component<Card> {
@@ -27,7 +28,7 @@ public class CardCtrl implements Component<Card> {
     @FXML
     private Text title;
     @FXML
-    private Text description;
+    private Label description;
 
     @Inject
     public CardCtrl(MainCtrl mainCtrl, ServerUtils serverUtils) {
