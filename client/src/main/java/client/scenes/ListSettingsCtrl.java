@@ -36,9 +36,7 @@ public class ListSettingsCtrl {
     public void saveChanges() {
         CardList cardList = getCardList();
         cardList.setTitle(listTitle.getText());
-        //Todo - figure out a way to update an object in the database
-        server.deleteCardList(cardList.getId());
-        server.addCardList(cardList);
+        server.updateCardList(cardList);
         mainCtrl.showMainView();
     }
 

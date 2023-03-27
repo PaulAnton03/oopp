@@ -14,7 +14,7 @@
          <children>
             <Text fx:id="title" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="title" text="Title" wrappingWidth="133.5322265625">
                <font>
-                  <Font size="19.0" />
+                  <Font size="16.0" />
                </font>
             </Text>
             <Pane prefHeight="30.0" prefWidth="13.0" />

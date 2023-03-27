@@ -1,5 +1,6 @@
 .card {
-
+    -fx-border-color: #000000;
+    -fx-border-radius: 1px 1px 1px 1px;
 }
 
 .card > .title {

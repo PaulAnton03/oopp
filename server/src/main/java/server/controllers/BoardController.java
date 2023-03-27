@@ -2,16 +2,15 @@ package server.controllers;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import commons.Board;
-import org.springframework.http.HttpStatus;
+import java.util.List;
+import java.util.Optional;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 import server.database.BoardRepository;
 import server.database.CardListRepository;
 import server.database.CardRepository;
-
-import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/boards")
@@ -72,6 +71,19 @@ public class BoardController {
         final Board board = optBoard.get();
         boardRepository.deleteById(board.getId());
         return ResponseEntity.ok(board);
+    }
+
+    @PutMapping("/update/{id}")
+    public ResponseEntity<Board> update(@RequestBody Board board) {
+        if(!board.isNetworkValid()) {
+            return ResponseEntity.badRequest().build();
+        }
+        final Optional<Board> optionalBoard = boardRepository.findById(board.getId());
+        if(optionalBoard.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        Board updated = boardRepository.save(board);
+        return ResponseEntity.ok(updated);
     }
 
     @MessageMapping("/boards")

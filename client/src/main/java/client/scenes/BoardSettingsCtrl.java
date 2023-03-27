@@ -42,9 +42,11 @@ public class BoardSettingsCtrl {
             return;
         }
         board.setPassword(passwordUsed.isSelected() ? boardPassword.getText() : null);
-        server.addBoard(board);
-        mainCtrl.showMainView();
+        server.updateBoard(board);
 
+        boardPassword.setText("");
+        passwordUsed.setSelected(false);
+        mainCtrl.showMainView(board);
     }
 
     public void deleteBoard() {
