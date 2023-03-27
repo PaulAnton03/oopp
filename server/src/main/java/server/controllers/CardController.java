@@ -4,6 +4,8 @@ import commons.Card;
 import commons.CardList;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import server.database.CardListRepository;
@@ -23,7 +25,7 @@ public class CardController {
         this.cardListRepository = cardListRepository;
     }
 
-    @GetMapping(path = { "", "/" })
+    @GetMapping(path = {"", "/"})
     public ResponseEntity<List<Card>> getAll() {
         return ResponseEntity.ok(cardRepository.findAll());
     }
@@ -93,5 +95,11 @@ public class CardController {
         }
         Card updated = cardRepository.save(card);
         return ResponseEntity.ok(updated);
+    }
+
+    @MessageMapping("/cards")
+    @SendTo("/topic/cards")
+    public Card addMessage(Card card) {
+        return card;
     }
 }

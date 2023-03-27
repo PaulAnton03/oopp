@@ -1,10 +1,11 @@
 package server.controllers;
-
 import commons.Board;
 import commons.CardList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import server.database.BoardRepository;
@@ -28,7 +29,7 @@ public class CardListController {
         this.cardRepository = cardRepository;
     }
 
-    @GetMapping(path = { "", "/" })
+    @GetMapping(path = {"", "/"})
     public ResponseEntity<List<CardList>> getAllLists() {
         var list = cardListRepository.findAll();
         return ResponseEntity.ok(list);
@@ -85,6 +86,12 @@ public class CardListController {
         }
         CardList updated = cardListRepository.save(cardList);
         return ResponseEntity.ok(updated);
+    }
+
+    @MessageMapping("/lists")
+    @SendTo("/topic/lists")
+    public CardList addMessage(CardList list) {
+        return list;
     }
 
 }
