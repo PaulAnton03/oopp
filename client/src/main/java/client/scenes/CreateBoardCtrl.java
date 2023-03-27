@@ -47,12 +47,17 @@ public class CreateBoardCtrl {
         final CardList addedCardList = server.addCardList(cardList);
         addedBoard.addCardList(addedCardList);
 
+        clear();
         mainCtrl.showMainView(addedBoard);
     }
 
     public void goBack() {
+        clear();
+        mainCtrl.showMainView();
+    }
+
+    public void clear() {
         boardName.setText("");
         boardPassword.setText("");
-        mainCtrl.showMainView();
     }
 }

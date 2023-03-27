@@ -37,6 +37,11 @@ public class PasswordProtectedCtrl {
         final String inputtedPassword = passwordField.getText();
         passwordField.clear();
 
+        if (inputtedPassword.isEmpty()) {
+            exceptionHandler.clientException("Password cannot be empty!");
+            return;
+        }
+
         if (!inputtedPassword.equals(passwordBoard.getPassword())) {
             exceptionHandler.clientException("Incorrect Password!");
             return;
