@@ -43,8 +43,7 @@ public class Card {
      */
     @JsonIgnore
     public boolean isNetworkValid() {
-        return !isNullOrEmpty(this.getTitle())
-            && !isNullOrEmpty(this.getDescription());
+        return !isNullOrEmpty(this.getTitle());
     }
 
     private static boolean isNullOrEmpty(String s) {

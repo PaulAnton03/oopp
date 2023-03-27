@@ -12,7 +12,7 @@
    <top>
       <HBox prefHeight="50.0" prefWidth="600.0" styleClass="navbar" stylesheets="/client/styles/navbar.css" BorderPane.alignment="CENTER">
          <children>
-            <Button fx:id="navbarBackButton" mnemonicParsing="false" onAction="#btnBackClicked" prefHeight="60.0" prefWidth="2000.0" text="Back">
+            <Button fx:id="navbarBackButton" mnemonicParsing="false" onAction="#btnBackClicked" prefHeight="60.0" prefWidth="2000.0" text="Disconnect">
                <font>
                   <Font size="16.0" />
                </font>
