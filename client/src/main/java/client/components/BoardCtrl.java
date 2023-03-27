@@ -2,6 +2,7 @@ package client.components;
 
 import client.utils.ClientUtils;
 import client.utils.ComponentFactory;
+import client.utils.Logger;
 import client.utils.ServerUtils;
 import commons.Board;
 import commons.CardList;
@@ -47,7 +48,7 @@ public class BoardCtrl implements Component<Board> {
 
         final long listWidthPlusGap = 200;
         boardView.setMinWidth(board.getCardLists().size() * listWidthPlusGap);
-        List<CardList> sortedLists = board.getCardLists().stream()
+        List<CardList> sortedLists = board.getCardLists().stream().filter(c -> c != null)
                 .sorted(Comparator.comparingDouble(CardList::getId))
                 .collect(Collectors.toList());
 
@@ -63,7 +64,7 @@ public class BoardCtrl implements Component<Board> {
         try {
             loadData(server.getBoard(board.getId()));
         } catch (Exception e) {
-            System.out.println("Refreshed unsuccessfully");
+            Logger.log("Failed to refresh board " + board + ". Error: " + e.getMessage());
         }
 
     }
