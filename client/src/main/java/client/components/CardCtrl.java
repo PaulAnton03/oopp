@@ -7,6 +7,7 @@ import client.utils.ServerUtils;
 import commons.Card;
 import javafx.animation.FadeTransition;
 import javafx.animation.ScaleTransition;
+import javafx.css.PseudoClass;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -14,7 +15,6 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.control.Button;
-import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.ClipboardContent;
@@ -32,7 +32,6 @@ import javax.inject.Inject;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
-import java.util.function.Consumer;
 
 @EqualsAndHashCode
 public class CardCtrl implements Component<Card>, Initializable {
@@ -82,33 +81,73 @@ public class CardCtrl implements Component<Card>, Initializable {
         ((VBox) cardView.getParent()).getChildren().remove(cardView);
     }
 
+    private static final PseudoClass HIGHLIGHT_PSEUDO_CLASS = PseudoClass.getPseudoClass("highlight");
+
     public void highlight() {
-        // TODO: change how highlighted card is displayed
-        ColorAdjust colorAdjust = new ColorAdjust();
-        colorAdjust.setBrightness(0.6);
-        getNode().setEffect(colorAdjust);
+        cardView.pseudoClassStateChanged(HIGHLIGHT_PSEUDO_CLASS, true);
     }
 
     public void unhighlight() {
-        getNode().setEffect(null);
+        cardView.pseudoClassStateChanged(HIGHLIGHT_PSEUDO_CLASS, false);
     }
 
-    public void setButtonsOpacity(double opacity) {
-        final double transitionTime = 100;
-        final Consumer<Node> showNode = (node) -> {
-            FadeTransition ft = new FadeTransition(Duration.millis(transitionTime), node);
-            ft.setToValue(opacity);
-            ft.play();
-        };
-        showNode.accept(deleteButton);
-        showNode.accept(editButton);
+    public void focus() {
+        ScaleTransition st = new ScaleTransition(Duration.millis(100), cardView);
+        st.setToX(1.15);
+        st.setToY(1.15);
+        showButtons();
+        st.play();
+    }
+
+    public void unfocus() {
+        ScaleTransition st = new ScaleTransition(Duration.millis(100), cardView);
+        st.setToX(1);
+        st.setToY(1);
+        st.play();
+        hideButtons();
+    }
+
+    public void runOpacityTransition(Node node, double finalOpacity, double duration, double delay) {
+        if (getCard() != null)
+            Logger.log(getCard().getTitle() + " Current opacity: " + node.getOpacity() + ", changing to: " + finalOpacity);
+
+        FadeTransition ft = new FadeTransition(Duration.millis(duration), node);
+        ft.setDelay(Duration.millis(delay));
+        ft.setFromValue(node.getOpacity());
+        ft.setToValue(finalOpacity);
+        ft.play();
+    }
+
+    // If anybody knows how to block other events of the same type
+    public void applyButtonHoverStyle(Button button) {
+        button.setOnMouseEntered(event -> runOpacityTransition(button, 1.0, 100, 0));
+        button.setOnMouseExited(event -> runOpacityTransition(button, 0.6, 100, 0));
+    }
+
+    public void hideButtons() {
+        runOpacityTransition(deleteButton, 0.0, 100, 0);
+        runOpacityTransition(editButton, 0.0, 100, 0);
+    }
+
+    public void showButtons() {
+        runOpacityTransition(deleteButton, 0.6, 100, 0);
+        runOpacityTransition(editButton, 0.6, 100, 0);
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // Set button icons
+        unhighlight();
+
+        // Set button icons and behaviour
         try (var binInputStream = getClass().getResourceAsStream("/client/images/bin.png");
              var editInputStream = getClass().getResourceAsStream("/client/images/edit.png")) {
+            // Hover behaviour
+            deleteButton.setOpacity(0.0);
+            editButton.setOpacity(0.0);
+            applyButtonHoverStyle(deleteButton);
+            applyButtonHoverStyle(editButton);
+
+            // Button graphic
             ImageView binIcon = new ImageView(new Image(binInputStream));
             ImageView editIcon = new ImageView(new Image(editInputStream));
             binIcon.setFitHeight(40);
@@ -117,55 +156,34 @@ public class CardCtrl implements Component<Card>, Initializable {
             editIcon.setPreserveRatio(true);
             deleteButton.setGraphic(binIcon);
             editButton.setGraphic(editIcon);
-            setButtonsOpacity(0);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
-        cardView.setOnMouseEntered(event -> {
-            if (cardView.getScaleX() != 1) return;
-
-            final double zoomScaleFactor = 1.15;
-            final double transitionTime = 100;
-
-            ScaleTransition st = new ScaleTransition(Duration.millis(transitionTime), cardView);
-            st.setToX(zoomScaleFactor);
-            st.setToY(zoomScaleFactor);
-            setButtonsOpacity(0.6);
-            st.play();
-
-        });
-
-        cardView.setOnMouseExited(event -> {
-            final double transitionTime = 100;
-
-            ScaleTransition st = new ScaleTransition(Duration.millis(transitionTime), cardView);
-            st.setToX(1);
-            st.setToY(1);
-            st.play();
-            setButtonsOpacity(0);
-        });
+        cardView.setOnMouseEntered(event -> focus());
+        cardView.setOnMouseExited(event -> unfocus());
 
         cardView.setOnDragDetected(event -> {
             Logger.log("Card " + getCard().getTitle() + " drag detected");
 
-            Dragboard db = cardView.startDragAndDrop(TransferMode.ANY);
             SnapshotParameters params = new SnapshotParameters();
             params.setFill(Color.TRANSPARENT);
             params.setTransform(Transform.scale(0.8, 0.8));
+            Dragboard db = cardView.startDragAndDrop(TransferMode.MOVE);
             db.setDragView(cardView.snapshot(params, null), event.getX(), event.getY());
             ClipboardContent content = new ClipboardContent();
             content.putString("Card source text");
             db.setContent(content);
+            event.consume();
         });
 
         cardView.setOnDragDone(event -> {
-            // TODO replace this with updating the card instead of deleting and adding
             delete();
             getCard().setCardList(client.getActiveCardList());
-            getCard().setId(0);
+            getCard().setId(0); // Default id
             server.addCardAtPosition(getCard(), (Integer) client.getActiveCardListCtrl().getCardListView().getUserData());
             client.getActiveCardListCtrl().refresh();
+            event.consume();
         });
     }
 }

@@ -3,6 +3,11 @@
     -fx-background-color: white;
 }
 
+.card.highlight {
+    -fx-border-radius: 5px;
+    -fx-border-style: 2px solid #555555;
+}
+
 .card:hover {
     -fx-effect: dropshadow(three-pass-box, #555555, 7, 0.1, 0, 0);
 }
@@ -11,14 +16,10 @@
     -fx-base: transparent;
 }
 
-.titlePane > Button:hover {
-    -fx-opacity: 1;
-}
-
 .card > .title {
     -fx-font-size: 20px;
 }
 
 .card > .description {
-    /* set the text color */
+    /* set the text color to gray */
 }

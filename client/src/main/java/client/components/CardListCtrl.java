@@ -74,21 +74,22 @@ public class CardListCtrl implements Component<CardList>, Initializable {
         });
 
         cardListView.setOnDragOver(event -> {
-            event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
+            event.acceptTransferModes(TransferMode.MOVE);
             event.consume();
         });
 
         cardListView.setOnDragDropped(event -> {
             Dragboard db = event.getDragboard();
-            Logger.log("Dropped: " + db.getString());
+            Logger.log("Dropped on list " + this.getCardList().getTitle());
             client.setActiveCardListCtrl(this);
 
-            // Find the position to insert the card\
             final double eventY = event.getY();
-            final List<Node> nodes = cardListView.getChildren();
+            // Filter out the currently dragged card
+            final List<Node> nodes = cardListView.getChildren().filtered(node -> !node.equals(event.getGestureSource()));
             Pair<Integer, Double> nearestPositionDistance = new Pair<>(nodes.size(), cardListView.getBoundsInLocal().getMaxY() - eventY);
             boolean isPositionAbove = false;
 
+            // Find the position to insert the card
             for (int i = 0; i < nodes.size(); i++) {
                 final Node node = nodes.get(i);
                 final double signedDistance = eventY - node.getBoundsInParent().getCenterY();
@@ -98,11 +99,13 @@ public class CardListCtrl implements Component<CardList>, Initializable {
                 }
             }
 
-            ((Node) event.getSource()).setUserData(Math.max(0,
+            ((Node) event.getSource()).setUserData(Math.min(nodes.size(),
                             nearestPositionDistance.getKey() + (isPositionAbove ? 1 : 0)));
             Logger.log("Position: " + nearestPositionDistance.getKey());
             Logger.log("Distance: " + nearestPositionDistance.getValue());
             Logger.log("Is above? " + isPositionAbove);
+            // Logger.log("Inserted at position: ")
+
             event.setDropCompleted(true);
             event.consume();
         });
