@@ -139,7 +139,6 @@ public class MainCtrl {
 
     public void showConnect() {
         primaryStage.setTitle("Connect: Talio server");
-        primaryStage.setResizable(false);
         primaryStage.setScene(connect);
     }
 

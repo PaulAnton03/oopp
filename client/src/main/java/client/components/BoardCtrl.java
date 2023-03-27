@@ -1,13 +1,5 @@
 package client.components;
 
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
-import javax.inject.Inject;
-
 import client.utils.ClientUtils;
 import client.utils.ComponentFactory;
 import client.utils.Logger;
@@ -19,6 +11,13 @@ import javafx.scene.Parent;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import lombok.Getter;
+
+import javax.inject.Inject;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class BoardCtrl implements Component<Board> {
     private final ClientUtils client;
@@ -51,7 +50,7 @@ public class BoardCtrl implements Component<Board> {
         this.board = board;
         client.setActiveBoardCtrl(this);
 
-        final long listWidthPlusGap = 200;
+        final long listWidthPlusGap = 290;
         boardView.setMinWidth(board.getCardLists().size() * listWidthPlusGap);
         List<CardList> sortedLists = board.getCardLists().stream().filter(c -> c != null)
                 .sorted(Comparator.comparingDouble(CardList::getId))

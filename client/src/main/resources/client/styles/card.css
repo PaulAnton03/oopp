@@ -1,6 +1,18 @@
 .card {
-    -fx-border-color: #000000;
-    -fx-border-radius: 1px 1px 1px 1px;
+    -fx-background-radius: 5px;
+    -fx-background-color: white;
+}
+
+.card:hover {
+    -fx-effect: dropshadow(three-pass-box, #555555, 7, 0.1, 0, 0);
+}
+
+.titlePane > Button {
+    -fx-base: transparent;
+}
+
+.titlePane > Button:hover {
+    -fx-opacity: 1;
 }
 
 .card > .title {
