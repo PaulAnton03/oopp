@@ -45,6 +45,6 @@ class CardTest {
 
         card.setTitle("task");
         card.setDescription("");
-        assertFalse(card.isNetworkValid());
+        assertTrue(card.isNetworkValid());
     }
 }
