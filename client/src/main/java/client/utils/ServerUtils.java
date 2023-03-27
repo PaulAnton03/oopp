@@ -15,15 +15,6 @@
  */
 package client.utils;
 
-import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
-
-import java.lang.reflect.Type;
-import java.util.List;
-import java.util.concurrent.ExecutionException;
-import java.util.function.Consumer;
-
-import org.glassfish.jersey.client.ClientConfig;
-
 import commons.Board;
 import commons.Card;
 import commons.CardList;
@@ -34,6 +25,7 @@ import jakarta.ws.rs.client.WebTarget;
 import jakarta.ws.rs.core.GenericType;
 import lombok.Getter;
 import lombok.Setter;
+import org.glassfish.jersey.client.ClientConfig;
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
 import org.springframework.messaging.simp.stomp.StompFrameHandler;
 import org.springframework.messaging.simp.stomp.StompHeaders;
@@ -41,6 +33,13 @@ import org.springframework.messaging.simp.stomp.StompSession;
 import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 import org.springframework.web.socket.messaging.WebSocketStompClient;
+
+import java.lang.reflect.Type;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.function.Consumer;
+
+import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
 public class ServerUtils {
 
@@ -117,7 +116,6 @@ public class ServerUtils {
     }
 
     public Board getBoard(long id) {
-        System.out.println(id);
         WebTarget webTarget = webTargetFromPath("/boards/{id}").resolveTemplate("id", id);
         return webTargetAddDefault(webTarget).get(new GenericType<>() {
         });
@@ -178,8 +176,6 @@ public class ServerUtils {
     public CardList addCardList(CardList cardList) {
         WebTarget webTarget = webTargetFromPath("/lists/create")
                 .queryParam("boardId", cardList.getBoard().getId());
-        System.out.println(webTarget);
-        System.out.println(cardList);
         return webTargetAddDefault(webTarget).post(Entity.entity(cardList, APPLICATION_JSON), CardList.class);
     }
 
