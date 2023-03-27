@@ -7,6 +7,8 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Entity
@@ -28,10 +30,24 @@ public class Card {
     @EqualsAndHashCode.Exclude
     private CardList cardList;
 
+    @ManyToMany(mappedBy = "tag", cascade = CascadeType.ALL)
+    @OrderColumn(name = "tag_index")
+    private List<Tag> tagList = new ArrayList<>();
+
     @NonNull
     private String title;
     @NonNull
     private String description;
+
+    public boolean removeTag(long id){
+        Tag tag = this.getTagList().stream().filter(c -> c.getId() == id).findFirst().orElse(null);
+        if(tag == null){
+            return false;
+        }else {
+            this.getTagList().remove(tag);
+        }
+        return true;
+    }
 
     @Override
     public String toString() {
@@ -50,4 +66,6 @@ public class Card {
     private static boolean isNullOrEmpty(String s) {
         return s == null || s.isEmpty();
     }
+
+
 }

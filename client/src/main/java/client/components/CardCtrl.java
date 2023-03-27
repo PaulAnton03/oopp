@@ -19,7 +19,6 @@ public class CardCtrl implements Component<Card> {
 
     @Getter
     private Card card;
-
     @FXML
     private VBox cardView;
     @FXML

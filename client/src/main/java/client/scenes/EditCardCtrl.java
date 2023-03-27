@@ -20,7 +20,7 @@ public class EditCardCtrl {
     @FXML
     private TextField changeTitle;
     @FXML
-    private TextArea changeDesc;
+    private TextField changeDesc;
 
     @Inject
     public EditCardCtrl(ServerUtils server, ClientUtils client, MainCtrl mainCtrl) {
