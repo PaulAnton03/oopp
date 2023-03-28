@@ -26,9 +26,10 @@ public class BoardCtrl implements Component<Board> {
     private final ServerUtils server;
 
     @Getter
-    private Board board;
+    private Map<Long, CardListCtrl> cardListCtrls = new HashMap<>();
+
     @Getter
-    private final Map<Long, CardListCtrl> cardListCtrls = new HashMap<>();
+    private Board board;
     @FXML
     private HBox boardView;
 
@@ -108,7 +109,9 @@ public class BoardCtrl implements Component<Board> {
 
     private void switchSelectedCardList(int diff) {
         int cardListIdx = 0;
-        if (board.getCardLists())
+        if (board.getCardLists() == null) {
+            return;
+        }
         if (getSelectedCardCtrl() != null) {
             cardListIdx = board.getCardLists().indexOf(getCardListCtrls().get(selectedCardListId).getCardList()) + diff;
         }

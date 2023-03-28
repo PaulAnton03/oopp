@@ -14,7 +14,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Table(name = "cards")
 @JsonIdentityInfo(scope = Card.class, generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-public class Card {
+public class Card implements DBEntity {
 
     @Id
     @SequenceGenerator(name="cards_seq", sequenceName="CARDS_SEQ")

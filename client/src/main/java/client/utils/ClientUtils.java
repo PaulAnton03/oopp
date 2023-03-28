@@ -9,12 +9,14 @@ import commons.CardList;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.inject.Inject;
 
 public class ClientUtils {
     private final ServerUtils server;
     private final ClientPreferences preferences;
-    private final ComponentFactory factory;
 
     @Setter
     private BoardCtrl activeBoardCtrl;
@@ -25,20 +27,20 @@ public class ClientUtils {
     @Setter
     private CardCtrl activeCardCtrl;
 
+    @Getter
+    @Setter
+    private Map<Long, CardListCtrl> cardListCtrls = new HashMap<>();
+    @Getter
+    @Setter
+    private Map<Long, CardCtrl> cardCtrls = new HashMap<>();
+
     @Inject
-    public ClientUtils(ServerUtils server, ClientPreferences preferences, ComponentFactory factory) {
+    public ClientUtils(ServerUtils server, ClientPreferences preferences) {
         this.server = server;
         this.preferences = preferences;
-        this.factory = factory;
     }
 
     public BoardCtrl getActiveBoardCtrl() {
-        if (activeBoardCtrl == null) {
-            // Load default board
-            preferences.getDefaultBoardId().ifPresent(boardId -> {
-                activeBoardCtrl = factory.create(BoardCtrl.class, server.getBoard(boardId));
-            });
-        }
         return activeBoardCtrl;
     }
 

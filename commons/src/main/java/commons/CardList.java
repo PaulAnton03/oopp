@@ -18,7 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Table(name = "card_lists")
 @JsonIdentityInfo(scope = CardList.class, generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-public class CardList {
+public class CardList implements DBEntity {
 
     @Id
     @SequenceGenerator(name="card_lists_seq", sequenceName="CARD_LISTS_SEQ")
