@@ -36,13 +36,11 @@ public class AdminPasswordCtrl {
         passwordField.clear();
 
         if (inputtedPassword.isEmpty()) {
-            exceptionHandler.clientException("Password cannot be empty!");
-            return;
+            throw new IllegalArgumentException("Password cannot be empty!");
         }
 
         if (!inputtedPassword.equals("admin")) {
-            exceptionHandler.clientException("Incorrect Password!");
-            return;
+            throw new IllegalArgumentException("Incorrect Password!");
         }
 
         correctPassword.complete(true);
