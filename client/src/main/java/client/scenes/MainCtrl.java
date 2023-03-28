@@ -69,6 +69,10 @@ public class MainCtrl {
     private PasswordProtectedCtrl passwordProtectedCtrl;
     private Scene passwordProtected;
 
+    @Getter
+    private AdminPasswordCtrl adminPasswordCtrl;
+    private Scene adminPassword;
+
     @Inject
     public MainCtrl(ServerUtils server, ClientUtils client, ComponentFactory factory) {
         this.server = server;
@@ -90,6 +94,7 @@ public class MainCtrl {
         private Pair<ListSettingsCtrl, Parent> editList;
         private Pair<EditCardCtrl, Parent> editCard;
         private Pair<PasswordProtectedCtrl, Parent> pswProtected;
+        private Pair<AdminPasswordCtrl, Parent> adminPsw;
     }
 
     public void initialize(Stage primaryStage, ScenesBuilder builder) {
@@ -125,16 +130,24 @@ public class MainCtrl {
         this.passwordProtectedCtrl = builder.getPswProtected().getKey();
         this.passwordProtected = new Scene(builder.getPswProtected().getValue());
 
+        this.adminPasswordCtrl = builder.getAdminPsw().getKey();
+        this.adminPassword = new Scene(builder.getAdminPsw().getValue());
+
         primaryStage.setResizable(true);
         showConnect();
         primaryStage.show();
     }
 
-    public void showEditCard(CardCtrl cardCtrl){
+    public void showEditCard(CardCtrl cardCtrl) {
         client.setActiveCardCtrl(cardCtrl);
         editCardCtrl.loadData(cardCtrl.getCard());
         primaryStage.setTitle("Edit Card");
         primaryStage.setScene(editCard);
+    }
+
+    public void showAdminPasswordProtected() {
+        primaryStage.setTitle("Admin password");
+        primaryStage.setScene(adminPassword);
     }
 
     public void showConnect() {
