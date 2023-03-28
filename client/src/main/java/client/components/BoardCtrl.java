@@ -1,5 +1,7 @@
 package client.components;
 
+import java.util.stream.IntStream;
+
 import javax.inject.Inject;
 
 import client.utils.ClientUtils;
@@ -13,7 +15,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import lombok.Getter;
 
-public class BoardCtrl implements Component<Board>, DBEntityCtrl<Board> {
+public class BoardCtrl implements Component<Board>, DBEntityCtrl<Board, CardList> {
     private final ClientUtils client;
     private final ComponentFactory factory;
     private final ServerUtils server;
@@ -22,8 +24,6 @@ public class BoardCtrl implements Component<Board>, DBEntityCtrl<Board> {
     private Board board;
     @FXML
     private HBox boardView;
-
-    private long selectedCardId = -1;
 
     @Inject
     public BoardCtrl(ClientUtils client, ComponentFactory factory, ServerUtils server) {
@@ -71,18 +71,20 @@ public class BoardCtrl implements Component<Board>, DBEntityCtrl<Board> {
         }
     }
 
-    private void changeSelection(long selectedCardId) {
-        CardCtrl cardCtrl = client.getCardCtrl(this.selectedCardId);
-        if (cardCtrl != null)
-            cardCtrl.unhighlight();
-        this.selectedCardId = selectedCardId;
-        client.getCardCtrl(selectedCardId).highlight();
+    public void replaceChild(CardList cardList) {
+        int idx = IntStream.range(0, board.getCardLists().size())
+            .filter(i -> board.getCardLists().get(i).getId() == cardList.getId())
+            .findFirst()
+            .orElse(-1);
+        if (idx == -1)
+            throw new IllegalStateException("Attempting to replace list in board that does not exist.");
+        board.getCardLists().set(idx, cardList);
     }
 
     private void switchSelectedCardList(int diff) {
         int cardListIdx = 0;
-        if (client.getCardCtrl(selectedCardId) != null) {
-            cardListIdx = board.getCardLists().indexOf(client.getCardList(client.getCard(selectedCardId).getCardList().getId())) + diff;
+        if (client.getCardCtrl(client.getSelectedCardId()) != null) {
+            cardListIdx = board.getCardLists().indexOf(client.getCardList(client.getCard(client.getSelectedCardId()).getCardList().getId())) + diff;
         }
         if (cardListIdx < 0 || cardListIdx >= board.getCardLists().size())
             return;
@@ -91,15 +93,15 @@ public class BoardCtrl implements Component<Board>, DBEntityCtrl<Board> {
             switchSelectedCardList(diff + Integer.signum(diff));
             return;
         }
-        changeSelection(cardList.getCards().get(0).getId());
+        client.changeSelection(cardList.getCards().get(0).getId());
     }
 
     private void switchSelectedCard(int diff) {
         int cardIdx = 0;
         CardList cardList;
-        if (client.getCardCtrl(selectedCardId) != null) {
-            cardList = client.getCard(selectedCardId).getCardList();
-            cardIdx = cardList.getCards().indexOf(client.getCard(selectedCardId)) + diff;
+        if (client.getCardCtrl(client.getSelectedCardId()) != null) {
+            cardList = client.getCard(client.getSelectedCardId()).getCardList();
+            cardIdx = cardList.getCards().indexOf(client.getCard(client.getSelectedCardId())) + diff;
         } else {
             cardList = board.getCardLists().get(0);
         }
@@ -109,7 +111,7 @@ public class BoardCtrl implements Component<Board>, DBEntityCtrl<Board> {
             || cardIdx >= cardList.getCards().size()) {
             return;
         }
-        changeSelection(cardList.getCards().get(cardIdx).getId());
+        client.changeSelection(cardList.getCards().get(cardIdx).getId());
     }
 
     public void handleKeyEvent(KeyEvent e) {

@@ -3,6 +3,7 @@ package client.components;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.stream.IntStream;
 
 import javax.inject.Inject;
 
@@ -27,7 +28,7 @@ import lombok.Getter;
 
 
 @EqualsAndHashCode
-public class CardListCtrl implements Component<CardList>, DBEntityCtrl<CardList>, Initializable {
+public class CardListCtrl implements Component<CardList>, DBEntityCtrl<CardList, Card>, Initializable {
     private final ClientUtils client;
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
@@ -69,6 +70,7 @@ public class CardListCtrl implements Component<CardList>, DBEntityCtrl<CardList>
     public void refresh() {
         cardListView.getChildren().clear();
         loadData(server.getCardList(cardList.getId()));
+        client.getBoardCtrl().replaceChild(cardList);
     }
 
     public void remove() {
@@ -80,6 +82,16 @@ public class CardListCtrl implements Component<CardList>, DBEntityCtrl<CardList>
         for (Card card : this.cardList.getCards()) {
             client.getCardCtrls().get(card.getId()).remove();
         }
+    }
+
+    public void replaceChild(Card card) {
+        int idx = IntStream.range(0, cardList.getCards().size())
+            .filter(i -> cardList.getCards().get(i).getId() == card.getId())
+            .findFirst()
+            .orElse(-1);
+        if (idx == -1)
+            throw new IllegalStateException("Attempting to replace card in card list that does not already exist.");
+        cardList.getCards().set(idx, card);
     }
 
     @Override

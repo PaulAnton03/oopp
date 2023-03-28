@@ -21,6 +21,9 @@ public class ClientUtils {
     @Getter
     @Setter
     private long activeCardListId;
+    @Getter
+    @Setter
+    private long selectedCardId = -1;
 
     @Getter
     @Setter
@@ -66,5 +69,13 @@ public class ClientUtils {
 
     public CardCtrl getCardCtrl(long id) {
         return cardCtrls.get(id);
+    }
+
+    public void changeSelection(long selectedCardId) {
+        CardCtrl cardCtrl = getCardCtrl(this.selectedCardId);
+        if (cardCtrl != null)
+            cardCtrl.unhighlight();
+        this.selectedCardId = selectedCardId;
+        getCardCtrl(selectedCardId).highlight();
     }
 }

@@ -39,7 +39,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 @EqualsAndHashCode
-public class CardCtrl implements Component<Card>, DBEntityCtrl<Card>, Initializable {
+public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Card/* TODO: change to TAG */>, Initializable {
     private final MainCtrl mainCtrl;
     private final ServerUtils server;
     private final ClientUtils client;
@@ -76,10 +76,16 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card>, Initializa
         this.card = card;
         title.setText(card.getTitle());
         description.setText(card.getDescription());
+        if (client.getSelectedCardId() == card.getId()) {
+            highlight();
+        } else {
+            unhighlight();
+        }
     }
 
     public void refresh() {
         loadData(server.getCard(card.getId()));
+        client.getCardListCtrl(card.getCardList().getId()).replaceChild(card);
     }
 
     public void remove() {
@@ -89,11 +95,13 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card>, Initializa
 
     public void removeChildren() {}
 
+    public void replaceChild(Card card /* TODO: Change to Tag tag */) {}
+
     public void editCard() { mainCtrl.showEditCard(this.getCard().getId()); }
 
     public void delete() {
         server.deleteCard(card.getId());
-        client.getCardListCtrls().get(card.getCardList().getId()).refresh(); // TODO: WEBSOCKET
+        client.getCardListCtrl(card.getCardList().getId()).refresh(); // TODO: WEBSOCKET
     }
 
     // CSS class that defines style for the highlighted card
