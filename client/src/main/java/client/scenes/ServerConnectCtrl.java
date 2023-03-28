@@ -27,6 +27,11 @@ public class ServerConnectCtrl {
     public void connect() {
         String serverPath = serverInput.getText();
         if (!serverPath.isEmpty()) {
+            boolean admin = serverPath.startsWith("admin//");
+            if (admin) {
+                serverPath = serverPath.substring(7);
+            }
+            serverUtils.setAdmin(admin);
             serverUtils.setServerPath(serverPath);
         }
 

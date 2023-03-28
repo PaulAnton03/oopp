@@ -11,6 +11,7 @@ import commons.Card;
 import commons.CardList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.ScrollEvent;
@@ -37,6 +38,9 @@ public class MainViewCtrl {
     private Text displayBoardName;
     @FXML
     private BorderPane root;
+
+    @FXML
+    private Label adminLabel;
 
     @Inject
     public MainViewCtrl(ServerUtils server, ClientUtils client, MainCtrl mainCtrl, ComponentFactory factory) {
@@ -94,6 +98,11 @@ public class MainViewCtrl {
     }
 
     public void loadData(Board board) {
+        boolean admin = server.isAdmin();
+        if(!admin) {
+            adminLabel.setVisible(false);
+        }
+
         this.boardCtrl = factory.create(BoardCtrl.class, board);
         client.setActiveBoardCtrl(boardCtrl);
         boardContainer.setContent(boardCtrl.getNode());

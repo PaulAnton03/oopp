@@ -146,6 +146,7 @@ public class MainCtrl {
     public void showSettings() {
         primaryStage.setTitle("Board Settings");
         primaryStage.setScene(settings);
+        boardSettingsCtrl.load();
     }
 
     public void showAddCard() {
