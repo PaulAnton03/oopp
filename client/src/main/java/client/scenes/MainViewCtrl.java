@@ -108,12 +108,12 @@ public class MainViewCtrl {
      */
     public void registerForMessages() {
 
-        long board_id = client.getActiveBoard().getId();
+        long boardId = client.getActiveBoard().getId();
 
         /**
          * This method handles the addition of a card to the board.
          */
-        server.registerForMessages("/topic/board/" + board_id + "/cards/create", Card.class, c -> {
+        server.registerForMessages("/topic/board/" + boardId + "/cards/create", Card.class, c -> {
             System.out.println("INCOMING CARD: " + c);
             boardCtrl.getCardListCtrls().get(c.getCardList().getId()).displayCard(c);
 
@@ -122,7 +122,7 @@ public class MainViewCtrl {
         /**
          * This method handles the deletion of a card from the board.
          */
-        server.registerForMessages("/topic/board/" + board_id + "/cards/delete", Card.class, c -> {
+        server.registerForMessages("/topic/board/" + boardId + "/cards/delete", Card.class, c -> {
             System.out.println("CARD HAS BEEN DELETED: " + c);
             boardCtrl.getCardListCtrls().get(c.getCardList().getId()).removeCard(c);
 
@@ -131,7 +131,7 @@ public class MainViewCtrl {
         /**
          * This method handles the addition of a list to the board.
          */
-        server.registerForMessages("/topic/board/" + board_id + "/lists/create", CardList.class, l -> {
+        server.registerForMessages("/topic/board/" + boardId + "/lists/create", CardList.class, l -> {
             System.out.println("INCOMING LIST: " + l);
             //TODO : add list for other clients
         });
@@ -139,7 +139,7 @@ public class MainViewCtrl {
         /**
          * This method handles the deletion of a list from the board.
          */
-        server.registerForMessages("/topic/board/" + board_id + "/lists/delete", CardList.class, l -> {
+        server.registerForMessages("/topic/board/" + boardId + "/lists/delete", CardList.class, l -> {
             System.out.println("LIST HAS BEEN DELETED " + l);
             boardCtrl.removeCardList(l);
         });

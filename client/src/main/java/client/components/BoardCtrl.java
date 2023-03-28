@@ -13,7 +13,6 @@ import client.utils.ComponentFactory;
 import client.utils.Logger;
 import client.utils.ServerUtils;
 import commons.Board;
-import commons.Card;
 import commons.CardList;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
