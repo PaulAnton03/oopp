@@ -24,6 +24,7 @@ import com.google.inject.Injector;
 
 import client.scenes.AddCardCtrl;
 import client.scenes.AddListCtrl;
+import client.scenes.AdminPasswordCtrl;
 import client.scenes.BoardSettingsCtrl;
 import client.scenes.CreateBoardCtrl;
 import client.scenes.EditCardCtrl;
@@ -34,6 +35,7 @@ import client.scenes.MainCtrl.ScenesBuilder;
 import client.scenes.MainViewCtrl;
 import client.scenes.PasswordProtectedCtrl;
 import client.scenes.ServerConnectCtrl;
+import client.utils.ExceptionHandler;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -49,7 +51,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException {
-        //Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler());
+        Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler());
 
         ScenesBuilder builder = new ScenesBuilder();
 
@@ -63,6 +65,7 @@ public class Main extends Application {
         builder.setAddList(FXML.load(AddListCtrl.class, "client", "scenes", "AddList.fxml"));
         builder.setEditList(FXML.load(ListSettingsCtrl.class, "client", "scenes", "ListSettings.fxml"));
         builder.setPswProtected(FXML.load(PasswordProtectedCtrl.class, "client", "scenes", "PasswordProtected.fxml"));
+        builder.setAdminPsw(FXML.load(AdminPasswordCtrl.class, "client", "scenes", "AdminPassword.fxml"));
 
         mainCtrl = INJECTOR.getInstance(MainCtrl.class);
         mainCtrl.initialize(primaryStage, builder);

@@ -1,16 +1,9 @@
 package client.components;
 
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
 import javax.inject.Inject;
 
 import client.utils.ClientUtils;
 import client.utils.ComponentFactory;
-import client.utils.Logger;
 import client.utils.ServerUtils;
 import commons.Board;
 import commons.CardList;
@@ -52,7 +45,7 @@ public class BoardCtrl implements Component<Board>, DBEntityCtrl<Board> {
         client.setActiveBoardCtrl(this);
         client.clearBoardData();
 
-        final long listWidthPlusGap = 200;
+        final long listWidthPlusGap = 300;
         boardView.setMinWidth(board.getCardLists().size() * listWidthPlusGap);
 
         for (CardList cardList : board.getCardLists()) {
