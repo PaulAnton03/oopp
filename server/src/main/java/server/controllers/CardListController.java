@@ -25,7 +25,8 @@ public class CardListController {
     private final BoardRepository boardRepository;
 
     @Autowired
-    public CardListController(CardListRepository cardListRepository, BoardRepository boardRepository, CardRepository cardRepository, SimpMessagingTemplate messagingTemplate) {
+    public CardListController(CardListRepository cardListRepository, BoardRepository boardRepository,
+                              CardRepository cardRepository, SimpMessagingTemplate messagingTemplate) {
         this.cardListRepository = cardListRepository;
         this.boardRepository = boardRepository;
         this.cardRepository = cardRepository;
