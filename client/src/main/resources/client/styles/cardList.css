@@ -1,8 +1,8 @@
 .cardList {
-    -fx-background-color: #5151e8;
-
+    -fx-background-color: #b2b2eb;
+    -fx-background-radius: 5px;
 }
 
-.cardList > AnchorPane {
-    -fx-background-color: #ed7373;
+.cardList > AnchorPane > .title {
+    -fx-font-size: 20px;
 }
