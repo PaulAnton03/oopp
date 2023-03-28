@@ -97,8 +97,18 @@ public class BoardCtrl implements Component<Board> {
         return (cardListCtrl == null) ? null : cardListCtrl.getCardCtrls().get(selectedCardId);
     }
 
+    private void changeSelection(long selectedCardListId, long selectedCardId) {
+        if (getSelectedCardCtrl() != null) {
+            getSelectedCardCtrl().unhighlight();
+        }
+        this.selectedCardListId = selectedCardListId;
+        this.selectedCardId = selectedCardId;
+        getSelectedCardCtrl().highlight();
+    }
+
     private void switchSelectedCardList(int diff) {
         int cardListIdx = 0;
+        if (board.getCardLists())
         if (getSelectedCardCtrl() != null) {
             cardListIdx = board.getCardLists().indexOf(getCardListCtrls().get(selectedCardListId).getCardList()) + diff;
         }
@@ -110,12 +120,7 @@ public class BoardCtrl implements Component<Board> {
             switchSelectedCardList(diff + Integer.signum(diff));
             return;
         }
-        if (getSelectedCardCtrl() != null) {
-            getSelectedCardCtrl().unhighlight();
-        }
-        selectedCardListId = cardList.getId();
-        selectedCardId = cardList.getCards().get(0).getId();
-        getSelectedCardCtrl().highlight();
+        changeSelection(cardList.getId(), cardList.getCards().get(0).getId());
     }
 
     private void switchSelectedCard(int diff) {
@@ -130,12 +135,7 @@ public class BoardCtrl implements Component<Board> {
         if (cardListCtrl.getCardList().getCards().size() == 0 || cardIdx < 0 || cardIdx >= cardListCtrl.getCardList().getCards().size()) {
             return;
         }
-        if (getSelectedCardCtrl() != null) {
-            getSelectedCardCtrl().unhighlight();
-        }
-        selectedCardId = cardListCtrl.getCardList().getCards().get(cardIdx).getId();
-        selectedCardListId = cardListCtrl.getCardList().getId();
-        getSelectedCardCtrl().highlight();
+        changeSelection(cardListCtrl.getCardList().getCards().get(cardIdx).getId(), cardListCtrl.getCardList().getId());
     }
 
     public void handleKeyEvent(KeyEvent e) {
