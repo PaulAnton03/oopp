@@ -52,11 +52,7 @@ public class MainViewCtrl {
 
     @FXML
     void btnAddClicked(ActionEvent event) {
-        if (client.getActiveBoardCtrl() != null)
-            mainCtrl.showAddList();
-        else {
-            throw new IllegalStateException("You cannot add lists to the empty board. Please select a board to operate on");
-        }
+        mainCtrl.showAddList();
     }
 
     @FXML
@@ -104,16 +100,16 @@ public class MainViewCtrl {
         }
 
         this.boardCtrl = factory.create(BoardCtrl.class, board);
-        client.setActiveBoardCtrl(boardCtrl);
+        // client.setBoardCtrl(boardCtrl); TODO:RETURN HERE
         boardContainer.setContent(boardCtrl.getNode());
         displayBoardName.setText(board.getName());
         server.registerForMessages("/topic/lists", CardList.class, l -> {
-            if (client.getActiveBoard().getId() == l.getBoard().getId()) {
+            if (client.getBoardCtrl().getBoard().getId() == l.getBoard().getId()) {
                 System.out.println("INCOMING LIST: " + l);
             }
         });
         server.registerForMessages("/topic/cards", Card.class, c -> {
-            if (c.getCardList().getBoard().getId() == client.getActiveBoard().getId()) {
+            if (c.getCardList().getBoard().getId() == client.getBoardCtrl().getBoard().getId()) {
                 System.out.println("INCOMING CARD: " + c);
             }
         });

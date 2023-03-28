@@ -13,6 +13,7 @@ public class AddCardCtrl {
     private final ServerUtils server;
     private final ClientUtils client;
     private final MainCtrl mainCtrl;
+    private long cardListId;
 
     @FXML
     private TextField title;
@@ -26,17 +27,13 @@ public class AddCardCtrl {
         this.mainCtrl = mainCtrl;
     }
 
-    private Card getCard() {
-        Card newCard = new Card(title.getText(), description.getText());
-        newCard.setCardList(client.getActiveCardList());
-        if (newCard.getCardList() == null) {
-            throw new IllegalStateException("There is no card list specified");
-        }
-        return newCard;
+    public void loadData(long cardListId) {
+        this.cardListId = cardListId;
     }
 
     public void ok() {
-        Card card = getCard();
+        Card card = new Card(title.getText(), description.getText());
+        card.setCardList(client.getCardList(cardListId));
         server.addCard(card);
         client.getCardListCtrls().get(card.getCardList().getId()).refresh(); // TODO: WEBSOCKET
         goBack();

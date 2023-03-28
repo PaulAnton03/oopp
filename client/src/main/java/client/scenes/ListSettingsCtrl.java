@@ -13,7 +13,7 @@ public class ListSettingsCtrl {
     private final ServerUtils server;
     private final ClientUtils client;
     private final MainCtrl mainCtrl;
-    private CardList cardList;
+    private long cardListId;
     @FXML
     private TextField listTitle;
 
@@ -24,8 +24,8 @@ public class ListSettingsCtrl {
         this.server = server;
     }
 
-    public void loadData(CardList cardList) {
-        this.cardList = cardList;
+    public void loadData(long cardListId) {
+        this.cardListId = cardListId;
     }
 
     public void resetForm() {
@@ -33,15 +33,16 @@ public class ListSettingsCtrl {
     }
 
     public void saveChanges() {
+        CardList cardList = client.getCardList(cardListId);
         cardList.setTitle(listTitle.getText());
         server.updateCardList(cardList);
-        client.getActiveBoardCtrl().refresh(); // TODO: WEBSOCKET
+        client.getBoardCtrl().refresh(); // TODO: WEBSOCKET
         mainCtrl.showMainView();
     }
 
     public void deleteList() {
-        server.deleteCardList(cardList.getId());
-        client.getActiveBoardCtrl().refresh(); // TODO: WEBSOCKET
+        server.deleteCardList(cardListId);
+        client.getBoardCtrl().refresh(); // TODO: WEBSOCKET
         resetForm();
         mainCtrl.showMainView();
     }

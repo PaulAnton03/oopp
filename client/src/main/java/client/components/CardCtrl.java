@@ -89,7 +89,7 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card>, Initializa
 
     public void removeChildren() {}
 
-    public void editCard() { mainCtrl.showEditCard(this); }
+    public void editCard() { mainCtrl.showEditCard(this.getCard().getId()); }
 
     public void delete() {
         server.deleteCard(card.getId());

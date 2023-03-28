@@ -42,8 +42,8 @@ public class BoardCtrl implements Component<Board>, DBEntityCtrl<Board> {
         if (this.board != null)
             removeChildren();
         this.board = board;
-        client.setActiveBoardCtrl(this);
         client.clearBoardData();
+        client.setBoardCtrl(this);
 
         final long listWidthPlusGap = 300;
         boardView.setMinWidth(board.getCardLists().size() * listWidthPlusGap);
@@ -82,7 +82,7 @@ public class BoardCtrl implements Component<Board>, DBEntityCtrl<Board> {
 
     public void remove() {
         removeChildren();
-        client.setActiveBoardCtrl(null);
+        client.setBoardCtrl(null);
     }
 
     public void removeChildren() {

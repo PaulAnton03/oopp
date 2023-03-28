@@ -96,7 +96,7 @@ public class CardListCtrl implements Component<CardList>, DBEntityCtrl<CardList>
         cardListView.setOnDragDropped(event -> {
             Dragboard db = event.getDragboard();
             Logger.log("Dropped on list " + this.getCardList().getTitle());
-            client.setActiveCardListCtrl(this);
+            client.setActiveCardListId(cardList.getId());
 
             final double eventY = event.getY();
             // Filter out the currently dragged card
@@ -127,12 +127,10 @@ public class CardListCtrl implements Component<CardList>, DBEntityCtrl<CardList>
     }
 
     public void addCard() {
-        client.setActiveCardListCtrl(this);
-        mainCtrl.showAddCard();
+        mainCtrl.showAddCard(cardList.getId());
     }
 
     public void listSettings() {
-        client.setActiveCardListCtrl(this);
-        mainCtrl.showListSettings(cardList);
+        mainCtrl.showListSettings(cardList.getId());
     }
 }
