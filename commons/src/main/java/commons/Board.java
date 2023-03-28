@@ -30,6 +30,9 @@ public class Board {
     /* If null the board will not have a password. */
     private String password;
 
+    @JsonIgnore
+    private boolean editable;
+
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @OrderColumn(name = "card_list_index")
     private List<CardList> cardLists = new ArrayList<>();

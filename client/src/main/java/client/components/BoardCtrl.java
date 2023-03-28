@@ -50,6 +50,14 @@ public class BoardCtrl implements Component<Board> {
         final long listWidthPlusGap = 300;
         boardView.setMinWidth(board.getCardLists().size() * listWidthPlusGap);
 
+        //Todo - Find out why null cardLists are being added to lists upon certain operations. This is just a temporary fix, which is not elegant.
+        for(int i = 0;i < board.getCardLists().size();i++) {
+            if(board.getCardLists().get(i) == null) {
+                board.getCardLists().remove(i);
+                i--;
+            }
+        }
+
         for (CardList cardList : board.getCardLists()) {
             CardListCtrl cardListCtrl = factory.create(CardListCtrl.class, cardList);
             cardListCtrls.put(cardList.getId(), cardListCtrl);

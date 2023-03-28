@@ -15,6 +15,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.ScrollEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.text.Text;
 import lombok.Getter;
@@ -42,6 +43,9 @@ public class MainViewCtrl {
     @FXML
     private Label adminLabel;
 
+    @FXML
+    private AnchorPane warning;
+
     @Inject
     public MainViewCtrl(ServerUtils server, ClientUtils client, MainCtrl mainCtrl, ComponentFactory factory) {
         this.server = server;
@@ -52,7 +56,10 @@ public class MainViewCtrl {
 
     @FXML
     void btnAddClicked(ActionEvent event) {
-        if (client.getActiveBoardCtrl() != null)
+        if(!client.getActiveBoard().isEditable()) {
+            throw new IllegalStateException("You do not have permissions to edit this board.");
+        }
+        else if (client.getActiveBoardCtrl() != null)
             mainCtrl.showAddList();
         else {
             throw new IllegalStateException("You cannot add lists to the empty board. Please select a board to operate on");
@@ -76,6 +83,9 @@ public class MainViewCtrl {
 
     @FXML
     void btnSettingsClicked(ActionEvent event) {
+        if(!client.getActiveBoard().isEditable()) {
+            throw new IllegalStateException("You do not have permissions to edit this board.");
+        }
         mainCtrl.showSettings();
     }
 
@@ -117,5 +127,6 @@ public class MainViewCtrl {
                 System.out.println("INCOMING CARD: " + c);
             }
         });
+        warning.setVisible(!board.isEditable());
     }
 }

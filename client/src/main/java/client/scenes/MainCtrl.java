@@ -180,6 +180,7 @@ public class MainCtrl {
             return;
         }
         client.getActiveBoardCtrl().refresh();
+        client.getActiveBoard().setEditable(true);
         primaryStage.setTitle("Main view");
         primaryStage.setScene(main);
     }

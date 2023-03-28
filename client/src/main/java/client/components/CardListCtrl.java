@@ -60,6 +60,14 @@ public class CardListCtrl implements Component<CardList>, Initializable {
         this.cardList = cardList;
         title.setText(cardList.getTitle());
 
+        //Todo - Find out why null cards are being added to lists upon certain operations. This is just a temporary fix, which is not elegant.
+        for(int i = 0;i < cardList.getCards().size();i++) {
+            if(cardList.getCards().get(i) == null) {
+                cardList.getCards().remove(i);
+                i--;
+            }
+        }
+
         for (Card card : cardList.getCards()) {
             CardCtrl cardCtrl = factory.create(CardCtrl.class, card);
             cardCtrls.put(cardCtrl.getCard().getId(), cardCtrl);
@@ -122,11 +130,17 @@ public class CardListCtrl implements Component<CardList>, Initializable {
     }
 
     public void addCard() {
+        if(!client.getActiveBoard().isEditable()) {
+            throw new IllegalStateException("You do not have permissions to edit this board.");
+        }
         client.setActiveCardListCtrl(this);
         mainCtrl.showAddCard();
     }
 
     public void listSettings() {
+        if(!client.getActiveBoard().isEditable()) {
+            throw new IllegalStateException("You do not have permissions to edit this board.");
+        }
         client.setActiveCardListCtrl(this);
         mainCtrl.showListSettings();
     }

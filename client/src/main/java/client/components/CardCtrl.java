@@ -74,9 +74,17 @@ public class CardCtrl implements Component<Card>, Initializable {
         description.setText(card.getDescription());
     }
 
-    public void editCard() { mainCtrl.showEditCard(this); }
+    public void editCard() {
+        if(!client.getActiveBoard().isEditable()) {
+            throw new IllegalStateException("You do not have permissions to edit this board.");
+        }
+        mainCtrl.showEditCard(this);
+    }
 
     public void delete() {
+        if(!client.getActiveBoard().isEditable()) {
+            throw new IllegalStateException("You do not have permissions to edit this board.");
+        }
         this.card = server.deleteCard(card.getId());
         ((VBox) cardView.getParent()).getChildren().remove(cardView);
     }
