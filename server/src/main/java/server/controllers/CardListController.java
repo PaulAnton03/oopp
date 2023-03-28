@@ -62,7 +62,8 @@ public class CardListController {
         cardList.setBoard(board.get());
         board.get().getCardLists().add(cardList);
         cardListRepository.save(cardList);
-        messagingTemplate.convertAndSend("/topic/board/"+cardList.getBoard().getId()+"/lists/create", cardList);
+        if (messagingTemplate != null)
+            messagingTemplate.convertAndSend("/topic/board/" + cardList.getBoard().getId() + "/lists/create", cardList);
         return ResponseEntity.ok(cardList);
     }
 
@@ -77,7 +78,7 @@ public class CardListController {
             cardList.getBoard().removeCardList(cardList.getId());
         }
         cardListRepository.deleteById(cardList.getId());
-        messagingTemplate.convertAndSend("/topic/board/"+cardList.getBoard().getId()+"/lists/delete", cardList);
+        messagingTemplate.convertAndSend("/topic/board/" + cardList.getBoard().getId() + "/lists/delete", cardList);
         return ResponseEntity.ok(cardList);
     }
 

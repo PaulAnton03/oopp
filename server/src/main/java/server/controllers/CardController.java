@@ -70,7 +70,8 @@ public class CardController {
                 pos -> cardList.get().getCards().add(pos, card),
                 () -> cardList.get().getCards().add(card));
         cardRepository.save(card);
-        messagingTemplate.convertAndSend("/topic/board/" + card.getCardList().getBoard().getId() + "/cards/create", card);
+        if (messagingTemplate != null)
+            messagingTemplate.convertAndSend("/topic/board/" + card.getCardList().getBoard().getId() + "/cards/create", card);
         return ResponseEntity.ok(card);
     }
 
