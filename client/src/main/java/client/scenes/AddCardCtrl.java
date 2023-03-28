@@ -1,13 +1,13 @@
 package client.scenes;
 
+import javax.inject.Inject;
+
 import client.utils.ClientUtils;
 import client.utils.ServerUtils;
 import commons.Card;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-
-import javax.inject.Inject;
 
 public class AddCardCtrl {
     private final ServerUtils server;

@@ -1,5 +1,7 @@
 package client.scenes;
 
+import javax.inject.Inject;
+
 import client.utils.ClientUtils;
 import client.utils.ServerUtils;
 import commons.Card;
@@ -8,8 +10,6 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-
-import javax.inject.Inject;
 
 
 public class EditCardCtrl {

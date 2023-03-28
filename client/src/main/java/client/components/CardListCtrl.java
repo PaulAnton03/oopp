@@ -1,5 +1,11 @@
 package client.components;
 
+import java.net.URL;
+import java.util.List;
+import java.util.ResourceBundle;
+
+import javax.inject.Inject;
+
 import client.scenes.MainCtrl;
 import client.utils.ClientUtils;
 import client.utils.ComponentFactory;
@@ -18,12 +24,6 @@ import javafx.scene.text.Text;
 import javafx.util.Pair;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-
-import javax.inject.Inject;
-import java.net.URL;
-import java.util.HashMap;
-import java.util.List;
-import java.util.ResourceBundle;
 
 
 @EqualsAndHashCode
@@ -133,6 +133,6 @@ public class CardListCtrl implements Component<CardList>, DBEntityCtrl<CardList>
 
     public void listSettings() {
         client.setActiveCardListCtrl(this);
-        mainCtrl.showListSettings();
+        mainCtrl.showListSettings(cardList);
     }
 }

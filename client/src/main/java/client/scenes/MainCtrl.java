@@ -15,12 +15,15 @@
  */
 package client.scenes;
 
+import javax.inject.Inject;
+
 import client.components.CardCtrl;
 import client.utils.ClientUtils;
 import client.utils.ComponentFactory;
 import client.utils.Logger;
 import client.utils.ServerUtils;
 import commons.Board;
+import commons.CardList;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -28,8 +31,6 @@ import javafx.util.Pair;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import javax.inject.Inject;
 
 public class MainCtrl {
     private final ServerUtils server;
@@ -199,8 +200,9 @@ public class MainCtrl {
         primaryStage.setScene(addList);
     }
 
-    public void showListSettings() {
+    public void showListSettings(CardList cardList) {
         primaryStage.setTitle("Edit list");
+        editListCtrl.loadData(cardList);
         primaryStage.setScene(editList);
     }
 

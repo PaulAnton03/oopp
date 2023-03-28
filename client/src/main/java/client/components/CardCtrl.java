@@ -1,11 +1,22 @@
 package client.components;
 
+import java.io.IOException;
+import java.net.URL;
+import java.util.List;
+import java.util.ResourceBundle;
+
+import javax.inject.Inject;
+
 import client.scenes.MainCtrl;
 import client.utils.ClientUtils;
 import client.utils.Logger;
 import client.utils.ServerUtils;
 import commons.Card;
-import javafx.animation.*;
+import javafx.animation.Animation;
+import javafx.animation.FadeTransition;
+import javafx.animation.ParallelTransition;
+import javafx.animation.ScaleTransition;
+import javafx.animation.Transition;
 import javafx.css.PseudoClass;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -26,12 +37,6 @@ import javafx.scene.transform.Transform;
 import javafx.util.Duration;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-
-import javax.inject.Inject;
-import java.io.IOException;
-import java.net.URL;
-import java.util.List;
-import java.util.ResourceBundle;
 
 @EqualsAndHashCode
 public class CardCtrl implements Component<Card>, DBEntityCtrl<Card>, Initializable {

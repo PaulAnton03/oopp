@@ -1,5 +1,10 @@
 package client.utils;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.inject.Inject;
+
 import client.components.BoardCtrl;
 import client.components.CardCtrl;
 import client.components.CardListCtrl;
@@ -8,11 +13,6 @@ import commons.Card;
 import commons.CardList;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.inject.Inject;
 
 public class ClientUtils {
     private final ServerUtils server;
