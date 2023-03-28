@@ -6,10 +6,16 @@ import client.utils.ClientUtils;
 import client.utils.ServerUtils;
 import commons.Card;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.control.ColorPicker;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.paint.Color;
+
+import java.awt.*;
+import java.awt.event.ActionEvent;
 
 
 public class EditCardCtrl {
@@ -21,6 +27,15 @@ public class EditCardCtrl {
     private TextField changeTitle;
     @FXML
     private TextField changeDesc;
+
+    @FXML
+    private Button addTagButton;
+
+    @FXML
+    private TextField tagField;
+
+    @FXML
+    private ColorPicker colourPicker;
 
     @Inject
     public EditCardCtrl(ServerUtils server, ClientUtils client, MainCtrl mainCtrl) {
@@ -54,5 +69,9 @@ public class EditCardCtrl {
     public void resetState() {
         this.changeTitle.setText("");
         this.changeDesc.setText("");
+    }
+
+    public void changeColor(ActionEvent event) {
+        Color myColor = colourPicker.getValue();
     }
 }

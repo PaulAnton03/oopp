@@ -1,12 +1,12 @@
 package commons;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIncludeProperties;
 
 import lombok.*;
-
 import javax.persistence.*;
-import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
+
 
 
 @Data
@@ -19,19 +19,13 @@ public class Tag {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "tags_seq")
     protected long id;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = "tags", fetch = FetchType.EAGER)
     @JoinColumn(name = "card_id", nullable = false)
     @OrderColumn(name = "tag_index")
     @JsonIncludeProperties("id")
     @EqualsAndHashCode.Exclude
-    private Card card;
+    private List<Card> cards = new ArrayList<>();
 
-    //I am making this not a non-null
     private String text;
-
-    private Color color;
-
-
-
 
 }

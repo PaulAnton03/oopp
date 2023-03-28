@@ -30,7 +30,7 @@ public class Card {
     @EqualsAndHashCode.Exclude
     private CardList cardList;
 
-    @ManyToMany(mappedBy = "tag", cascade = CascadeType.ALL)
+    @ManyToMany
     @OrderColumn(name = "tag_index")
     private List<Tag> tagList = new ArrayList<>();
 

@@ -56,9 +56,22 @@ public class TagController {
     public ResponseEntity<Tag> delete(@PathVariable("id") long id){
         final Optional<Tag> optTag = tagRepository.findById(id);
         if(optTag.isEmpty()){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Tag not found")
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Tag not found");
         }
         Tag tag = optTag.get();
-        tag.getCard().
+        tag.getCard().getTagList().remove(tag);
+        tagRepository.deleteById(tag.getId());
+        return ResponseEntity.ok(tag);
+    }
+    @PutMapping("/update/{id}")
+    public ResponseEntity<Tag> update(@RequestBody Tag tag) {
+        final Optional<Tag> optTag = tagRepository.findById(tag.getId());
+        if(optTag.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        Tag updated = tagRepository.save(tag);
+        return ResponseEntity.ok(updated);
     }
 }
+
+
