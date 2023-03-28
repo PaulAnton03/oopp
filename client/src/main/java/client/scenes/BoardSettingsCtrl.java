@@ -7,6 +7,7 @@ import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Board;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.TextField;
@@ -26,12 +27,25 @@ public class BoardSettingsCtrl {
     @FXML
     private CheckBox passwordUsed;
 
+    @FXML
+    private Button deleteBoardButton;
+
     @Inject
     public BoardSettingsCtrl(ServerUtils server, ClientUtils client, MainCtrl mainCtrl, ExceptionHandler exceptionHandler) {
         this.client = client;
         this.mainCtrl = mainCtrl;
         this.server = server;
         this.exceptionHandler = exceptionHandler;
+    }
+
+    public void load() {
+        if (!server.isAdmin()) {
+            deleteBoardButton.setDisable(true);
+            deleteBoardButton.setVisible(false);
+            return;
+        }
+        deleteBoardButton.setDisable(false);
+        deleteBoardButton.setVisible(true);
     }
 
     public void saveChanges() {

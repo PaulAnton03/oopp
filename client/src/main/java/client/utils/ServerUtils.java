@@ -47,6 +47,10 @@ public class ServerUtils {
     @Getter
     private String serverPath = "localhost:8080";
 
+    @Getter
+    @Setter
+    private boolean admin = false;
+
     private WebSocketStompClient stomp = null;
     private StompSession session = null;
 
