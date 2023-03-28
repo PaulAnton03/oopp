@@ -1,7 +1,5 @@
 package client.scenes;
 
-import javax.inject.Inject;
-
 import client.utils.ClientUtils;
 import client.utils.ServerUtils;
 import commons.Card;
@@ -10,7 +8,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.paint.Color;
+
+import javax.inject.Inject;
 
 
 public class EditCardCtrl {

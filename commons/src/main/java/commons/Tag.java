@@ -1,13 +1,11 @@
 package commons;
 
-import com.fasterxml.jackson.annotation.JsonIncludeProperties;
+import lombok.Data;
+import lombok.RequiredArgsConstructor;
 
-import lombok.*;
 import javax.persistence.*;
 import java.awt.*;
-
 import java.util.HashSet;
-
 import java.util.Set;
 
 
