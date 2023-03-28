@@ -166,7 +166,6 @@ public class MainCtrl {
             this.showJoin();
             return;
         }
-        client.getActiveBoardCtrl().refresh();
         primaryStage.setTitle("Main view");
         primaryStage.setScene(main);
     }

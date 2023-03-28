@@ -40,6 +40,11 @@ public class ClientUtils {
         this.preferences = preferences;
     }
 
+    public void clearBoardData() {
+        this.cardListCtrls = new HashMap<>();
+        this.cardCtrls = new HashMap<>();
+    }
+
     public BoardCtrl getActiveBoardCtrl() {
         return activeBoardCtrl;
     }

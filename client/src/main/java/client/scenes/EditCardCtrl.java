@@ -16,6 +16,7 @@ public class EditCardCtrl {
     private final ServerUtils server;
     private final ClientUtils client;
     private final MainCtrl mainCtrl;
+    private Card card;
 
     @FXML
     private TextField changeTitle;
@@ -30,16 +31,16 @@ public class EditCardCtrl {
     }
 
     public void saveCardChanges(){
-        Card card = client.getActiveCardCtrl().getCard();
         card.setTitle(changeTitle.getText());
         card.setDescription(changeDesc.getText());
         server.updateCard(card);
-        client.getActiveCardCtrl().loadData(card);
+        client.getActiveCardCtrl().refresh(); // TODO: WEBSOCKET
         resetState();
         mainCtrl.showMainView();
     }
 
     public void loadData(Card card) {
+        this.card = card;
         changeTitle.setText(card.getTitle());
         changeDesc.setText(card.getDescription());
     }

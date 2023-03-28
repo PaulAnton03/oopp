@@ -20,13 +20,10 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import lombok.Getter;
 
-public class BoardCtrl implements Component<Board> {
+public class BoardCtrl implements Component<Board>, DBEntityCtrl<Board> {
     private final ClientUtils client;
     private final ComponentFactory factory;
     private final ServerUtils server;
-
-    @Getter
-    private Map<Long, CardListCtrl> cardListCtrls = new HashMap<>();
 
     @Getter
     private Board board;
@@ -49,23 +46,24 @@ public class BoardCtrl implements Component<Board> {
 
     @Override
     public void loadData(Board board) {
+        if (this.board != null)
+            removeChildren();
         this.board = board;
         client.setActiveBoardCtrl(this);
+        client.clearBoardData();
 
         final long listWidthPlusGap = 200;
         boardView.setMinWidth(board.getCardLists().size() * listWidthPlusGap);
-        List<CardList> sortedLists = board.getCardLists().stream().filter(c -> c != null)
-                .sorted(Comparator.comparingDouble(CardList::getId))
-                .collect(Collectors.toList());
 
-        for (CardList cardList : sortedLists) {
+        for (CardList cardList : board.getCardLists()) {
+            if (cardList == null)
+                continue;
             CardListCtrl cardListCtrl = factory.create(CardListCtrl.class, cardList);
-            cardListCtrls.put(cardList.getId(), cardListCtrl);
             boardView.getChildren().add(cardListCtrl.getNode());
         }
 
         // Find new controller assigned to selected card and highlight
-        if (selectedCardId != -1) {
+        /*if (selectedCardId != -1) {
             boolean foundCardCtrl = false;
             for (CardListCtrl cardListCtrl : cardListCtrls.values()) {
                 CardCtrl cardCtrl = cardListCtrl.getCardCtrls().get(selectedCardId);
@@ -81,34 +79,42 @@ public class BoardCtrl implements Component<Board> {
                 selectedCardId = -1;
                 selectedCardListId = -1;
             }
-        }
+            }*/
     }
 
     public void refresh() {
         boardView.getChildren().clear();
-        try {
-            loadData(server.getBoard(board.getId()));
-        } catch (Exception e) {
-            Logger.log("Failed to refresh board " + board + ". Error: " + e.getMessage());
+        loadData(server.getBoard(board.getId()));
+    }
+
+    public void remove() {
+        removeChildren();
+        client.setActiveBoardCtrl(null);
+    }
+
+    public void removeChildren() {
+        for (CardList cardList : board.getCardLists()) {
+            client.getCardListCtrls().get(cardList.getId()).remove();
         }
     }
 
     private CardCtrl getSelectedCardCtrl() {
-        CardListCtrl cardListCtrl = getCardListCtrls().get(selectedCardListId);
-        return (cardListCtrl == null) ? null : cardListCtrl.getCardCtrls().get(selectedCardId);
+        return null;
+        /*CardListCtrl cardListCtrl = getCardListCtrls().get(selectedCardListId);
+          return (cardListCtrl == null) ? null : cardListCtrl.getCardCtrls().get(selectedCardId);*/
     }
 
     private void changeSelection(long selectedCardListId, long selectedCardId) {
-        if (getSelectedCardCtrl() != null) {
+        /*if (getSelectedCardCtrl() != null) {
             getSelectedCardCtrl().unhighlight();
         }
         this.selectedCardListId = selectedCardListId;
         this.selectedCardId = selectedCardId;
-        getSelectedCardCtrl().highlight();
+        getSelectedCardCtrl().highlight();*/
     }
 
     private void switchSelectedCardList(int diff) {
-        int cardListIdx = 0;
+        /*int cardListIdx = 0;
         if (board.getCardLists() == null) {
             return;
         }
@@ -123,11 +129,11 @@ public class BoardCtrl implements Component<Board> {
             switchSelectedCardList(diff + Integer.signum(diff));
             return;
         }
-        changeSelection(cardList.getId(), cardList.getCards().get(0).getId());
+        changeSelection(cardList.getId(), cardList.getCards().get(0).getId());*/
     }
 
     private void switchSelectedCard(int diff) {
-        int cardIdx = 0;
+        /*int cardIdx = 0;
         CardListCtrl cardListCtrl;
         if (getSelectedCardCtrl() != null) {
             cardListCtrl = getCardListCtrls().get(board.getCardLists().get(0).getId());
@@ -138,12 +144,12 @@ public class BoardCtrl implements Component<Board> {
         if (cardListCtrl.getCardList().getCards().size() == 0 || cardIdx < 0 || cardIdx >= cardListCtrl.getCardList().getCards().size()) {
             return;
         }
-        changeSelection(cardListCtrl.getCardList().getCards().get(cardIdx).getId(), cardListCtrl.getCardList().getId());
+        changeSelection(cardListCtrl.getCardList().getCards().get(cardIdx).getId(), cardListCtrl.getCardList().getId());*/
     }
 
     public void handleKeyEvent(KeyEvent e) {
-        if (getCardListCtrls().size() == 0)
-            return;
+        /*if (getCardListCtrls().size() == 0)
+          return;*/
         switch (e.getCode()) {
             case LEFT:
                 switchSelectedCardList(-1);

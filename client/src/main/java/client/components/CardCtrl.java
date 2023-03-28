@@ -1,6 +1,7 @@
 package client.components;
 
 import client.scenes.MainCtrl;
+import client.utils.ClientUtils;
 import client.utils.ServerUtils;
 import commons.Card;
 import javafx.fxml.FXML;
@@ -16,9 +17,10 @@ import lombok.Getter;
 import javax.inject.Inject;
 
 @EqualsAndHashCode
-public class CardCtrl implements Component<Card> {
+public class CardCtrl implements Component<Card>, DBEntityCtrl<Card> {
     private final MainCtrl mainCtrl;
-    private final ServerUtils serverUtils;
+    private final ServerUtils server;
+    private final ClientUtils client;
 
     @Getter
     private Card card;
@@ -31,9 +33,10 @@ public class CardCtrl implements Component<Card> {
     private Label description;
 
     @Inject
-    public CardCtrl(MainCtrl mainCtrl, ServerUtils serverUtils) {
+    public CardCtrl(MainCtrl mainCtrl, ServerUtils serverUtils, ClientUtils client) {
         this.mainCtrl = mainCtrl;
-        this.serverUtils = serverUtils;
+        this.server = serverUtils;
+        this.client = client;
         FXMLLoader loader = new FXMLLoader(getClass().getResource("Card.fxml"));
         loader.setController(this);
         loader.setRoot(this);
@@ -49,11 +52,22 @@ public class CardCtrl implements Component<Card> {
         description.setText(card.getDescription());
     }
 
+    public void refresh() {
+        loadData(server.getCard(card.getId()));
+    }
+
+    public void remove() {
+        client.getCardCtrls().remove(card.getId());
+        removeChildren();
+    }
+
+    public void removeChildren() {}
+
     public void editCard() { mainCtrl.showEditCard(this); }
 
     public void delete() {
-        serverUtils.deleteCard(card.getId());
-        mainCtrl.showMainView();
+        server.deleteCard(card.getId());
+        client.getCardListCtrls().get(card.getCardList().getId()).refresh(); // TODO: WEBSOCKET
     }
 
     public void highlight() {

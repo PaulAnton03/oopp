@@ -1,8 +1,9 @@
 package client.scenes;
 
+import com.google.inject.Inject;
+
 import client.utils.ClientUtils;
 import client.utils.ServerUtils;
-import com.google.inject.Inject;
 import commons.CardList;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
@@ -12,6 +13,7 @@ public class ListSettingsCtrl {
     private final ServerUtils server;
     private final ClientUtils client;
     private final MainCtrl mainCtrl;
+    private CardList cardList;
     @FXML
     private TextField listTitle;
 
@@ -22,26 +24,24 @@ public class ListSettingsCtrl {
         this.server = server;
     }
 
-    public CardList getCardList() {
-        CardList cardList = client.getActiveCardList();
-        if(cardList == null) {
-            throw new IllegalStateException("No card list selected");
-        }
-        return cardList;
+    public void loadData(CardList cardList) {
+        this.cardList = cardList;
     }
 
     public void resetForm() {
         listTitle.setText("");
     }
+
     public void saveChanges() {
-        CardList cardList = getCardList();
         cardList.setTitle(listTitle.getText());
         server.updateCardList(cardList);
+        client.getActiveBoardCtrl().refresh(); // TODO: WEBSOCKET
         mainCtrl.showMainView();
     }
 
     public void deleteList() {
-        server.deleteCardList(getCardList().getId());
+        server.deleteCardList(cardList.getId());
+        client.getActiveBoardCtrl().refresh(); // TODO: WEBSOCKET
         resetForm();
         mainCtrl.showMainView();
     }
