@@ -52,7 +52,6 @@ public class CardController {
     @PostMapping("/create")
     public ResponseEntity<Card> create(@RequestBody Card card, @RequestParam long cardListId, @RequestParam Optional<Integer> position) {
         if (!card.isNetworkValid()) {
-            System.out.println("Card invalid, sending bad request");
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Card data is not valid");
         }
 
@@ -61,8 +60,8 @@ public class CardController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Card list with id " + cardListId + " not found");
         }
 
-        if (position.isPresent() && (position.get() < 0 || position.get() >= cardList.get().getCards().size())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Position " + position + " is invalid");
+        if (position.isPresent() && (position.get() < 0 || position.get() > cardList.get().getCards().size())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Position " +  position + " is invalid");
         }
 
         card.setCardList(cardList.get());

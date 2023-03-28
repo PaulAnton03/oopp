@@ -47,6 +47,10 @@ public class ServerUtils {
     @Getter
     private String serverPath = "localhost:8080";
 
+    @Getter
+    @Setter
+    private boolean admin = false;
+
     private WebSocketStompClient stomp = null;
 
     @Getter
@@ -158,6 +162,13 @@ public class ServerUtils {
         return webTargetAddDefault(webTarget).put(Entity.entity(card, APPLICATION_JSON), Card.class);
     }
 
+    public Card addCardAtPosition(Card card, int position) {
+        WebTarget webTarget = webTargetFromPath("/cards/create")
+                .queryParam("cardListId", card.getCardList().getId())
+                .queryParam("position", position);
+        return webTargetAddDefault(webTarget).post(Entity.entity(card, APPLICATION_JSON), Card.class);
+    }
+
     public Card deleteCard(long id) {
         WebTarget webTarget = webTargetFromPath("/cards/delete/{id}").resolveTemplate("id", id);
         return webTargetAddDefault(webTarget).delete(new GenericType<>() {
@@ -211,4 +222,6 @@ public class ServerUtils {
             session = null;
         }
     }
+
+
 }

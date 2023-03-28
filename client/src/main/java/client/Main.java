@@ -15,20 +15,17 @@
  */
 package client;
 
-import static com.google.inject.Guice.createInjector;
+import client.scenes.*;
+import client.utils.ExceptionHandler;
+import com.google.inject.Injector;
+import javafx.application.Application;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
 
-import client.scenes.*;
-import client.utils.ExceptionHandler;
-
-import com.google.inject.Injector;
-
-import javafx.application.Application;
-import javafx.stage.Stage;
-
 import static client.scenes.MainCtrl.ScenesBuilder;
+import static com.google.inject.Guice.createInjector;
 
 public class Main extends Application {
 
@@ -56,6 +53,7 @@ public class Main extends Application {
         builder.setAddList(FXML.load(AddListCtrl.class, "client", "scenes", "AddList.fxml"));
         builder.setEditList(FXML.load(ListSettingsCtrl.class, "client", "scenes", "ListSettings.fxml"));
         builder.setPswProtected(FXML.load(PasswordProtectedCtrl.class, "client", "scenes", "PasswordProtected.fxml"));
+        builder.setAdminPsw(FXML.load(AdminPasswordCtrl.class, "client", "scenes", "AdminPassword.fxml"));
 
         mainCtrl = INJECTOR.getInstance(MainCtrl.class);
         mainCtrl.initialize(primaryStage, builder);
