@@ -3,21 +3,15 @@ package client.utils;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.inject.Inject;
-
 import client.components.BoardCtrl;
 import client.components.CardCtrl;
 import client.components.CardListCtrl;
-import commons.Board;
 import commons.Card;
 import commons.CardList;
 import lombok.Getter;
 import lombok.Setter;
 
 public class ClientUtils {
-    private final ServerUtils server;
-    private final ClientPreferences preferences;
-
     @Getter
     @Setter
     private long activeCardListId;
@@ -34,12 +28,6 @@ public class ClientUtils {
     @Getter
     @Setter
     private Map<Long, CardCtrl> cardCtrls = new HashMap<>();
-
-    @Inject
-    public ClientUtils(ServerUtils server, ClientPreferences preferences) {
-        this.server = server;
-        this.preferences = preferences;
-    }
 
     public void clearBoardData() {
         this.cardListCtrls = new HashMap<>();
