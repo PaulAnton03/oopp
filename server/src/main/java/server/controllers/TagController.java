@@ -46,7 +46,7 @@ public class TagController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Card with given Id not found");
         }
 
-        tag.setCard(card.get());
+        tag.getCards().add(card.get());
         card.get().getTagList().add(tag);
         tagRepository.save(tag);
         return ResponseEntity.ok(tag);
@@ -59,7 +59,9 @@ public class TagController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Tag not found");
         }
         Tag tag = optTag.get();
-        tag.getCard().getTagList().remove(tag);
+        for(Card  c : tag.getCards()){
+            c.getTagList().remove(tag);
+        }
         tagRepository.deleteById(tag.getId());
         return ResponseEntity.ok(tag);
     }

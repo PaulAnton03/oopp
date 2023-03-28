@@ -5,14 +5,12 @@ import javax.inject.Inject;
 import client.utils.ClientUtils;
 import client.utils.ServerUtils;
 import commons.Card;
+import commons.Tag;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ColorPicker;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
-import java.awt.event.ActionEvent;
 
 
 public class EditCardCtrl {
@@ -23,16 +21,18 @@ public class EditCardCtrl {
     @FXML
     private TextField changeTitle;
     @FXML
-    private TextField changeDesc;
+    private TextArea changeDesc;
 
     @FXML
     private Button addTagButton;
 
     @FXML
     private TextField tagField;
-
     @FXML
     private ColorPicker colourPicker;
+
+    @FXML
+    private ComboBox comboBox;
 
     @Inject
     public EditCardCtrl(ServerUtils server, ClientUtils client, MainCtrl mainCtrl) {
@@ -68,7 +68,16 @@ public class EditCardCtrl {
         this.changeDesc.setText("");
     }
 
-    public void changeColor(ActionEvent event) {
-        Color myColor = colourPicker.getValue();
+
+    public void createTag(){
+        Tag tag = new Tag();
+        tag.setText(tagField.getText());
+        tag.setColor(new java.awt.Color(
+                (float) colourPicker.getValue().getRed(),
+                (float) colourPicker.getValue().getBlue(),
+                (float) colourPicker.getValue().getGreen()));
+        client.getActiveCard().getTagList().add(tag);
+        server.addTag(tag);
+        new Alert(Alert.AlertType.INFORMATION, "New Tag Added!");
     }
 }

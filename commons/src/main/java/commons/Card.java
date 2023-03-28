@@ -7,8 +7,10 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+
+import java.util.HashSet;
+
+import java.util.Set;
 
 @Data
 @Entity
@@ -30,9 +32,13 @@ public class Card {
     @EqualsAndHashCode.Exclude
     private CardList cardList;
 
+    @JoinTable(
+            name = "card_tag",
+            joinColumns = { @JoinColumn(name = "card_id") },
+            inverseJoinColumns = { @JoinColumn(name = "tag_id") }
+    )
     @ManyToMany
-    @OrderColumn(name = "tag_index")
-    private List<Tag> tagList = new ArrayList<>();
+    private Set<Tag> tagList = new HashSet<>();
 
     @NonNull
     private String title;

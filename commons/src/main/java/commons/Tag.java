@@ -4,9 +4,11 @@ import com.fasterxml.jackson.annotation.JsonIncludeProperties;
 
 import lombok.*;
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.awt.*;
 
+import java.util.HashSet;
+
+import java.util.Set;
 
 
 @Data
@@ -19,13 +21,11 @@ public class Tag {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "tags_seq")
     protected long id;
 
-    @ManyToMany(mappedBy = "tags", fetch = FetchType.EAGER)
-    @JoinColumn(name = "card_id", nullable = false)
-    @OrderColumn(name = "tag_index")
-    @JsonIncludeProperties("id")
-    @EqualsAndHashCode.Exclude
-    private List<Card> cards = new ArrayList<>();
+    @ManyToMany(mappedBy = "tagList", fetch = FetchType.EAGER)
+    private Set<Card> cards = new HashSet<>();
 
     private String text;
+
+    private Color color;
 
 }

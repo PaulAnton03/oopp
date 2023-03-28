@@ -1,9 +1,7 @@
 package commons;
-
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-
 import java.awt.*;
 
 @RequiredArgsConstructor
@@ -13,6 +11,5 @@ public class TagData {
 
     private Tag tag;
     private Color color;
-
 
 }

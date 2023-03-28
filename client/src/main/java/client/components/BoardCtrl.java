@@ -65,6 +65,5 @@ public class BoardCtrl implements Component<Board> {
         } catch (Exception e) {
             System.out.println("Refreshed unsuccessfully");
         }
-
     }
 }

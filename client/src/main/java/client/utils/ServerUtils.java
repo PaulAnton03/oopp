@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Consumer;
 
+import commons.Tag;
 import org.glassfish.jersey.client.ClientConfig;
 
 import commons.Board;
@@ -192,6 +193,25 @@ public class ServerUtils {
         WebTarget webTarget = webTargetFromPath("/lists/delete/{id}").resolveTemplate("id", id);
         return webTargetAddDefault(webTarget).delete(new GenericType<>() {
         });
+    }
+
+    public List<Tag> getTagList() {
+        WebTarget webTarget = webTargetFromPath("/tags");
+        return webTargetAddDefault(webTarget).get(new GenericType<>(){});
+    }
+    public Tag getTag(long id) {
+        WebTarget webTarget = webTargetFromPath("/tags/{id}").resolveTemplate("id", id);
+        return webTargetAddDefault(webTarget).get(new GenericType<>(){});
+    }
+
+    public Tag addTag(Tag tag){
+        WebTarget webTarget = webTargetFromPath("/tags/create");
+        return webTargetAddDefault(webTarget).post(Entity.entity(tag, APPLICATION_JSON), Tag.class);
+    }
+
+    public Tag deleteTag(long id){
+        WebTarget webTarget = webTargetFromPath("/tags/delete/{id}").resolveTemplate("id", id);
+        return webTargetAddDefault(webTarget).delete(new GenericType<>(){});
     }
 
     // For TESTING purpose
