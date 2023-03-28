@@ -9,7 +9,7 @@
    <children>
       <AnchorPane maxHeight="-Infinity" minHeight="-Infinity" prefHeight="50.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Text fx:id="title" layoutX="14.0" layoutY="31.0" strokeType="OUTSIDE" strokeWidth="0.0" text="TODO" wrappingWidth="79.91095733642578" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="12.0">
+            <Text fx:id="title" layoutX="14.0" layoutY="31.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="title" text="TODO" wrappingWidth="79.91095733642578" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="12.0">
                <font>
                   <Font size="16.0" />
                </font></Text>

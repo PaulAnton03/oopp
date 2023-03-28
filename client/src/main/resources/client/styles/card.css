@@ -4,8 +4,10 @@
 }
 
 .card.highlight {
+    -fx-border-width: 2px;
     -fx-border-radius: 5px;
-    -fx-border-style: 2px solid #555555;
+    -fx-border-color: #555555;
+    -fx-border-style: solid outside;
 }
 
 .card:hover {

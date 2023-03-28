@@ -29,6 +29,6 @@
    </padding>
    <styleClass>
       <String fx:value="card" />
-      <String fx:value="focused" />
+      <String fx:value="highlight" />
    </styleClass>
 </VBox>

@@ -5,8 +5,7 @@ import client.utils.ClientUtils;
 import client.utils.Logger;
 import client.utils.ServerUtils;
 import commons.Card;
-import javafx.animation.FadeTransition;
-import javafx.animation.ScaleTransition;
+import javafx.animation.*;
 import javafx.css.PseudoClass;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -31,6 +30,7 @@ import lombok.Getter;
 import javax.inject.Inject;
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 @EqualsAndHashCode
@@ -81,14 +81,16 @@ public class CardCtrl implements Component<Card>, Initializable {
         ((VBox) cardView.getParent()).getChildren().remove(cardView);
     }
 
+    // CSS class that defines style for the highlighted card
     private static final PseudoClass HIGHLIGHT_PSEUDO_CLASS = PseudoClass.getPseudoClass("highlight");
 
     public void highlight() {
-        cardView.pseudoClassStateChanged(HIGHLIGHT_PSEUDO_CLASS, true);
+        if (!cardView.getStyleClass().contains("highlight"))
+            cardView.getStyleClass().add("highlight");
     }
 
     public void unhighlight() {
-        cardView.pseudoClassStateChanged(HIGHLIGHT_PSEUDO_CLASS, false);
+        cardView.getStyleClass().remove("highlight");
     }
 
     public void focus() {
@@ -107,43 +109,60 @@ public class CardCtrl implements Component<Card>, Initializable {
         hideButtons();
     }
 
-    public void runOpacityTransition(Node node, double finalOpacity, double duration, double delay) {
-        if (getCard() != null)
-            Logger.log(getCard().getTitle() + " Current opacity: " + node.getOpacity() + ", changing to: " + finalOpacity);
-
+    public Transition getOpacityTransition(Node node, double initialOpacity, double finalOpacity, double duration) {
         FadeTransition ft = new FadeTransition(Duration.millis(duration), node);
-        ft.setDelay(Duration.millis(delay));
-        ft.setFromValue(node.getOpacity());
+        ft.setFromValue(initialOpacity);
         ft.setToValue(finalOpacity);
-        ft.play();
+        return ft;
     }
 
-    // If anybody knows how to block other events of the same type
     public void applyButtonHoverStyle(Button button) {
-        button.setOnMouseEntered(event -> runOpacityTransition(button, 1.0, 100, 0));
-        button.setOnMouseExited(event -> runOpacityTransition(button, 0.6, 100, 0));
+        button.setOnMouseEntered(event -> {
+            if (buttonsVisibilityPT.getStatus() == Animation.Status.RUNNING) return;
+            getOpacityTransition(button, 0.6, 1.0, 100).play();
+        });
+        button.setOnMouseExited(event -> {
+            if (buttonsVisibilityPT.getStatus() == Animation.Status.RUNNING) return;
+            getOpacityTransition(button, 1.0, 0.6, 100).play();
+        });
     }
+
+    private ParallelTransition buttonsVisibilityPT;
 
     public void hideButtons() {
-        runOpacityTransition(deleteButton, 0.0, 100, 0);
-        runOpacityTransition(editButton, 0.0, 100, 0);
+        buttonsVisibilityPT.setRate(-1.0);
+        buttonsVisibilityPT.playFrom(buttonsVisibilityPT.getCurrentTime());
     }
 
     public void showButtons() {
-        runOpacityTransition(deleteButton, 0.6, 100, 0);
-        runOpacityTransition(editButton, 0.6, 100, 0);
+        buttonsVisibilityPT.setRate(1.0);
+        buttonsVisibilityPT.playFrom(buttonsVisibilityPT.getCurrentTime());
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        // Hide buttons, unhighlight card
         unhighlight();
+        deleteButton.setOpacity(0.0);
+        editButton.setOpacity(0.0);
+
+        // Create show/hide transition for buttons
+        final Duration ftDuration = Duration.millis(200);
+        final Duration ftDelay = Duration.millis(200);
+        final List<FadeTransition> fts = List.of(
+                new FadeTransition(ftDuration, deleteButton),
+                new FadeTransition(ftDuration, editButton));
+        fts.forEach(ft -> {
+            ft.setDelay(ftDelay);
+            ft.setFromValue(0.0);
+            ft.setToValue(0.6);
+        });
+        buttonsVisibilityPT = new ParallelTransition(fts.get(0), fts.get(1));
 
         // Set button icons and behaviour
         try (var binInputStream = getClass().getResourceAsStream("/client/images/bin.png");
              var editInputStream = getClass().getResourceAsStream("/client/images/edit.png")) {
             // Hover behaviour
-            deleteButton.setOpacity(0.0);
-            editButton.setOpacity(0.0);
             applyButtonHoverStyle(deleteButton);
             applyButtonHoverStyle(editButton);
 
@@ -160,6 +179,8 @@ public class CardCtrl implements Component<Card>, Initializable {
             throw new RuntimeException(e);
         }
 
+
+        // Set card view event handlers
         cardView.setOnMouseEntered(event -> focus());
         cardView.setOnMouseExited(event -> unfocus());
 
@@ -180,7 +201,7 @@ public class CardCtrl implements Component<Card>, Initializable {
         cardView.setOnDragDone(event -> {
             delete();
             getCard().setCardList(client.getActiveCardList());
-            getCard().setId(0); // Default id
+            getCard().setId(0); // Default id to be overridden by JPA
             server.addCardAtPosition(getCard(), (Integer) client.getActiveCardListCtrl().getCardListView().getUserData());
             client.getActiveCardListCtrl().refresh();
             event.consume();

@@ -2,3 +2,7 @@
     -fx-background-color: #b2b2eb;
     -fx-background-radius: 5px;
 }
+
+.cardList > AnchorPane > .title {
+    -fx-font-size: 20px;
+}
