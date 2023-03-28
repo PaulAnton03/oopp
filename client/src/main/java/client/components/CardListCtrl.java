@@ -25,7 +25,7 @@ public class CardListCtrl implements Component<CardList> {
     @Getter
     private CardList cardList;
     @Getter
-    private HashMap<Long, CardCtrl> cardCtrls = new HashMap<>();
+    private final HashMap<Long, CardCtrl> cardCtrls = new HashMap<>();
     @FXML
     private Text title;
     @FXML

@@ -3,7 +3,7 @@ package client.utils;
 public class Logger {
 
     public enum LogLevel {
-        DEBUG, INFO, WARN, ERROR;
+        DEBUG, INFO, WARN, ERROR
     }
 
     public static void log(String msg) {

@@ -17,8 +17,8 @@ public class BoardJoinCtrl implements Component<Board> {
 
     private Board board;
 
-    private MainCtrl mainCtrl;
-    private JoinBoardsCtrl joinBoardsCtrl;
+    private final MainCtrl mainCtrl;
+    private final JoinBoardsCtrl joinBoardsCtrl;
 
     @Override
     public void loadData(Board board) {
