@@ -169,6 +169,7 @@ public class BoardCtrl implements Component<Board> {
      * @param cardList the new cardList that needs to be displayed for the user
      */
     public void displayList(CardList cardList) {
+        // This does not work currently. It is always false.
         if (cardListCtrls.containsKey(cardList.getId())) {
             System.out.println("This cardList is already here");
             return;

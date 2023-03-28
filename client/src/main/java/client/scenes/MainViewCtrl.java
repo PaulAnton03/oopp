@@ -133,7 +133,7 @@ public class MainViewCtrl {
          */
         server.registerForMessages("/topic/board/" + board_id + "/lists/create", CardList.class, l -> {
             System.out.println("INCOMING LIST: " + l);
-//            boardCtrl.displayList(l);
+            //TODO : add list for other clients
         });
 
         /**
