@@ -38,7 +38,7 @@ public class AddCardCtrl {
     public void ok() {
         Card card = getCard();
         server.addCard(card);
-        server.send("/app/cards", card);
+        client.getCardListCtrls().get(card.getCardList().getId()).refresh(); // TODO: WEBSOCKET
         goBack();
     }
 
