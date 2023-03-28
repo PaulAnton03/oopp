@@ -28,7 +28,7 @@ public class BoardCtrl implements Component<Board> {
     @Getter
     private Board board;
     @Getter
-    private final Map<Long, CardListCtrl> cardListCtrls = new HashMap<>();
+    private Map<Long, CardListCtrl> cardListCtrls = new HashMap<>();
     @FXML
     private HBox boardView;
 
@@ -85,6 +85,7 @@ public class BoardCtrl implements Component<Board> {
 
     public void refresh() {
         boardView.getChildren().clear();
+        this.cardListCtrls = new HashMap<>();
         try {
             loadData(server.getBoard(board.getId()));
         } catch (Exception e) {
