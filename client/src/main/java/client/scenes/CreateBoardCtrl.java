@@ -41,6 +41,7 @@ public class CreateBoardCtrl {
         }
         final Board addedBoard = server.addBoard(newBoard);
         System.out.println("Added board " + addedBoard);
+        addedBoard.setEditable(true);
 
         final CardList cardList = new CardList("TODO");
         cardList.setBoard(addedBoard);
