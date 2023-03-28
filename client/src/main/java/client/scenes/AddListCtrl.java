@@ -36,7 +36,6 @@ public class AddListCtrl {
     void addList() {
         CardList cardList = getList();
         server.addCardList(cardList);
-        server.send("/app/lists", cardList);
         goBack();
     }
 

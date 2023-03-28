@@ -48,6 +48,7 @@ public class CreateBoardCtrl {
         addedBoard.addCardList(addedCardList);
 
         clear();
+        server.send("/app/boards", addedBoard);
         mainCtrl.showMainView(addedBoard);
     }
 

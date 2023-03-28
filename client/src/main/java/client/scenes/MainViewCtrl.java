@@ -98,15 +98,51 @@ public class MainViewCtrl {
         client.setActiveBoardCtrl(boardCtrl);
         boardContainer.setContent(boardCtrl.getNode());
         displayBoardName.setText(board.getName());
-        server.registerForMessages("/topic/lists", CardList.class, l -> {
-            if (client.getActiveBoard().getId() == l.getBoard().getId()) {
-                System.out.println("INCOMING LIST: " + l);
-            }
+        registerForMessages();
+    }
+
+    /**
+     * This method is used after loading the data in order to subscribe the client to different endpoints
+     * and handle events related to deleting, creating, and updating cards and lists on the current board the
+     * user is viewing.
+     */
+    public void registerForMessages() {
+
+        long board_id = client.getActiveBoard().getId();
+
+        /**
+         * This method handles the addition of a card to the board.
+         */
+        server.registerForMessages("/topic/board/" + board_id + "/cards/create", Card.class, c -> {
+            System.out.println("INCOMING CARD: " + c);
+            boardCtrl.getCardListCtrls().get(c.getCardList().getId()).displayCard(c);
+
         });
-        server.registerForMessages("/topic/cards", Card.class, c -> {
-            if (c.getCardList().getBoard().getId() == client.getActiveBoard().getId()) {
-                System.out.println("INCOMING CARD: " + c);
-            }
+
+        /**
+         * This method handles the deletion of a card from the board.
+         */
+        server.registerForMessages("/topic/board/" + board_id + "/cards/delete", Card.class, c -> {
+            System.out.println("CARD HAS BEEN DELETED: " + c);
+            boardCtrl.getCardListCtrls().get(c.getCardList().getId()).removeCard(c);
+
         });
+
+        /**
+         * This method handles the addition of a list to the board.
+         */
+        server.registerForMessages("/topic/board/" + board_id + "/lists/create", CardList.class, l -> {
+            System.out.println("INCOMING LIST: " + l);
+//            boardCtrl.displayList(l);
+        });
+
+        /**
+         * This method handles the deletion of a list from the board.
+         */
+        server.registerForMessages("/topic/board/" + board_id + "/lists/delete", CardList.class, l -> {
+            System.out.println("LIST HAS BEEN DELETED " + l);
+            boardCtrl.removeCardList(l);
+        });
+
     }
 }

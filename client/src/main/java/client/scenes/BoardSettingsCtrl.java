@@ -57,7 +57,7 @@ public class BoardSettingsCtrl {
         }
         server.deleteBoard(board.getId());
         Logger.log("Deleted board " + board);
-
+        server.send("/app/boards", board);
         mainCtrl.showJoin();
     }
 

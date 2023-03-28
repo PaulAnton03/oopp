@@ -13,7 +13,9 @@ import client.utils.ComponentFactory;
 import client.utils.Logger;
 import client.utils.ServerUtils;
 import commons.Board;
+import commons.Card;
 import commons.CardList;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.input.KeyEvent;
@@ -156,6 +158,40 @@ public class BoardCtrl implements Component<Board> {
                 break;
             default:
                 break;
+        }
+    }
+
+    /**
+     * This method puts a new CardListCtrl for the added cardList
+     * in the cardListCtrls map and adds it to the interface
+     *
+     * @param cardList the new cardList that needs to be displayed for the user
+     */
+    public void displayList(CardList cardList) {
+        if (cardListCtrls.containsKey(cardList.getId())) {
+            System.out.println("This cardList is already here");
+            return;
+        }
+        CardListCtrl cardListCtrl = factory.create(CardListCtrl.class, cardList);
+        cardListCtrls.put(cardList.getId(), cardListCtrl);
+        Platform.runLater(() -> {
+            boardView.getChildren().add(cardListCtrl.getNode());
+        });
+    }
+
+    /**
+     * This method removes the deleted cardList's CardListCtrl from the cardListCtrls map
+     * and removes it from the interface
+     *
+     * @param cardList the cardList that needs to be deleted from the user's display
+     */
+    public void removeCardList(CardList cardList) {
+        CardListCtrl cardListCtrl = cardListCtrls.get(cardList.getId());
+        if (cardListCtrl != null) {
+            cardListCtrls.remove(cardList.getId());
+            Platform.runLater(() -> {
+                boardView.getChildren().remove(cardListCtrl.getNode());
+            });
         }
     }
 }
