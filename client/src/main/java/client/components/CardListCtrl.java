@@ -1,5 +1,12 @@
 package client.components;
 
+import java.net.URL;
+import java.util.List;
+import java.util.ResourceBundle;
+import java.util.stream.IntStream;
+
+import javax.inject.Inject;
+
 import client.scenes.MainCtrl;
 import client.utils.ClientUtils;
 import client.utils.ComponentFactory;
@@ -20,15 +27,9 @@ import javafx.util.Pair;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
-import javax.inject.Inject;
-import java.net.URL;
-import java.util.HashMap;
-import java.util.List;
-import java.util.ResourceBundle;
-
 
 @EqualsAndHashCode
-public class CardListCtrl implements Component<CardList>, Initializable {
+public class CardListCtrl implements Component<CardList>, DBEntityCtrl<CardList, Card>, Initializable {
     private final ClientUtils client;
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
@@ -36,8 +37,6 @@ public class CardListCtrl implements Component<CardList>, Initializable {
 
     @Getter
     private CardList cardList;
-    @Getter
-    private HashMap<Long, CardCtrl> cardCtrls = new HashMap<>();
     @FXML
     private Text title;
     @Getter
@@ -58,14 +57,43 @@ public class CardListCtrl implements Component<CardList>, Initializable {
 
     @Override
     public void loadData(CardList cardList) {
+        if (this.cardList != null)
+            removeChildren();
         this.cardList = cardList;
         title.setText(cardList.getTitle());
 
         for (Card card : cardList.getCards()) {
             CardCtrl cardCtrl = factory.create(CardCtrl.class, card);
-            cardCtrls.put(cardCtrl.getCard().getId(), cardCtrl);
             cardListView.getChildren().add(cardCtrl.getNode());
         }
+    }
+
+    public void refresh() {
+        cardListView.getChildren().clear();
+        loadData(server.getCardList(cardList.getId()));
+        client.getBoardCtrl().replaceChild(cardList);
+    }
+
+    public void remove() {
+        removeChildren();
+        client.getCardListCtrls().remove(cardList.getId());
+    }
+
+    public void removeChildren() {
+        for (Card card : this.cardList.getCards()) {
+            client.getCardCtrl(card.getId()).remove();
+        }
+    }
+
+    public void replaceChild(Card card) {
+        int idx = IntStream.range(0, cardList.getCards().size())
+            .filter(i -> cardList.getCards().get(i).getId() == card.getId())
+            .findFirst()
+            .orElse(-1);
+        if (idx == -1)
+            throw new IllegalStateException("Attempting to replace card in card list that does not already exist.");
+        cardList.getCards().set(idx, card);
+        card.setCardList(cardList);
     }
 
     @Override
@@ -82,7 +110,7 @@ public class CardListCtrl implements Component<CardList>, Initializable {
         cardListView.setOnDragDropped(event -> {
             Dragboard db = event.getDragboard();
             Logger.log("Dropped on list " + this.getCardList().getTitle());
-            client.setActiveCardListCtrl(this);
+            client.setActiveCardListId(cardList.getId());
 
             final double eventY = event.getY();
             // Filter out the currently dragged card
@@ -112,24 +140,12 @@ public class CardListCtrl implements Component<CardList>, Initializable {
         });
     }
 
-    public void refresh() {
-        cardListView.getChildren().clear();
-        try {
-            loadData(server.getCardList(cardList.getId()));
-        } catch (Exception e) {
-            Logger.log("Card list couldn't be refreshed");
-        }
-
-    }
-
     public void addCard() {
-        client.setActiveCardListCtrl(this);
-        mainCtrl.showAddCard();
+        mainCtrl.showAddCard(cardList.getId());
     }
 
     public void listSettings() {
-        client.setActiveCardListCtrl(this);
-        mainCtrl.showListSettings();
+        mainCtrl.showListSettings(cardList.getId());
     }
 
     /**

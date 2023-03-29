@@ -15,7 +15,8 @@
  */
 package client.scenes;
 
-import client.components.CardCtrl;
+import javax.inject.Inject;
+
 import client.utils.ClientUtils;
 import client.utils.ComponentFactory;
 import client.utils.Logger;
@@ -28,8 +29,6 @@ import javafx.util.Pair;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import javax.inject.Inject;
 
 public class MainCtrl {
     private final ServerUtils server;
@@ -138,9 +137,8 @@ public class MainCtrl {
         primaryStage.show();
     }
 
-    public void showEditCard(CardCtrl cardCtrl) {
-        client.setActiveCardCtrl(cardCtrl);
-        editCardCtrl.loadData(cardCtrl.getCard());
+    public void showEditCard(long cardId) {
+        editCardCtrl.loadData(cardId);
         primaryStage.setTitle("Edit Card");
         primaryStage.setScene(editCard);
     }
@@ -161,7 +159,8 @@ public class MainCtrl {
         boardSettingsCtrl.load();
     }
 
-    public void showAddCard() {
+    public void showAddCard(long cardListId) {
+        addCardCtrl.loadData(cardListId);
         primaryStage.setTitle("Add card");
         primaryStage.setScene(add);
     }
@@ -174,12 +173,11 @@ public class MainCtrl {
     }
 
     public void showMainView() {
-        if (client.getActiveBoard() == null) {
+        if (client.getBoardCtrl() == null) {
             Logger.log("No active board, cannot show main view");
             this.showJoin();
             return;
         }
-        client.getActiveBoardCtrl().refresh();
         primaryStage.setTitle("Main view");
         primaryStage.setScene(main);
     }
@@ -200,8 +198,9 @@ public class MainCtrl {
         primaryStage.setScene(addList);
     }
 
-    public void showListSettings() {
+    public void showListSettings(long cardListId) {
         primaryStage.setTitle("Edit list");
+        editListCtrl.loadData(cardListId);
         primaryStage.setScene(editList);
     }
 

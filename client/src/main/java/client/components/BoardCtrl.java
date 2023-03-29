@@ -1,8 +1,11 @@
 package client.components;
 
+import java.util.stream.IntStream;
+
+import javax.inject.Inject;
+
 import client.utils.ClientUtils;
 import client.utils.ComponentFactory;
-import client.utils.Logger;
 import client.utils.ServerUtils;
 import commons.Board;
 import commons.CardList;
@@ -13,24 +16,15 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import lombok.Getter;
 
-import javax.inject.Inject;
-import java.util.HashMap;
-import java.util.Map;
-
-public class BoardCtrl implements Component<Board> {
+public class BoardCtrl implements Component<Board>, DBEntityCtrl<Board, CardList> {
     private final ClientUtils client;
     private final ComponentFactory factory;
     private final ServerUtils server;
 
     @Getter
     private Board board;
-    @Getter
-    private Map<Long, CardListCtrl> cardListCtrls = new HashMap<>();
     @FXML
     private HBox boardView;
-
-    private long selectedCardListId = -1;
-    private long selectedCardId = -1;
 
     @Inject
     public BoardCtrl(ClientUtils client, ComponentFactory factory, ServerUtils server) {
@@ -45,96 +39,85 @@ public class BoardCtrl implements Component<Board> {
 
     @Override
     public void loadData(Board board) {
+        if (this.board != null)
+            removeChildren();
         this.board = board;
-        client.setActiveBoardCtrl(this);
+        client.clearBoardData();
+        client.setBoardCtrl(this);
 
         final long listWidthPlusGap = 300;
         boardView.setMinWidth(board.getCardLists().size() * listWidthPlusGap);
 
         for (CardList cardList : board.getCardLists()) {
+            if (cardList == null)
+                continue;
             CardListCtrl cardListCtrl = factory.create(CardListCtrl.class, cardList);
-            cardListCtrls.put(cardList.getId(), cardListCtrl);
             boardView.getChildren().add(cardListCtrl.getNode());
-        }
-
-        // Find new controller assigned to selected card and highlight
-        if (selectedCardId != -1) {
-            boolean foundCardCtrl = false;
-            for (CardListCtrl cardListCtrl : cardListCtrls.values()) {
-                CardCtrl cardCtrl = cardListCtrl.getCardCtrls().get(selectedCardId);
-                if (cardCtrl != null) {
-                    selectedCardId = cardCtrl.getCard().getId();
-                    selectedCardListId = cardListCtrl.getCardList().getId();
-                    cardCtrl.highlight();
-                    foundCardCtrl = true;
-                    break;
-                }
-            }
-            if (!foundCardCtrl) {
-                selectedCardId = -1;
-                selectedCardListId = -1;
-            }
         }
     }
 
     public void refresh() {
         boardView.getChildren().clear();
-        this.cardListCtrls = new HashMap<>();
-        try {
-            loadData(server.getBoard(board.getId()));
-        } catch (Exception e) {
-            Logger.log("Failed to refresh board " + board + ". Error: " + e.getMessage());
+        loadData(server.getBoard(board.getId()));
+    }
+
+    public void remove() {
+        removeChildren();
+        client.setBoardCtrl(null);
+    }
+
+    public void removeChildren() {
+        for (CardList cardList : board.getCardLists()) {
+            client.getCardListCtrl(cardList.getId()).remove();
         }
     }
 
-    private CardCtrl getSelectedCardCtrl() {
-        CardListCtrl cardListCtrl = getCardListCtrls().get(selectedCardListId);
-        return (cardListCtrl == null) ? null : cardListCtrl.getCardCtrls().get(selectedCardId);
+    public void replaceChild(CardList cardList) {
+        int idx = IntStream.range(0, board.getCardLists().size())
+            .filter(i -> board.getCardLists().get(i).getId() == cardList.getId())
+            .findFirst()
+            .orElse(-1);
+        if (idx == -1)
+            throw new IllegalStateException("Attempting to replace list in board that does not exist.");
+        board.getCardLists().set(idx, cardList);
+        cardList.setBoard(board);
     }
 
     private void switchSelectedCardList(int diff) {
         int cardListIdx = 0;
-        if (getSelectedCardCtrl() != null) {
-            cardListIdx = board.getCardLists().indexOf(getCardListCtrls().get(selectedCardListId).getCardList()) + diff;
+        if (client.getCardCtrl(client.getSelectedCardId()) != null) {
+            cardListIdx = board.getCardLists().indexOf(client.getCardList(client.getCard(client.getSelectedCardId()).getCardList().getId())) + diff;
         }
-        if (cardListIdx < 0 || cardListIdx >= board.getCardLists().size()) {
+        if (cardListIdx < 0 || cardListIdx >= board.getCardLists().size())
             return;
-        }
         CardList cardList = board.getCardLists().get(cardListIdx);
         if (cardList.getCards().size() == 0) { // If empty list, try next
             switchSelectedCardList(diff + Integer.signum(diff));
             return;
         }
-        if (getSelectedCardCtrl() != null) {
-            getSelectedCardCtrl().unhighlight();
-        }
-        selectedCardListId = cardList.getId();
-        selectedCardId = cardList.getCards().get(0).getId();
-        getSelectedCardCtrl().highlight();
+        client.changeSelection(cardList.getCards().get(0).getId());
     }
 
     private void switchSelectedCard(int diff) {
         int cardIdx = 0;
-        CardListCtrl cardListCtrl;
-        if (getSelectedCardCtrl() != null) {
-            cardListCtrl = getCardListCtrls().get(board.getCardLists().get(0).getId());
+        CardList cardList;
+        if (client.getCardCtrl(client.getSelectedCardId()) != null) {
+            cardList = client.getCard(client.getSelectedCardId()).getCardList();
+            cardIdx = cardList.getCards().indexOf(client.getCard(client.getSelectedCardId())) + diff;
         } else {
-            cardListCtrl = getCardListCtrls().get(selectedCardListId);
-            cardIdx = cardListCtrl.getCardList().getCards().indexOf(cardListCtrl.getCardCtrls().get(selectedCardId).getCard()) + diff;
+            cardList = board.getCardLists().get(0);
         }
-        if (cardListCtrl.getCardList().getCards().size() == 0 || cardIdx < 0 || cardIdx >= cardListCtrl.getCardList().getCards().size()) {
+        if (cardIdx < 0
+            || cardList.getCards() == null
+            || cardList.getCards().size() == 0
+            || cardIdx >= cardList.getCards().size()) {
             return;
         }
-        if (getSelectedCardCtrl() != null) {
-            getSelectedCardCtrl().unhighlight();
-        }
-        selectedCardId = cardListCtrl.getCardList().getCards().get(cardIdx).getId();
-        selectedCardListId = cardListCtrl.getCardList().getId();
-        getSelectedCardCtrl().highlight();
+        client.changeSelection(cardList.getCards().get(cardIdx).getId());
     }
 
     public void handleKeyEvent(KeyEvent e) {
-        if (getCardListCtrls().size() == 0)
+        if (board.getCardLists() == null || board.getCardLists().size() == 0)
             return;
         switch (e.getCode()) {
             case LEFT:
