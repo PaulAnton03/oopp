@@ -35,7 +35,7 @@ public class EditCardCtrl {
         card.setTitle(changeTitle.getText());
         card.setDescription(changeDesc.getText());
         server.updateCard(card);
-        client.getCardCtrl(cardId).refresh(); // TODO: WEBSOCKET
+        client.getCardCtrl(cardId).refresh();
         resetState();
         mainCtrl.showMainView();
     }

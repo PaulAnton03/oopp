@@ -198,6 +198,7 @@ public class MainCtrl {
             return;
         }
         Logger.log("Connecting to the last used board.");
+        client.getBoardCtrl().getBoard().setEditable(true);
         showMainView(board);
     }
 

@@ -10,12 +10,14 @@ import client.utils.ServerUtils;
 import commons.Board;
 import commons.Card;
 import commons.CardList;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.ScrollEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.text.Text;
 
@@ -37,6 +39,9 @@ public class MainViewCtrl {
     @FXML
     private Label adminLabel;
 
+    @FXML
+    private AnchorPane warning;
+
     @Inject
     public MainViewCtrl(ServerUtils server, ClientUtils client, MainCtrl mainCtrl, ComponentFactory factory) {
         this.server = server;
@@ -47,6 +52,9 @@ public class MainViewCtrl {
 
     @FXML
     void btnAddClicked(ActionEvent event) {
+        if(!client.getBoardCtrl().getBoard().isEditable()) {
+            throw new IllegalStateException("You do not have permissions to edit this board.");
+        }
         mainCtrl.showAddList();
     }
 
@@ -67,6 +75,9 @@ public class MainViewCtrl {
 
     @FXML
     void btnSettingsClicked(ActionEvent event) {
+        if(!client.getBoardCtrl().getBoard().isEditable()) {
+            throw new IllegalStateException("You do not have permissions to edit this board.");
+        }
         mainCtrl.showSettings();
     }
 
@@ -90,22 +101,51 @@ public class MainViewCtrl {
 
     public void loadData(Board board) {
         boolean admin = server.isAdmin();
-        if(!admin) {
+        if (!admin) {
             adminLabel.setVisible(false);
         }
 
         BoardCtrl boardCtrl = factory.create(BoardCtrl.class, board);
         boardContainer.setContent(boardCtrl.getNode());
         displayBoardName.setText(board.getName());
-        server.registerForMessages("/topic/lists", CardList.class, l -> {
-            if (client.getBoardCtrl().getBoard().getId() == l.getBoard().getId()) {
-                System.out.println("INCOMING LIST: " + l);
-            }
+        if(client.getBoardCtrl().getBoard().getPassword() == null || admin)
+            board.setEditable(true);
+        warning.setVisible(!board.isEditable());
+        registerForMessages();
+    }
+
+    /**
+     * This method is used after loading the data in order to subscribe the client to different endpoints
+     * and handle events related to deleting, creating, and updating cards and lists on the current board the
+     * user is viewing.
+     */
+    public void registerForMessages() {
+
+        long boardId = client.getBoardCtrl().getBoard().getId();
+
+        /**
+         * This method handles the deletion and addition of a card to the board.
+         */
+        server.registerForMessages("/topic/board/" + boardId + "/cards", Card.class, c -> {
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    client.getCardListCtrl(c.getCardList().getId()).refresh();
+                }
+            });
+
         });
-        server.registerForMessages("/topic/cards", Card.class, c -> {
-            if (c.getCardList().getBoard().getId() == client.getBoardCtrl().getBoard().getId()) {
-                System.out.println("INCOMING CARD: " + c);
-            }
+
+        /**
+         * This method handles the deletion and addition of a list to the board.
+         */
+        server.registerForMessages("/topic/board/" + boardId + "/lists", CardList.class, l -> {
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    client.getBoardCtrl().refresh();
+                }
+            });
         });
     }
 }
