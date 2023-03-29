@@ -64,7 +64,9 @@ public class BoardController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Board with name " + board.getName() + " already exists");
         }
         Board boardSaved = boardRepository.save(board);
-        messagingTemplate.convertAndSend("/topic/board/" + board.getId() + "/create", board);
+        if(messagingTemplate!=null){
+            messagingTemplate.convertAndSend("/topic/board/" + board.getId() + "/create", board);
+        }
         return ResponseEntity.ok(boardSaved);
     }
 
