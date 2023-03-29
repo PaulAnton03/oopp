@@ -1,13 +1,16 @@
 package client.utils;
 
+import java.security.PublicKey;
 import java.util.HashMap;
 import java.util.Map;
 
 import client.components.BoardCtrl;
 import client.components.CardCtrl;
 import client.components.CardListCtrl;
+import client.components.TagCtrl;
 import commons.Card;
 import commons.CardList;
+import commons.Tag;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -28,6 +31,10 @@ public class ClientUtils {
     @Getter
     @Setter
     private Map<Long, CardCtrl> cardCtrls = new HashMap<>();
+
+    @Getter
+    @Setter
+    private  Map<Long, TagCtrl> tagCtrls = new HashMap<>();
 
     public void clearBoardData() {
         this.cardListCtrls = new HashMap<>();
@@ -57,6 +64,14 @@ public class ClientUtils {
 
     public CardCtrl getCardCtrl(long id) {
         return cardCtrls.get(id);
+    }
+
+    public Tag getTag(long id){
+        return tagCtrls.get(id).getTag();
+    }
+
+    public TagCtrl getTagCtrl(long id){
+        return tagCtrls.get(id);
     }
 
     public void changeSelection(long selectedCardId) {

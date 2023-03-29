@@ -62,15 +62,14 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Card/* TODO
     private Button editButton;
     @FXML
     private Button deleteButton;
-
     @FXML
     private FlowPane tagArea;
 
     @Inject
-    public CardCtrl(MainCtrl mainCtrl, ServerUtils serverUtils, ComponentFactory factory, ServerUtils server) {
+    public CardCtrl(MainCtrl mainCtrl, ServerUtils server, ComponentFactory factory, ClientUtils client) {
         this.mainCtrl = mainCtrl;
         this.factory = factory;
-        this.mainCtrl = mainCtrl;
+        this.server = server;
         this.client = client;
         FXMLLoader loader = new FXMLLoader(getClass().getResource("Card.fxml"));
         loader.setController(this);
@@ -105,7 +104,6 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Card/* TODO
     public void remove() {
         client.getCardCtrls().remove(card.getId());
         removeChildren();
->>>>>>> main
     }
 
     public void removeChildren() {}

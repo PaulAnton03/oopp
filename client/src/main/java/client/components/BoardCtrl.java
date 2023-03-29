@@ -134,6 +134,5 @@ public class BoardCtrl implements Component<Board>, DBEntityCtrl<Board, CardList
             default:
                 break;
         }
->>>>>>> main
     }
 }

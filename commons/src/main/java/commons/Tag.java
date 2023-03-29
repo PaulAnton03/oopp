@@ -1,6 +1,7 @@
 package commons;
 
 import lombok.Data;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import javax.persistence.*;
@@ -12,7 +13,8 @@ import java.util.Set;
 @Data
 @Entity
 @RequiredArgsConstructor
-public class Tag {
+public class Tag implements DBEntity {
+
 
     @Id
     @SequenceGenerator(name = "tags_seq", sequenceName = "TAGS_SEQ")
@@ -25,5 +27,6 @@ public class Tag {
     private String text;
 
     private Color color;
+
 
 }
