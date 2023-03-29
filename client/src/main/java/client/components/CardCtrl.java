@@ -222,9 +222,12 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Card/* TODO
 
         cardView.setOnDragDone(event -> {
             delete();
-            getCard().setCardList(client.getActiveCardList());
-            getCard().setId(0); // Default id to be overridden by JPA
-            server.addCardAtPosition(getCard(), (Integer) client.getActiveCardListCtrl().getCardListView().getUserData());
+            Card card = new Card();
+            card.setDescription(this.card.getDescription());
+            card.setTitle(this.card.getTitle());
+            card.setCardList(client.getActiveCardList());
+            card.setId(0); // Default id to be overridden by JPA
+            server.addCardAtPosition(card, (Integer) client.getActiveCardListCtrl().getCardListView().getUserData());
             client.getActiveCardListCtrl().refresh();
             event.consume();
         });
