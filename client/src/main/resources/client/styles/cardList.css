@@ -1,8 +1,22 @@
+@import "global.css";
+
 .cardList {
     -fx-background-color: #b2b2eb;
     -fx-background-radius: 5px;
 }
 
-.cardList > AnchorPane > .title {
-    -fx-font-size: 20px;
+.cardList > AnchorPane > Button {
+    -fx-base: transparent;
+    -fx-background-color: transparent;
+    -fx-opacity: 0.6;
 }
+
+.cardList > AnchorPane > Button:hover {
+    -fx-opacity: 1.0;
+}
+
+.listTitle {
+    -fx-font-size: 30px;
+    -fx-font-weight: 600;
+}
+

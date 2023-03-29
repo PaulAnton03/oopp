@@ -25,6 +25,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.ClipboardContent;
@@ -32,7 +33,6 @@ import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Text;
 import javafx.scene.transform.Transform;
 import javafx.util.Duration;
 import lombok.EqualsAndHashCode;
@@ -50,9 +50,9 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Card/* TODO
     @FXML
     private VBox cardView;
     @FXML
-    private Text title;
+    private Label title;
     @FXML
-    private Text description;
+    private Label description;
     @FXML
     private Button editButton;
     @FXML
@@ -129,6 +129,7 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Card/* TODO
         st.setToY(1.15);
         showButtons();
         st.play();
+        cardView.setViewOrder(-1.0);
     }
 
     public void unfocus() {
@@ -137,6 +138,7 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Card/* TODO
         st.setToY(1);
         st.play();
         hideButtons();
+        cardView.setViewOrder(0.0);
     }
 
     public Transition getOpacityTransition(Node node, double initialOpacity, double finalOpacity, double duration) {
@@ -162,9 +164,11 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Card/* TODO
     public void hideButtons() {
         buttonsVisibilityPT.setRate(-1.0);
         buttonsVisibilityPT.playFrom(buttonsVisibilityPT.getCurrentTime());
+        title.setPrefWidth(250);
     }
 
     public void showButtons() {
+        title.setPrefWidth(160);
         buttonsVisibilityPT.setRate(1.0);
         buttonsVisibilityPT.playFrom(buttonsVisibilityPT.getCurrentTime());
     }

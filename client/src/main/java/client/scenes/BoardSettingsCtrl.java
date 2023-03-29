@@ -36,16 +36,6 @@ public class BoardSettingsCtrl implements SceneCtrl {
         this.server = server;
     }
 
-    public void load() {
-        if (!server.isAdmin()) {
-            deleteBoardButton.setDisable(true);
-            deleteBoardButton.setVisible(false);
-            return;
-        }
-        deleteBoardButton.setDisable(false);
-        deleteBoardButton.setVisible(true);
-    }
-
     public void saveChanges() {
         Board board = client.getBoardCtrl().getBoard();
         if (board == null) {

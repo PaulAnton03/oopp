@@ -243,10 +243,6 @@ public class MainCtrl {
         primaryStage.setScene(passwordProtected);
     }
 
-    public Stage getPrimaryStage() {
-        return primaryStage;
-    }
-
     public void stop() {
         server.stop();
     }
