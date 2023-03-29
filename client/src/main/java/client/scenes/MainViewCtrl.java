@@ -127,7 +127,7 @@ public class MainViewCtrl {
                 System.out.println("INCOMING CARD: " + c);
             }
         });
-        if(client.getActiveBoard().getPassword() == null)
+        if(client.getActiveBoard().getPassword() == null || admin)
             board.setEditable(true);
         warning.setVisible(!board.isEditable());
     }
