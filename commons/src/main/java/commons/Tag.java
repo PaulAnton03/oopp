@@ -1,11 +1,8 @@
 package commons;
 
-import lombok.Data;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 import javax.persistence.*;
-import java.awt.*;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -21,12 +18,22 @@ public class Tag implements DBEntity {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "tags_seq")
     protected long id;
 
-    @ManyToMany(mappedBy = "tagList", fetch = FetchType.EAGER)
+    @Getter
+    @JsonIgnore
+    @EqualsAndHashCode.Exclude
+    @ManyToMany(mappedBy = "tags", cascade = CascadeType.ALL)
     private Set<Card> cards = new HashSet<>();
 
     private String text;
 
-    private Color color;
-
+    @Getter
+    @Setter
+    private int red;
+    @Getter
+    @Setter
+    private int blue;
+    @Getter
+    @Setter
+    private int green;
 
 }

@@ -211,8 +211,14 @@ public class ServerUtils {
         return webTargetAddDefault(webTarget).get(new GenericType<>(){});
     }
 
-    public Tag addTag(Tag tag){
-        WebTarget webTarget = webTargetFromPath("/tags/create");
+    public Tag updateTag(Tag tag){
+        WebTarget webTarget = webTargetFromPath("/tags/update/{id}").resolveTemplate("id", tag.getId());
+        return webTargetAddDefault(webTarget).put(Entity.entity(tag, APPLICATION_JSON), Tag.class);
+    }
+
+    public Tag createTag(Tag tag){
+        WebTarget webTarget = webTargetFromPath("/tags/create")
+                .queryParam("cardId", tag.getCards().iterator().next().getId());
         return webTargetAddDefault(webTarget).post(Entity.entity(tag, APPLICATION_JSON), Tag.class);
     }
 

@@ -40,15 +40,16 @@ public class TagController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<Tag> create(@RequestBody Tag tag, @RequestParam long cardId){
-        Optional<Card> card = cardRepository.findById(cardId);
-        if(card.isEmpty()){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Card with given Id not found");
-        }
-
-        tag.getCards().add(card.get());
-        card.get().getTagList().add(tag);
+    public ResponseEntity<Tag> create(@RequestBody Tag tag){
+//        Optional<Card> card = cardRepository.findById(cardId);
+//        if(card.isEmpty()){
+//            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Card with given Id not found");
+//        }
+//        System.out.println("I reached here!");
+//        tag.getCards().add(card.get());
+//        card.get().getTags().add(tag);
         tagRepository.save(tag);
+        System.out.println("Yo before return");
         return ResponseEntity.ok(tag);
     }
 
@@ -60,7 +61,7 @@ public class TagController {
         }
         Tag tag = optTag.get();
         for(Card  c : tag.getCards()){
-            c.getTagList().remove(tag);
+            c.getTags().remove(tag);
         }
         tagRepository.deleteById(tag.getId());
         return ResponseEntity.ok(tag);

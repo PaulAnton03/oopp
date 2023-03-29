@@ -1,15 +1,6 @@
 package commons;
 
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OrderColumn;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -51,8 +42,9 @@ public class Card implements DBEntity {
             joinColumns = { @JoinColumn(name = "card_id") },
             inverseJoinColumns = { @JoinColumn(name = "tag_id") }
     )
-    @ManyToMany
-    private Set<Tag> tagList = new HashSet<>();
+
+    @ManyToMany(cascade=CascadeType.ALL)
+    private Set<Tag> tags = new HashSet<>();
 
     @NonNull
     private String title;
@@ -60,11 +52,11 @@ public class Card implements DBEntity {
     private String description;
 
     public boolean removeTag(long id){
-        Tag tag = this.getTagList().stream().filter(c -> c.getId() == id).findFirst().orElse(null);
+        Tag tag = this.getTags().stream().filter(c -> c.getId() == id).findFirst().orElse(null);
         if(tag == null){
             return false;
         }else {
-            this.getTagList().remove(tag);
+            this.getTags().remove(tag);
         }
         return true;
     }

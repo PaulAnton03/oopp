@@ -3,12 +3,13 @@ package client.components;
 import client.scenes.MainCtrl;
 import client.utils.ClientUtils;
 import client.utils.ServerUtils;
-import commons.DBEntity;
+import commons.Card;
 import commons.Tag;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import lombok.Getter;
 
@@ -19,7 +20,7 @@ public class TagCtrl implements Component<Tag>, DBEntityCtrl<Tag, Tag> {
 
     private final MainCtrl mainCtrl;
 
-    private final ServerUtils serverUtils;
+    private final ServerUtils server;
 
     @Getter
     private Tag tag;
@@ -30,11 +31,14 @@ public class TagCtrl implements Component<Tag>, DBEntityCtrl<Tag, Tag> {
     @FXML
     private Color color;
 
+    @FXML
+    private AnchorPane anchorPane;
+
     ClientUtils client;
     @Inject
-    public TagCtrl(MainCtrl mainCtrl, ServerUtils serverUtils, ClientUtils client) {
+    public TagCtrl(MainCtrl mainCtrl, ServerUtils server, ClientUtils client) {
         this.mainCtrl = mainCtrl;
-        this.serverUtils = serverUtils;
+        this.server = server;
         this.client = client;
         FXMLLoader loader = new FXMLLoader(getClass().getResource("Tag.fxml"));
         loader.setController(this);
@@ -44,9 +48,13 @@ public class TagCtrl implements Component<Tag>, DBEntityCtrl<Tag, Tag> {
     @Override
     public void loadData(Tag tag) {
         this.tag = tag;
+        if(tag == null || label == null){
+            return;
+        }
         label.setText(tag.getText());
-        color = Color.rgb(tag.getColor().getRed(), tag.getColor().getBlue(),
-                tag.getColor().getGreen());
+        color = Color.rgb(tag.getRed(), tag.getBlue(),
+                tag.getGreen());
+        anchorPane.setStyle("-fx-background-color: #" + color);
     }
 
     @Override
@@ -55,16 +63,30 @@ public class TagCtrl implements Component<Tag>, DBEntityCtrl<Tag, Tag> {
     }
 
     public void editTag() {
-        //TODO
+        server.updateTag(this.tag);
+    }
+
+    public void assignTagToCard(long cardId){
+        Card card = client.getCard(cardId);
+        card.getTags().add(tag);
+        server.updateCard(card);
+
+        tag.getCards().add(card);
+        server.getCard(cardId).getTags().add(tag);
+        server.getTag(tag.getId()).getCards().add(card);
+        server.updateTag(tag);
     }
 
     public void delete(){
-        serverUtils.deleteTag(tag.getId());
+        server.deleteTag(tag.getId());
         //TODO delete the FXML thingy that you see of the tag
     }
 
     public void refresh(){
-        loadData(serverUtils.getTag(tag.getId()));
+        loadData(server.getTag(tag.getId()));
+        for(Card card : tag.getCards()){
+            client.getCardCtrl(card.getId()).replaceChild(tag);
+        }
     }
 
     @Override

@@ -14,8 +14,6 @@ import commons.Card;
 import commons.Tag;
 import client.utils.ClientUtils;
 import client.utils.Logger;
-import client.utils.ServerUtils;
-import commons.Card;
 import javafx.animation.Animation;
 import javafx.animation.FadeTransition;
 import javafx.animation.ParallelTransition;
@@ -85,7 +83,7 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Card/* TODO
         title.setText(card.getTitle());
         description.setText(card.getDescription());
 
-        for (Tag tag : card.getTagList()){
+        for (Tag tag : card.getTags()){
             TagCtrl tagCtrl = factory.create(TagCtrl.class, tag);
             tagArea.getChildren().add(tagCtrl.getNode());
         }
@@ -108,7 +106,9 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Card/* TODO
 
     public void removeChildren() {}
 
-    public void replaceChild(Card card /* TODO: Change to Tag tag */) {}
+    public void replaceChild(Tag tag /* TODO: Change to Tag tag */) {
+
+    }
 
     public void editCard() { mainCtrl.showEditCard(this.getCard().getId()); }
 

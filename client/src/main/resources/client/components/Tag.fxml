@@ -3,9 +3,8 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
 
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="31.0" prefWidth="52.0" stylesheets="/client/styles/tag.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="31.0" prefWidth="52.0" stylesheets="/client/styles/tag.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.components.TagCtrl">
    <children>
-      <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="31.0" prefWidth="52.0" text="Label" textAlignment="CENTER" />
+      <Label fx:id="label" alignment="CENTER" contentDisplay="CENTER" prefHeight="31.0" prefWidth="52.0" text="Label" textAlignment="CENTER" />
    </children>
 </AnchorPane>

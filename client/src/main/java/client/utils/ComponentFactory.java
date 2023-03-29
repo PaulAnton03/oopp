@@ -4,13 +4,9 @@ import static client.Main.FXML;
 
 import java.util.Map;
 
+import client.components.*;
 import com.google.inject.Inject;
 
-import client.components.BoardCtrl;
-import client.components.BoardJoinCtrl;
-import client.components.CardCtrl;
-import client.components.CardListCtrl;
-import client.components.Component;
 import commons.DBEntity;
 
 public class ComponentFactory {
@@ -25,7 +21,8 @@ public class ComponentFactory {
         BoardCtrl.class, "Board.fxml",
             CardListCtrl.class, "CardList.fxml",
             CardCtrl.class, "Card.fxml",
-            BoardJoinCtrl.class, "BoardJoin.fxml"
+            BoardJoinCtrl.class, "BoardJoin.fxml",
+            TagCtrl.class, "Tag.fxml"
     );
 
     /**
@@ -52,7 +49,9 @@ public class ComponentFactory {
         } else if (ctrlClass == CardListCtrl.class) {
             client.getCardListCtrls().put(data.getId(), (CardListCtrl) ctrl);
         }
-
+        else if (ctrlClass == TagCtrl.class){
+            client.getTagCtrls().put(data.getId(), (TagCtrl) ctrl);
+        }
         ctrl.loadData(data);
         return ctrl;
     }

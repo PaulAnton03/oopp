@@ -73,18 +73,23 @@ public class EditCardCtrl {
     public void resetState() {
         this.changeTitle.setText("");
         this.changeDesc.setText("");
+        this.tagField.setText("");
     }
 
 
     public void createTag(){
         Tag tag = new Tag();
         tag.setText(tagField.getText());
-        tag.setColor(new java.awt.Color(
-                (float) colourPicker.getValue().getRed(),
-                (float) colourPicker.getValue().getBlue(),
-                (float) colourPicker.getValue().getGreen()));
-        client.getActiveCard().getTagList().add(tag);
-        server.addTag(tag);
+        tag.setRed((int) colourPicker.getValue().getRed());
+        tag.setBlue((int) colourPicker.getValue().getBlue());
+        tag.setGreen((int) colourPicker.getValue().getGreen());
+        client.getCard(cardId).getTags().add(tag);
+        tag.getCards().add(client.getCard(cardId));
+        server.createTag(tag);
         new Alert(Alert.AlertType.INFORMATION, "New Tag Added!");
+    }
+
+    public void assignTag(){
+
     }
 }
