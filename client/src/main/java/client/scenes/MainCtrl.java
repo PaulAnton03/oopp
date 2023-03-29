@@ -15,12 +15,7 @@
  */
 package client.scenes;
 
-import javax.inject.Inject;
-
-import client.utils.ClientUtils;
-import client.utils.ComponentFactory;
-import client.utils.Logger;
-import client.utils.ServerUtils;
+import client.utils.*;
 import commons.Board;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -30,10 +25,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.inject.Inject;
+
 public class MainCtrl {
     private final ServerUtils server;
     private final ClientUtils client;
     private final ComponentFactory factory;
+    private final ClientPreferences clientPreferences;
 
     @Getter
     private Stage primaryStage;
@@ -73,10 +71,11 @@ public class MainCtrl {
     private Scene adminPassword;
 
     @Inject
-    public MainCtrl(ServerUtils server, ClientUtils client, ComponentFactory factory) {
+    public MainCtrl(ServerUtils server, ClientUtils client, ComponentFactory factory, ClientPreferences clientPreferences) {
         this.server = server;
         this.client = client;
         this.factory = factory;
+        this.clientPreferences = clientPreferences;
     }
 
     @NoArgsConstructor
@@ -169,17 +168,32 @@ public class MainCtrl {
         mainViewCtrl.loadData(board);
         primaryStage.setTitle("Main view");
         primaryStage.setScene(main);
+        clientPreferences.setDefaultBoardId(board.getId());
+        if (board.getPassword() != null && !board.getPassword().isEmpty())
+            clientPreferences.setPasswordForBoard(board.getId(), board.getPassword());
         Logger.log("Showing main view for board " + board);
     }
 
     public void showMainView() {
-        if (client.getBoardCtrl() == null) {
-            Logger.log("No active board, cannot show main view");
+        Long boardId = clientPreferences.getDefaultBoardId().orElse(Long.valueOf(-1));
+        if (boardId == -1) {
+            Logger.log("No default board, cannot show main view");
             this.showJoin();
             return;
         }
-        primaryStage.setTitle("Main view");
-        primaryStage.setScene(main);
+
+        Board board;
+        try {
+            board = server.getBoard(boardId);
+        } catch (Exception e) {
+            Logger.log("Default board not found, cannot show main view");
+            this.showJoin();
+            return;
+        }
+
+        //TODO: In case there's password change handle IT!
+        Logger.log("Connecting to default board");
+        showMainView(board);
     }
 
     public void showCreate() {
