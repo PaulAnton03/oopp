@@ -178,6 +178,7 @@ public class MainCtrl {
             this.showJoin();
             return;
         }
+        client.getBoardCtrl().getBoard().setEditable(true);
         primaryStage.setTitle("Main view");
         primaryStage.setScene(main);
     }
