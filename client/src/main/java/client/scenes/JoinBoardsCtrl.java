@@ -64,7 +64,7 @@ public class JoinBoardsCtrl {
     }
 
     public void onJoin(ActionEvent event) {
-        String id = boardId.getText();
+        String id = this.boardId.getText();
         long boardId;
         try {
             boardId = Long.parseLong(id);
@@ -72,18 +72,17 @@ public class JoinBoardsCtrl {
             throw new IllegalArgumentException("Board ID must be a number");
         }
 
-        Board board;
         try {
-            board = server.getBoard(boardId);
+            server.getBoard(boardId);
         } catch (Exception e) {
             throw new IllegalArgumentException("Board with ID " + boardId + " does not exist");
         }
 
-        if (board.getPassword() != null) {
-            requestPassword(board);
-            return;
-        }
+        if (clientPrefs.getJoinedBoards().contains(boardId))
+            throw new IllegalArgumentException("You have already joined to this board");
 
-        mainCtrl.showMainView(board);
+        clientPrefs.addJoinedBoard(boardId);
+        populateBoards();
+        this.boardId.setText("");
     }
 }

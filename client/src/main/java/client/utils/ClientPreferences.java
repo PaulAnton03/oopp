@@ -65,6 +65,17 @@ public class ClientPreferences {
         return password == null ? Optional.empty() : Optional.of(password);
     }
 
+    public void clearPreferences() {
+        try {
+            commonPrefs.clear();
+            savedPasswords.clear();
+            savedBoards.clear();
+            unsetDefaultBoardId();
+        } catch (BackingStoreException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
     public List<Long> getJoinedBoards() {
         try {
             return List.of(savedBoards.keys()).stream().map(c -> Long.parseLong(c)).collect(Collectors.toList());
