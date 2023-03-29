@@ -2,6 +2,7 @@ package client.components;
 
 import java.net.URL;
 import java.util.List;
+import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.stream.IntStream;
 
@@ -62,12 +63,7 @@ public class CardListCtrl implements Component<CardList>, DBEntityCtrl<CardList,
         title.setText(cardList.getTitle());
 
         //Todo - Find out why null cards are being added to lists upon certain operations. This is just a temporary fix, which is not elegant.
-        for(int i = 0;i < cardList.getCards().size();i++) {
-            if(cardList.getCards().get(i) == null) {
-                cardList.getCards().remove(i);
-                i--;
-            }
-        }
+        cardList.getCards().removeIf(Objects::isNull);
 
         for (Card card : cardList.getCards()) {
             CardCtrl cardCtrl = factory.create(CardCtrl.class, card);
