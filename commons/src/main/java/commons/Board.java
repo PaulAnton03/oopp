@@ -31,7 +31,7 @@ public class Board implements DBEntity {
     private String password;
 
     @JsonIgnore
-    private boolean editable;
+    private boolean editable = true;
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @OrderColumn(name = "card_list_index")

@@ -90,10 +90,6 @@ public class ServerUtils {
         });
     }
 
-    public void send(String dest, Object o) {
-        session.send(dest, o);
-    }
-
     private WebTarget webTargetFromPath(String path) {
         return ClientBuilder.newClient(new ClientConfig())
                 .target("http://" + serverPath).path(path);
