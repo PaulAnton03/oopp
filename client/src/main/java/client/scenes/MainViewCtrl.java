@@ -111,7 +111,7 @@ public class MainViewCtrl {
         long boardId = client.getBoardCtrl().getBoard().getId();
 
         /**
-         * This method handles the addition of a card to the board.
+         * This method handles the deletion and addition of a card to the board.
          */
         server.registerForMessages("/topic/board/" + boardId + "/cards", Card.class, c -> {
             Platform.runLater(new Runnable() {
@@ -124,7 +124,7 @@ public class MainViewCtrl {
         });
 
         /**
-         * This method handles the addition of a list to the board.
+         * This method handles the deletion and addition of a list to the board.
          */
         server.registerForMessages("/topic/board/" + boardId + "/lists", CardList.class, l -> {
             Platform.runLater(new Runnable() {
