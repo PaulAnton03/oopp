@@ -80,7 +80,7 @@ public class CardListCtrl implements Component<CardList>, DBEntityCtrl<CardList,
 
     public void removeChildren() {
         for (Card card : this.cardList.getCards()) {
-            client.getCardCtrls().get(card.getId()).remove();
+            client.getCardCtrl(card.getId()).remove();
         }
     }
 

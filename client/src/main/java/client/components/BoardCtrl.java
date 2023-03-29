@@ -67,7 +67,7 @@ public class BoardCtrl implements Component<Board>, DBEntityCtrl<Board, CardList
 
     public void removeChildren() {
         for (CardList cardList : board.getCardLists()) {
-            client.getCardListCtrls().get(cardList.getId()).remove();
+            client.getCardListCtrl(cardList.getId()).remove();
         }
     }
 
