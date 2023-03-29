@@ -72,6 +72,9 @@ public class MainCtrl {
     private AdminPasswordCtrl adminPasswordCtrl;
     private Scene adminPassword;
 
+    @Getter
+    private SceneCtrl activeCtrl;
+
     @Inject
     public MainCtrl(ServerUtils server, ClientUtils client, ComponentFactory factory) {
         this.server = server;
@@ -141,6 +144,7 @@ public class MainCtrl {
         editCardCtrl.loadData(cardId);
         primaryStage.setTitle("Edit Card");
         primaryStage.setScene(editCard);
+        activeCtrl = editCardCtrl;
     }
 
     public void showAdminPasswordProtected() {
@@ -157,12 +161,14 @@ public class MainCtrl {
         primaryStage.setTitle("Board Settings");
         primaryStage.setScene(settings);
         boardSettingsCtrl.load();
+        activeCtrl = boardSettingsCtrl;
     }
 
     public void showAddCard(long cardListId) {
         addCardCtrl.loadData(cardListId);
         primaryStage.setTitle("Add card");
         primaryStage.setScene(add);
+        activeCtrl = addCardCtrl;
     }
 
     public void showMainView(Board board) {
@@ -170,6 +176,7 @@ public class MainCtrl {
         primaryStage.setTitle("Main view");
         primaryStage.setScene(main);
         Logger.log("Showing main view for board " + board);
+        activeCtrl = mainViewCtrl;
     }
 
     public void showMainView() {
@@ -180,11 +187,13 @@ public class MainCtrl {
         }
         primaryStage.setTitle("Main view");
         primaryStage.setScene(main);
+        activeCtrl = mainViewCtrl;
     }
 
     public void showCreate() {
         primaryStage.setTitle("Create board");
         primaryStage.setScene(create);
+        activeCtrl = createBoardCtrl;
     }
 
     public void showJoin() {
@@ -196,12 +205,14 @@ public class MainCtrl {
     public void showAddList() {
         primaryStage.setTitle("Add list");
         primaryStage.setScene(addList);
+        activeCtrl = addListCtrl;
     }
 
     public void showListSettings(long cardListId) {
         primaryStage.setTitle("Edit list");
         editListCtrl.loadData(cardListId);
         primaryStage.setScene(editList);
+        activeCtrl = editListCtrl;
     }
 
     public void showPasswordProtected(Board pswProtectedBoard) {

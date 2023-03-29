@@ -3,6 +3,7 @@ package client.scenes;
 import javax.inject.Inject;
 
 import client.utils.ClientUtils;
+import client.utils.ExceptionHandler;
 import client.utils.ServerUtils;
 import commons.Card;
 import javafx.fxml.FXML;
@@ -12,10 +13,12 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
 
-public class EditCardCtrl {
+public class EditCardCtrl implements SceneCtrl {
     private final ServerUtils server;
     private final ClientUtils client;
     private final MainCtrl mainCtrl;
+
+    private final ExceptionHandler exceptionHandler;
     private long cardId;
 
     @FXML
@@ -24,10 +27,11 @@ public class EditCardCtrl {
     private TextArea changeDesc;
 
     @Inject
-    public EditCardCtrl(ServerUtils server, ClientUtils client, MainCtrl mainCtrl) {
+    public EditCardCtrl(ServerUtils server, ClientUtils client, MainCtrl mainCtrl, ExceptionHandler exceptionHandler) {
         this.server = server;
         this.client = client;
         this.mainCtrl = mainCtrl;
+        this.exceptionHandler = exceptionHandler;
     }
 
     public void saveCardChanges() {
@@ -62,5 +66,14 @@ public class EditCardCtrl {
     public void resetState() {
         this.changeTitle.setText("");
         this.changeDesc.setText("");
+    }
+
+    @Override
+    public void revalidate() {
+        if (client.getCardCtrls().containsKey(cardId)) {
+            return;
+        }
+        mainCtrl.showMainView();
+        exceptionHandler.clientException("Sorry, but the card you were editing or the list it was part of has been permanently deleted.");
     }
 }

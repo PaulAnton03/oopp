@@ -1,12 +1,9 @@
 package client.scenes;
 
+import client.utils.*;
 import com.google.inject.Inject;
 
 import client.components.BoardCtrl;
-import client.utils.ClientUtils;
-import client.utils.ComponentFactory;
-import client.utils.MainViewKeyEventHandler;
-import client.utils.ServerUtils;
 import commons.Board;
 import commons.Card;
 import commons.CardList;
@@ -21,12 +18,14 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.text.Text;
 
 
-public class MainViewCtrl {
+public class MainViewCtrl implements SceneCtrl {
 
     private final ServerUtils server;
     private final ClientUtils client;
     private final MainCtrl mainCtrl;
     private final ComponentFactory factory;
+
+    private final ExceptionHandler exceptionHandler;
 
     @FXML
     private ScrollPane boardContainer;
@@ -39,11 +38,12 @@ public class MainViewCtrl {
     private Label adminLabel;
 
     @Inject
-    public MainViewCtrl(ServerUtils server, ClientUtils client, MainCtrl mainCtrl, ComponentFactory factory) {
+    public MainViewCtrl(ServerUtils server, ClientUtils client, MainCtrl mainCtrl, ComponentFactory factory, ExceptionHandler exceptionHandler) {
         this.server = server;
         this.client = client;
         this.mainCtrl = mainCtrl;
         this.factory = factory;
+        this.exceptionHandler = exceptionHandler;
     }
 
     @FXML
@@ -111,29 +111,56 @@ public class MainViewCtrl {
         long boardId = client.getBoardCtrl().getBoard().getId();
 
         /**
-         * This method handles the deletion and addition of a card to the board.
+         * This method call handles the deletion,addition and updating of a card on the current board by
+         * using the registerForMessages method of the server, which refreshes the CardListCtrl of the card
+         * in question.
          */
         server.registerForMessages("/topic/board/" + boardId + "/cards", Card.class, c -> {
             Platform.runLater(new Runnable() {
                 @Override
                 public void run() {
                     client.getCardListCtrl(c.getCardList().getId()).refresh();
+                    mainCtrl.getActiveCtrl().revalidate();
                 }
             });
 
         });
 
         /**
-         * This method handles the deletion and addition of a list to the board.
+         * This method call handles the deletion,addition and updating of a list on the current board by
+         * using the registerForMessages method of the server, which refreshes the BoardCtrl of the list
+         * in question.
          */
         server.registerForMessages("/topic/board/" + boardId + "/lists", CardList.class, l -> {
             Platform.runLater(new Runnable() {
                 @Override
                 public void run() {
                     client.getBoardCtrl().refresh();
+                    mainCtrl.getActiveCtrl().revalidate();
                 }
             });
         });
+
+        /**
+         * This method call is used for informing the client that the board they are currently on
+         * has been deleted
+         */
+        server.registerForMessages("/topic/board/" + boardId + "/delete", Board.class, b -> {
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    client.setBoardCtrl(null);
+                    mainCtrl.showJoin();
+                    exceptionHandler.clientException("Sorry, but the board you are currently viewing has been permanently deleted.");
+                }
+            });
+        });
+
+
+    }
+
+    @Override
+    public void revalidate() {
 
     }
 }
