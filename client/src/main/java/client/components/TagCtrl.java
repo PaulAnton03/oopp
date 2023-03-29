@@ -54,7 +54,9 @@ public class TagCtrl implements Component<Tag>, DBEntityCtrl<Tag, Tag> {
         label.setText(tag.getText());
         color = Color.rgb(tag.getRed(), tag.getBlue(),
                 tag.getGreen());
-        anchorPane.setStyle("-fx-background-color: #" + color);
+        String string = "-fx-background-color: #" + color;
+        string = string.replaceAll("0x", "");
+        anchorPane.setStyle(string);
     }
 
     @Override

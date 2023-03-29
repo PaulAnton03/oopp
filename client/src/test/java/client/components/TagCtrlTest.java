@@ -9,7 +9,11 @@ class TagCtrlTest {
 
     @Test
     void loadData() {
-        System.out.println(Color.BISQUE);
+        Color color;
+        color = Color.rgb(100, 100,100);
+        String string = "-fx-background-color: #" + color;
+        string = string.replaceAll("0x", "");
+        System.out.println(string);
     }
 
     @Test
