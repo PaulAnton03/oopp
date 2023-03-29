@@ -236,5 +236,11 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Card/* TODO
             client.getActiveCardListCtrl().refresh();
             event.consume();
         });
+
+        cardView.setOnMouseClicked(event -> {
+            if (event.getClickCount() == 2) {
+                editCard();
+            }
+        });
     }
 }
