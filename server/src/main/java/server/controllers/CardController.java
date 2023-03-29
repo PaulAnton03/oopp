@@ -4,6 +4,8 @@ import commons.Card;
 import commons.CardList;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import server.database.CardListRepository;
@@ -23,7 +25,7 @@ public class CardController {
         this.cardListRepository = cardListRepository;
     }
 
-    @GetMapping(path = { "", "/" })
+    @GetMapping(path = {"", "/"})
     public ResponseEntity<List<Card>> getAll() {
         return ResponseEntity.ok(cardRepository.findAll());
     }
@@ -47,7 +49,6 @@ public class CardController {
     @PostMapping("/create")
     public ResponseEntity<Card> create(@RequestBody Card card, @RequestParam long cardListId, @RequestParam Optional<Integer> position) {
         if (!card.isNetworkValid()) {
-            System.out.println("Card invalid, sending bad request");
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Card data is not valid");
         }
 
@@ -56,7 +57,7 @@ public class CardController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Card list with id " +  cardListId + " not found");
         }
 
-        if (position.isPresent() && (position.get() < 0 || position.get() >= cardList.get().getCards().size())) {
+        if (position.isPresent() && (position.get() < 0 || position.get() > cardList.get().getCards().size())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Position " +  position + " is invalid");
         }
 
@@ -93,5 +94,11 @@ public class CardController {
         }
         Card updated = cardRepository.save(card);
         return ResponseEntity.ok(updated);
+    }
+
+    @MessageMapping("/cards")
+    @SendTo("/topic/cards")
+    public Card addMessage(Card card) {
+        return card;
     }
 }

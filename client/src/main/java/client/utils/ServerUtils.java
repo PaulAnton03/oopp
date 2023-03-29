@@ -15,16 +15,6 @@
  */
 package client.utils;
 
-import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
-
-import java.lang.reflect.Type;
-import java.util.List;
-import java.util.concurrent.ExecutionException;
-import java.util.function.Consumer;
-
-import commons.Tag;
-import org.glassfish.jersey.client.ClientConfig;
-
 import commons.Board;
 import commons.Card;
 import commons.CardList;
@@ -35,6 +25,7 @@ import jakarta.ws.rs.client.WebTarget;
 import jakarta.ws.rs.core.GenericType;
 import lombok.Getter;
 import lombok.Setter;
+import org.glassfish.jersey.client.ClientConfig;
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
 import org.springframework.messaging.simp.stomp.StompFrameHandler;
 import org.springframework.messaging.simp.stomp.StompHeaders;
@@ -43,11 +34,22 @@ import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 import org.springframework.web.socket.messaging.WebSocketStompClient;
 
+import java.lang.reflect.Type;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.function.Consumer;
+
+import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
+
 public class ServerUtils {
 
     @Setter
     @Getter
     private String serverPath = "localhost:8080";
+
+    @Getter
+    @Setter
+    private boolean admin = false;
 
     private WebSocketStompClient stomp = null;
     private StompSession session = null;
@@ -118,7 +120,6 @@ public class ServerUtils {
     }
 
     public Board getBoard(long id) {
-        System.out.println(id);
         WebTarget webTarget = webTargetFromPath("/boards/{id}").resolveTemplate("id", id);
         return webTargetAddDefault(webTarget).get(new GenericType<>() {
         });
@@ -158,6 +159,13 @@ public class ServerUtils {
         return webTargetAddDefault(webTarget).put(Entity.entity(card, APPLICATION_JSON), Card.class);
     }
 
+    public Card addCardAtPosition(Card card, int position) {
+        WebTarget webTarget = webTargetFromPath("/cards/create")
+                .queryParam("cardListId", card.getCardList().getId())
+                .queryParam("position", position);
+        return webTargetAddDefault(webTarget).post(Entity.entity(card, APPLICATION_JSON), Card.class);
+    }
+
     public Card deleteCard(long id) {
         WebTarget webTarget = webTargetFromPath("/cards/delete/{id}").resolveTemplate("id", id);
         return webTargetAddDefault(webTarget).delete(new GenericType<>() {
@@ -179,8 +187,6 @@ public class ServerUtils {
     public CardList addCardList(CardList cardList) {
         WebTarget webTarget = webTargetFromPath("/lists/create")
                 .queryParam("boardId", cardList.getBoard().getId());
-        System.out.println(webTarget);
-        System.out.println(cardList);
         return webTargetAddDefault(webTarget).post(Entity.entity(cardList, APPLICATION_JSON), CardList.class);
     }
 
@@ -232,4 +238,6 @@ public class ServerUtils {
             session = null;
         }
     }
+
+
 }

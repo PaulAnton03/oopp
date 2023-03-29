@@ -1,16 +1,27 @@
 package commons;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.OrderColumn;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-
-import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Data
 @RequiredArgsConstructor
@@ -18,7 +29,7 @@ import java.util.List;
 @NoArgsConstructor
 @Table(name = "boards")
 @JsonIdentityInfo(scope = Board.class, generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-public class Board {
+public class Board implements DBEntity {
     @Id
     @SequenceGenerator(name="boards_seq", sequenceName="BOARDS_SEQ")
     @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="boards_seq")
@@ -106,4 +117,3 @@ public class Board {
                 && !isNullOrEmpty(this.getName());
     }
 }
-

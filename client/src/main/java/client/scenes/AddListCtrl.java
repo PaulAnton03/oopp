@@ -1,12 +1,12 @@
 package client.scenes;
 
+import javax.inject.Inject;
+
 import client.utils.ClientUtils;
 import client.utils.ServerUtils;
 import commons.CardList;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
-
-import javax.inject.Inject;
 
 public class AddListCtrl {
 
@@ -25,15 +25,18 @@ public class AddListCtrl {
 
     public CardList getList() {
         CardList cardList = new CardList(title.getText());
-        cardList.setBoard(client.getActiveBoard());
-        if(cardList.getBoard() == null) {
+        cardList.setBoard(client.getBoardCtrl().getBoard());
+        if (cardList.getBoard() == null) {
             throw new IllegalStateException("No board selected");
         }
         return cardList;
     }
+
     @FXML
     void addList() {
-        server.addCardList(getList());
+        CardList cardList = getList();
+        server.addCardList(cardList);
+        client.getBoardCtrl().refresh(); // TODO: WEBSOCKET
         goBack();
     }
 

@@ -17,11 +17,10 @@ package client.scenes;
 
 import javax.inject.Inject;
 
-import client.components.CardCtrl;
 import client.utils.ClientUtils;
 import client.utils.ComponentFactory;
-import client.utils.ServerUtils;
 import client.utils.Logger;
+import client.utils.ServerUtils;
 import commons.Board;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -69,6 +68,10 @@ public class MainCtrl {
     private PasswordProtectedCtrl passwordProtectedCtrl;
     private Scene passwordProtected;
 
+    @Getter
+    private AdminPasswordCtrl adminPasswordCtrl;
+    private Scene adminPassword;
+
     @Inject
     public MainCtrl(ServerUtils server, ClientUtils client, ComponentFactory factory) {
         this.server = server;
@@ -90,6 +93,7 @@ public class MainCtrl {
         private Pair<ListSettingsCtrl, Parent> editList;
         private Pair<EditCardCtrl, Parent> editCard;
         private Pair<PasswordProtectedCtrl, Parent> pswProtected;
+        private Pair<AdminPasswordCtrl, Parent> adminPsw;
     }
 
     public void initialize(Stage primaryStage, ScenesBuilder builder) {
@@ -125,30 +129,38 @@ public class MainCtrl {
         this.passwordProtectedCtrl = builder.getPswProtected().getKey();
         this.passwordProtected = new Scene(builder.getPswProtected().getValue());
 
+        this.adminPasswordCtrl = builder.getAdminPsw().getKey();
+        this.adminPassword = new Scene(builder.getAdminPsw().getValue());
+
         primaryStage.setResizable(true);
         showConnect();
         primaryStage.show();
     }
 
-
-    public void showEditCard(CardCtrl cardCtrl){
-        client.setActiveCardCtrl(cardCtrl);
+    public void showEditCard(long cardId) {
+        editCardCtrl.loadData(cardId);
         primaryStage.setTitle("Edit Card");
         primaryStage.setScene(editCard);
     }
 
+    public void showAdminPasswordProtected() {
+        primaryStage.setTitle("Admin password");
+        primaryStage.setScene(adminPassword);
+    }
+
     public void showConnect() {
         primaryStage.setTitle("Connect: Talio server");
-        primaryStage.setResizable(false);
         primaryStage.setScene(connect);
     }
 
     public void showSettings() {
         primaryStage.setTitle("Board Settings");
         primaryStage.setScene(settings);
+        boardSettingsCtrl.load();
     }
 
-    public void showAddCard() {
+    public void showAddCard(long cardListId) {
+        addCardCtrl.loadData(cardListId);
         primaryStage.setTitle("Add card");
         primaryStage.setScene(add);
     }
@@ -161,12 +173,11 @@ public class MainCtrl {
     }
 
     public void showMainView() {
-        if (client.getActiveBoard() == null) {
+        if (client.getBoardCtrl() == null) {
             Logger.log("No active board, cannot show main view");
             this.showJoin();
             return;
         }
-        client.getActiveBoardCtrl().refresh();
         primaryStage.setTitle("Main view");
         primaryStage.setScene(main);
     }
@@ -187,8 +198,9 @@ public class MainCtrl {
         primaryStage.setScene(addList);
     }
 
-    public void showListSettings() {
+    public void showListSettings(long cardListId) {
         primaryStage.setTitle("Edit list");
+        editListCtrl.loadData(cardListId);
         primaryStage.setScene(editList);
     }
 

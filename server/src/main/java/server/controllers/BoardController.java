@@ -1,12 +1,11 @@
 package server.controllers;
-
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
+import commons.Board;
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import commons.Board;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 import server.database.BoardRepository;
@@ -85,5 +84,11 @@ public class BoardController {
         }
         Board updated = boardRepository.save(board);
         return ResponseEntity.ok(updated);
+    }
+
+    @MessageMapping("/boards")
+    @SendTo("/topic/boards")
+    public Board addMessage(Board board) {
+        return board;
     }
 }
