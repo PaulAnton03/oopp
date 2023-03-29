@@ -92,6 +92,7 @@ public class CardListCtrl implements Component<CardList>, DBEntityCtrl<CardList,
         if (idx == -1)
             throw new IllegalStateException("Attempting to replace card in card list that does not already exist.");
         cardList.getCards().set(idx, card);
+        card.setCardList(cardList);
     }
 
     @Override

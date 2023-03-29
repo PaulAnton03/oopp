@@ -79,6 +79,7 @@ public class BoardCtrl implements Component<Board>, DBEntityCtrl<Board, CardList
         if (idx == -1)
             throw new IllegalStateException("Attempting to replace list in board that does not exist.");
         board.getCardLists().set(idx, cardList);
+        cardList.setBoard(board);
     }
 
     private void switchSelectedCardList(int diff) {
