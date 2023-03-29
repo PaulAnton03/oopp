@@ -1,6 +1,7 @@
 package client.scenes;
 
 import client.components.BoardJoinCtrl;
+import client.utils.ClientPreferences;
 import client.utils.ComponentFactory;
 import client.utils.ServerUtils;
 import commons.Board;
@@ -15,6 +16,7 @@ public class JoinBoardsCtrl {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
     private final ComponentFactory factory;
+    private final ClientPreferences clientPrefs;
 
     @FXML
     private VBox boardPopulation;
@@ -22,17 +24,22 @@ public class JoinBoardsCtrl {
     public void populateBoards() {
         boardPopulation.getChildren().clear();
 
+        /* Commenting original code in case changes go horribly wrong
         var boardJoinNodes = server.getBoards().stream()
                 .map(board -> factory.create(BoardJoinCtrl.class, board).getNode())
-                .collect(Collectors.toList());
+                .collect(Collectors.toList());*/
+        var boardJoinNodes = clientPrefs.getJoinedBoards().stream()
+                        .map(boardId -> factory.create(BoardJoinCtrl.class, server.getBoard(boardId)).getNode())
+                        .collect(Collectors.toList());
         boardPopulation.getChildren().addAll(boardJoinNodes);
     }
 
     @Inject
-    public JoinBoardsCtrl(ServerUtils server, MainCtrl mainCtrl, ComponentFactory factory) {
+    public JoinBoardsCtrl(ServerUtils server, MainCtrl mainCtrl, ComponentFactory factory, ClientPreferences clientPrefs) {
         this.server = server;
         this.mainCtrl = mainCtrl;
         this.factory = factory;
+        this.clientPrefs = clientPrefs;
     }
 
     public void btnBackClicked() { mainCtrl.showMainView(); }
