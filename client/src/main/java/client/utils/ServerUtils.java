@@ -52,11 +52,13 @@ public class ServerUtils {
     private boolean admin = false;
 
     private WebSocketStompClient stomp = null;
+
+    @Getter
     private StompSession session = null;
 
     public void connect() {
         var client = new StandardWebSocketClient();
-        if(session != null) {
+        if (session != null) {
             stomp.stop();
             stomp = null;
             session = null;
@@ -127,7 +129,8 @@ public class ServerUtils {
 
     public Board getBoard(String name) {
         WebTarget webTarget = webTargetFromPath("/boards/name/{name}").resolveTemplate("name", name);
-        return webTargetAddDefault(webTarget).get(new GenericType<>() {});
+        return webTargetAddDefault(webTarget).get(new GenericType<>() {
+        });
     }
 
     public Board deleteBoard(long id) {
@@ -213,7 +216,7 @@ public class ServerUtils {
     }
 
     public void stop() {
-        if(session != null) {
+        if (session != null) {
             stomp.stop();
             stomp = null;
             session = null;

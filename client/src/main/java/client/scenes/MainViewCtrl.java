@@ -10,6 +10,7 @@ import client.utils.ServerUtils;
 import commons.Board;
 import commons.Card;
 import commons.CardList;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -90,22 +91,49 @@ public class MainViewCtrl {
 
     public void loadData(Board board) {
         boolean admin = server.isAdmin();
-        if(!admin) {
+        if (!admin) {
             adminLabel.setVisible(false);
         }
 
         BoardCtrl boardCtrl = factory.create(BoardCtrl.class, board);
         boardContainer.setContent(boardCtrl.getNode());
         displayBoardName.setText(board.getName());
-        server.registerForMessages("/topic/lists", CardList.class, l -> {
-            if (client.getBoardCtrl().getBoard().getId() == l.getBoard().getId()) {
-                System.out.println("INCOMING LIST: " + l);
-            }
+        registerForMessages();
+    }
+
+    /**
+     * This method is used after loading the data in order to subscribe the client to different endpoints
+     * and handle events related to deleting, creating, and updating cards and lists on the current board the
+     * user is viewing.
+     */
+    public void registerForMessages() {
+
+        long boardId = client.getBoardCtrl().getBoard().getId();
+
+        /**
+         * This method handles the deletion and addition of a card to the board.
+         */
+        server.registerForMessages("/topic/board/" + boardId + "/cards", Card.class, c -> {
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    client.getCardListCtrl(c.getCardList().getId()).refresh();
+                }
+            });
+
         });
-        server.registerForMessages("/topic/cards", Card.class, c -> {
-            if (c.getCardList().getBoard().getId() == client.getBoardCtrl().getBoard().getId()) {
-                System.out.println("INCOMING CARD: " + c);
-            }
+
+        /**
+         * This method handles the deletion and addition of a list to the board.
+         */
+        server.registerForMessages("/topic/board/" + boardId + "/lists", CardList.class, l -> {
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    client.getBoardCtrl().refresh();
+                }
+            });
         });
+
     }
 }

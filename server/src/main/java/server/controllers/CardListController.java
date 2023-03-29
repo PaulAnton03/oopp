@@ -1,11 +1,11 @@
 package server.controllers;
+
 import commons.Board;
 import commons.CardList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import server.database.BoardRepository;
@@ -19,14 +19,18 @@ import java.util.Optional;
 @RequestMapping("/lists")
 public class CardListController {
     private final CardRepository cardRepository;
+
+    private final SimpMessagingTemplate messagingTemplate;
     private final CardListRepository cardListRepository;
     private final BoardRepository boardRepository;
 
     @Autowired
-    public CardListController(CardListRepository cardListRepository, BoardRepository boardRepository, CardRepository cardRepository) {
+    public CardListController(CardListRepository cardListRepository, BoardRepository boardRepository,
+                              CardRepository cardRepository, SimpMessagingTemplate messagingTemplate) {
         this.cardListRepository = cardListRepository;
         this.boardRepository = boardRepository;
         this.cardRepository = cardRepository;
+        this.messagingTemplate = messagingTemplate;
     }
 
     @GetMapping(path = {"", "/"})
@@ -58,6 +62,8 @@ public class CardListController {
         cardList.setBoard(board.get());
         board.get().getCardLists().add(cardList);
         cardListRepository.save(cardList);
+        if (messagingTemplate != null)
+            messagingTemplate.convertAndSend("/topic/board/" + cardList.getBoard().getId() + "/lists", cardList);
         return ResponseEntity.ok(cardList);
     }
 
@@ -72,26 +78,22 @@ public class CardListController {
             cardList.getBoard().removeCardList(cardList.getId());
         }
         cardListRepository.deleteById(cardList.getId());
+        messagingTemplate.convertAndSend("/topic/board/" + cardList.getBoard().getId() + "/lists", cardList);
         return ResponseEntity.ok(cardList);
     }
 
     @PutMapping("/update/{id}")
     public ResponseEntity<CardList> update(@RequestBody CardList cardList) {
-        if(!cardList.isNetworkValid()) {
+        if (!cardList.isNetworkValid()) {
             return ResponseEntity.badRequest().build();
         }
         final Optional<CardList> optionalCardList = cardListRepository.findById(cardList.getId());
-        if(optionalCardList.isEmpty()) {
+        if (optionalCardList.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
         CardList updated = cardListRepository.save(cardList);
         return ResponseEntity.ok(updated);
     }
 
-    @MessageMapping("/lists")
-    @SendTo("/topic/lists")
-    public CardList addMessage(CardList list) {
-        return list;
-    }
 
 }

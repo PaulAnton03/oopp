@@ -36,13 +36,12 @@ public class ListSettingsCtrl {
         CardList cardList = client.getCardList(cardListId);
         cardList.setTitle(listTitle.getText());
         server.updateCardList(cardList);
-        client.getBoardCtrl().refresh(); // TODO: WEBSOCKET
+        client.getBoardCtrl().refresh();
         mainCtrl.showMainView();
     }
 
     public void deleteList() {
         server.deleteCardList(cardListId);
-        client.getBoardCtrl().refresh(); // TODO: WEBSOCKET
         resetForm();
         mainCtrl.showMainView();
     }

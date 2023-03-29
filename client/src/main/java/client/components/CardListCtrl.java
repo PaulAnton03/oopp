@@ -68,6 +68,7 @@ public class CardListCtrl implements Component<CardList>, DBEntityCtrl<CardList,
     }
 
     public void refresh() {
+        System.out.println(server.getCardList(cardList.getId()));
         cardListView.getChildren().clear();
         loadData(server.getCardList(cardList.getId()));
         client.getBoardCtrl().replaceChild(cardList);
