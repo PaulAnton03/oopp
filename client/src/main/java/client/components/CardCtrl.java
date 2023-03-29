@@ -1,11 +1,22 @@
 package client.components;
 
+import java.io.IOException;
+import java.net.URL;
+import java.util.List;
+import java.util.ResourceBundle;
+
+import javax.inject.Inject;
+
 import client.scenes.MainCtrl;
 import client.utils.ClientUtils;
 import client.utils.Logger;
 import client.utils.ServerUtils;
 import commons.Card;
-import javafx.animation.*;
+import javafx.animation.Animation;
+import javafx.animation.FadeTransition;
+import javafx.animation.ParallelTransition;
+import javafx.animation.ScaleTransition;
+import javafx.animation.Transition;
 import javafx.css.PseudoClass;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -27,14 +38,8 @@ import javafx.util.Duration;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
-import javax.inject.Inject;
-import java.io.IOException;
-import java.net.URL;
-import java.util.List;
-import java.util.ResourceBundle;
-
 @EqualsAndHashCode
-public class CardCtrl implements Component<Card>, Initializable {
+public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Card/* TODO: change to TAG */>, Initializable {
     private final MainCtrl mainCtrl;
     private final ServerUtils server;
     private final ClientUtils client;
@@ -54,11 +59,10 @@ public class CardCtrl implements Component<Card>, Initializable {
     private Button deleteButton;
 
     @Inject
-    public CardCtrl(MainCtrl mainCtrl, ServerUtils server, ClientUtils client) {
+    public CardCtrl(MainCtrl mainCtrl, ServerUtils serverUtils, ClientUtils client) {
         this.mainCtrl = mainCtrl;
-        this.server = server;
+        this.server = serverUtils;
         this.client = client;
-
         FXMLLoader loader = new FXMLLoader(getClass().getResource("Card.fxml"));
         loader.setController(this);
         loader.setRoot(this);
@@ -72,13 +76,32 @@ public class CardCtrl implements Component<Card>, Initializable {
         this.card = card;
         title.setText(card.getTitle());
         description.setText(card.getDescription());
+        if (client.getSelectedCardId() == card.getId()) {
+            highlight();
+        } else {
+            unhighlight();
+        }
     }
 
-    public void editCard() { mainCtrl.showEditCard(this); }
+    public void refresh() {
+        loadData(server.getCard(card.getId()));
+        client.getCardListCtrl(card.getCardList().getId()).replaceChild(card);
+    }
+
+    public void remove() {
+        client.getCardCtrls().remove(card.getId());
+        removeChildren();
+    }
+
+    public void removeChildren() {}
+
+    public void replaceChild(Card card /* TODO: Change to Tag tag */) {}
+
+    public void editCard() { mainCtrl.showEditCard(this.getCard().getId()); }
 
     public void delete() {
-        this.card = server.deleteCard(card.getId());
-        ((VBox) cardView.getParent()).getChildren().remove(cardView);
+        server.deleteCard(card.getId());
+        client.getCardListCtrl(card.getCardList().getId()).refresh(); // TODO: WEBSOCKET
     }
 
     // CSS class that defines style for the highlighted card

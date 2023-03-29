@@ -1,12 +1,12 @@
 package client.scenes;
 
+import javax.inject.Inject;
+
 import client.utils.ClientUtils;
 import client.utils.ServerUtils;
 import commons.CardList;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
-
-import javax.inject.Inject;
 
 public class AddListCtrl {
 
@@ -25,7 +25,7 @@ public class AddListCtrl {
 
     public CardList getList() {
         CardList cardList = new CardList(title.getText());
-        cardList.setBoard(client.getActiveBoard());
+        cardList.setBoard(client.getBoardCtrl().getBoard());
         if (cardList.getBoard() == null) {
             throw new IllegalStateException("No board selected");
         }
@@ -36,7 +36,7 @@ public class AddListCtrl {
     void addList() {
         CardList cardList = getList();
         server.addCardList(cardList);
-        server.send("/app/lists", cardList);
+        client.getBoardCtrl().refresh(); // TODO: WEBSOCKET
         goBack();
     }
 

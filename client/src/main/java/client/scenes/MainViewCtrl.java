@@ -1,11 +1,12 @@
 package client.scenes;
 
+import com.google.inject.Inject;
+
 import client.components.BoardCtrl;
 import client.utils.ClientUtils;
 import client.utils.ComponentFactory;
 import client.utils.MainViewKeyEventHandler;
 import client.utils.ServerUtils;
-import com.google.inject.Inject;
 import commons.Board;
 import commons.Card;
 import commons.CardList;
@@ -17,8 +18,6 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.text.Text;
-import lombok.Getter;
-import lombok.Setter;
 
 
 public class MainViewCtrl {
@@ -27,10 +26,6 @@ public class MainViewCtrl {
     private final ClientUtils client;
     private final MainCtrl mainCtrl;
     private final ComponentFactory factory;
-
-    @Getter
-    @Setter
-    private BoardCtrl boardCtrl;
 
     @FXML
     private ScrollPane boardContainer;
@@ -52,11 +47,7 @@ public class MainViewCtrl {
 
     @FXML
     void btnAddClicked(ActionEvent event) {
-        if (client.getActiveBoardCtrl() != null)
-            mainCtrl.showAddList();
-        else {
-            throw new IllegalStateException("You cannot add lists to the empty board. Please select a board to operate on");
-        }
+        mainCtrl.showAddList();
     }
 
     @FXML
@@ -94,7 +85,7 @@ public class MainViewCtrl {
 
     @FXML
     public void initialize() {
-        root.addEventFilter(KeyEvent.KEY_PRESSED, new MainViewKeyEventHandler(this));
+        root.addEventFilter(KeyEvent.KEY_PRESSED, new MainViewKeyEventHandler(client));
     }
 
     public void loadData(Board board) {
@@ -103,17 +94,16 @@ public class MainViewCtrl {
             adminLabel.setVisible(false);
         }
 
-        this.boardCtrl = factory.create(BoardCtrl.class, board);
-        client.setActiveBoardCtrl(boardCtrl);
+        BoardCtrl boardCtrl = factory.create(BoardCtrl.class, board);
         boardContainer.setContent(boardCtrl.getNode());
         displayBoardName.setText(board.getName());
         server.registerForMessages("/topic/lists", CardList.class, l -> {
-            if (client.getActiveBoard().getId() == l.getBoard().getId()) {
+            if (client.getBoardCtrl().getBoard().getId() == l.getBoard().getId()) {
                 System.out.println("INCOMING LIST: " + l);
             }
         });
         server.registerForMessages("/topic/cards", Card.class, c -> {
-            if (c.getCardList().getBoard().getId() == client.getActiveBoard().getId()) {
+            if (c.getCardList().getBoard().getId() == client.getBoardCtrl().getBoard().getId()) {
                 System.out.println("INCOMING CARD: " + c);
             }
         });

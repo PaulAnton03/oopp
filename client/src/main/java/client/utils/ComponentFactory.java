@@ -1,14 +1,28 @@
 package client.utils;
 
-import client.components.*;
+import static client.Main.FXML;
 
 import java.util.Map;
 
-import static client.Main.FXML;
+import com.google.inject.Inject;
+
+import client.components.BoardCtrl;
+import client.components.BoardJoinCtrl;
+import client.components.CardCtrl;
+import client.components.CardListCtrl;
+import client.components.Component;
+import commons.DBEntity;
 
 public class ComponentFactory {
-    private final Map<Class<? extends Component<?>>, String> fxmlFileName = Map.of(
-            BoardCtrl.class, "Board.fxml",
+    private ClientUtils client;
+
+    @Inject
+    public ComponentFactory(ClientUtils client) {
+        this.client = client;
+    }
+
+    private Map<Class<? extends Component<?>>, String> fxmlFileName = Map.of(
+        BoardCtrl.class, "Board.fxml",
             CardListCtrl.class, "CardList.fxml",
             CardCtrl.class, "Card.fxml",
             BoardJoinCtrl.class, "BoardJoin.fxml"
@@ -29,9 +43,16 @@ public class ComponentFactory {
      * @param <D> data type
      * @return controller for the new component
      */
-    public <T extends Component<D>, D> T create(Class<T> ctrlClass, D data) {
+    public <T extends Component<D>, D extends DBEntity> T create(Class<T> ctrlClass, D data) {
         var pair = FXML.load(ctrlClass, "client", "components", fxmlFileName.get(ctrlClass));
         T ctrl = pair.getKey();
+
+        if (ctrlClass == CardCtrl.class) {
+            client.getCardCtrls().put(data.getId(), (CardCtrl) ctrl);
+        } else if (ctrlClass == CardListCtrl.class) {
+            client.getCardListCtrls().put(data.getId(), (CardListCtrl) ctrl);
+        }
+
         ctrl.loadData(data);
         return ctrl;
     }
