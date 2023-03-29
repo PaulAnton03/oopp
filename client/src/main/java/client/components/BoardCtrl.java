@@ -4,6 +4,7 @@ import java.util.stream.IntStream;
 
 import javax.inject.Inject;
 
+import client.scenes.MainCtrl;
 import client.utils.ClientUtils;
 import client.utils.ComponentFactory;
 import client.utils.ServerUtils;
@@ -19,6 +20,7 @@ public class BoardCtrl implements Component<Board>, DBEntityCtrl<Board, CardList
     private final ClientUtils client;
     private final ComponentFactory factory;
     private final ServerUtils server;
+    private final MainCtrl mainCtrl;
 
     @Getter
     private Board board;
@@ -26,10 +28,11 @@ public class BoardCtrl implements Component<Board>, DBEntityCtrl<Board, CardList
     private HBox boardView;
 
     @Inject
-    public BoardCtrl(ClientUtils client, ComponentFactory factory, ServerUtils server) {
+    public BoardCtrl(ClientUtils client, ComponentFactory factory, ServerUtils server, MainCtrl mainCtrl) {
         this.client = client;
         this.factory = factory;
         this.server = server;
+        this.mainCtrl = mainCtrl;
     }
 
     public Parent getNode() {
@@ -130,6 +133,9 @@ public class BoardCtrl implements Component<Board>, DBEntityCtrl<Board, CardList
                 break;
             case DOWN:
                 switchSelectedCard(1);
+                break;
+            case ENTER:
+                mainCtrl.showEditCard(client.getSelectedCardId());
                 break;
             default:
                 break;
