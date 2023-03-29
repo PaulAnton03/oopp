@@ -69,6 +69,7 @@ public class CardListCtrl implements Component<CardList>, DBEntityCtrl<CardList,
     }
 
     public void refresh() {
+        System.out.println(server.getCardList(cardList.getId()));
         cardListView.getChildren().clear();
         loadData(server.getCardList(cardList.getId()));
         client.getBoardCtrl().replaceChild(cardList);
@@ -148,33 +149,33 @@ public class CardListCtrl implements Component<CardList>, DBEntityCtrl<CardList,
         mainCtrl.showListSettings(cardList.getId());
     }
 
-    /**
-     * This method puts a new CardCtrl for the added card
-     * in the cardCtrls map and adds it to the interface
-     *
-     * @param card the new card that needs to be displayed for the user
-     */
-    public void displayCard(Card card) {
-        CardCtrl cardCtrl = factory.create(CardCtrl.class, card);
-        cardCtrls.put(card.getId(), cardCtrl);
-        Platform.runLater(() -> {
-            cardListView.getChildren().add(cardCtrl.getNode());
-        });
-    }
-
-    /**
-     * This method removes the deleted card's CardCtrl from the cardCtrls map
-     * and removes it from the interface
-     *
-     * @param card the card that needs to be deleted from the user's display
-     */
-    public void removeCard(Card card) {
-        CardCtrl cardCtrl = cardCtrls.get(card.getId());
-        if (cardCtrl != null) {
-            cardCtrls.remove(card.getId());
-            Platform.runLater(() -> {
-                cardListView.getChildren().remove(cardCtrl.getNode());
-            });
-        }
-    }
+//    /**
+//     * This method puts a new CardCtrl for the added card
+//     * in the cardCtrls map and adds it to the interface
+//     *
+//     * @param card the new card that needs to be displayed for the user
+//     */
+//    public void displayCard(Card card) {
+//        CardCtrl cardCtrl = factory.create(CardCtrl.class, card);
+//        cardCtrls.put(card.getId(), cardCtrl);
+//        Platform.runLater(() -> {
+//            cardListView.getChildren().add(cardCtrl.getNode());
+//        });
+//    }
+//
+//    /**
+//     * This method removes the deleted card's CardCtrl from the cardCtrls map
+//     * and removes it from the interface
+//     *
+//     * @param card the card that needs to be deleted from the user's display
+//     */
+//    public void removeCard(Card card) {
+//        CardCtrl cardCtrl = cardCtrls.get(card.getId());
+//        if (cardCtrl != null) {
+//            cardCtrls.remove(card.getId());
+//            Platform.runLater(() -> {
+//                cardListView.getChildren().remove(cardCtrl.getNode());
+//            });
+//        }
+//    }
 }

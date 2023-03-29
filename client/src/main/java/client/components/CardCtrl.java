@@ -101,7 +101,6 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Card/* TODO
 
     public void delete() {
         server.deleteCard(card.getId());
-        client.getCardListCtrl(card.getCardList().getId()).refresh(); // TODO: WEBSOCKET
     }
 
     // CSS class that defines style for the highlighted card

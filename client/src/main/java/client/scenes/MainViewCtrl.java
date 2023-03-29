@@ -90,7 +90,7 @@ public class MainViewCtrl {
 
     public void loadData(Board board) {
         boolean admin = server.isAdmin();
-        if(!admin) {
+        if (!admin) {
             adminLabel.setVisible(false);
         }
 
@@ -107,14 +107,14 @@ public class MainViewCtrl {
      */
     public void registerForMessages() {
 
-        long boardId = client.getActiveBoard().getId();
+        long boardId = client.getBoardCtrl().getBoard().getId();
 
         /**
          * This method handles the addition of a card to the board.
          */
         server.registerForMessages("/topic/board/" + boardId + "/cards/create", Card.class, c -> {
             System.out.println("INCOMING CARD: " + c);
-            boardCtrl.getCardListCtrls().get(c.getCardList().getId()).displayCard(c);
+            client.getCardListCtrl(c.getCardList().getId()).refresh();
 
         });
 
@@ -123,7 +123,7 @@ public class MainViewCtrl {
          */
         server.registerForMessages("/topic/board/" + boardId + "/cards/delete", Card.class, c -> {
             System.out.println("CARD HAS BEEN DELETED: " + c);
-            boardCtrl.getCardListCtrls().get(c.getCardList().getId()).removeCard(c);
+            client.getCardListCtrl(c.getCardList().getId()).refresh();
 
         });
 
@@ -140,7 +140,7 @@ public class MainViewCtrl {
          */
         server.registerForMessages("/topic/board/" + boardId + "/lists/delete", CardList.class, l -> {
             System.out.println("LIST HAS BEEN DELETED " + l);
-            boardCtrl.removeCardList(l);
+            client.getBoardCtrl().refresh();
         });
 
     }

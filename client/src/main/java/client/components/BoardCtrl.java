@@ -137,38 +137,38 @@ public class BoardCtrl implements Component<Board>, DBEntityCtrl<Board, CardList
         }
     }
 
-    /**
-     * This method puts a new CardListCtrl for the added cardList
-     * in the cardListCtrls map and adds it to the interface
-     *
-     * @param cardList the new cardList that needs to be displayed for the user
-     */
-    public void displayList(CardList cardList) {
-        // This does not work currently. It is always false.
-        if (cardListCtrls.containsKey(cardList.getId())) {
-            System.out.println("This cardList is already here");
-            return;
-        }
-        CardListCtrl cardListCtrl = factory.create(CardListCtrl.class, cardList);
-        cardListCtrls.put(cardList.getId(), cardListCtrl);
-        Platform.runLater(() -> {
-            boardView.getChildren().add(cardListCtrl.getNode());
-        });
-    }
-
-    /**
-     * This method removes the deleted cardList's CardListCtrl from the cardListCtrls map
-     * and removes it from the interface
-     *
-     * @param cardList the cardList that needs to be deleted from the user's display
-     */
-    public void removeCardList(CardList cardList) {
-        CardListCtrl cardListCtrl = cardListCtrls.get(cardList.getId());
-        if (cardListCtrl != null) {
-            cardListCtrls.remove(cardList.getId());
-            Platform.runLater(() -> {
-                boardView.getChildren().remove(cardListCtrl.getNode());
-            });
-        }
-    }
+//    /**
+//     * This method puts a new CardListCtrl for the added cardList
+//     * in the cardListCtrls map and adds it to the interface
+//     *
+//     * @param cardList the new cardList that needs to be displayed for the user
+//     */
+//    public void displayList(CardList cardList) {
+//        // This does not work currently. It is always false.
+//        if (cardListCtrls.containsKey(cardList.getId())) {
+//            System.out.println("This cardList is already here");
+//            return;
+//        }
+//        CardListCtrl cardListCtrl = factory.create(CardListCtrl.class, cardList);
+//        cardListCtrls.put(cardList.getId(), cardListCtrl);
+//        Platform.runLater(() -> {
+//            boardView.getChildren().add(cardListCtrl.getNode());
+//        });
+//    }
+//
+//    /**
+//     * This method removes the deleted cardList's CardListCtrl from the cardListCtrls map
+//     * and removes it from the interface
+//     *
+//     * @param cardList the cardList that needs to be deleted from the user's display
+//     */
+//    public void removeCardList(CardList cardList) {
+//        CardListCtrl cardListCtrl = cardListCtrls.get(cardList.getId());
+//        if (cardListCtrl != null) {
+//            cardListCtrls.remove(cardList.getId());
+//            Platform.runLater(() -> {
+//                boardView.getChildren().remove(cardListCtrl.getNode());
+//            });
+//        }
+//    }
 }

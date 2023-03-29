@@ -42,7 +42,6 @@ public class ListSettingsCtrl {
 
     public void deleteList() {
         server.deleteCardList(cardListId);
-        client.getBoardCtrl().refresh(); // TODO: WEBSOCKET
         resetForm();
         mainCtrl.showMainView();
     }
