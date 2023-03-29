@@ -10,6 +10,7 @@ import client.utils.ServerUtils;
 import commons.Board;
 import commons.Card;
 import commons.CardList;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -112,35 +113,26 @@ public class MainViewCtrl {
         /**
          * This method handles the addition of a card to the board.
          */
-        server.registerForMessages("/topic/board/" + boardId + "/cards/create", Card.class, c -> {
-            System.out.println("INCOMING CARD: " + c);
-            client.getCardListCtrl(c.getCardList().getId()).refresh();
-
-        });
-
-        /**
-         * This method handles the deletion of a card from the board.
-         */
-        server.registerForMessages("/topic/board/" + boardId + "/cards/delete", Card.class, c -> {
-            System.out.println("CARD HAS BEEN DELETED: " + c);
-            client.getCardListCtrl(c.getCardList().getId()).refresh();
+        server.registerForMessages("/topic/board/" + boardId + "/cards", Card.class, c -> {
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    client.getCardListCtrl(c.getCardList().getId()).refresh();
+                }
+            });
 
         });
 
         /**
          * This method handles the addition of a list to the board.
          */
-        server.registerForMessages("/topic/board/" + boardId + "/lists/create", CardList.class, l -> {
-            System.out.println("INCOMING LIST: " + l);
-            //TODO : add list for other clients
-        });
-
-        /**
-         * This method handles the deletion of a list from the board.
-         */
-        server.registerForMessages("/topic/board/" + boardId + "/lists/delete", CardList.class, l -> {
-            System.out.println("LIST HAS BEEN DELETED " + l);
-            client.getBoardCtrl().refresh();
+        server.registerForMessages("/topic/board/" + boardId + "/lists", CardList.class, l -> {
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    client.getBoardCtrl().refresh();
+                }
+            });
         });
 
     }

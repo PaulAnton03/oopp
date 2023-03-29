@@ -70,7 +70,7 @@ public class CardController {
                 () -> cardList.get().getCards().add(card));
         cardRepository.save(card);
         if (messagingTemplate != null)
-            messagingTemplate.convertAndSend("/topic/board/" + card.getCardList().getBoard().getId() + "/cards/create", card);
+            messagingTemplate.convertAndSend("/topic/board/" + card.getCardList().getBoard().getId() + "/cards", card);
         return ResponseEntity.ok(card);
     }
 
@@ -85,7 +85,7 @@ public class CardController {
             card.getCardList().removeCard(card.getId());
         }
         cardRepository.deleteById(card.getId());
-        messagingTemplate.convertAndSend("/topic/board/" + card.getCardList().getBoard().getId() + "/cards/delete", card);
+        messagingTemplate.convertAndSend("/topic/board/" + card.getCardList().getBoard().getId() + "/cards", card);
         return ResponseEntity.ok(card);
     }
 

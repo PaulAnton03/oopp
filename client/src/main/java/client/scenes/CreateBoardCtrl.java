@@ -33,7 +33,6 @@ public class CreateBoardCtrl {
     }
 
     public void createBoard() {
-        // TODO: Implement board colors.
 
         final Board newBoard = new Board(boardName.getText());
         if (passwordUsed.isSelected()) {

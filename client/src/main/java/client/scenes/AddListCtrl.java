@@ -36,7 +36,7 @@ public class AddListCtrl {
     void addList() {
         CardList cardList = getList();
         server.addCardList(cardList);
-        client.getBoardCtrl().refresh(); // TODO: WEBSOCKET
+        client.getBoardCtrl().refresh();
         goBack();
     }
 
