@@ -191,8 +191,13 @@ public class MainCtrl {
             return;
         }
 
-        //TODO: In case there's password change handle IT!
-        Logger.log("Connecting to default board");
+        String password = clientPreferences.getPasswordForBoard(boardId).orElse(null);
+        if (board.getPassword() != null && !board.getPassword().equals(password)) {
+            Logger.log("Saved password for board " + boardId + " is not correct, cannot show main view.", Logger.LogLevel.WARN);
+            showJoin();
+            return;
+        }
+        Logger.log("Connecting to the last used board.");
         showMainView(board);
     }
 
