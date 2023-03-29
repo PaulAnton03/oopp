@@ -172,6 +172,7 @@ public class MainCtrl {
         boolean okPassword = board.getPassword() != null && !board.getPassword().isEmpty();
         if (board.isEditable() && okPassword)
             clientPreferences.setPasswordForBoard(board.getId(), board.getPassword());
+        clientPreferences.addJoinedBoard(board.getId());
         Logger.log("Showing main view for board " + board);
     }
 

@@ -5,6 +5,7 @@ import client.utils.ClientPreferences;
 import client.utils.ComponentFactory;
 import client.utils.ServerUtils;
 import commons.Board;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
@@ -37,8 +38,8 @@ public class JoinBoardsCtrl {
                 .map(board -> factory.create(BoardJoinCtrl.class, board).getNode())
                 .collect(Collectors.toList());*/
         var boardJoinNodes = clientPrefs.getJoinedBoards().stream()
-                        .map(boardId -> factory.create(BoardJoinCtrl.class, server.getBoard(boardId)).getNode())
-                        .collect(Collectors.toList());
+                .map(boardId -> factory.create(BoardJoinCtrl.class, server.getBoard(boardId)).getNode())
+                .collect(Collectors.toList());
         boardPopulation.getChildren().addAll(boardJoinNodes);
     }
 
@@ -62,7 +63,27 @@ public class JoinBoardsCtrl {
         mainCtrl.showPasswordProtected(pswProtectedBoard);
     }
 
-    public void onJoin() {
-        
+    public void onJoin(ActionEvent event) {
+        String id = boardId.getText();
+        long boardId;
+        try {
+            boardId = Long.parseLong(id);
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("Board ID must be a number");
+        }
+
+        Board board;
+        try {
+            board = server.getBoard(boardId);
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Board with ID " + boardId + " does not exist");
+        }
+
+        if (board.getPassword() != null) {
+            requestPassword(board);
+            return;
+        }
+
+        mainCtrl.showMainView(board);
     }
 }

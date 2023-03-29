@@ -47,7 +47,7 @@
                      </font>
                   </Label>
                   <TextField fx:id="boardId" layoutX="24.0" layoutY="88.0" promptText="Board Id" />
-                  <Button fx:id="btnJoin" onAction="onJoin" layoutX="66.0" layoutY="127.0" mnemonicParsing="false" prefHeight="15.0" prefWidth="65.0" text="ENTER">
+                  <Button fx:id="btnJoin" onAction="#onJoin" layoutX="66.0" layoutY="127.0" mnemonicParsing="false" prefHeight="15.0" prefWidth="65.0" text="ENTER">
                      <font>
                         <Font size="9.0" />
                      </font>
