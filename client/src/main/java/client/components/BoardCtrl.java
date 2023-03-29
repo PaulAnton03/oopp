@@ -142,6 +142,10 @@ public class BoardCtrl implements Component<Board>, DBEntityCtrl<Board, CardList
             case ENTER:
                 mainCtrl.showEditCard(client.getSelectedCardId());
                 break;
+            case BACK_SPACE:
+            case DELETE:
+                client.getCardCtrl(client.getSelectedCardId()).delete();
+                break;
             default:
                 break;
         }
