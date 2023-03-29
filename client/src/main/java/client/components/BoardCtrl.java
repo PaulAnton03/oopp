@@ -10,6 +10,7 @@ import client.utils.ClientUtils;
 import client.utils.ComponentFactory;
 import client.utils.ServerUtils;
 import commons.Board;
+import commons.Card;
 import commons.CardList;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
@@ -123,6 +124,21 @@ public class BoardCtrl implements Component<Board>, DBEntityCtrl<Board, CardList
         client.changeSelection(cardList.getCards().get(cardIdx).getId());
     }
 
+    public void shiftSelectedCard(int diff) {
+        Card card = client.getCard(client.getSelectedCardId());
+        if (card == null)
+            return;
+        CardList cardList = card.getCardList();
+        int cardIdx = cardList.getCards().indexOf(card);
+        int destCardIdx = cardIdx + diff;
+        if (destCardIdx < 0 || destCardIdx >= cardList.getCards().size())
+            return;
+        cardList.getCards().set(cardIdx, cardList.getCards().get(destCardIdx));
+        cardList.getCards().set(destCardIdx, card);
+        server.updateCardList(cardList);
+        client.getCardListCtrl(cardList.getId()).refresh(); // TODO: WEBSOCKETS
+    }
+
     public void handleKeyEvent(KeyEvent e) {
         if (board.getCardLists() == null || board.getCardLists().size() == 0)
             return;
@@ -134,10 +150,18 @@ public class BoardCtrl implements Component<Board>, DBEntityCtrl<Board, CardList
                 switchSelectedCardList(1);
                 break;
             case UP:
-                switchSelectedCard(-1);
+                if (e.isShiftDown()) {
+                    shiftSelectedCard(-1);
+                } else {
+                    switchSelectedCard(-1);
+                }
                 break;
             case DOWN:
-                switchSelectedCard(1);
+                if (e.isShiftDown()) {
+                    shiftSelectedCard(1);
+                } else {
+                    switchSelectedCard(1);
+                }
                 break;
             case ENTER:
                 mainCtrl.showEditCard(client.getSelectedCardId());
