@@ -23,16 +23,6 @@
                   <Font size="16.0" />
                </font>
             </Button>
-            <Button mnemonicParsing="false" prefHeight="60.0" prefWidth="200.0" text="Create Board">
-               <font>
-                  <Font size="16.0" />
-               </font>
-            </Button>
-            <Button mnemonicParsing="false" prefHeight="50.0" prefWidth="200.0" text="Join Boards">
-               <font>
-                  <Font size="16.0" />
-               </font>
-            </Button>
          </children>
       </HBox>
    </top>

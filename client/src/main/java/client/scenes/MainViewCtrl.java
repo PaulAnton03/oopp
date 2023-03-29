@@ -14,6 +14,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.ScrollEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.text.Text;
 
@@ -37,6 +38,9 @@ public class MainViewCtrl implements SceneCtrl {
     @FXML
     private Label adminLabel;
 
+    @FXML
+    private AnchorPane warning;
+
     @Inject
     public MainViewCtrl(ServerUtils server, ClientUtils client, MainCtrl mainCtrl, ComponentFactory factory, ExceptionHandler exceptionHandler) {
         this.server = server;
@@ -48,6 +52,9 @@ public class MainViewCtrl implements SceneCtrl {
 
     @FXML
     void btnAddClicked(ActionEvent event) {
+        if(!client.getBoardCtrl().getBoard().isEditable()) {
+            throw new IllegalStateException("You do not have permissions to edit this board.");
+        }
         mainCtrl.showAddList();
     }
 
@@ -68,6 +75,9 @@ public class MainViewCtrl implements SceneCtrl {
 
     @FXML
     void btnSettingsClicked(ActionEvent event) {
+        if(!client.getBoardCtrl().getBoard().isEditable()) {
+            throw new IllegalStateException("You do not have permissions to edit this board.");
+        }
         mainCtrl.showSettings();
     }
 
@@ -98,6 +108,7 @@ public class MainViewCtrl implements SceneCtrl {
         BoardCtrl boardCtrl = factory.create(BoardCtrl.class, board);
         boardContainer.setContent(boardCtrl.getNode());
         displayBoardName.setText(board.getName());
+        warning.setVisible(!board.isEditable());
         registerForMessages();
     }
 
@@ -155,10 +166,7 @@ public class MainViewCtrl implements SceneCtrl {
                 }
             });
         });
-
-
     }
-
     @Override
     public void revalidate() {
 

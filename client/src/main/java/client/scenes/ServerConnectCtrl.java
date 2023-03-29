@@ -64,9 +64,9 @@ public class ServerConnectCtrl {
     }
 
     private void connectToServer() {
-        mainCtrl.showMainView();
         // Connect to server
         serverUtils.connect();
+        mainCtrl.showMainView();
         Logger.log("Connecting to server: " + serverUtils.getServerPath());
     }
 

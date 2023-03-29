@@ -56,4 +56,15 @@
    <center>
       <ScrollPane fx:id="boardContainer" fitToHeight="true" fitToWidth="true" hbarPolicy="ALWAYS" onScroll="#scrollHandler" prefHeight="500.0" prefWidth="800.0" vbarPolicy="NEVER" vmax="0.0" BorderPane.alignment="CENTER" />
    </center>
+   <bottom>
+      <AnchorPane fx:id="warning" prefHeight="20.0" prefWidth="200.0" style="-fx-background-color: yellow;" visible="false" BorderPane.alignment="CENTER">
+         <children>
+            <Text layoutX="54.0" layoutY="15.0" strokeType="OUTSIDE" strokeWidth="0.0" text="This board is in read-only mode. Enter the password to gain editing access." AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="0.0">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Text>
+         </children>
+      </AnchorPane>
+   </bottom>
 </BorderPane>

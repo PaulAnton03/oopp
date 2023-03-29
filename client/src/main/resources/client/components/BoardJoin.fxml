@@ -1,6 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
-
-<Button fx:id="button" mnemonicParsing="false" onAction="#onSelect" prefWidth="250.0" text="BOARD NAME" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.components.BoardJoinCtrl" />
+<AnchorPane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="110.0" prefWidth="268.0" styleClass="pane" stylesheets="/client/styles/board-join.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.components.BoardJoinCtrl">
+    <children>
+        <Button layoutX="194.0" layoutY="43.0" mnemonicParsing="false" onAction="#onSelect" styleClass="btn" text="Connect" />
+        <Label fx:id="label" layoutX="26.0" layoutY="21.0" prefHeight="69.0" prefWidth="158.0" text="BOARD NAME" wrapText="true">
+            <font>
+                <Font size="16.0" />
+            </font>
+        </Label>
+        <ImageView fx:id="lockImage" fitHeight="17.0" fitWidth="18.0" layoutX="6.0" layoutY="47.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+                <Image url="/client/images/lock.png" />
+            </image>
+        </ImageView>
+    </children>
+    <padding>
+        <Insets bottom="50.0" />
+    </padding>
+</AnchorPane>
