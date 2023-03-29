@@ -32,11 +32,13 @@ public class JoinBoardsCtrl {
 
     public void populateBoards() {
         boardPopulation.getChildren().clear();
-
-        /* Commenting original code in case changes go horribly wrong
-        var boardJoinNodes = server.getBoards().stream()
-                .map(board -> factory.create(BoardJoinCtrl.class, board).getNode())
-                .collect(Collectors.toList());*/
+        if(server.isAdmin()) {
+            var boardJoinNodes = server.getBoards().stream()
+                    .map(board -> factory.create(BoardJoinCtrl.class, board).getNode())
+                    .collect(Collectors.toList());
+            boardPopulation.getChildren().addAll(boardJoinNodes);
+            return;
+        }
         var boardJoinNodes = clientPrefs.getJoinedBoards().stream()
                 .map(boardId -> factory.create(BoardJoinCtrl.class, server.getBoard(boardId)).getNode())
                 .collect(Collectors.toList());
