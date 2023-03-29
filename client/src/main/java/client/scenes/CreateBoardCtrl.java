@@ -33,7 +33,6 @@ public class CreateBoardCtrl {
     }
 
     public void createBoard() {
-        // TODO: Implement board colors.
 
         final Board newBoard = new Board(boardName.getText());
         if (passwordUsed.isSelected()) {
@@ -49,6 +48,7 @@ public class CreateBoardCtrl {
         addedBoard.addCardList(addedCardList);
 
         clear();
+        server.send("/app/boards", addedBoard);
         mainCtrl.showMainView(addedBoard);
     }
 

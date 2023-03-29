@@ -1,14 +1,16 @@
 package client.scenes;
 
+import com.google.inject.Inject;
+
 import client.components.BoardCtrl;
 import client.utils.ClientUtils;
 import client.utils.ComponentFactory;
 import client.utils.MainViewKeyEventHandler;
 import client.utils.ServerUtils;
-import com.google.inject.Inject;
 import commons.Board;
 import commons.Card;
 import commons.CardList;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -18,8 +20,6 @@ import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.text.Text;
-import lombok.Getter;
-import lombok.Setter;
 
 
 public class MainViewCtrl {
@@ -28,10 +28,6 @@ public class MainViewCtrl {
     private final ClientUtils client;
     private final MainCtrl mainCtrl;
     private final ComponentFactory factory;
-
-    @Getter
-    @Setter
-    private BoardCtrl boardCtrl;
 
     @FXML
     private ScrollPane boardContainer;
@@ -56,14 +52,10 @@ public class MainViewCtrl {
 
     @FXML
     void btnAddClicked(ActionEvent event) {
-        if(!client.getActiveBoard().isEditable()) {
+        if(!client.getBoardCtrl().getBoard().isEditable()) {
             throw new IllegalStateException("You do not have permissions to edit this board.");
         }
-        else if (client.getActiveBoardCtrl() != null)
-            mainCtrl.showAddList();
-        else {
-            throw new IllegalStateException("You cannot add lists to the empty board. Please select a board to operate on");
-        }
+        mainCtrl.showAddList();
     }
 
     @FXML
@@ -83,7 +75,7 @@ public class MainViewCtrl {
 
     @FXML
     void btnSettingsClicked(ActionEvent event) {
-        if(!client.getActiveBoard().isEditable()) {
+        if(!client.getBoardCtrl().getBoard().isEditable()) {
             throw new IllegalStateException("You do not have permissions to edit this board.");
         }
         mainCtrl.showSettings();
@@ -104,31 +96,56 @@ public class MainViewCtrl {
 
     @FXML
     public void initialize() {
-        root.addEventFilter(KeyEvent.KEY_PRESSED, new MainViewKeyEventHandler(this));
+        root.addEventFilter(KeyEvent.KEY_PRESSED, new MainViewKeyEventHandler(client));
     }
 
     public void loadData(Board board) {
         boolean admin = server.isAdmin();
-        if(!admin) {
+        if (!admin) {
             adminLabel.setVisible(false);
         }
 
-        this.boardCtrl = factory.create(BoardCtrl.class, board);
-        client.setActiveBoardCtrl(boardCtrl);
+        BoardCtrl boardCtrl = factory.create(BoardCtrl.class, board);
         boardContainer.setContent(boardCtrl.getNode());
         displayBoardName.setText(board.getName());
-        server.registerForMessages("/topic/lists", CardList.class, l -> {
-            if (client.getActiveBoard().getId() == l.getBoard().getId()) {
-                System.out.println("INCOMING LIST: " + l);
-            }
-        });
-        server.registerForMessages("/topic/cards", Card.class, c -> {
-            if (c.getCardList().getBoard().getId() == client.getActiveBoard().getId()) {
-                System.out.println("INCOMING CARD: " + c);
-            }
-        });
-        if(client.getActiveBoard().getPassword() == null || admin)
+        if(client.getBoardCtrl().getBoard().getPassword() == null || admin)
             board.setEditable(true);
         warning.setVisible(!board.isEditable());
+        registerForMessages();
+    }
+
+    /**
+     * This method is used after loading the data in order to subscribe the client to different endpoints
+     * and handle events related to deleting, creating, and updating cards and lists on the current board the
+     * user is viewing.
+     */
+    public void registerForMessages() {
+
+        long boardId = client.getBoardCtrl().getBoard().getId();
+
+        /**
+         * This method handles the deletion and addition of a card to the board.
+         */
+        server.registerForMessages("/topic/board/" + boardId + "/cards", Card.class, c -> {
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    client.getCardListCtrl(c.getCardList().getId()).refresh();
+                }
+            });
+
+        });
+
+        /**
+         * This method handles the deletion and addition of a list to the board.
+         */
+        server.registerForMessages("/topic/board/" + boardId + "/lists", CardList.class, l -> {
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    client.getBoardCtrl().refresh();
+                }
+            });
+        });
     }
 }

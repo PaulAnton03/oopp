@@ -1,59 +1,69 @@
 package client.utils;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import client.components.BoardCtrl;
 import client.components.CardCtrl;
 import client.components.CardListCtrl;
-import commons.Board;
 import commons.Card;
 import commons.CardList;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.inject.Inject;
-
 public class ClientUtils {
-    private final ServerUtils server;
-    private final ClientPreferences preferences;
-    private final ComponentFactory factory;
-
-    @Setter
-    private BoardCtrl activeBoardCtrl;
     @Getter
     @Setter
-    private CardListCtrl activeCardListCtrl;
+    private long activeCardListId;
     @Getter
     @Setter
-    private CardCtrl activeCardCtrl;
+    private long selectedCardId = -1;
 
-    @Inject
-    public ClientUtils(ServerUtils server, ClientPreferences preferences, ComponentFactory factory) {
-        this.server = server;
-        this.preferences = preferences;
-        this.factory = factory;
+    @Getter
+    @Setter
+    private BoardCtrl boardCtrl;
+    @Getter
+    @Setter
+    private Map<Long, CardListCtrl> cardListCtrls = new HashMap<>();
+    @Getter
+    @Setter
+    private Map<Long, CardCtrl> cardCtrls = new HashMap<>();
+
+    public void clearBoardData() {
+        this.cardListCtrls = new HashMap<>();
+        this.cardCtrls = new HashMap<>();
+        this.boardCtrl = null;
     }
 
-    public BoardCtrl getActiveBoardCtrl() {
-        if (activeBoardCtrl == null) {
-            // Load default board
-            preferences.getDefaultBoardId().ifPresent(boardId -> {
-                activeBoardCtrl = factory.create(BoardCtrl.class, server.getBoard(boardId));
-            });
-        }
-        return activeBoardCtrl;
-    }
-
-    public Board getActiveBoard() {
-        if (getActiveBoardCtrl() == null) return null;
-        return getActiveBoardCtrl().getBoard();
+    public CardListCtrl getActiveCardListCtrl() {
+        return cardListCtrls.get(activeCardListId);
     }
 
     public CardList getActiveCardList() {
-        if (getActiveCardListCtrl() == null) return null;
-        return getActiveCardListCtrl().getCardList();
+        return cardListCtrls.get(activeCardListId).getCardList();
     }
 
-    public Card getActiveCard() {
-        if (getActiveCardCtrl() == null) return null;
-        return getActiveCardCtrl().getCard();
+    public CardList getCardList(long id) {
+        return cardListCtrls.get(id).getCardList();
+    }
+
+    public Card getCard(long id) {
+        return cardCtrls.get(id).getCard();
+    }
+
+    public CardListCtrl getCardListCtrl(long id) {
+        return cardListCtrls.get(id);
+    }
+
+    public CardCtrl getCardCtrl(long id) {
+        return cardCtrls.get(id);
+    }
+
+    public void changeSelection(long selectedCardId) {
+        CardCtrl cardCtrl = getCardCtrl(this.selectedCardId);
+        if (cardCtrl != null)
+            cardCtrl.unhighlight();
+        this.selectedCardId = selectedCardId;
+        getCardCtrl(selectedCardId).highlight();
     }
 }
