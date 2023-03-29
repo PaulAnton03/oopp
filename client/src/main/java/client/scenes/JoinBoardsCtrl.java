@@ -6,6 +6,8 @@ import client.utils.ComponentFactory;
 import client.utils.ServerUtils;
 import commons.Board;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 
 import javax.inject.Inject;
@@ -20,6 +22,12 @@ public class JoinBoardsCtrl {
 
     @FXML
     private VBox boardPopulation;
+
+    @FXML
+    private TextField boardId;
+
+    @FXML
+    private Button btnJoin;
 
     public void populateBoards() {
         boardPopulation.getChildren().clear();
@@ -42,11 +50,19 @@ public class JoinBoardsCtrl {
         this.clientPrefs = clientPrefs;
     }
 
-    public void btnBackClicked() { mainCtrl.showMainView(); }
+    public void btnBackClicked() {
+        mainCtrl.showMainView();
+    }
 
-    public void btnCreateClicked() { mainCtrl.showCreate(); }
+    public void btnCreateClicked() {
+        mainCtrl.showCreate();
+    }
 
     public void requestPassword(Board pswProtectedBoard) {
         mainCtrl.showPasswordProtected(pswProtectedBoard);
+    }
+
+    public void onJoin() {
+        
     }
 }

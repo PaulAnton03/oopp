@@ -2,7 +2,10 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
@@ -28,14 +31,29 @@
     <center>
         <HBox fx:id="grid" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
             <children>
-                <ScrollPane prefHeight="270.0" prefWidth="1000.0">
+                <ScrollPane prefHeight="200.0" prefWidth="404.0">
                     <content>
-                        <VBox fx:id="boardPopulation" prefHeight="200.0" prefWidth="550.0">
+                        <VBox fx:id="boardPopulation" prefHeight="200.0" prefWidth="389.0">
                      <padding>
                         <Insets bottom="10.0" />
                      </padding></VBox>
                     </content>
                 </ScrollPane>
+            <AnchorPane prefHeight="200.0" prefWidth="200.0">
+               <children>
+                  <Label layoutX="56.0" layoutY="50.0" text="JOIN BOARD" textAlignment="CENTER">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="boardId" layoutX="24.0" layoutY="88.0" promptText="Board Id" />
+                  <Button fx:id="btnJoin" onAction="onJoin" layoutX="66.0" layoutY="127.0" mnemonicParsing="false" prefHeight="15.0" prefWidth="65.0" text="ENTER">
+                     <font>
+                        <Font size="9.0" />
+                     </font>
+                  </Button>
+               </children>
+            </AnchorPane>
             </children>
         </HBox>
     </center>
