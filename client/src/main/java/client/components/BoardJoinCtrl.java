@@ -10,7 +10,9 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 
 import javax.inject.Inject;
 
@@ -19,22 +21,26 @@ public class BoardJoinCtrl implements Component<Board> {
     private final JoinBoardsCtrl joinBoardsCtrl;
     private final ClientPreferences clientPreferences;
     @FXML
-    private Button button;
+    private Label label;
 
+    @FXML
+    private AnchorPane pane;
+    @FXML
+    private ImageView lockImage;
     private Board board;
-
 
     private ServerUtils server;
 
     @Override
     public void loadData(Board board) {
         this.board = board;
-        button.setText(board.getName());
+        if(board.getPassword() == null) lockImage.setVisible(false);
+        label.setText(board.getName());
     }
 
     @Override
     public Parent getNode() {
-        return button;
+        return pane;
     }
 
     @Inject
@@ -50,11 +56,12 @@ public class BoardJoinCtrl implements Component<Board> {
 
     public void onSelect(ActionEvent actionEvent) {
         String password = clientPreferences.getPasswordForBoard(board.getId()).orElse(null);
-        if(password != null) Logger.log("Detected local password for board " + board.getId() + ": " + password);
-        boolean validSavedPassword = board.getPassword() != null && board.getPassword().equals(password);
-        if(validSavedPassword) Logger.log("Saved password is valid.");
-        if(server.isAdmin()) Logger.log("Admin mode enabled- bypassing password check.");
-        if (!validSavedPassword && !server.isAdmin()) {
+        if (password != null) Logger.log("Detected local password for board " + board.getId() + ": " + password);
+        boolean passwordExists = board.getPassword() != null;
+        boolean validSavedPassword = passwordExists && board.getPassword().equals(password);
+        if (validSavedPassword) Logger.log("Saved password is valid.");
+        if (server.isAdmin()) Logger.log("Admin mode enabled- bypassing password check.");
+        if (passwordExists && !validSavedPassword && !server.isAdmin()) {
             joinBoardsCtrl.requestPassword(board);
             return;
         }
