@@ -108,8 +108,6 @@ public class MainViewCtrl {
         BoardCtrl boardCtrl = factory.create(BoardCtrl.class, board);
         boardContainer.setContent(boardCtrl.getNode());
         displayBoardName.setText(board.getName());
-        if(client.getBoardCtrl().getBoard().getPassword() == null || admin)
-            board.setEditable(true);
         warning.setVisible(!board.isEditable());
         registerForMessages();
     }

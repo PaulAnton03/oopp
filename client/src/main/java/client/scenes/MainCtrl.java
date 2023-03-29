@@ -169,7 +169,8 @@ public class MainCtrl {
         primaryStage.setTitle("Main view");
         primaryStage.setScene(main);
         clientPreferences.setDefaultBoardId(board.getId());
-        if (board.getPassword() != null && !board.getPassword().isEmpty())
+        boolean okPassword = board.getPassword() != null && !board.getPassword().isEmpty();
+        if (board.isEditable() && okPassword)
             clientPreferences.setPasswordForBoard(board.getId(), board.getPassword());
         Logger.log("Showing main view for board " + board);
     }
