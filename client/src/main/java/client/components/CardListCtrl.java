@@ -1,13 +1,5 @@
 package client.components;
 
-import java.net.URL;
-import java.util.List;
-import java.util.Objects;
-import java.util.ResourceBundle;
-import java.util.stream.IntStream;
-
-import javax.inject.Inject;
-
 import client.scenes.MainCtrl;
 import client.utils.ClientUtils;
 import client.utils.ComponentFactory;
@@ -33,10 +25,10 @@ import lombok.Getter;
 import javax.inject.Inject;
 import java.io.IOException;
 import java.net.URL;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 import java.util.ResourceBundle;
-
+import java.util.stream.IntStream;
 
 @EqualsAndHashCode
 public class CardListCtrl implements Component<CardList>, DBEntityCtrl<CardList, Card>, Initializable {
