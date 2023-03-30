@@ -46,7 +46,7 @@
                <children>
                   <TextField fx:id="boardPassword" layoutX="150.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="145.0" promptText="New Password" styleClass="formTextInput" AnchorPane.rightAnchor="0.0" />
                   <Label prefHeight="32.0" prefWidth="110.0" text="Password" AnchorPane.leftAnchor="0.0" />
-                  <CheckBox fx:id="passwordUsed" layoutX="132.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="30.0" AnchorPane.rightAnchor="155.0" />
+                  <CheckBox fx:id="passwordUsed" layoutX="132.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="30.0" styleClass="big" AnchorPane.rightAnchor="155.0" />
                </children>
             </AnchorPane>
             <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="75.0" prefWidth="300.0" GridPane.rowIndex="3">

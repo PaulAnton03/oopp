@@ -22,7 +22,7 @@
     -fx-border-width: 2px;
     -fx-border-radius: 5px;
     -fx-border-color: #D9D9D9;
-    -fx-border-insets: -2px;
+    -fx-border-style: solid outside;
     -fx-prompt-text-fill: #7c7c7c;
 }
 
@@ -40,5 +40,9 @@ TextArea.formTextInput .content {
     -fx-border-width: 2px;
     -fx-border-radius: 5px;
     -fx-border-color: #D9D9D9;
+    -fx-padding: 4px;
+}
+
+.check-box.big > .box {
     -fx-padding: 8px;
 }

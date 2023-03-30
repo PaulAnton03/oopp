@@ -4,7 +4,7 @@
 }
 
 .card.highlight {
-    -fx-border-width: 2px;
+    -fx-border-width: 3px;
     -fx-border-radius: 5px;
     -fx-border-color: #555555;
     -fx-border-style: solid outside;
