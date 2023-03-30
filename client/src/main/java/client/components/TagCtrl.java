@@ -22,6 +22,8 @@ public class TagCtrl implements Component<Tag>, DBEntityCtrl<Tag, Tag> {
 
     private final ServerUtils server;
 
+    private ClientUtils client;
+
     @Getter
     private Tag tag;
 
@@ -34,7 +36,7 @@ public class TagCtrl implements Component<Tag>, DBEntityCtrl<Tag, Tag> {
     @FXML
     private AnchorPane anchorPane;
 
-    ClientUtils client;
+
     @Inject
     public TagCtrl(MainCtrl mainCtrl, ServerUtils server, ClientUtils client) {
         this.mainCtrl = mainCtrl;
