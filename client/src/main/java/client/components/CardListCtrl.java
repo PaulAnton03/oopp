@@ -1,13 +1,5 @@
 package client.components;
 
-import java.net.URL;
-import java.util.List;
-import java.util.Objects;
-import java.util.ResourceBundle;
-import java.util.stream.IntStream;
-
-import javax.inject.Inject;
-
 import client.scenes.MainCtrl;
 import client.utils.ClientUtils;
 import client.utils.ComponentFactory;
@@ -19,14 +11,24 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 import javafx.util.Pair;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
+import javax.inject.Inject;
+import java.io.IOException;
+import java.net.URL;
+import java.util.List;
+import java.util.Objects;
+import java.util.ResourceBundle;
+import java.util.stream.IntStream;
 
 @EqualsAndHashCode
 public class CardListCtrl implements Component<CardList>, DBEntityCtrl<CardList, Card>, Initializable {
@@ -38,10 +40,14 @@ public class CardListCtrl implements Component<CardList>, DBEntityCtrl<CardList,
     @Getter
     private CardList cardList;
     @FXML
-    private Text title;
+    private Label title;
     @Getter
     @FXML
     private VBox cardListView;
+    @FXML
+    private Button addCardButton;
+    @FXML
+    private Button listSettingsButton;
 
     @Inject
     public CardListCtrl(ClientUtils client, ServerUtils server, MainCtrl mainCtrl, ComponentFactory factory) {
@@ -102,9 +108,21 @@ public class CardListCtrl implements Component<CardList>, DBEntityCtrl<CardList,
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        cardListView.setOnDragEntered(event -> {
-            Logger.log("Entered drag");
-        });
+        // Set button icons and behaviour
+        try (var addInputStream = getClass().getResourceAsStream("/client/images/add.png");
+             var settingsInputStream = getClass().getResourceAsStream("/client/images/settings.png")) {
+            // Button graphic
+            ImageView addIcon = new ImageView(new Image(addInputStream));
+            ImageView settingsIcon = new ImageView(new Image(settingsInputStream));
+            addIcon.setFitHeight(38);
+            settingsIcon.setFitHeight(38);
+            addIcon.setPreserveRatio(true);
+            settingsIcon.setPreserveRatio(true);
+            addCardButton.setGraphic(addIcon);
+            listSettingsButton.setGraphic(settingsIcon);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         cardListView.setOnDragOver(event -> {
             event.acceptTransferModes(TransferMode.MOVE);
@@ -137,7 +155,6 @@ public class CardListCtrl implements Component<CardList>, DBEntityCtrl<CardList,
             Logger.log("Position: " + nearestPositionDistance.getKey());
             Logger.log("Distance: " + nearestPositionDistance.getValue());
             Logger.log("Is above? " + isPositionAbove);
-            // Logger.log("Inserted at position: ")
 
             event.setDropCompleted(true);
             event.consume();

@@ -159,7 +159,6 @@ public class MainCtrl {
     public void showSettings() {
         primaryStage.setTitle("Board Settings");
         primaryStage.setScene(settings);
-        boardSettingsCtrl.load();
         activeCtrl = boardSettingsCtrl;
     }
 
@@ -241,10 +240,6 @@ public class MainCtrl {
         primaryStage.setTitle("Password Protected Board");
         passwordProtectedCtrl.loadData(pswProtectedBoard);
         primaryStage.setScene(passwordProtected);
-    }
-
-    public Stage getPrimaryStage() {
-        return primaryStage;
     }
 
     public void stop() {
