@@ -63,23 +63,12 @@ public class TagCtrl implements Component<Tag>, DBEntityCtrl<Tag, Tag> {
 
     @Override
     public Parent getNode() {
-        return label.getParent();
+        return anchorPane;
     }
 
-    public void editTag() {
-        server.updateTag(this.tag);
-    }
 
-    public void assignTagToCard(long cardId){
-        Card card = client.getCard(cardId);
-        card.getTags().add(tag);
-        server.updateCard(card);
 
-        tag.getCards().add(card);
-        server.getCard(cardId).getTags().add(tag);
-        server.getTag(tag.getId()).getCards().add(card);
-        server.updateTag(tag);
-    }
+
 
     public void delete(){
         server.deleteTag(tag.getId());

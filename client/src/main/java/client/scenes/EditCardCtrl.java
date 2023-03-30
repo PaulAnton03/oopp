@@ -70,6 +70,23 @@ public class EditCardCtrl {
         }
     }
 
+    public void editTag() {
+        Card card = server.getCard(cardId);
+        server.updateTag(card.getTags().iterator().next());
+    }
+
+    public void assignTagToCard(long tagId){
+        Tag tag = client.getTag(tagId);
+        Card card = client.getCard(cardId);
+        card.getTags().add(tag);
+        server.updateCard(card);
+
+        tag.getCards().add(card);
+        server.getCard(cardId).getTags().add(tag);
+        server.getTag(tag.getId()).getCards().add(card);
+        server.updateTag(tag);
+    }
+
     public void resetState() {
         this.changeTitle.setText("");
         this.changeDesc.setText("");
