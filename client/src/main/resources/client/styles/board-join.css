@@ -1,0 +1,14 @@
+.pane {
+    -fx-background-color: #f2e9e9;
+    -fx-border-width: 3;
+    -fx-border-color: #ccbfbe;
+}
+
+.btn {
+    -fx-background-color: #ede9e0;
+    -fx-border-color: #737373;
+}
+
+.btn:hover {
+    -fx-effect: dropshadow(three-pass-box, #555555, 7, 0.1, 0, 0);
+}

@@ -36,7 +36,6 @@ public class ServerConnectCtrl {
         }
 
         connectToServer();
-        // TODO: Implement connecting to a specific board.
     }
 
     private boolean handleCustomServer(String serverPath) {
@@ -65,9 +64,9 @@ public class ServerConnectCtrl {
     }
 
     private void connectToServer() {
-        mainCtrl.showMainView();
         // Connect to server
         serverUtils.connect();
+        mainCtrl.showMainView();
         Logger.log("Connecting to server: " + serverUtils.getServerPath());
     }
 

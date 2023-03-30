@@ -54,7 +54,7 @@ public class BoardSettingsCtrl {
         }
         board.setPassword(passwordUsed.isSelected() ? boardPassword.getText() : null);
         server.updateBoard(board);
-        client.getBoardCtrl().refresh(); // TODO: WEBSOCKETS
+        client.getBoardCtrl().refresh();
         clearForm();
         mainCtrl.showMainView();
     }
@@ -66,7 +66,7 @@ public class BoardSettingsCtrl {
             throw new IllegalStateException("Something went wrong, no board selected!");
         }
         server.deleteBoard(board.getId());
-        client.getBoardCtrl().remove(); // TODO: WEBSOCKETS
+        client.getBoardCtrl().remove();
         Logger.log("Deleted board " + board);
         mainCtrl.showJoin();
     }

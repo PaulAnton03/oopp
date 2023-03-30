@@ -1,6 +1,7 @@
 package client.scenes;
 
 import client.utils.ClientUtils;
+import client.utils.Logger;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Board;
@@ -33,14 +34,13 @@ public class CreateBoardCtrl {
     }
 
     public void createBoard() {
-        // TODO: Implement board colors.
 
         final Board newBoard = new Board(boardName.getText());
         if (passwordUsed.isSelected()) {
             newBoard.setPassword(boardPassword.getText());
         }
         final Board addedBoard = server.addBoard(newBoard);
-        System.out.println("Added board " + addedBoard);
+        Logger.log("Added board " + addedBoard);
 
         final CardList cardList = new CardList("TODO");
         cardList.setBoard(addedBoard);

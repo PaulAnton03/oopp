@@ -94,6 +94,20 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Tag>, Initi
         }
     }
 
+    public void editCard() {
+        if(!client.getBoardCtrl().getBoard().isEditable()) {
+            throw new IllegalStateException("You do not have permissions to edit this board.");
+        }
+        mainCtrl.showEditCard(this.getCard().getId());
+    }
+
+    public void delete() {
+        if (!client.getBoardCtrl().getBoard().isEditable()) {
+            throw new IllegalStateException("You do not have permissions to edit this board.");
+        }
+        this.card = server.deleteCard(card.getId());
+    }
+
     public void refresh() {
         loadData(server.getCard(card.getId()));
         client.getCardListCtrl(card.getCardList().getId()).replaceChild(card);
@@ -108,13 +122,6 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Tag>, Initi
 
     public void replaceChild(Tag tag /* TODO: Change to Tag tag */) {
 
-    }
-
-    public void editCard() { mainCtrl.showEditCard(this.getCard().getId()); }
-
-    public void delete() {
-        server.deleteCard(card.getId());
-        client.getCardListCtrl(card.getCardList().getId()).refresh(); // TODO: WEBSOCKET
     }
 
     // CSS class that defines style for the highlighted card

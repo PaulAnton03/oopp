@@ -2,6 +2,7 @@ package client.components;
 
 import java.net.URL;
 import java.util.List;
+import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.stream.IntStream;
 
@@ -62,6 +63,9 @@ public class CardListCtrl implements Component<CardList>, DBEntityCtrl<CardList,
         this.cardList = cardList;
         title.setText(cardList.getTitle());
 
+        //Todo - Find out why null cards are being added to lists upon certain operations. This is just a temporary fix, which is not elegant.
+        cardList.getCards().removeIf(Objects::isNull);
+
         for (Card card : cardList.getCards()) {
             CardCtrl cardCtrl = factory.create(CardCtrl.class, card);
             cardListView.getChildren().add(cardCtrl.getNode());
@@ -69,6 +73,7 @@ public class CardListCtrl implements Component<CardList>, DBEntityCtrl<CardList,
     }
 
     public void refresh() {
+        System.out.println(server.getCardList(cardList.getId()));
         cardListView.getChildren().clear();
         loadData(server.getCardList(cardList.getId()));
         client.getBoardCtrl().replaceChild(cardList);
@@ -141,10 +146,17 @@ public class CardListCtrl implements Component<CardList>, DBEntityCtrl<CardList,
     }
 
     public void addCard() {
+        if(!client.getBoardCtrl().getBoard().isEditable()) {
+            throw new IllegalStateException("You do not have permissions to edit this board.");
+        }
         mainCtrl.showAddCard(cardList.getId());
     }
 
     public void listSettings() {
+        if(!client.getBoardCtrl().getBoard().isEditable()) {
+            throw new IllegalStateException("You do not have permissions to edit this board.");
+        }
         mainCtrl.showListSettings(cardList.getId());
     }
+
 }

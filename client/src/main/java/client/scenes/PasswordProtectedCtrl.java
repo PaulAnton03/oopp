@@ -46,6 +46,12 @@ public class PasswordProtectedCtrl {
             exceptionHandler.clientException("Incorrect Password!");
             return;
         }
+        passwordBoard.setEditable(true);
+        mainCtrl.showMainView(passwordBoard);
+    }
+
+    public void readOnly() {
+        passwordBoard.setEditable(false);
         mainCtrl.showMainView(passwordBoard);
     }
 }
