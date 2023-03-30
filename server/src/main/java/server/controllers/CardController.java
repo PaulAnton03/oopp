@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import server.database.CardListRepository;
 import server.database.CardRepository;
+import server.database.SubTaskRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -21,10 +22,14 @@ public class CardController {
     private final CardRepository cardRepository;
     private final CardListRepository cardListRepository;
 
-    public CardController(SimpMessagingTemplate messagingTemplate, CardRepository cardRepository, CardListRepository cardListRepository) {
+    private final SubTaskRepository subTaskRepository;
+
+    public CardController(SimpMessagingTemplate messagingTemplate, CardRepository cardRepository,
+                          CardListRepository cardListRepository, SubTaskRepository subTaskRepository) {
         this.messagingTemplate = messagingTemplate;
         this.cardRepository = cardRepository;
         this.cardListRepository = cardListRepository;
+        this.subTaskRepository = subTaskRepository;
     }
 
     @GetMapping(path = {"", "/"})

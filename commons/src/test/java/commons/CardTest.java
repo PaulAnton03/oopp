@@ -8,7 +8,7 @@ class CardTest {
     Card card = new Card("task", "description");
 
     @Test
-    void setgetCardList() {
+    void SetGetCardList() {
         CardList list = new CardList();
         card.setCardList(list);
         assertSame(card.getCardList(), list);
