@@ -1,6 +1,7 @@
 package client.scenes;
 
 import client.components.BoardJoinCtrl;
+import client.utils.ClientUtils;
 import client.utils.ComponentFactory;
 import client.utils.ServerUtils;
 import commons.Board;
@@ -12,6 +13,7 @@ import java.util.stream.Collectors;
 
 public class JoinBoardsCtrl {
 
+    private final ClientUtils client;
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
     private final ComponentFactory factory;
@@ -29,15 +31,24 @@ public class JoinBoardsCtrl {
     }
 
     @Inject
-    public JoinBoardsCtrl(ServerUtils server, MainCtrl mainCtrl, ComponentFactory factory) {
+    public JoinBoardsCtrl(ClientUtils client, ServerUtils server, MainCtrl mainCtrl, ComponentFactory factory) {
+        this.client = client;
         this.server = server;
         this.mainCtrl = mainCtrl;
         this.factory = factory;
     }
 
-    public void btnBackClicked() { mainCtrl.showMainView(); }
+    public void btnBackClicked() {
+        if (client.getBoardCtrl() == null) {
+            mainCtrl.showConnect();
+            return;
+        }
+        mainCtrl.showMainView();
+    }
 
-    public void btnCreateClicked() { mainCtrl.showCreate(); }
+    public void btnCreateClicked() {
+        mainCtrl.showCreate();
+    }
 
     public void requestPassword(Board pswProtectedBoard) {
         mainCtrl.showPasswordProtected(pswProtectedBoard);

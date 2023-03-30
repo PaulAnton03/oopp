@@ -11,7 +11,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.TextField;
 
-public class CreateBoardCtrl {
+public class CreateBoardCtrl implements SceneCtrl {
 
     private final ServerUtils server;
     private final ClientUtils client;
@@ -59,5 +59,10 @@ public class CreateBoardCtrl {
     public void clear() {
         boardName.setText("");
         boardPassword.setText("");
+    }
+
+    @Override
+    public void revalidate() {
+
     }
 }
