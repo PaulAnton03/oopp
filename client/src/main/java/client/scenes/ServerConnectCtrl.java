@@ -70,7 +70,6 @@ public class ServerConnectCtrl {
     private void connectToServer() {
         // Connect to server
         serverUtils.connect();
-        clientPreferences.clearPreferences();
         mainCtrl.showMainView();
         Logger.log("Connecting to server: " + serverUtils.getServerPath());
     }
