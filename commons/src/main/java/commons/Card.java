@@ -32,7 +32,6 @@ public class Card implements DBEntity {
     @OneToMany(mappedBy = "card", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderColumn(name = "subtask_index")
     @EqualsAndHashCode.Exclude
-    @JsonIncludeProperties("id")
     private List<SubTask> subtasks = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
