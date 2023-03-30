@@ -74,6 +74,6 @@ public class EditCardCtrl implements SceneCtrl {
             return;
         }
         mainCtrl.showMainView();
-        exceptionHandler.clientException("Sorry, but the card you were editing or the list it was part of has been permanently deleted.");
+        throw new RuntimeException("Sorry, but the card you were editing or the list it was part of has been permanently deleted.");
     }
 }

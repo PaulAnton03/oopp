@@ -58,6 +58,6 @@ public class AddCardCtrl implements SceneCtrl {
             return;
         }
         mainCtrl.showMainView();
-        exceptionHandler.clientException("Sorry, but the list you are currently trying to add a card to has been permanently deleted.");
+        throw new RuntimeException("Sorry, but the list you are currently trying to add a card to has been permanently deleted.");
     }
 }

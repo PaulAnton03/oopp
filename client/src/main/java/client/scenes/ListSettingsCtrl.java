@@ -61,6 +61,6 @@ public class ListSettingsCtrl implements SceneCtrl {
             return;
         }
         mainCtrl.showMainView();
-        exceptionHandler.clientException("Sorry, but the list you were editing has been permanently deleted.");
+        throw new RuntimeException("Sorry, but the list you were editing has been permanently deleted.");
     }
 }
