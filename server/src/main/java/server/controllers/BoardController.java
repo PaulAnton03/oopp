@@ -1,10 +1,12 @@
 package server.controllers;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
+
 import commons.Board;
+
 import java.util.List;
 import java.util.Optional;
+
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
@@ -16,11 +18,14 @@ import server.database.CardRepository;
 @RequestMapping("/boards")
 public class BoardController {
 
+    private final SimpMessagingTemplate messagingTemplate;
     private final BoardRepository boardRepository;
     private final CardListRepository cardListRepository;
     private final CardRepository cardRepository;
 
-    public BoardController(BoardRepository boardRepository, CardListRepository cardListRepository, CardRepository cardRepository) {
+    public BoardController(SimpMessagingTemplate messagingTemplate, BoardRepository boardRepository,
+                           CardListRepository cardListRepository, CardRepository cardRepository) {
+        this.messagingTemplate = messagingTemplate;
         this.boardRepository = boardRepository;
         this.cardListRepository = cardListRepository;
         this.cardRepository = cardRepository;
@@ -59,6 +64,9 @@ public class BoardController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Board with name " + board.getName() + " already exists");
         }
         Board boardSaved = boardRepository.save(board);
+        if(messagingTemplate!=null){
+            messagingTemplate.convertAndSend("/topic/board/" + board.getId() + "/create", board);
+        }
         return ResponseEntity.ok(boardSaved);
     }
 
@@ -70,25 +78,22 @@ public class BoardController {
         }
         final Board board = optBoard.get();
         boardRepository.deleteById(board.getId());
+        messagingTemplate.convertAndSend("/topic/board/" + board.getId() + "/delete", board);
         return ResponseEntity.ok(board);
     }
 
     @PutMapping("/update/{id}")
     public ResponseEntity<Board> update(@RequestBody Board board) {
-        if(!board.isNetworkValid()) {
+        if (!board.isNetworkValid()) {
             return ResponseEntity.badRequest().build();
         }
         final Optional<Board> optionalBoard = boardRepository.findById(board.getId());
-        if(optionalBoard.isEmpty()) {
+        if (optionalBoard.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
         Board updated = boardRepository.save(board);
+        messagingTemplate.convertAndSend("/topic/board/" + board.getId() + "/update", board);
         return ResponseEntity.ok(updated);
     }
 
-    @MessageMapping("/boards")
-    @SendTo("/topic/boards")
-    public Board addMessage(Board board) {
-        return board;
-    }
 }

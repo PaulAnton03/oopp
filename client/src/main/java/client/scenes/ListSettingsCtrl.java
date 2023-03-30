@@ -1,5 +1,6 @@
 package client.scenes;
 
+import client.utils.ExceptionHandler;
 import com.google.inject.Inject;
 
 import client.utils.ClientUtils;
@@ -8,7 +9,9 @@ import commons.CardList;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 
-public class ListSettingsCtrl {
+public class ListSettingsCtrl implements SceneCtrl {
+
+    private final ExceptionHandler exceptionHandler;
 
     private final ServerUtils server;
     private final ClientUtils client;
@@ -18,7 +21,8 @@ public class ListSettingsCtrl {
     private TextField listTitle;
 
     @Inject
-    public ListSettingsCtrl(ServerUtils server, ClientUtils client, MainCtrl mainCtrl) {
+    public ListSettingsCtrl(ExceptionHandler exceptionHandler, ServerUtils server, ClientUtils client, MainCtrl mainCtrl) {
+        this.exceptionHandler = exceptionHandler;
         this.client = client;
         this.mainCtrl = mainCtrl;
         this.server = server;
@@ -51,4 +55,12 @@ public class ListSettingsCtrl {
         mainCtrl.showMainView();
     }
 
+    @Override
+    public void revalidate() {
+        if (client.getCardListCtrls().containsKey(cardListId)) {
+            return;
+        }
+        mainCtrl.showMainView();
+        throw new RuntimeException("Sorry, but the list you were editing has been permanently deleted.");
+    }
 }

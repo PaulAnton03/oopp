@@ -2,6 +2,7 @@ package client.scenes;
 
 import client.components.BoardJoinCtrl;
 import client.utils.ClientPreferences;
+import client.utils.ClientUtils;
 import client.utils.ComponentFactory;
 import client.utils.ServerUtils;
 import commons.Board;
@@ -16,6 +17,7 @@ import java.util.stream.Collectors;
 
 public class JoinBoardsCtrl {
 
+    private final ClientUtils client;
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
     private final ComponentFactory factory;
@@ -46,7 +48,8 @@ public class JoinBoardsCtrl {
     }
 
     @Inject
-    public JoinBoardsCtrl(ServerUtils server, MainCtrl mainCtrl, ComponentFactory factory, ClientPreferences clientPrefs) {
+    public JoinBoardsCtrl(ClientUtils client, ServerUtils server, MainCtrl mainCtrl, ComponentFactory factory, ClientPreferences clientPrefs) {
+        this.client = client;
         this.server = server;
         this.mainCtrl = mainCtrl;
         this.factory = factory;
@@ -54,6 +57,10 @@ public class JoinBoardsCtrl {
     }
 
     public void btnBackClicked() {
+        if (client.getBoardCtrl() == null) {
+            mainCtrl.showConnect();
+            return;
+        }
         mainCtrl.showMainView();
     }
 

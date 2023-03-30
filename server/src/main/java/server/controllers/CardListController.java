@@ -92,6 +92,7 @@ public class CardListController {
             return ResponseEntity.notFound().build();
         }
         CardList updated = cardListRepository.save(cardList);
+        messagingTemplate.convertAndSend("/topic/board/" + cardList.getBoard().getId() + "/lists", updated);
         return ResponseEntity.ok(updated);
     }
 

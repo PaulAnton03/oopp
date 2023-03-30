@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import server.database.CardListRepository;
 import server.database.CardRepository;
+import server.database.SubTaskRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -21,10 +22,14 @@ public class CardController {
     private final CardRepository cardRepository;
     private final CardListRepository cardListRepository;
 
-    public CardController(SimpMessagingTemplate messagingTemplate, CardRepository cardRepository, CardListRepository cardListRepository) {
+    private final SubTaskRepository subTaskRepository;
+
+    public CardController(SimpMessagingTemplate messagingTemplate, CardRepository cardRepository,
+                          CardListRepository cardListRepository, SubTaskRepository subTaskRepository) {
         this.messagingTemplate = messagingTemplate;
         this.cardRepository = cardRepository;
         this.cardListRepository = cardListRepository;
+        this.subTaskRepository = subTaskRepository;
     }
 
     @GetMapping(path = {"", "/"})
@@ -61,7 +66,7 @@ public class CardController {
         }
 
         if (position.isPresent() && (position.get() < 0 || position.get() > cardList.get().getCards().size())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Position " +  position + " is invalid");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Position " + position + " is invalid");
         }
 
         card.setCardList(cardList.get());
@@ -99,6 +104,8 @@ public class CardController {
             return ResponseEntity.notFound().build();
         }
         Card updated = cardRepository.save(card);
+        CardList cardList = cardListRepository.getById(card.getCardList().getId());
+        messagingTemplate.convertAndSend("/topic/board/" + cardList.getBoard().getId() + "/cards", updated);
         return ResponseEntity.ok(updated);
     }
 
