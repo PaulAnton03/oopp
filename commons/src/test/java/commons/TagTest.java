@@ -39,7 +39,7 @@ class TagTest {
     }
 
 
-    
+
     @Test
     void getCards() {
         Tag tag = new Tag();
