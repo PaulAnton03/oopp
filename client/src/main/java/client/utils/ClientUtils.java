@@ -1,6 +1,5 @@
 package client.utils;
 
-import java.security.PublicKey;
 import java.util.HashMap;
 import java.util.Map;
 
