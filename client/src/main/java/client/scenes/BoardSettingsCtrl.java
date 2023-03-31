@@ -13,7 +13,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.TextField;
 
-public class BoardSettingsCtrl {
+public class BoardSettingsCtrl implements SceneCtrl {
 
     private final ServerUtils server;
     private final ClientUtils client;
@@ -34,16 +34,6 @@ public class BoardSettingsCtrl {
         this.client = client;
         this.mainCtrl = mainCtrl;
         this.server = server;
-    }
-
-    public void load() {
-        if (!server.isAdmin()) {
-            deleteBoardButton.setDisable(true);
-            deleteBoardButton.setVisible(false);
-            return;
-        }
-        deleteBoardButton.setDisable(false);
-        deleteBoardButton.setVisible(true);
     }
 
     public void saveChanges() {
@@ -79,5 +69,10 @@ public class BoardSettingsCtrl {
     public void clearForm() {
         boardPassword.setText("");
         passwordUsed.setSelected(false);
+    }
+
+    @Override
+    public void revalidate() {
+
     }
 }

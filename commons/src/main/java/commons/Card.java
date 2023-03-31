@@ -13,7 +13,10 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
+
 import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
 
 import java.util.Set;
 
@@ -26,9 +29,14 @@ import java.util.Set;
 public class Card implements DBEntity {
 
     @Id
-    @SequenceGenerator(name="cards_seq", sequenceName="CARDS_SEQ")
-    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="cards_seq")
+    @SequenceGenerator(name = "cards_seq", sequenceName = "CARDS_SEQ")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "cards_seq")
     protected long id;
+
+    @OneToMany(mappedBy = "card", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OrderColumn(name = "subtask_index")
+    @EqualsAndHashCode.Exclude
+    private List<SubTask> subtasks = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "card_list_id", nullable = false)
@@ -51,7 +59,7 @@ public class Card implements DBEntity {
     @NonNull
     private String description;
 
-    public boolean removeTag(long id){
+ public boolean removeTag(long id){
         Tag tag = this.getTags().stream().filter(c -> c.getId() == id).findFirst().orElse(null);
         if(tag == null){
             return false;
@@ -59,11 +67,25 @@ public class Card implements DBEntity {
             this.getTags().remove(tag);
         }
         return true;
+    public boolean removeSubTask(SubTask subTask) {
+        return this.subtasks.remove(subTask);
+    }
+
+    public boolean removeSubTask(long id) {
+        SubTask subTask = this.getSubtasks().stream().filter(s -> s.getId() == id).findFirst().orElse(null);
+        if (subTask == null)
+            return false;
+        return removeSubTask(subTask);
+    }
+
+    public void addSubTask(SubTask subTask) {
+        this.subtasks.add(subTask);
+
     }
 
     @Override
     public String toString() {
-        return "Card [id=" + id + ", title=" + title + ", description=" + description + "]";
+        return "Card [id=" + id + ", title=" + title + ", description=" + description + ",subtasks= " + subtasks + "]";
     }
 
     /**

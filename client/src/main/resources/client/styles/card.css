@@ -4,7 +4,7 @@
 }
 
 .card.highlight {
-    -fx-border-width: 2px;
+    -fx-border-width: 3px;
     -fx-border-radius: 5px;
     -fx-border-color: #555555;
     -fx-border-style: solid outside;
@@ -18,10 +18,11 @@
     -fx-base: transparent;
 }
 
-.card > .title {
+.titlePane > .title {
+    -fx-max-width: 220;
     -fx-font-size: 20px;
 }
 
 .card > .description {
-    /* set the text color to gray */
+    -fx-text-fill: #5b5b5b;
 }

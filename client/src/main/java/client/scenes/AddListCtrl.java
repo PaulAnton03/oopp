@@ -8,7 +8,7 @@ import commons.CardList;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 
-public class AddListCtrl {
+public class AddListCtrl implements SceneCtrl {
 
     private final MainCtrl mainCtrl;
     private final ServerUtils server;
@@ -51,4 +51,8 @@ public class AddListCtrl {
         mainCtrl.showMainView();
     }
 
+    @Override
+    public void revalidate() {
+
+    }
 }

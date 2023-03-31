@@ -70,6 +70,9 @@ public class MainCtrl {
     private AdminPasswordCtrl adminPasswordCtrl;
     private Scene adminPassword;
 
+    @Getter
+    private SceneCtrl activeCtrl;
+
     @Inject
     public MainCtrl(ServerUtils server, ClientUtils client, ComponentFactory factory, ClientPreferences clientPreferences) {
         this.server = server;
@@ -140,6 +143,7 @@ public class MainCtrl {
         editCardCtrl.loadData(cardId);
         primaryStage.setTitle("Edit Card");
         primaryStage.setScene(editCard);
+        activeCtrl = editCardCtrl;
     }
 
     public void showAdminPasswordProtected() {
@@ -155,13 +159,14 @@ public class MainCtrl {
     public void showSettings() {
         primaryStage.setTitle("Board Settings");
         primaryStage.setScene(settings);
-        boardSettingsCtrl.load();
+        activeCtrl = boardSettingsCtrl;
     }
 
     public void showAddCard(long cardListId) {
         addCardCtrl.loadData(cardListId);
         primaryStage.setTitle("Add card");
         primaryStage.setScene(add);
+        activeCtrl = addCardCtrl;
     }
 
     public void showMainView(Board board) {
@@ -173,16 +178,19 @@ public class MainCtrl {
         if (board.isEditable() && okPassword)
             clientPreferences.setPasswordForBoard(board.getId(), board.getPassword());
         Logger.log("Showing main view for board " + board);
+        activeCtrl = mainViewCtrl;
     }
 
     public void showMainView() {
+        activeCtrl = mainViewCtrl;
         Long boardId = clientPreferences.getDefaultBoardId().orElse(Long.valueOf(-1));
         if (boardId == -1) {
             Logger.log("No default board, cannot show main view");
             this.showJoin();
             return;
         }
-
+        primaryStage.setTitle("Main view");
+        primaryStage.setScene(main);
         Board board;
         try {
             board = server.getBoard(boardId);
@@ -206,6 +214,7 @@ public class MainCtrl {
     public void showCreate() {
         primaryStage.setTitle("Create board");
         primaryStage.setScene(create);
+        activeCtrl = createBoardCtrl;
     }
 
     public void showJoin() {
@@ -217,22 +226,20 @@ public class MainCtrl {
     public void showAddList() {
         primaryStage.setTitle("Add list");
         primaryStage.setScene(addList);
+        activeCtrl = addListCtrl;
     }
 
     public void showListSettings(long cardListId) {
         primaryStage.setTitle("Edit list");
         editListCtrl.loadData(cardListId);
         primaryStage.setScene(editList);
+        activeCtrl = editListCtrl;
     }
 
     public void showPasswordProtected(Board pswProtectedBoard) {
         primaryStage.setTitle("Password Protected Board");
         passwordProtectedCtrl.loadData(pswProtectedBoard);
         primaryStage.setScene(passwordProtected);
-    }
-
-    public Stage getPrimaryStage() {
-        return primaryStage;
     }
 
     public void stop() {
