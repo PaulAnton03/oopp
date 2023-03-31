@@ -58,7 +58,7 @@ public class TagCtrl implements Component<Tag>, DBEntityCtrl<Tag, Tag> {
                 tag.getGreen());
         String string = "-fx-background-color: #" + color;
         string = string.replaceAll("0x", "");
-        anchorPane.setStyle(string);
+       // anchorPane.setStyle(string);
     }
 
     @Override
@@ -72,7 +72,6 @@ public class TagCtrl implements Component<Tag>, DBEntityCtrl<Tag, Tag> {
 
     public void delete(){
         server.deleteTag(tag.getId());
-        //TODO delete the FXML thingy that you see of the tag
     }
 
     public void refresh(){

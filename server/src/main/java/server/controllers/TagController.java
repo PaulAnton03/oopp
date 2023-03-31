@@ -41,13 +41,7 @@ public class TagController {
 
     @PostMapping("/create")
     public ResponseEntity<Tag> create(@RequestBody Tag tag){
-//        Optional<Card> card = cardRepository.findById(cardId);
-//        if(card.isEmpty()){
-//            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Card with given Id not found");
-//        }
-//        System.out.println("I reached here!");
-//        tag.getCards().add(card.get());
-//        card.get().getTags().add(tag);
+
         tagRepository.save(tag);
         System.out.println("Yo before return");
         return ResponseEntity.ok(tag);
