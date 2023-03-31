@@ -2,6 +2,7 @@ package client.components;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.HashSet;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -11,6 +12,7 @@ import client.scenes.MainCtrl;
 import client.utils.ComponentFactory;
 import client.utils.ServerUtils;
 import commons.Card;
+import commons.CardList;
 import commons.Tag;
 import client.utils.ClientUtils;
 import client.utils.Logger;
@@ -243,13 +245,11 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Tag>, Initi
         });
 
         cardView.setOnDragDone(event -> {
-            delete();
-            Card card = new Card();
-            card.setDescription(this.card.getDescription());
-            card.setTitle(this.card.getTitle());
-            card.setCardList(client.getActiveCardList());
-            card.setId(0); // Default id to be overridden by JPA
-            server.addCardAtPosition(card, (Integer) client.getActiveCardListCtrl().getCardListView().getUserData());
+            CardList cardList = card.getCardList();
+            int position = (Integer) client.getActiveCardListCtrl().getCardListView().getUserData();
+            cardList.removeCard(this.card);
+            cardList.addCardAtPosition(card, position);
+            server.updateCardList(cardList);
             client.getActiveCardListCtrl().refresh();
             event.consume();
         });

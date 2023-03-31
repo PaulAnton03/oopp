@@ -71,6 +71,10 @@ public class CardList implements DBEntity {
         this.cards.add(card);
     }
 
+    public void addCardAtPosition(Card card, int pos) {
+        this.cards.add(pos, card);
+    }
+
     @Override
     public String toString() {
         return "CardList [id=" + id + ", title=" + title + ", cards=" + cards + "]";
