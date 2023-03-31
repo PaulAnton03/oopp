@@ -192,7 +192,6 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Tag>, Initi
         unhighlight();
         deleteButton.setOpacity(0.0);
         editButton.setOpacity(0.0);
-
         // Create show/hide transition for buttons
         final Duration ftDuration = Duration.millis(200);
         final Duration ftDelay = Duration.millis(200);
@@ -205,14 +204,14 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Tag>, Initi
             ft.setToValue(0.6);
         });
         buttonsVisibilityPT = new ParallelTransition(fts.get(0), fts.get(1));
-
         // Set button icons and behaviour
-        try (var binInputStream = getClass().getResourceAsStream("/client/images/bin.png");
-             var editInputStream = getClass().getResourceAsStream("/client/images/edit.png")) {
+        try (var binInputStream =
+                     getClass().getResourceAsStream("/client/images/bin.png");
+             var editInputStream =
+                     getClass().getResourceAsStream("/client/images/edit.png")) {
             // Hover behaviour
             applyButtonHoverStyle(deleteButton);
             applyButtonHoverStyle(editButton);
-
             // Button graphic
             ImageView binIcon = new ImageView(new Image(binInputStream));
             ImageView editIcon = new ImageView(new Image(editInputStream));
@@ -225,8 +224,6 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Tag>, Initi
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
-
         // Set card view event handlers
         cardView.setOnMouseEntered(event -> focus());
         cardView.setOnMouseExited(event -> unfocus());
