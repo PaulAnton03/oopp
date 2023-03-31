@@ -47,11 +47,11 @@ public class Card implements DBEntity {
 
     @JoinTable(
             name = "card_tag",
-            joinColumns = { @JoinColumn(name = "card_id") },
-            inverseJoinColumns = { @JoinColumn(name = "tag_id") }
+            joinColumns = {@JoinColumn(name = "card_id")},
+            inverseJoinColumns = {@JoinColumn(name = "tag_id")}
     )
 
-    @ManyToMany(cascade=CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.ALL)
     private Set<Tag> tags = new HashSet<>();
 
     @NonNull
@@ -59,15 +59,16 @@ public class Card implements DBEntity {
     @NonNull
     private String description;
 
- public boolean removeTag(long id) {
-     Tag tag = this.getTags().stream().filter(c -> c.getId() == id).findFirst().orElse(null);
-     if (tag == null) {
-         return false;
-     } else {
-         this.getTags().remove(tag);
-     }
-     return true;
- }
+    public boolean removeTag(long id) {
+        Tag tag = this.getTags().stream().filter(c -> c.getId() == id).findFirst().orElse(null);
+        if (tag == null) {
+            return false;
+        } else {
+            this.getTags().remove(tag);
+        }
+        return true;
+    }
+
     public boolean removeSubTask(SubTask subTask) {
         return this.subtasks.remove(subTask);
     }
