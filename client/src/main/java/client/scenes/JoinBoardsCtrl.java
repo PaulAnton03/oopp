@@ -6,6 +6,7 @@ import client.utils.ClientUtils;
 import client.utils.ComponentFactory;
 import client.utils.ServerUtils;
 import commons.Board;
+import jakarta.ws.rs.NotFoundException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -41,10 +42,14 @@ public class JoinBoardsCtrl {
             boardPopulation.getChildren().addAll(boardJoinNodes);
             return;
         }
-        var boardJoinNodes = clientPrefs.getJoinedBoards().stream()
-                .map(boardId -> factory.create(BoardJoinCtrl.class, server.getBoard(boardId)).getNode())
-                .collect(Collectors.toList());
-        boardPopulation.getChildren().addAll(boardJoinNodes);
+        try {
+            var boardJoinNodes = clientPrefs.getJoinedBoards().stream()
+                    .map(boardId -> factory.create(BoardJoinCtrl.class, server.getBoard(boardId)).getNode())
+                    .collect(Collectors.toList());
+            boardPopulation.getChildren().addAll(boardJoinNodes);
+        } catch (NotFoundException e) {
+            clientPrefs.clearPreferences();
+        }
     }
 
     @Inject

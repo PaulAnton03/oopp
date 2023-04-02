@@ -12,6 +12,7 @@ import client.utils.ClientUtils;
 import client.utils.Logger;
 import client.utils.ServerUtils;
 import commons.Card;
+import commons.CardList;
 import javafx.animation.Animation;
 import javafx.animation.FadeTransition;
 import javafx.animation.ParallelTransition;
@@ -233,14 +234,30 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Card/* TODO
         });
 
         cardView.setOnDragDone(event -> {
-            delete();
+            /*delete();
             Card card = new Card();
             card.setDescription(this.card.getDescription());
             card.setTitle(this.card.getTitle());
             card.setCardList(client.getActiveCardList());
             card.setId(0); // Default id to be overridden by JPA
             server.addCardAtPosition(card, (Integer) client.getActiveCardListCtrl().getCardListView().getUserData());
-            client.getActiveCardListCtrl().refresh();
+            client.getActiveCardListCtrl().refresh();*/
+            CardList cardListStart = card.getCardList();
+            CardList cardListEnd = client.getActiveCardList();
+            int position;
+            try {
+                position = (Integer) client.getActiveCardListCtrl().getCardListView().getUserData();
+            } catch (Exception e) {
+                return;
+            }
+            cardListStart.removeCard(card);
+            cardListEnd.addCardAtPosition(card, position);
+            this.card.setCardList(cardListEnd);
+            server.updateCardList(cardListStart);
+            server.updateCardList(cardListEnd);
+            System.out.println("Test: " + server.getCardList(cardListStart.getId()));
+            System.out.println("Test: " + server.getCardList(cardListEnd.getId()));
+            client.getBoardCtrl().refresh();
             event.consume();
         });
 

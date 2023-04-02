@@ -88,6 +88,11 @@ public class ClientPreferences {
         savedBoards.put(String.valueOf(boardId), "");
     }
 
+    public void removeJoinedBoard(long boardId) {
+        savedBoards.remove(String.valueOf(boardId));
+        savedPasswords.remove(String.valueOf(boardId));
+    }
+
     /**
      * Store a password for a board
      *

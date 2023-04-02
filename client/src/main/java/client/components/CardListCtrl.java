@@ -68,9 +68,6 @@ public class CardListCtrl implements Component<CardList>, DBEntityCtrl<CardList,
         this.cardList = cardList;
         title.setText(cardList.getTitle());
 
-        //Todo - Find out why null cards are being added to lists upon certain operations. This is just a temporary fix, which is not elegant.
-        cardList.getCards().removeIf(Objects::isNull);
-
         for (Card card : cardList.getCards()) {
             CardCtrl cardCtrl = factory.create(CardCtrl.class, card);
             cardListView.getChildren().add(cardCtrl.getNode());

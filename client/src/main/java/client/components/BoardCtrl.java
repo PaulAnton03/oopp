@@ -52,12 +52,7 @@ public class BoardCtrl implements Component<Board>, DBEntityCtrl<Board, CardList
         final long listWidthPlusGap = 300;
         boardView.setMinWidth(board.getCardLists().size() * listWidthPlusGap);
 
-        //Todo - Find out why null cardLists are being added to lists upon certain operations. This is just a temporary fix, which is not elegant.
-        board.getCardLists().removeIf(Objects::isNull);
-
         for (CardList cardList : board.getCardLists()) {
-            if (cardList == null)
-                continue;
             CardListCtrl cardListCtrl = factory.create(CardListCtrl.class, cardList);
             boardView.getChildren().add(cardListCtrl.getNode());
         }
