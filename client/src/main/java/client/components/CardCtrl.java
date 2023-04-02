@@ -180,7 +180,6 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Card/* TODO
         unhighlight();
         deleteButton.setOpacity(0.0);
         editButton.setOpacity(0.0);
-
         // Create show/hide transition for buttons
         final Duration ftDuration = Duration.millis(200);
         final Duration ftDelay = Duration.millis(200);
@@ -193,14 +192,12 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Card/* TODO
             ft.setToValue(0.6);
         });
         buttonsVisibilityPT = new ParallelTransition(fts.get(0), fts.get(1));
-
         // Set button icons and behaviour
         try (var binInputStream = getClass().getResourceAsStream("/client/images/bin.png");
              var editInputStream = getClass().getResourceAsStream("/client/images/edit.png")) {
             // Hover behaviour
             applyButtonHoverStyle(deleteButton);
             applyButtonHoverStyle(editButton);
-
             // Button graphic
             ImageView binIcon = new ImageView(new Image(binInputStream));
             ImageView editIcon = new ImageView(new Image(editInputStream));
@@ -213,12 +210,9 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Card/* TODO
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
-
         // Set card view event handlers
         cardView.setOnMouseEntered(event -> focus());
         cardView.setOnMouseExited(event -> unfocus());
-
         cardView.setOnDragDetected(event -> {
             Logger.log("Card " + getCard().getTitle() + " drag detected");
 
@@ -232,16 +226,7 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Card/* TODO
             db.setContent(content);
             event.consume();
         });
-
         cardView.setOnDragDone(event -> {
-            /*delete();
-            Card card = new Card();
-            card.setDescription(this.card.getDescription());
-            card.setTitle(this.card.getTitle());
-            card.setCardList(client.getActiveCardList());
-            card.setId(0); // Default id to be overridden by JPA
-            server.addCardAtPosition(card, (Integer) client.getActiveCardListCtrl().getCardListView().getUserData());
-            client.getActiveCardListCtrl().refresh();*/
             CardList cardListStart = card.getCardList();
             CardList cardListEnd = client.getActiveCardList();
             int position;
@@ -255,12 +240,9 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Card/* TODO
             this.card.setCardList(cardListEnd);
             server.updateCardList(cardListStart);
             server.updateCardList(cardListEnd);
-            System.out.println("Test: " + server.getCardList(cardListStart.getId()));
-            System.out.println("Test: " + server.getCardList(cardListEnd.getId()));
             client.getBoardCtrl().refresh();
             event.consume();
         });
-
         cardView.setOnMouseClicked(event -> {
             if (event.getClickCount() == 2) {
                 editCard();

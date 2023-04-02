@@ -1,6 +1,5 @@
 package client.components;
 
-import java.util.Objects;
 import java.util.stream.IntStream;
 
 import javax.inject.Inject;
