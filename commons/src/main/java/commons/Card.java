@@ -46,6 +46,7 @@ public class Card implements DBEntity {
     @NonNull
     private String description;
 
+    private List<Tag> tagList = new ArrayList<>();
     public boolean removeSubTask(SubTask subTask) {
         return this.subtasks.remove(subTask);
     }
