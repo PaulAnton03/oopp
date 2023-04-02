@@ -30,6 +30,10 @@ public class Board implements DBEntity {
     @Getter
     @Setter
     private List<Tag> boardTagList = new ArrayList<>();
+
+    @Getter
+    @Setter
+    private int idGenerator = 0;
     @JsonIgnore
     private boolean editable = true;
 
