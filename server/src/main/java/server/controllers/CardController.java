@@ -95,11 +95,11 @@ public class CardController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<Card> update(@RequestBody Card card) {
+    public ResponseEntity<Card> update(@RequestBody Card card, @PathVariable("id") long id) {
         if (!card.isNetworkValid()) {
             return ResponseEntity.badRequest().build();
         }
-        final Optional<Card> optionalCard = cardRepository.findById(card.getId());
+        final Optional<Card> optionalCard = cardRepository.findById(id);
         if (optionalCard.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
