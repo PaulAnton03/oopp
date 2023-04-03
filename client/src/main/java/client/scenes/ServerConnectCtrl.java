@@ -9,7 +9,7 @@ import javafx.scene.control.TextField;
 
 import java.util.concurrent.CompletableFuture;
 
-public class ServerConnectCtrl {
+public class ServerConnectCtrl implements SceneCtrl{
 
     private final ServerUtils serverUtils;
     private final MainCtrl mainCtrl;
@@ -68,4 +68,7 @@ public class ServerConnectCtrl {
         mainCtrl.showMainView();
         Logger.log("Connecting to server: " + serverUtils.getServerPath());
     }
+
+    @Override
+    public void revalidate() {}
 }

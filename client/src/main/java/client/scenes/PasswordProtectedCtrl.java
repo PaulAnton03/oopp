@@ -8,7 +8,7 @@ import lombok.Setter;
 
 import javax.inject.Inject;
 
-public class PasswordProtectedCtrl {
+public class PasswordProtectedCtrl implements SceneCtrl {
 
     private MainCtrl mainCtrl;
     private ExceptionHandler exceptionHandler;
@@ -54,4 +54,7 @@ public class PasswordProtectedCtrl {
         passwordBoard.setEditable(false);
         mainCtrl.showMainView(passwordBoard);
     }
+
+    @Override
+    public void revalidate() {}
 }
