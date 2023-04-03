@@ -7,6 +7,8 @@ import client.utils.ClientUtils;
 import client.utils.ServerUtils;
 import commons.CardList;
 import javafx.fxml.FXML;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.ColorPicker;
 import javafx.scene.control.TextField;
 
 public class ListSettingsCtrl implements SceneCtrl {
@@ -19,6 +21,10 @@ public class ListSettingsCtrl implements SceneCtrl {
     private long cardListId;
     @FXML
     private TextField listTitle;
+    @FXML
+    private ColorPicker listColor;
+    @FXML
+    private CheckBox useDefault;
 
     @Inject
     public ListSettingsCtrl(ExceptionHandler exceptionHandler, ServerUtils server, ClientUtils client, MainCtrl mainCtrl) {
@@ -30,6 +36,7 @@ public class ListSettingsCtrl implements SceneCtrl {
 
     public void loadData(long cardListId) {
         this.cardListId = cardListId;
+        this.listTitle.setText(client.getCardList(cardListId).getTitle());
     }
 
     public void resetForm() {
@@ -38,7 +45,15 @@ public class ListSettingsCtrl implements SceneCtrl {
 
     public void saveChanges() {
         CardList cardList = client.getCardList(cardListId);
+        String color = mainCtrl.turnColorIntoString(listColor.getValue());
+        if(color.equals(client.getBoardCtrl().getBoard().getColor())) {
+            throw new IllegalStateException("List color cannot be the same as board color. Please select a different color");
+        }
         cardList.setTitle(listTitle.getText());
+        if(useDefault.isSelected())
+            cardList.setColor(cardList.getDefaultColor());
+        else
+            cardList.setColor(color);
         server.updateCardList(cardList);
         client.getBoardCtrl().refresh();
         mainCtrl.showMainView();

@@ -6,6 +6,8 @@ import client.utils.ClientUtils;
 import client.utils.ServerUtils;
 import commons.CardList;
 import javafx.fxml.FXML;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.ColorPicker;
 import javafx.scene.control.TextField;
 
 public class AddListCtrl implements SceneCtrl {
@@ -13,8 +15,10 @@ public class AddListCtrl implements SceneCtrl {
     private final MainCtrl mainCtrl;
     private final ServerUtils server;
     private final ClientUtils client;
-    @FXML
-    private TextField title;
+
+    @FXML private TextField title;
+    @FXML private ColorPicker listColor;
+    @FXML private CheckBox useDefault;
 
     @Inject
     public AddListCtrl(MainCtrl mainCtrl, ServerUtils server, ClientUtils client) {
@@ -24,7 +28,15 @@ public class AddListCtrl implements SceneCtrl {
     }
 
     public CardList getList() {
-        CardList cardList = new CardList(title.getText());
+        String color = mainCtrl.turnColorIntoString(listColor.getValue());
+        if(color.equals(client.getBoardCtrl().getBoard().getColor())) {
+            throw new IllegalStateException("List color cannot be the same as board color. Please select a different color");
+        }
+        CardList cardList;
+        if(useDefault.isSelected())
+            cardList = new CardList(title.getText());
+        else
+            cardList = new CardList(title.getText(), color);
         cardList.setBoard(client.getBoardCtrl().getBoard());
         if (cardList.getBoard() == null) {
             throw new IllegalStateException("No board selected");

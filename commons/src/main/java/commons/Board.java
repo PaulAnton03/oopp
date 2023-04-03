@@ -33,9 +33,20 @@ public class Board implements DBEntity {
     @JsonIgnore
     private boolean editable = true;
 
-    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
+    private final String defaultColor = "#ffffffff";
+
+    @NonNull
+    private String color;
+
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @OrderColumn(name = "card_list_index")
     private List<CardList> cardLists = new ArrayList<>();
+
+    public Board(String name) {
+        this.name = name;
+        this.color = "#ffffffff";
+    }
 
     /**
      * Adds an empty {@link CardList} to the board.
@@ -90,7 +101,7 @@ public class Board implements DBEntity {
 
     @Override
     public String toString() {
-        return "Board [id=" + id + ", name=" + name + ", password=" + password + ", cardLists=" + cardLists + "]";
+        return "Board [id=" + id + ", name=" + name + ", password=" + password + ", color=" + color + ", cardLists=" + cardLists + "]";
     }
 
 
@@ -105,11 +116,17 @@ public class Board implements DBEntity {
     @JsonIgnore
     public boolean isNetworkValid() {
         return this.cardLists != null
-                && !isNullOrEmpty(this.getName());
+                && !isNullOrEmpty(this.getName())
+                && !isNullOrEmpty(this.getColor());
     }
 
     @JsonIgnore
     public boolean isEditable() {
         return editable;
+    }
+
+    @JsonIgnore
+    public String getDefaultColor() {
+        return defaultColor;
     }
 }

@@ -1,7 +1,6 @@
 @import "global.css";
 
 .cardList {
-    -fx-background-color: #b2b2eb;
     -fx-background-radius: 5px;
 }
 
@@ -18,5 +17,6 @@
 .listTitle {
     -fx-font-size: 30px;
     -fx-font-weight: 600;
+    -fx-text-fill: black;
 }
 

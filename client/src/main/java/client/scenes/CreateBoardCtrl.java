@@ -1,21 +1,24 @@
 package client.scenes;
 
-import client.utils.ClientUtils;
-import client.utils.Logger;
-import client.utils.ServerUtils;
+import client.components.BoardCtrl;
+import client.utils.*;
 import com.google.inject.Inject;
 import commons.Board;
 import commons.CardList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.TextField;
+import javafx.scene.paint.Color;
 
 public class CreateBoardCtrl implements SceneCtrl {
 
     private final ServerUtils server;
     private final ClientUtils client;
     private final MainCtrl mainCtrl;
+    private final ComponentFactory factory;
+    private final ClientPreferences clientPrefs;
 
     @FXML
     private TextField boardName;
@@ -26,16 +29,22 @@ public class CreateBoardCtrl implements SceneCtrl {
     @FXML
     private CheckBox passwordUsed;
 
+    private Color color;
+
     @Inject
-    public CreateBoardCtrl(ServerUtils server, ClientUtils client, MainCtrl mainCtrl) {
+    public CreateBoardCtrl(ServerUtils server, ClientUtils client, MainCtrl mainCtrl,
+                           ComponentFactory factory, ClientPreferences clientPrefs) {
         this.client = client;
         this.mainCtrl = mainCtrl;
         this.server = server;
+        this.factory = factory;
+        this.clientPrefs = clientPrefs;
     }
 
     public void createBoard() {
 
-        final Board newBoard = new Board(boardName.getText());
+        String color = mainCtrl.turnColorIntoString(boardColor.getValue());
+        final Board newBoard = new Board(boardName.getText(), color);
         if (passwordUsed.isSelected()) {
             newBoard.setPassword(boardPassword.getText());
         }
@@ -48,12 +57,20 @@ public class CreateBoardCtrl implements SceneCtrl {
         addedBoard.addCardList(addedCardList);
 
         clear();
-        mainCtrl.showMainView(addedBoard);
+        BoardCtrl boardCtrl = factory.create(BoardCtrl.class, addedBoard);
+        client.setBoardCtrl(boardCtrl);
+        clientPrefs.setDefaultBoardId(addedBoard.getId());
+        clientPrefs.addJoinedBoard(addedBoard.getId());
+        mainCtrl.showMainView();
     }
 
     public void goBack() {
         clear();
         mainCtrl.showMainView();
+    }
+
+    public void pickColor(ActionEvent action){
+        color = boardColor.getValue();
     }
 
     public void clear() {

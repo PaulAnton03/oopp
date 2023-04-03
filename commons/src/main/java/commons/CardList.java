@@ -52,8 +52,19 @@ public class CardList implements DBEntity {
     @NonNull
     private String title;
 
+    @NonNull
+    private String color;
+
+    @JsonIgnore
+    private final String defaultColor = "#b2b2ebff";
+
     public CardList() {
         this.title = "New Card List";
+    }
+
+    public CardList(String title) {
+        this.title = title;
+        this.color = defaultColor;
     }
 
     public boolean removeCard(Card card) {
@@ -77,7 +88,7 @@ public class CardList implements DBEntity {
 
     @Override
     public String toString() {
-        return "CardList [id=" + id + ", title=" + title + ", cards=" + cards + "]";
+        return "CardList [id=" + id + ", title=" + title + ", color=" + color + ", cards=" + cards + "]";
     }
 
     /**
@@ -86,10 +97,16 @@ public class CardList implements DBEntity {
     @JsonIgnore
     public boolean isNetworkValid() {
         return this.getCards() != null
-            && !isNullOrEmpty(this.getTitle());
+                && !isNullOrEmpty(this.getTitle())
+                && !isNullOrEmpty(this.getColor());
     }
 
     private static boolean isNullOrEmpty(String s) {
         return s == null || s.isEmpty();
+    }
+
+    @JsonIgnore
+    public String getDefaultColor() {
+        return defaultColor;
     }
 }

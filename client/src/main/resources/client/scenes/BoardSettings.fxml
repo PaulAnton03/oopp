@@ -49,7 +49,7 @@
             </Text>
             <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="30.0" prefWidth="300.0" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
                <children>
-                  <ColorPicker fx:id="boardColor" layoutX="150.0" minHeight="-Infinity" prefHeight="30.0" prefWidth="147.0" styleClass="formButton" AnchorPane.rightAnchor="0.0" />
+                  <ColorPicker fx:id="boardColor" layoutX="150.0" minHeight="-Infinity" onAction="#pickColor" prefHeight="30.0" prefWidth="147.0" styleClass="formButton" AnchorPane.rightAnchor="0.0" />
                   <Label contentDisplay="CENTER" layoutX="24.0" minHeight="30.0" prefHeight="33.0" prefWidth="80.0" text="Board color" textAlignment="CENTER" AnchorPane.leftAnchor="0.0" />
                </children>
             </AnchorPane>
