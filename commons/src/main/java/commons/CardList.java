@@ -55,13 +55,16 @@ public class CardList implements DBEntity {
     @NonNull
     private String color;
 
+    @JsonIgnore
+    private final String defaultColor = "#b2b2ebff";
+
     public CardList() {
         this.title = "New Card List";
     }
 
     public CardList(String title) {
         this.title = title;
-        this.color = "#b2b2ebff";
+        this.color = defaultColor;
     }
 
     public boolean removeCard(Card card) {
@@ -100,5 +103,10 @@ public class CardList implements DBEntity {
 
     private static boolean isNullOrEmpty(String s) {
         return s == null || s.isEmpty();
+    }
+
+    @JsonIgnore
+    public String getDefaultColor() {
+        return defaultColor;
     }
 }

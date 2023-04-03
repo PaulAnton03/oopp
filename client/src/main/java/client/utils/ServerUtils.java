@@ -210,17 +210,6 @@ public class ServerUtils {
         });
     }
 
-    // For TESTING purpose
-    public Board getBoardTest() {
-        Board board = new Board("Testing board", "#ffffffff");
-        CardList list1 = new CardList("List 1", "#b2b2ebff");
-        CardList list2 = new CardList("List 2", "#b2b2ebff");
-        list1.addCard(new Card("Do the dishes", "In kitchen"));
-        list1.addCard(new Card("Do the homework", "Maths, Biology"));
-        list2.addCard(new Card("Title", "Only card in list 2"));
-        return board;
-    }
-
     public void stop() {
         if (session != null) {
             stomp.stop();

@@ -33,6 +33,9 @@ public class Board implements DBEntity {
     @JsonIgnore
     private boolean editable = true;
 
+    @JsonIgnore
+    private final String defaultColor = "#ffffffff";
+
     @NonNull
     private String color;
 
@@ -120,5 +123,10 @@ public class Board implements DBEntity {
     @JsonIgnore
     public boolean isEditable() {
         return editable;
+    }
+
+    @JsonIgnore
+    public String getDefaultColor() {
+        return defaultColor;
     }
 }

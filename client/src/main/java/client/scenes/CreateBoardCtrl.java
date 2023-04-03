@@ -51,7 +51,7 @@ public class CreateBoardCtrl implements SceneCtrl {
         final Board addedBoard = server.addBoard(newBoard);
         Logger.log("Added board " + addedBoard);
 
-        final CardList cardList = new CardList("TODO", "#b2b2ebff");
+        final CardList cardList = new CardList("TODO");
         cardList.setBoard(addedBoard);
         final CardList addedCardList = server.addCardList(cardList);
         addedBoard.addCardList(addedCardList);
