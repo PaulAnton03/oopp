@@ -47,7 +47,6 @@ public class BoardSettingsCtrl implements SceneCtrl {
         board.setColor(color);
         board.setPassword(passwordUsed.isSelected() ? boardPassword.getText() : null);
         server.updateBoard(board);
-        client.getBoardCtrl().refresh();
         clearForm();
         mainCtrl.showMainView();
     }

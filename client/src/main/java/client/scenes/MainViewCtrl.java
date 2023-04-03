@@ -153,6 +153,21 @@ public class MainViewCtrl implements SceneCtrl {
             });
         });
 
+        server.registerForMessages("/topic/board/" + boardId + "/update", Board.class, b -> {
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    System.out.println(mainCtrl.getActiveCtrl());
+                    if (mainCtrl.getActiveCtrl() == mainCtrl.getMainViewCtrl()) {
+                        mainCtrl.showMainView(b);
+                    } else {
+                        client.getBoardCtrl().refresh();
+                        mainCtrl.getActiveCtrl().revalidate();
+                    }
+                }
+            });
+        });
+
         /**
          * This method call is used for informing the client that the board they are currently on
          * has been deleted
