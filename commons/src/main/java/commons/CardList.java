@@ -59,6 +59,11 @@ public class CardList implements DBEntity {
         this.title = "New Card List";
     }
 
+    public CardList(String title) {
+        this.title = title;
+        this.color = "#b2b2ebff";
+    }
+
     public boolean removeCard(Card card) {
         return this.cards.remove(card);
     }

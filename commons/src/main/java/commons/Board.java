@@ -40,6 +40,11 @@ public class Board implements DBEntity {
     @OrderColumn(name = "card_list_index")
     private List<CardList> cardLists = new ArrayList<>();
 
+    public Board(String name) {
+        this.name = name;
+        this.color = "#ffffffff";
+    }
+
     /**
      * Adds an empty {@link CardList} to the board.
      *
