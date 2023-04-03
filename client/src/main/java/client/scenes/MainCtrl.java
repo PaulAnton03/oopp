@@ -43,6 +43,7 @@ public class MainCtrl {
     private BoardSettingsCtrl boardSettingsCtrl;
     private Scene settings;
 
+    @Getter
     private MainViewCtrl mainViewCtrl;
     private Scene main;
 
