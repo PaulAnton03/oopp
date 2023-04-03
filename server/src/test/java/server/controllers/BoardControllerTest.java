@@ -9,6 +9,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import org.opentest4j.TestAbortedException;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.server.ResponseStatusException;
 import server.database.BoardRepository;
 
@@ -25,6 +26,8 @@ import static org.mockito.Mockito.*;
 public class BoardControllerTest {
     @Mock
     BoardRepository boardRepoMock;
+    @Mock
+    SimpMessagingTemplate messagingTemplate;
     @InjectMocks
     BoardController controller;
 
@@ -62,13 +65,21 @@ public class BoardControllerTest {
     }
 
     @Test
+    @MockitoSettings(strictness = Strictness.LENIENT)
     public void createBoardTest() {
         final Board suppliedBoard = new Board("supplied");
+        suppliedBoard.setId(15L);
         final Board savedBoard = new Board("saved");
+        savedBoard.setId(15L);
 
         when(boardRepoMock.save(suppliedBoard)).thenReturn(savedBoard);
+        doNothing().when(messagingTemplate).convertAndSend(any(String.class), any(Board.class));
 
-        assertEquals(savedBoard, controller.create(suppliedBoard).getBody());
+        Board ret = controller.create(suppliedBoard).getBody();
+
+        assertEquals(savedBoard, ret);
+
+        verify(messagingTemplate, times(1)).convertAndSend("/topic/board/15/create", suppliedBoard);
     }
 
     @Test
