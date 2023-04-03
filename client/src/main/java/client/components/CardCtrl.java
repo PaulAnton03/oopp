@@ -189,8 +189,7 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Card/* TODO
         fts.forEach(ft -> {
             ft.setDelay(ftDelay);
             ft.setFromValue(0.0);
-            ft.setToValue(0.6);
-        });
+            ft.setToValue(0.6);});
         buttonsVisibilityPT = new ParallelTransition(fts.get(0), fts.get(1));
         // Set button icons and behaviour
         try (var binInputStream = getClass().getResourceAsStream("/client/images/bin.png");
@@ -211,11 +210,12 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Card/* TODO
             throw new RuntimeException(e);
         }
         // Set card view event handlers
-        cardView.setOnMouseEntered(event -> focus());
+        cardView.setOnMouseEntered(event -> {
+            focus();
+            client.changeSelection(card.getId());});
         cardView.setOnMouseExited(event -> unfocus());
         cardView.setOnDragDetected(event -> {
             Logger.log("Card " + getCard().getTitle() + " drag detected");
-
             SnapshotParameters params = new SnapshotParameters();
             params.setFill(Color.TRANSPARENT);
             params.setTransform(Transform.scale(0.8, 0.8));
