@@ -12,7 +12,7 @@ import java.util.List;
 @Data
 @RequiredArgsConstructor
 @Entity
-@NoArgsConstructor
+@NoArgsConstructor(force = true)
 @Table(name = "boards")
 @JsonIdentityInfo(scope = Board.class, generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Board implements DBEntity {

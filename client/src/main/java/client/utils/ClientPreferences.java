@@ -17,14 +17,16 @@ public class ClientPreferences {
     private final Preferences savedPasswords;
     private final Preferences savedBoards;
     private final static String DEFAULT_BOARD_KEY = "default_board";
-    private final static String SAVED_BOARDS_PATH = "/boards";
-    private final static String SAVED_PASSWORDS_PATH = "/passwords";
+    private final static String SAVED_BOARDS_PATH = "boards";
+    private final static String SAVED_PASSWORDS_PATH = "passwords";
 
     @Inject
-    public ClientPreferences(Preferences preferences) {
-        this.commonPrefs = preferences;
-        this.savedPasswords = preferences.node(SAVED_PASSWORDS_PATH);
-        this.savedBoards = preferences.node(SAVED_BOARDS_PATH);
+    public ClientPreferences(ServerUtils serverUtils, Preferences preferences) {
+        // The directory for a server is its path hashcode so there aren't any illegal characters
+        Preferences serverSpecificPrefs = preferences.node(String.valueOf(serverUtils.getServerPath().hashCode()));
+        this.commonPrefs = serverSpecificPrefs;
+        this.savedPasswords = serverSpecificPrefs.node(SAVED_PASSWORDS_PATH);
+        this.savedBoards = serverSpecificPrefs.node(SAVED_BOARDS_PATH);
     }
 
     /**
@@ -70,7 +72,6 @@ public class ClientPreferences {
             commonPrefs.clear();
             savedPasswords.clear();
             savedBoards.clear();
-            unsetDefaultBoardId();
         } catch (BackingStoreException e) {
             throw new RuntimeException(e);
         }
@@ -86,6 +87,11 @@ public class ClientPreferences {
 
     public void addJoinedBoard(long boardId) {
         savedBoards.put(String.valueOf(boardId), "");
+    }
+
+    public void removeJoinedBoard(long boardId) {
+        savedBoards.remove(String.valueOf(boardId));
+        savedPasswords.remove(String.valueOf(boardId));
     }
 
     /**
