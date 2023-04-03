@@ -8,6 +8,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
@@ -32,12 +33,15 @@
                         <Label text="New Tag" />
                         <Button fx:id="addTagButton" mnemonicParsing="false" onAction="#createTag" text="+" />
                         <TextField fx:id="tagField" prefHeight="25.0" prefWidth="117.0" />
-                        <ColorPicker fx:id="colourPicker" prefHeight="25.0" prefWidth="122.0" />
+                        <ColorPicker fx:id="colourPicker" onAction="#pickColor" prefHeight="25.0" prefWidth="122.0" />
                      </children>
                   </HBox>
                   <Button layoutX="320.0" layoutY="160.0" mnemonicParsing="false" onAction="#saveCardChanges" prefHeight="27.0" prefWidth="70.0" styleClass="formButton" text="Save" />
                   <Button layoutX="12.0" layoutY="160.0" mnemonicParsing="false" onAction="#cancel" prefHeight="26.0" prefWidth="70.0" styleClass="formButton" text="Cancel" />
-                  <AnchorPane fx:id="tagArea" layoutX="9.0" layoutY="23.0" prefHeight="72.0" prefWidth="385.0" style="-fx-background-color: WHITE;" />
+                  <AnchorPane layoutX="9.0" layoutY="23.0" prefHeight="72.0" prefWidth="385.0" style="-fx-background-color: WHITE;">
+                     <children>
+                        <FlowPane fx:id="tagArea" prefHeight="72.0" prefWidth="389.0" />
+                     </children></AnchorPane>
                </children>
             </AnchorPane>
          </children>

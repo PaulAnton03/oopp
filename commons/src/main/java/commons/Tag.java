@@ -40,4 +40,9 @@ public class Tag implements DBEntity{
     public void setColor(String color) {
         this.color = color;
     }
+
+    @Override
+    public long getId(){
+        return (long) id;
+    }
 }

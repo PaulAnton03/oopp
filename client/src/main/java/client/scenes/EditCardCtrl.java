@@ -4,9 +4,11 @@ import client.components.TagCtrl;
 import client.utils.ClientUtils;
 import client.utils.ExceptionHandler;
 import client.utils.ServerUtils;
+import client.utils.ComponentFactory;
 import commons.Board;
 import commons.Card;
 import commons.Tag;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
@@ -14,7 +16,11 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import lombok.Getter;
 
 import javax.inject.Inject;
 
@@ -24,9 +30,11 @@ public class EditCardCtrl implements SceneCtrl {
     private final ClientUtils client;
     private final MainCtrl mainCtrl;
 
-    private ComponentFactory componentFactory;
+    private ComponentFactory factory;
 
     private final ExceptionHandler exceptionHandler;
+
+    @Getter
     private long cardId;
 
     @FXML
@@ -43,7 +51,9 @@ public class EditCardCtrl implements SceneCtrl {
     private TextArea changeDesc;
 
     @FXML
-    private Pane tagArea;
+    private FlowPane tagArea;
+
+    private Color color;
 
     @Inject
     public EditCardCtrl(ServerUtils server, ClientUtils client, MainCtrl mainCtrl,
@@ -52,7 +62,7 @@ public class EditCardCtrl implements SceneCtrl {
         this.client = client;
         this.mainCtrl = mainCtrl;
         this.exceptionHandler = exceptionHandler;
-        this.componentFactory = componentFactory;
+        this.factory = componentFactory;
     }
 
     public void saveCardChanges() {
@@ -66,6 +76,7 @@ public class EditCardCtrl implements SceneCtrl {
     }
 
     public void loadData(long cardId) {
+        resetState();
         this.cardId = cardId;
         Card card = client.getCard(cardId);
         changeTitle.setText(card.getTitle());
@@ -78,7 +89,7 @@ public class EditCardCtrl implements SceneCtrl {
             if(curBoard.getBoardTagId()[a] > 0) {
                 Tag tag = new Tag(curBoard.getBoardTagText()[a],
                         curBoard.getBoardTagId()[a], curBoard.getBoardTagColor()[a]);
-                TagCtrl tagCtrl = null;
+                TagCtrl tagCtrl = factory.create(TagCtrl.class, tag);
                 tagCtrl.loadData(tag);
                 tagArea.getChildren().add(tagCtrl.getNode());
             }
@@ -95,22 +106,23 @@ public class EditCardCtrl implements SceneCtrl {
         board.setIdGenerator(board.getIdGenerator() + 1);
         String tagText = "";
         String tagColor = "";
-        if (tagField.getText() == null) {
+        if (tagField == null) {
             tagText = "";
         } else {
             tagText = tagField.getText();
         }
-        if (colourPicker.getValue() == null) {
+        if (color == null) {
             tagColor = "FFFFFF";
         } else {
-            tagColor = colourPicker.getValue().toString();
+            tagColor = color.toString();
         }
         Tag tag = new Tag(tagText, board.getIdGenerator(), tagColor);
         int id = board.getIdGenerator();
         board.getBoardTagText()[id] = tagText;
         board.getBoardTagId()[id] = id;
-        board.getBoardTagColor()[id] = tagText;
+        board.getBoardTagColor()[id] = tagColor;
         server.updateBoard(board);
+        loadData(cardId);
         System.out.println("Tag created: " + tag);
     }
 
@@ -120,10 +132,14 @@ public class EditCardCtrl implements SceneCtrl {
             cancel();
         }
     }
+    public void pickColor(ActionEvent event){
+        color = colourPicker.getValue();
+    }
 
     public void resetState() {
         this.changeTitle.setText("");
         this.changeDesc.setText("");
+        tagArea.getChildren().removeAll();
     }
 
     @Override

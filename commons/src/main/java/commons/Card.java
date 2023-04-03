@@ -69,7 +69,13 @@ public class Card implements DBEntity {
 
     @Override
     public String toString() {
-        return "Card [id=" + id + ", title=" + title + ", description=" + description + ",subtasks= " + subtasks + "]";
+        String tags = "";
+        for(int i = 0; i < getCardTagId().length; i++){
+            if(getCardTagId()[i] > 0)
+                tags += getCardTagText()[i] + ", ";
+        }
+        return "Card [id=" + id + ", title=" + title + ", description=" + description + ",subtasks= " + subtasks + "]"
+                + " Tags: " + tags;
     }
 
     /**
