@@ -30,10 +30,12 @@ public class Board implements DBEntity {
     /* If null the board will not have a password. */
     private String password;
 
+    private String boardColor = "FFFFFF";
+
     @JsonIgnore
     private boolean editable = true;
 
-    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @OrderColumn(name = "card_list_index")
     private List<CardList> cardLists = new ArrayList<>();
 
