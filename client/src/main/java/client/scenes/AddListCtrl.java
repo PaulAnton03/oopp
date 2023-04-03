@@ -9,7 +9,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.TextField;
-import org.checkerframework.checker.units.qual.C;
 
 public class AddListCtrl implements SceneCtrl {
 
