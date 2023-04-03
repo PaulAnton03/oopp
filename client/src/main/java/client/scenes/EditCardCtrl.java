@@ -1,10 +1,7 @@
 package client.scenes;
 
-import javax.inject.Inject;
-
 import client.components.TagCtrl;
 import client.utils.ClientUtils;
-import client.utils.ComponentFactory;
 import client.utils.ExceptionHandler;
 import client.utils.ServerUtils;
 import commons.Board;
@@ -19,13 +16,15 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 
+import javax.inject.Inject;
+
 
 public class EditCardCtrl implements SceneCtrl {
     private final ServerUtils server;
     private final ClientUtils client;
     private final MainCtrl mainCtrl;
 
-    private final ComponentFactory factory;
+    private ComponentFactory componentFactory;
 
     private final ExceptionHandler exceptionHandler;
     private long cardId;
@@ -48,12 +47,12 @@ public class EditCardCtrl implements SceneCtrl {
 
     @Inject
     public EditCardCtrl(ServerUtils server, ClientUtils client, MainCtrl mainCtrl,
-                        ExceptionHandler exceptionHandler, ComponentFactory factory) {
+                        ExceptionHandler exceptionHandler, ComponentFactory componentFactory) {
         this.server = server;
         this.client = client;
         this.mainCtrl = mainCtrl;
-        this.factory = factory;
         this.exceptionHandler = exceptionHandler;
+        this.componentFactory = componentFactory;
     }
 
     public void saveCardChanges() {
@@ -71,12 +70,19 @@ public class EditCardCtrl implements SceneCtrl {
         Card card = client.getCard(cardId);
         changeTitle.setText(card.getTitle());
         changeDesc.setText(card.getDescription());
-        for(Tag tag : client.getBoardCtrl().getBoard().getBoardTagList()){
-            TagCtrl tagCtrl =
-            tagArea.getChildren().add();
-            //todo finish this with factory and such
+        Board curBoard = client.getBoardCtrl().getBoard();
+        for(int a = 0; a < curBoard.getBoardTagId().length; a++ ){
+            System.out.println("now on loadData editctrl: " + a);
+            System.out.println(curBoard.getBoardTagText()[a]);
+            System.out.println(curBoard.getBoardTagId()[a]);
+            if(curBoard.getBoardTagId()[a] > 0) {
+                Tag tag = new Tag(curBoard.getBoardTagText()[a],
+                        curBoard.getBoardTagId()[a], curBoard.getBoardTagColor()[a]);
+                TagCtrl tagCtrl = null;
+                tagCtrl.loadData(tag);
+                tagArea.getChildren().add(tagCtrl.getNode());
+            }
         }
-
     }
 
     public void cancel() {
@@ -100,7 +106,12 @@ public class EditCardCtrl implements SceneCtrl {
             tagColor = colourPicker.getValue().toString();
         }
         Tag tag = new Tag(tagText, board.getIdGenerator(), tagColor);
-        board.getBoardTagList().add(tag);
+        int id = board.getIdGenerator();
+        board.getBoardTagText()[id] = tagText;
+        board.getBoardTagId()[id] = id;
+        board.getBoardTagColor()[id] = tagText;
+        server.updateBoard(board);
+        System.out.println("Tag created: " + tag);
     }
 
     @FXML

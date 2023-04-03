@@ -6,8 +6,10 @@ import java.util.Map;
 import client.components.BoardCtrl;
 import client.components.CardCtrl;
 import client.components.CardListCtrl;
+import client.components.TagCtrl;
 import commons.Card;
 import commons.CardList;
+import commons.Tag;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -29,9 +31,14 @@ public class ClientUtils {
     @Setter
     private Map<Long, CardCtrl> cardCtrls = new HashMap<>();
 
+    @Getter
+    @Setter
+    private Map<Long, TagCtrl> tagCtrls = new HashMap<>();
+
     public void clearBoardData() {
         this.cardListCtrls = new HashMap<>();
         this.cardCtrls = new HashMap<>();
+        this.tagCtrls = new HashMap<>();
         this.boardCtrl = null;
     }
 
@@ -65,5 +72,9 @@ public class ClientUtils {
             cardCtrl.unhighlight();
         this.selectedCardId = selectedCardId;
         getCardCtrl(selectedCardId).highlight();
+    }
+
+    public Tag getTag(long id){
+        return tagCtrls.get(id).getTag();
     }
 }

@@ -45,8 +45,13 @@ public class Card implements DBEntity {
     private String title;
     @NonNull
     private String description;
+//
+//    @OneToOne(targetEntity = Tag.class)
+    //private List<Triple<String, Integer, String>> tagList = new ArrayList<>();
+    private String[] cardTagText = new String[10];
+    private int[] cardTagId = new int[10];
+    private String[] cardTagColor = new String[10];
 
-    private List<Tag> tagList = new ArrayList<>();
     public boolean removeSubTask(SubTask subTask) {
         return this.subtasks.remove(subTask);
     }

@@ -27,9 +27,14 @@ public class Board implements DBEntity {
     /* If null the board will not have a password. */
     private String password;
 
-    @Getter
-    @Setter
-    private List<Tag> boardTagList = new ArrayList<>();
+//    @Getter
+//    @Setter
+//    @OneToOne(targetEntity = Tag.class)
+    //private List<String[], int[], String[]> boardTagList = new ArrayList<>();
+    private String[] boardTagText = new String[32];
+    private int[] boardTagId = new int[32];
+    private String[] boardTagColor = new String[32];
+
 
     @Getter
     @Setter
