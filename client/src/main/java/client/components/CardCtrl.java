@@ -1,26 +1,14 @@
 package client.components;
 
-import java.io.IOException;
-import java.net.URL;
-import java.util.List;
-import java.util.ResourceBundle;
-
-import javax.inject.Inject;
-
 import client.scenes.MainCtrl;
 import client.utils.ClientUtils;
 import client.utils.Logger;
 import client.utils.ServerUtils;
 import commons.Card;
 import commons.CardList;
-import javafx.animation.Animation;
-import javafx.animation.FadeTransition;
-import javafx.animation.ParallelTransition;
-import javafx.animation.ScaleTransition;
-import javafx.animation.Transition;
+import javafx.animation.*;
 import javafx.css.PseudoClass;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -38,6 +26,12 @@ import javafx.scene.transform.Transform;
 import javafx.util.Duration;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+
+import javax.inject.Inject;
+import java.io.IOException;
+import java.net.URL;
+import java.util.List;
+import java.util.ResourceBundle;
 
 @EqualsAndHashCode
 public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Card/* TODO: change to TAG */>, Initializable {
@@ -64,9 +58,13 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Card/* TODO
         this.mainCtrl = mainCtrl;
         this.server = serverUtils;
         this.client = client;
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("Card.fxml"));
-        loader.setController(this);
-        loader.setRoot(this);
+
+//         I figured out these do nothing, but if anybody encounters any problems uncomment this
+//         Also notify me if that happens, treat this as a test, Błażej
+//
+//        FXMLLoader loader = new FXMLLoader(getClass().getResource("Card.fxml"));
+//        loader.setController(this);
+//        loader.setRoot(this);
     }
 
     @Override
