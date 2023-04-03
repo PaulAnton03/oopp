@@ -1,9 +1,12 @@
 package client.scenes;
 
-import client.utils.*;
 import com.google.inject.Inject;
 
 import client.components.BoardCtrl;
+import client.utils.ClientUtils;
+import client.utils.ComponentFactory;
+import client.utils.ExceptionHandler;
+import client.utils.ServerUtils;
 import commons.Board;
 import commons.Card;
 import commons.CardList;
@@ -12,7 +15,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
@@ -92,11 +94,6 @@ public class MainViewCtrl implements SceneCtrl {
             pane.setHvalue(pane.getHvalue() - scrollAmount);
         }
         event.consume();
-    }
-
-    @FXML
-    public void initialize() {
-        root.addEventFilter(KeyEvent.KEY_PRESSED, new MainViewKeyEventHandler(client));
     }
 
     public void loadData(Board board) {
