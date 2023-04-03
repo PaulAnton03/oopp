@@ -161,6 +161,7 @@ public class MainCtrl {
     }
 
     public void showSettings() {
+        boardSettingsCtrl.loadData();
         primaryStage.setTitle("Board Settings");
         primaryStage.setScene(settings);
         activeCtrl = boardSettingsCtrl;

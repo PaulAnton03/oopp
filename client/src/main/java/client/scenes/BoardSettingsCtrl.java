@@ -24,6 +24,8 @@ public class BoardSettingsCtrl implements SceneCtrl {
     private TextField boardPassword;
     @FXML
     private CheckBox passwordUsed;
+    @FXML
+    private TextField boardName;
 
     @FXML
     private Button deleteBoardButton;
@@ -37,12 +39,17 @@ public class BoardSettingsCtrl implements SceneCtrl {
         this.clientPrefs = clientPrefs;
     }
 
+    public void loadData() {
+        boardName.setText(client.getBoardCtrl().getBoard().getName());
+    }
+
     public void saveChanges() {
         Board board = client.getBoardCtrl().getBoard();
         if (board == null) {
             Logger.log("No board selected", Logger.LogLevel.ERROR);
             throw new IllegalStateException("Something went wrong, no board selected!");
         }
+        board.setName(boardName.getText());
         board.setPassword(passwordUsed.isSelected() ? boardPassword.getText() : null);
         server.updateBoard(board);
         client.getBoardCtrl().refresh();
