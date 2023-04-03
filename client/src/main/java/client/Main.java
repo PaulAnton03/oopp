@@ -57,8 +57,14 @@ public class Main extends Application {
 
         mainCtrl = INJECTOR.getInstance(MainCtrl.class);
         mainCtrl.initialize(primaryStage, builder);
+
+        primaryStage.setOnCloseRequest(e -> {
+            System.exit(0);
+        });
     }
 
     @Override
-    public void stop() { mainCtrl.stop(); }
+    public void stop() {
+        mainCtrl.stop();
+    }
 }

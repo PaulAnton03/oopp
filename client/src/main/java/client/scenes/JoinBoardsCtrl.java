@@ -15,6 +15,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 
 import javax.inject.Inject;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -41,13 +42,19 @@ public class JoinBoardsCtrl {
 
     private final AtomicBoolean running = new AtomicBoolean(false);
 
+    private List<Board> currentBoards = new ArrayList<>();
+
+
     private void startPolling() {
         running.set(true);
         worker = new Thread(() -> {
             while (running.get()) {
                 try {
                     var updatedBoards = server.longPollBoards();
-                    Platform.runLater(() -> updateBoards(updatedBoards));
+                    if (updatedBoards != null && !updatedBoards.equals(currentBoards)) {
+                        Platform.runLater(() -> updateBoards(updatedBoards));
+                        currentBoards = updatedBoards;
+                    }
                 } catch (InterruptedException | ExecutionException e) {
 
                 }
