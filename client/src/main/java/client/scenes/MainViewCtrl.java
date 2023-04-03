@@ -180,19 +180,6 @@ public class MainViewCtrl implements SceneCtrl {
             });
         });
 
-        server.registerForMessages("/topic/board/" + boardId + "/update", Board.class, b -> {
-            Platform.runLater(new Runnable() {
-                @Override
-                public void run() {
-                    if (mainCtrl.getActiveCtrl() == mainCtrl.getMainViewCtrl()) {
-                        mainCtrl.showMainView(b);
-                    } else {
-                        client.getBoardCtrl().refresh();
-                        mainCtrl.getActiveCtrl().revalidate();
-                    }
-                }
-            });
-        });
     }
     @Override
     public void revalidate() {
