@@ -154,7 +154,6 @@ public class MainViewCtrl implements SceneCtrl {
             Platform.runLater(new Runnable() {
                 @Override
                 public void run() {
-                    System.out.println(mainCtrl.getActiveCtrl());
                     if (mainCtrl.getActiveCtrl() == mainCtrl.getMainViewCtrl()) {
                         mainCtrl.showMainView(b);
                     } else {
