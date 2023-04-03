@@ -56,13 +56,6 @@ public class EditCardCtrl implements SceneCtrl {
         mainCtrl.showMainView();
     }
 
-    @FXML
-    public void onKeyPressed(KeyEvent e) {
-        if (KeyCode.ESCAPE == e.getCode()) {
-            cancel();
-        }
-    }
-
     public void resetState() {
         this.changeTitle.setText("");
         this.changeDesc.setText("");

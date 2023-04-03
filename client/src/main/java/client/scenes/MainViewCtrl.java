@@ -94,11 +94,6 @@ public class MainViewCtrl implements SceneCtrl {
         event.consume();
     }
 
-    @FXML
-    public void initialize() {
-        root.addEventFilter(KeyEvent.KEY_PRESSED, new MainViewKeyEventHandler(client));
-    }
-
     public void loadData(Board board) {
         boolean admin = server.isAdmin();
         if (!admin) {
