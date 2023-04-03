@@ -65,6 +65,7 @@ public class BoardJoinCtrl implements Component<Board> {
             joinBoardsCtrl.requestPassword(board);
             return;
         }
+        joinBoardsCtrl.stopPolling();
         mainCtrl.showMainView(board);
     }
 }

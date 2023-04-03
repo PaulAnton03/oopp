@@ -5,10 +5,12 @@ import client.utils.*;
 import com.google.inject.Inject;
 import commons.Board;
 import commons.CardList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.TextField;
+import javafx.scene.paint.Color;
 
 public class CreateBoardCtrl implements SceneCtrl {
 
@@ -26,6 +28,8 @@ public class CreateBoardCtrl implements SceneCtrl {
     private TextField boardPassword;
     @FXML
     private CheckBox passwordUsed;
+
+    private Color color;
 
     @Inject
     public CreateBoardCtrl(ServerUtils server, ClientUtils client, MainCtrl mainCtrl,
@@ -63,6 +67,10 @@ public class CreateBoardCtrl implements SceneCtrl {
     public void goBack() {
         clear();
         mainCtrl.showMainView();
+    }
+
+    public void pickColor(ActionEvent action){
+        color = boardColor.getValue();
     }
 
     public void clear() {

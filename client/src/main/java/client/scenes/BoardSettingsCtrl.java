@@ -4,11 +4,13 @@ import client.utils.*;
 import com.google.inject.Inject;
 
 import commons.Board;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.TextField;
+import javafx.scene.paint.Color;
 
 public class BoardSettingsCtrl implements SceneCtrl {
 
@@ -27,6 +29,8 @@ public class BoardSettingsCtrl implements SceneCtrl {
 
     @FXML
     private Button deleteBoardButton;
+
+    private Color color;
 
     @Inject
     public BoardSettingsCtrl(ServerUtils server, ClientUtils client, MainCtrl mainCtrl,
@@ -47,7 +51,6 @@ public class BoardSettingsCtrl implements SceneCtrl {
         board.setColor(color);
         board.setPassword(passwordUsed.isSelected() ? boardPassword.getText() : null);
         server.updateBoard(board);
-        client.getBoardCtrl().refresh();
         clearForm();
         mainCtrl.showMainView();
     }
@@ -68,6 +71,10 @@ public class BoardSettingsCtrl implements SceneCtrl {
     public void goBack() {
         clearForm();
         mainCtrl.showMainView();
+    }
+
+    public void pickColor(ActionEvent action){
+        color = boardColor.getValue();
     }
 
     public void clearForm() {

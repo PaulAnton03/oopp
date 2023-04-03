@@ -47,6 +47,7 @@ public class BoardCtrl implements Component<Board>, DBEntityCtrl<Board, CardList
         this.board = board;
         client.clearBoardData();
         client.setBoardCtrl(this);
+        boardView.setStyle("-fx-background-color: " + board.getColor());
 
         final long listWidthPlusGap = 300;
         boardView.setMinWidth(board.getCardLists().size() * listWidthPlusGap);

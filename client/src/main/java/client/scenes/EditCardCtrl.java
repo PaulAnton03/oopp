@@ -9,8 +9,6 @@ import commons.Card;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 
 
 public class EditCardCtrl implements SceneCtrl {
@@ -54,13 +52,6 @@ public class EditCardCtrl implements SceneCtrl {
     public void cancel() {
         resetState();
         mainCtrl.showMainView();
-    }
-
-    @FXML
-    public void onKeyPressed(KeyEvent e) {
-        if (KeyCode.ESCAPE == e.getCode()) {
-            cancel();
-        }
     }
 
     public void resetState() {

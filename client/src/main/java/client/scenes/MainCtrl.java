@@ -20,6 +20,7 @@ import commons.Board;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.paint.Color;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 import lombok.Getter;
@@ -43,6 +44,7 @@ public class MainCtrl {
     private BoardSettingsCtrl boardSettingsCtrl;
     private Scene settings;
 
+    @Getter
     private MainViewCtrl mainViewCtrl;
     private Scene main;
 
@@ -55,6 +57,7 @@ public class MainCtrl {
     private JoinBoardsCtrl joinBoardsCtrl;
     private Scene join;
 
+    @Getter
     private EditCardCtrl editCardCtrl;
     private Scene editCard;
 
@@ -138,6 +141,7 @@ public class MainCtrl {
         primaryStage.setResizable(true);
         showConnect();
         primaryStage.show();
+        primaryStage.addEventFilter(KeyEvent.KEY_PRESSED, new KeyEventHandler(client, this));
     }
 
     public void showEditCard(long cardId) {
