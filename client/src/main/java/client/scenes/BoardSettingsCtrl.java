@@ -47,12 +47,10 @@ public class BoardSettingsCtrl implements SceneCtrl {
             Logger.log("No board selected", Logger.LogLevel.ERROR);
             throw new IllegalStateException("Something went wrong, no board selected!");
         }
+        String color = mainCtrl.turnColorIntoString(boardColor.getValue());
+        board.setColor(color);
         board.setPassword(passwordUsed.isSelected() ? boardPassword.getText() : null);
-        if(color != null){
-            board.setBoardColor(color.toString());
-        }
         server.updateBoard(board);
-        client.getBoardCtrl().refresh();
         clearForm();
         mainCtrl.showMainView();
     }

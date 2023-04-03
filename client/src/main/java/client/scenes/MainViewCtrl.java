@@ -104,6 +104,7 @@ public class MainViewCtrl implements SceneCtrl {
 
         BoardCtrl boardCtrl = factory.create(BoardCtrl.class, board);
         boardContainer.setContent(boardCtrl.getNode());
+        boardContainer.setStyle("-fx-background: " + board.getColor());
         displayBoardName.setText(board.getName());
         warning.setVisible(!board.isEditable());
         registerForMessages();
@@ -149,6 +150,20 @@ public class MainViewCtrl implements SceneCtrl {
             });
         });
 
+        server.registerForMessages("/topic/board/" + boardId + "/update", Board.class, b -> {
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    if (mainCtrl.getActiveCtrl() == mainCtrl.getMainViewCtrl()) {
+                        mainCtrl.showMainView(b);
+                    } else {
+                        client.getBoardCtrl().refresh();
+                        mainCtrl.getActiveCtrl().revalidate();
+                    }
+                }
+            });
+        });
+
         /**
          * This method call is used for informing the client that the board they are currently on
          * has been deleted
@@ -163,6 +178,7 @@ public class MainViewCtrl implements SceneCtrl {
                 }
             });
         });
+
     }
     @Override
     public void revalidate() {
