@@ -9,9 +9,11 @@ import javax.inject.Inject;
 
 import client.scenes.MainCtrl;
 import client.utils.ClientUtils;
+import client.utils.ComponentFactory;
 import client.utils.Logger;
 import client.utils.ServerUtils;
 import commons.Card;
+import commons.Tag;
 import commons.CardList;
 import javafx.animation.Animation;
 import javafx.animation.FadeTransition;
@@ -32,6 +34,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.transform.Transform;
@@ -45,6 +48,7 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Card/* TODO
     private final ServerUtils server;
     private final ClientUtils client;
 
+    private final ComponentFactory factory;
     @Getter
     private Card card;
 
@@ -59,11 +63,15 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Card/* TODO
     @FXML
     private Button deleteButton;
 
+    @FXML
+    private FlowPane flowPane;
+
     @Inject
-    public CardCtrl(MainCtrl mainCtrl, ServerUtils serverUtils, ClientUtils client) {
+    public CardCtrl(MainCtrl mainCtrl, ServerUtils serverUtils, ClientUtils client, ComponentFactory factory) {
         this.mainCtrl = mainCtrl;
         this.server = serverUtils;
         this.client = client;
+        this.factory = factory;
         FXMLLoader loader = new FXMLLoader(getClass().getResource("Card.fxml"));
         loader.setController(this);
         loader.setRoot(this);
@@ -77,6 +85,19 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Card/* TODO
         this.card = card;
         title.setText(card.getTitle());
         description.setText(card.getDescription());
+        for(int a = 0; a < card.getCardTagId().length; a++ ){
+            System.out.println("now on loadData card: " + a);
+            System.out.println(card.getCardTagText()[a]);
+            System.out.println(card.getCardTagId()[a]);
+            if(card.getCardTagId()[a] > 0) {
+                Tag tag = new Tag(card.getCardTagText()[a],
+                        card.getCardTagId()[a], card.getCardTagColor()[a]);
+                TagCtrl tagCtrl = factory.create(TagCtrl.class, tag);
+                tagCtrl.loadData(tag);
+                flowPane.getChildren().add(tagCtrl.getNode());
+            }
+        }
+
         if (client.getSelectedCardId() == card.getId()) {
             highlight();
         } else {

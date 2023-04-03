@@ -1,16 +1,28 @@
 package client.scenes;
 
-import javax.inject.Inject;
-
+import client.components.TagCtrl;
 import client.utils.ClientUtils;
 import client.utils.ExceptionHandler;
 import client.utils.ServerUtils;
+import client.utils.ComponentFactory;
+import commons.Board;
 import commons.Card;
+import commons.Tag;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.control.ColorPicker;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import lombok.Getter;
+
+import javax.inject.Inject;
 
 
 public class EditCardCtrl implements SceneCtrl {
@@ -18,20 +30,39 @@ public class EditCardCtrl implements SceneCtrl {
     private final ClientUtils client;
     private final MainCtrl mainCtrl;
 
+    private ComponentFactory factory;
+
     private final ExceptionHandler exceptionHandler;
+
+    @Getter
     private long cardId;
 
+    @FXML
+    private ColorPicker colourPicker;
+
+    @FXML
+    private Button addTagButton;
+
+    @FXML
+    private TextField tagField;
     @FXML
     private TextField changeTitle;
     @FXML
     private TextArea changeDesc;
 
+    @FXML
+    private FlowPane tagArea;
+
+    private Color color;
+
     @Inject
-    public EditCardCtrl(ServerUtils server, ClientUtils client, MainCtrl mainCtrl, ExceptionHandler exceptionHandler) {
+    public EditCardCtrl(ServerUtils server, ClientUtils client, MainCtrl mainCtrl,
+                        ExceptionHandler exceptionHandler, ComponentFactory componentFactory) {
         this.server = server;
         this.client = client;
         this.mainCtrl = mainCtrl;
         this.exceptionHandler = exceptionHandler;
+        this.factory = componentFactory;
     }
 
     public void saveCardChanges() {
@@ -45,15 +76,54 @@ public class EditCardCtrl implements SceneCtrl {
     }
 
     public void loadData(long cardId) {
+        resetState();
         this.cardId = cardId;
         Card card = client.getCard(cardId);
         changeTitle.setText(card.getTitle());
         changeDesc.setText(card.getDescription());
+        Board curBoard = client.getBoardCtrl().getBoard();
+        for(int a = 0; a < curBoard.getBoardTagId().length; a++ ){
+            System.out.println("now on loadData editctrl: " + a);
+            System.out.println(curBoard.getBoardTagText()[a]);
+            System.out.println(curBoard.getBoardTagId()[a]);
+            if(curBoard.getBoardTagId()[a] > 0) {
+                Tag tag = new Tag(curBoard.getBoardTagText()[a],
+                        curBoard.getBoardTagId()[a], curBoard.getBoardTagColor()[a]);
+                TagCtrl tagCtrl = factory.create(TagCtrl.class, tag);
+                tagCtrl.loadData(tag);
+                tagArea.getChildren().add(tagCtrl.getNode());
+            }
+        }
     }
 
     public void cancel() {
         resetState();
         mainCtrl.showMainView();
+    }
+
+    public void createTag() {
+        Board board = client.getBoardCtrl().getBoard();
+        board.setIdGenerator(board.getIdGenerator() + 1);
+        String tagText = "";
+        String tagColor = "";
+        if (tagField == null) {
+            tagText = "";
+        } else {
+            tagText = tagField.getText();
+        }
+        if (color == null) {
+            tagColor = "FFFFFF";
+        } else {
+            tagColor = color.toString();
+        }
+        Tag tag = new Tag(tagText, board.getIdGenerator(), tagColor);
+        int id = board.getIdGenerator();
+        board.getBoardTagText()[id] = tagText;
+        board.getBoardTagId()[id] = id;
+        board.getBoardTagColor()[id] = tagColor;
+        server.updateBoard(board);
+        loadData(cardId);
+        System.out.println("Tag created: " + tag);
     }
 
     @FXML
@@ -62,10 +132,14 @@ public class EditCardCtrl implements SceneCtrl {
             cancel();
         }
     }
+    public void pickColor(ActionEvent event){
+        color = colourPicker.getValue();
+    }
 
     public void resetState() {
         this.changeTitle.setText("");
         this.changeDesc.setText("");
+        tagArea.getChildren().removeAll();
     }
 
     @Override
