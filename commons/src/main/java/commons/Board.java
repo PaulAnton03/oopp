@@ -30,7 +30,7 @@ public class Board implements DBEntity {
     /* If null the board will not have a password. */
     private String password;
 
-    private String boardColor;
+    private String boardColor = "FFFFFF";
 
     @JsonIgnore
     private boolean editable = true;
