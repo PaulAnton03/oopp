@@ -25,7 +25,7 @@ public class KeyEventHandler implements EventHandler<KeyEvent> {
             + "\nBackspace/Del : Delete selected card"
             + "\nEsc : Close task details menu"
             + "\n? : Show this menu"
-            );
+        );
         alert.showAndWait();
     }
 
