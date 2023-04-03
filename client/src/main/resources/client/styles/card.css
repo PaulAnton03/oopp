@@ -23,6 +23,14 @@
     -fx-font-size: 20px;
 }
 
+.title {
+    -fx-text-fill: black;
+}
+
+.description {
+    -fx-text-fill: black;
+}
+
 .card > .description {
     -fx-text-fill: #5b5b5b;
 }

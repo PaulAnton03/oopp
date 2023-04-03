@@ -83,11 +83,12 @@ public class BoardController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<Board> update(@RequestBody Board board) {
+    public ResponseEntity<Board> update(@RequestBody Board board, @PathVariable("id") long id) {
+        System.out.println("test1");
         if (!board.isNetworkValid()) {
             return ResponseEntity.badRequest().build();
         }
-        final Optional<Board> optionalBoard = boardRepository.findById(board.getId());
+        final Optional<Board> optionalBoard = boardRepository.findById(id);
         if (optionalBoard.isEmpty()) {
             return ResponseEntity.notFound().build();
         }

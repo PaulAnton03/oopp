@@ -9,6 +9,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.TextField;
+import javafx.scene.paint.Color;
 
 public class BoardSettingsCtrl implements SceneCtrl {
 
@@ -43,6 +44,8 @@ public class BoardSettingsCtrl implements SceneCtrl {
             Logger.log("No board selected", Logger.LogLevel.ERROR);
             throw new IllegalStateException("Something went wrong, no board selected!");
         }
+        String color = mainCtrl.turnColorIntoString(boardColor.getValue());
+        board.setColor(color);
         board.setPassword(passwordUsed.isSelected() ? boardPassword.getText() : null);
         server.updateBoard(board);
         client.getBoardCtrl().refresh();

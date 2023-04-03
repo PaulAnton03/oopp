@@ -52,6 +52,9 @@ public class CardList implements DBEntity {
     @NonNull
     private String title;
 
+    @NonNull
+    private String color;
+
     public CardList() {
         this.title = "New Card List";
     }
@@ -77,7 +80,7 @@ public class CardList implements DBEntity {
 
     @Override
     public String toString() {
-        return "CardList [id=" + id + ", title=" + title + ", cards=" + cards + "]";
+        return "CardList [id=" + id + ", title=" + title + ", color=" + color + ", cards=" + cards + "]";
     }
 
     /**
@@ -86,7 +89,8 @@ public class CardList implements DBEntity {
     @JsonIgnore
     public boolean isNetworkValid() {
         return this.getCards() != null
-            && !isNullOrEmpty(this.getTitle());
+                && !isNullOrEmpty(this.getTitle())
+                && !isNullOrEmpty(this.getColor());
     }
 
     private static boolean isNullOrEmpty(String s) {

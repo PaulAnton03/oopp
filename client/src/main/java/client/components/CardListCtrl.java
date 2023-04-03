@@ -17,6 +17,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.util.Pair;
 import lombok.EqualsAndHashCode;
@@ -47,6 +48,8 @@ public class CardListCtrl implements Component<CardList>, DBEntityCtrl<CardList,
     private Button addCardButton;
     @FXML
     private Button listSettingsButton;
+    @FXML
+    private AnchorPane cardListBackground;
 
     @Inject
     public CardListCtrl(ClientUtils client, ServerUtils server, MainCtrl mainCtrl, ComponentFactory factory) {
@@ -66,6 +69,7 @@ public class CardListCtrl implements Component<CardList>, DBEntityCtrl<CardList,
             removeChildren();
         this.cardList = cardList;
         title.setText(cardList.getTitle());
+        cardListBackground.setStyle("-fx-background-color: " + cardList.getColor());
 
         for (Card card : cardList.getCards()) {
             CardCtrl cardCtrl = factory.create(CardCtrl.class, card);

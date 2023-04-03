@@ -35,14 +35,15 @@ public class CreateBoardCtrl implements SceneCtrl {
 
     public void createBoard() {
 
-        final Board newBoard = new Board(boardName.getText());
+        String color = mainCtrl.turnColorIntoString(boardColor.getValue());
+        final Board newBoard = new Board(boardName.getText(), color);
         if (passwordUsed.isSelected()) {
             newBoard.setPassword(boardPassword.getText());
         }
         final Board addedBoard = server.addBoard(newBoard);
         Logger.log("Added board " + addedBoard);
 
-        final CardList cardList = new CardList("TODO");
+        final CardList cardList = new CardList("TODO", "#b2b2ebff");
         cardList.setBoard(addedBoard);
         final CardList addedCardList = server.addCardList(cardList);
         addedBoard.addCardList(addedCardList);
