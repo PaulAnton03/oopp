@@ -28,15 +28,12 @@ public class AddListCtrl implements SceneCtrl {
     }
 
     public CardList getList() {
-        String color = mainCtrl.turnColorIntoString(listColor.getValue());
+        CardList cardList = new CardList(title.getText());
+        String color = useDefault.isSelected() ? cardList.getDefaultColor() : mainCtrl.turnColorIntoString(listColor.getValue());
         if(color.equals(client.getBoardCtrl().getBoard().getColor())) {
             throw new IllegalStateException("List color cannot be the same as board color. Please select a different color");
         }
-        CardList cardList;
-        if(useDefault.isSelected())
-            cardList = new CardList(title.getText());
-        else
-            cardList = new CardList(title.getText(), color);
+        cardList.setColor(color);
         cardList.setBoard(client.getBoardCtrl().getBoard());
         if (cardList.getBoard() == null) {
             throw new IllegalStateException("No board selected");
