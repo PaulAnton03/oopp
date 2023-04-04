@@ -68,7 +68,7 @@
             <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="400.0" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER">
                <children>
                   <Label layoutX="8.0" layoutY="6.0" text="Choose a preset:" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                  <ComboBox fx:id="presets" layoutX="110.0" layoutY="2.0" prefWidth="125.0" promptText="Choose preset" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="120.0" AnchorPane.topAnchor="0.0" />
+                  <ComboBox fx:id="presets" layoutX="110.0" layoutY="2.0" onAction="#loadPreset" prefWidth="125.0" promptText="Choose preset" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="120.0" AnchorPane.topAnchor="0.0" />
                   <Button layoutX="305.0" layoutY="4.0" mnemonicParsing="false" onAction="#applyChanges" text="Apply changes" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                </children>
             </AnchorPane>

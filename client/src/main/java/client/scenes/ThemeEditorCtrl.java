@@ -6,6 +6,7 @@ import client.utils.ThemeUtils;
 import commons.Board;
 import commons.Card;
 import commons.CardList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ComboBox;
@@ -55,13 +56,17 @@ public class ThemeEditorCtrl implements SceneCtrl {
         List<ThemeUtils.Theme> loadPresets = ThemeUtils.Theme.getPredefinedThemes();
         presets.getItems().addAll(loadPresets.stream().map(ThemeUtils.Theme::toString).collect(Collectors.toList()));
         boardFont.getItems().addAll(Font.getFamilies());
-        loadDefaultValues();
+        loadDefaultValues(board.getBoardColor(), board.getListColor(), board.getCardColor(), board.getFont());
     }
 
-    private void loadDefaultValues() {
-        boardColor.setValue(Color.valueOf(board.getColor()));
-        listColor.setValue(Color.valueOf(cardList.getColor()));
-        cardColor.setValue(Color.valueOf(card.getColor()));
+    private void loadDefaultValues(String boardColor, String listColor, String cardColor, String font) {
+        this.boardColor.setValue(Color.valueOf(boardColor));
+        this.listColor.setValue(Color.valueOf(listColor));
+        this.cardColor.setValue(Color.valueOf(cardColor));
+        if(font == null)
+            boardFont.setValue(Font.getDefault().getFamily());
+        else
+            boardFont.setValue(font);
     }
 
     @FXML
@@ -73,6 +78,13 @@ public class ThemeEditorCtrl implements SceneCtrl {
     @FXML
     void goBack() {
         mainCtrl.showMainView();
+    }
+
+    @FXML
+    public void loadPreset(ActionEvent event) {
+        String selected = presets.getValue();
+        var theme = ThemeUtils.Theme.valueOf(selected);
+        loadDefaultValues(theme.getBoardColor(), theme.getListColor(), theme.getCardColor(), theme.getFont().getFamily());
     }
 
 }
