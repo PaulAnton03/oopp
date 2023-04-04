@@ -68,7 +68,4 @@ public class ServerConnectCtrl implements SceneCtrl{
         mainCtrl.showMainView();
         Logger.log("Connecting to server: " + serverUtils.getServerPath());
     }
-
-    @Override
-    public void revalidate() {}
 }

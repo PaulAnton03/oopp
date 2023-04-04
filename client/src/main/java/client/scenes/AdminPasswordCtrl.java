@@ -45,7 +45,4 @@ public class AdminPasswordCtrl implements SceneCtrl {
 
         correctPassword.complete(true);
     }
-
-    @Override
-    public void revalidate() {}
 }

@@ -164,8 +164,4 @@ public class MainViewCtrl implements SceneCtrl {
             });
         });
     }
-    @Override
-    public void revalidate() {
-
-    }
 }

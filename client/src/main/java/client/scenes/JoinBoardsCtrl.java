@@ -146,7 +146,4 @@ public class JoinBoardsCtrl implements SceneCtrl {
         populateBoards();
         this.boardId.setText("");
     }
-
-    @Override
-    public void revalidate() {}
 }

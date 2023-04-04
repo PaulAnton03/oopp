@@ -50,9 +50,4 @@ public class AddListCtrl implements SceneCtrl {
         clearForm();
         mainCtrl.showMainView();
     }
-
-    @Override
-    public void revalidate() {
-
-    }
 }

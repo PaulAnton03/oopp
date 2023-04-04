@@ -54,7 +54,4 @@ public class PasswordProtectedCtrl implements SceneCtrl {
         passwordBoard.setEditable(false);
         mainCtrl.showMainView(passwordBoard);
     }
-
-    @Override
-    public void revalidate() {}
 }
