@@ -271,8 +271,4 @@ public class MainCtrl {
     public void stop() {
         server.stop();
     }
-
-    public String turnColorIntoString(Color color) {
-        return color.toString().replace("0x", "#");
-    }
 }

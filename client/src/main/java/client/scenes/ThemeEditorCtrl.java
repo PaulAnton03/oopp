@@ -76,9 +76,9 @@ public class ThemeEditorCtrl implements SceneCtrl {
     }
 
     void setColors() {
-        board.setBoardColor(mainCtrl.turnColorIntoString(this.boardColor.getValue()));
-        board.setListColor(mainCtrl.turnColorIntoString(this.listColor.getValue()));
-        board.setCardColor(mainCtrl.turnColorIntoString(this.cardColor.getValue()));
+        board.setBoardColor(themeUtils.turnColorIntoString(this.boardColor.getValue()));
+        board.setListColor(themeUtils.turnColorIntoString(this.listColor.getValue()));
+        board.setCardColor(themeUtils.turnColorIntoString(this.cardColor.getValue()));
         board.setFont(boardFont.getValue());
     }
 
