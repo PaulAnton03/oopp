@@ -77,9 +77,4 @@ public class CreateBoardCtrl implements SceneCtrl {
         boardName.setText("");
         boardPassword.setText("");
     }
-
-    @Override
-    public void revalidate() {
-
-    }
 }

@@ -74,7 +74,6 @@ public class ServerUtils {
         } catch (ExecutionException e) {
             throw new RuntimeException(e);
         }
-//        throw new IllegalStateException();
     }
 
     public <T> void registerForMessages(String dest, Class<T> type, Consumer<T> consumer) {

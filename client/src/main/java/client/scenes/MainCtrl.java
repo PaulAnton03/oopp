@@ -154,11 +154,13 @@ public class MainCtrl {
     public void showAdminPasswordProtected() {
         primaryStage.setTitle("Admin password");
         primaryStage.setScene(adminPassword);
+        activeCtrl = adminPasswordCtrl;
     }
 
     public void showConnect() {
         primaryStage.setTitle("Connect: Talio server");
         primaryStage.setScene(connect);
+        activeCtrl = serverConnectCtrl;
     }
 
     public void showSettings() {
@@ -228,6 +230,7 @@ public class MainCtrl {
         primaryStage.setTitle("Join boards");
         primaryStage.setScene(join);
         joinBoardsCtrl.populateBoards();
+        activeCtrl = joinBoardsCtrl;
     }
 
     public void showAddList() {
@@ -247,6 +250,7 @@ public class MainCtrl {
         primaryStage.setTitle("Password Protected Board");
         passwordProtectedCtrl.loadData(pswProtectedBoard);
         primaryStage.setScene(passwordProtected);
+        activeCtrl = passwordProtectedCtrl;
     }
 
     public void stop() {

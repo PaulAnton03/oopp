@@ -21,7 +21,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
-public class JoinBoardsCtrl {
+public class JoinBoardsCtrl implements SceneCtrl {
 
     private final ClientUtils client;
     private final ServerUtils server;

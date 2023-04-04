@@ -8,7 +8,7 @@ import lombok.Setter;
 
 import javax.inject.Inject;
 
-public class PasswordProtectedCtrl {
+public class PasswordProtectedCtrl implements SceneCtrl {
 
     private final MainCtrl mainCtrl;
     private final ExceptionHandler exceptionHandler;
