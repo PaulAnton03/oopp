@@ -5,17 +5,14 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerator;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.*;
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 
 @Data
 @Entity
 @RequiredArgsConstructor
-@JsonIdentityInfo(scope = Tag.class,
-        generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "id")
+@JsonIdentityInfo(scope = Tag.class, generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+@Table(name = "tags")
 public class Tag implements DBEntity {
 
 
@@ -26,8 +23,14 @@ public class Tag implements DBEntity {
     @Getter
     @JsonIgnore
     @EqualsAndHashCode.Exclude
-    @ManyToMany(mappedBy = "tags", cascade = CascadeType.ALL)
+    @ManyToMany(targetEntity = commons.Card.class, mappedBy = "tags", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ElementCollection
     private Set<Card> cards = new HashSet<>();
+
+
+//    public Set<Card> getCards(){
+//        return cards;
+//    }
 
     @ManyToOne
     @EqualsAndHashCode.Exclude

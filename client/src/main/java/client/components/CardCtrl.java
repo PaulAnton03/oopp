@@ -116,6 +116,7 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Tag>, Initi
             throw new IllegalStateException("You do not have permissions to edit this board.");
         }
         this.card = server.deleteCard(card.getId());
+
     }
 
     public void refresh() {

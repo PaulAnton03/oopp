@@ -28,7 +28,7 @@ public class Card implements DBEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected long id;
 
-    @OneToMany(mappedBy = "card", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "card", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderColumn(name = "subtask_index")
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
@@ -42,16 +42,18 @@ public class Card implements DBEntity {
     @ToString.Exclude
     private CardList cardList;
 
-    @JoinTable(
-            name = "card_tag",
-            joinColumns = {@JoinColumn(name = "card_id")},
-            inverseJoinColumns = {@JoinColumn(name = "tag_id")}
-    )
-    @ManyToMany(cascade = CascadeType.ALL)
+
+
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
+    @ElementCollection
     private Set<Tag> tags = new HashSet<>();
 
+    @ManyToMany(targetEntity = commons.Tag.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "cards_tags")
+    public Set<Tag> getTags(){
+        return tags;
+    }
 
 
     //Board->Tag OneToMany, Tag -> Board ManyToOne,
