@@ -76,7 +76,6 @@ public class EditCardCtrl implements SceneCtrl {
     }
 
     public void loadData(long cardId) {
-        resetState();
         this.cardId = cardId;
         Card card = client.getCard(cardId);
         changeTitle.setText(card.getTitle());
@@ -103,6 +102,7 @@ public class EditCardCtrl implements SceneCtrl {
 
     public void createTag() {
         Board board = client.getBoardCtrl().getBoard();
+        Board board1 = server.getBoard(board.getId());
         board.setIdGenerator(board.getIdGenerator() + 1);
         String tagText = "";
         String tagColor = "";
@@ -122,6 +122,7 @@ public class EditCardCtrl implements SceneCtrl {
         board.getBoardTagId()[id] = id;
         board.getBoardTagColor()[id] = tagColor;
         server.updateBoard(board);
+        resetState();
         loadData(cardId);
         System.out.println("Tag created: " + tag);
     }

@@ -43,7 +43,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 @EqualsAndHashCode
-public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Card/* TODO: change to TAG */>, Initializable {
+public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Tag>, Initializable {
     private final MainCtrl mainCtrl;
     private final ServerUtils server;
     private final ClientUtils client;
@@ -131,6 +131,11 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Card/* TODO
     }
 
     public void removeChildren() {}
+
+    @Override
+    public void replaceChild(Tag tag) {
+
+    }
 
     public void replaceChild(Card card /* TODO: Change to Tag tag */) {}
 
