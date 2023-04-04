@@ -1,11 +1,8 @@
 package client.scenes;
 
+import client.utils.*;
 import com.google.inject.Inject;
 
-import client.utils.ClientUtils;
-import client.utils.ExceptionHandler;
-import client.utils.Logger;
-import client.utils.ServerUtils;
 import commons.Board;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -19,6 +16,8 @@ public class BoardSettingsCtrl implements SceneCtrl {
     private final ClientUtils client;
     private final MainCtrl mainCtrl;
 
+    private final ClientPreferences clientPrefs;
+
     @FXML
     private ColorPicker boardColor;
     @FXML
@@ -30,10 +29,12 @@ public class BoardSettingsCtrl implements SceneCtrl {
     private Button deleteBoardButton;
 
     @Inject
-    public BoardSettingsCtrl(ServerUtils server, ClientUtils client, MainCtrl mainCtrl, ExceptionHandler exceptionHandler) {
+    public BoardSettingsCtrl(ServerUtils server, ClientUtils client, MainCtrl mainCtrl,
+                             ExceptionHandler exceptionHandler, ClientPreferences clientPrefs) {
         this.client = client;
         this.mainCtrl = mainCtrl;
         this.server = server;
+        this.clientPrefs = clientPrefs;
     }
 
     public void saveChanges() {
@@ -55,6 +56,7 @@ public class BoardSettingsCtrl implements SceneCtrl {
             Logger.log("No board selected", Logger.LogLevel.ERROR);
             throw new IllegalStateException("Something went wrong, no board selected!");
         }
+        clientPrefs.removeJoinedBoard(board.getId());
         server.deleteBoard(board.getId());
         client.getBoardCtrl().remove();
         Logger.log("Deleted board " + board);

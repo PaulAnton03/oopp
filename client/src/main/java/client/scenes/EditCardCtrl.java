@@ -1,5 +1,7 @@
 package client.scenes;
 
+import javax.inject.Inject;
+
 import client.utils.ClientUtils;
 import client.utils.ExceptionHandler;
 import client.utils.ServerUtils;
@@ -9,6 +11,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 
 import javax.inject.Inject;
 

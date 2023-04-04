@@ -16,6 +16,9 @@ import commons.CardList;
 import commons.Tag;
 import client.utils.ClientUtils;
 import client.utils.Logger;
+import client.utils.ServerUtils;
+import commons.Card;
+import commons.CardList;
 import javafx.animation.Animation;
 import javafx.animation.FadeTransition;
 import javafx.animation.ParallelTransition;
@@ -52,6 +55,7 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Tag>, Initi
 
     @Getter
     private Card card;
+
     @FXML
     private VBox cardView;
     @FXML
@@ -122,9 +126,7 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Tag>, Initi
 
     public void removeChildren() {}
 
-    public void replaceChild(Tag tag /* TODO: Change to Tag tag */) {
-
-    }
+    public void replaceChild(Card card /* TODO: Change to Tag tag */) {}
 
     // CSS class that defines style for the highlighted card
     private static final PseudoClass HIGHLIGHT_PSEUDO_CLASS = PseudoClass.getPseudoClass("highlight");
@@ -194,6 +196,7 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Tag>, Initi
         unhighlight();
         deleteButton.setOpacity(0.0);
         editButton.setOpacity(0.0);
+
         // Create show/hide transition for buttons
         final Duration ftDuration = Duration.millis(200);
         final Duration ftDelay = Duration.millis(200);
@@ -206,6 +209,7 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Tag>, Initi
             ft.setToValue(0.6);
         });
         buttonsVisibilityPT = new ParallelTransition(fts.get(0), fts.get(1));
+
         // Set button icons and behaviour
         try (var binInputStream =
                      getClass().getResourceAsStream("/client/images/bin.png");
@@ -214,6 +218,7 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Tag>, Initi
             // Hover behaviour
             applyButtonHoverStyle(deleteButton);
             applyButtonHoverStyle(editButton);
+
             // Button graphic
             ImageView binIcon = new ImageView(new Image(binInputStream));
             ImageView editIcon = new ImageView(new Image(editInputStream));
@@ -226,6 +231,8 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Tag>, Initi
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
+
         // Set card view event handlers
         cardView.setOnMouseEntered(event -> focus());
         cardView.setOnMouseExited(event -> unfocus());
@@ -243,14 +250,21 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Tag>, Initi
             db.setContent(content);
             event.consume();
         });
-
         cardView.setOnDragDone(event -> {
-            CardList cardList = card.getCardList();
-            int position = (Integer) client.getActiveCardListCtrl().getCardListView().getUserData();
-            cardList.removeCard(this.card);
-            cardList.addCardAtPosition(card, position);
-            server.updateCardList(cardList);
-            client.getActiveCardListCtrl().refresh();
+            CardList cardListStart = card.getCardList();
+            CardList cardListEnd = client.getActiveCardList();
+            int position;
+            try {
+                position = (Integer) client.getActiveCardListCtrl().getCardListView().getUserData();
+            } catch (Exception e) {
+                return;
+            }
+            cardListStart.removeCard(card);
+            cardListEnd.addCardAtPosition(card, position);
+            this.card.setCardList(cardListEnd);
+            server.updateCardList(cardListStart);
+            server.updateCardList(cardListEnd);
+            client.getBoardCtrl().refresh();
             event.consume();
         });
 

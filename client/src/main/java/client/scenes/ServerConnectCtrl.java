@@ -1,5 +1,6 @@
 package client.scenes;
 
+import client.utils.ClientPreferences;
 import client.utils.Logger;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
@@ -12,13 +13,15 @@ public class ServerConnectCtrl {
 
     private final ServerUtils serverUtils;
     private final MainCtrl mainCtrl;
+    private final ClientPreferences clientPreferences;
     @FXML
     private TextField serverInput;
 
     @Inject
-    public ServerConnectCtrl(ServerUtils server, MainCtrl mainCtrl) {
+    public ServerConnectCtrl(ServerUtils server, MainCtrl mainCtrl,ClientPreferences clientPreferences) {
         this.mainCtrl = mainCtrl;
         this.serverUtils = server;
+        this.clientPreferences = clientPreferences;
     }
 
     public void connect() {
@@ -53,6 +56,7 @@ public class ServerConnectCtrl {
         mainCtrl.showAdminPasswordProtected();
         correctPassword.thenAccept((correct) -> {
             if (correct) {
+                clientPreferences.clearPreferences();
                 connectToServer();
             }
         });

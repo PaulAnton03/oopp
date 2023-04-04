@@ -91,6 +91,16 @@ public class ServerUtils {
         });
     }
 
+    public List<Board> longPollBoards() throws InterruptedException, ExecutionException {
+        var target = ClientBuilder.newClient(new ClientConfig())
+                .target("http://" + serverPath + "/boards");
+        var invocation = target.request(APPLICATION_JSON).buildGet();
+        var type = new GenericType<List<Board>>() {
+        };
+        return invocation.submit(type).get();
+    }
+
+
     private WebTarget webTargetFromPath(String path) {
         return ClientBuilder.newClient(new ClientConfig())
                 .target("http://" + serverPath).path(path);

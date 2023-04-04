@@ -38,7 +38,7 @@ public class CardList implements DBEntity {
     @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="card_lists_seq")
     protected long id;
 
-    @OneToMany(mappedBy = "cardList", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "cardList", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @OrderColumn(name = "card_index")
     private List<Card> cards = new ArrayList<>();
 
@@ -71,8 +71,8 @@ public class CardList implements DBEntity {
         this.cards.add(card);
     }
 
-    public void addCardAtPosition(Card card, int pos) {
-        this.cards.add(pos, card);
+    public void addCardAtPosition(Card card, int position) {
+        this.cards.add(position, card);
     }
 
     @Override
