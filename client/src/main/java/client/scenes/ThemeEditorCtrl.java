@@ -52,7 +52,7 @@ public class ThemeEditorCtrl implements SceneCtrl {
 
     public void loadData() {
         presets.getItems().clear();
-        List<ThemeUtils.Theme> loadPresets = themeUtils.getPredefinedThemes();
+        List<ThemeUtils.Theme> loadPresets = ThemeUtils.Theme.getPredefinedThemes();
         presets.getItems().addAll(loadPresets.stream().map(ThemeUtils.Theme::toString).collect(Collectors.toList()));
         boardFont.getItems().addAll(Font.getFamilies());
         loadDefaultValues();
