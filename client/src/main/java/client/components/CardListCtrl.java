@@ -69,7 +69,7 @@ public class CardListCtrl implements Component<CardList>, DBEntityCtrl<CardList,
             removeChildren();
         this.cardList = cardList;
         title.setText(cardList.getTitle());
-        cardListBackground.setStyle("-fx-background-color: " + cardList.getColor());
+        cardListBackground.setStyle("-fx-background-color: " + cardList.getBoard().getListColor());
 
         for (Card card : cardList.getCards()) {
             CardCtrl cardCtrl = factory.create(CardCtrl.class, card);
@@ -97,9 +97,9 @@ public class CardListCtrl implements Component<CardList>, DBEntityCtrl<CardList,
 
     public void replaceChild(Card card) {
         int idx = IntStream.range(0, cardList.getCards().size())
-            .filter(i -> cardList.getCards().get(i).getId() == card.getId())
-            .findFirst()
-            .orElse(-1);
+                .filter(i -> cardList.getCards().get(i).getId() == card.getId())
+                .findFirst()
+                .orElse(-1);
         if (idx == -1)
             throw new IllegalStateException("Attempting to replace card in card list that does not already exist.");
         cardList.getCards().set(idx, card);
@@ -151,7 +151,7 @@ public class CardListCtrl implements Component<CardList>, DBEntityCtrl<CardList,
             }
 
             ((Node) event.getSource()).setUserData(Math.min(nodes.size(),
-                            nearestPositionDistance.getKey() + (isPositionAbove ? 1 : 0)));
+                    nearestPositionDistance.getKey() + (isPositionAbove ? 1 : 0)));
             Logger.log("Position: " + nearestPositionDistance.getKey());
             Logger.log("Distance: " + nearestPositionDistance.getValue());
             Logger.log("Is above? " + isPositionAbove);
@@ -162,14 +162,14 @@ public class CardListCtrl implements Component<CardList>, DBEntityCtrl<CardList,
     }
 
     public void addCard() {
-        if(!client.getBoardCtrl().getBoard().isEditable()) {
+        if (!client.getBoardCtrl().getBoard().isEditable()) {
             throw new IllegalStateException("You do not have permissions to edit this board.");
         }
         mainCtrl.showAddCard(cardList.getId());
     }
 
     public void listSettings() {
-        if(!client.getBoardCtrl().getBoard().isEditable()) {
+        if (!client.getBoardCtrl().getBoard().isEditable()) {
             throw new IllegalStateException("You do not have permissions to edit this board.");
         }
         mainCtrl.showListSettings(cardList.getId());
