@@ -262,7 +262,9 @@ public class MainCtrl {
     }
 
     public void showThemeEditor() {
+        activeCtrl = themeEditorCtrl;
         primaryStage.setTitle("Theme editor");
+        themeEditorCtrl.loadData();
         primaryStage.setScene(themeEdit);
     }
 
