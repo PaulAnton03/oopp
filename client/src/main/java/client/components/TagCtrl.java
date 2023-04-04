@@ -20,6 +20,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import javafx.stage.Popup;
 import javafx.stage.Stage;
 import lombok.Getter;
 
@@ -91,7 +92,11 @@ public class TagCtrl implements Component<Tag>{
         colorString = "-fx-background-color: #" + col;
         colorString = colorString.replaceAll("0x", "");
         anchorPane.setStyle(colorString);
-
+        if(mainCtrl.getActiveCtrl().getClass() == EditCardCtrl.class){
+            if(isAssigned){
+                label.setText(label.getText() + "*");
+            }
+        }
     }
 
     @Override
@@ -99,39 +104,6 @@ public class TagCtrl implements Component<Tag>{
         return anchorPane;
     }
 
-
-    public void pickColor(ActionEvent event){
-        color = colorPicker.getValue();
-    }
-
-    public void saveTagChanges() {
-        Board board = client.getBoardCtrl().getBoard();
-        if(tag == null){
-            System.out.println("Could not find tag!");
-            this.savedText.setText("Error: Could not find tag!!");
-            return;
-        }
-        if(colorPicker.getValue() != null){
-            color = colorPicker.getValue();
-            tag.setColor(color.toString());
-        }
-        if(textField.getText() != null){
-            tag.setText(textField.getText());
-        }
-        if(!board.getTagList().contains(tag))
-            board.getTagList().add(tag);
-//        else{
-//            for(Tag tag1 : board.getTagList()){
-//                if(tag1.getId() == tag.getId()){
-//
-//                }
-//            }
-//        }
-        server.updateTag(tag);
-        server.updateBoard(board);
-
-        this.savedText.setText("Saved!");
-    }
 
     @FXML
     public void clickAssigning(MouseEvent event){
@@ -158,25 +130,30 @@ public class TagCtrl implements Component<Tag>{
     public void assignThisToCard(Card card){
         System.out.println("Assigning is called");
         card.getTags().add(tag);
-        server.updateCard(card);
+        tag.getCards().add(card);
+        //server.updateCard(card);
     }
 
     public void unAssignFromCard(Card card){
         card.getTags().remove(tag);
+        tag.getCards().remove(card);
         server.updateCard(card);
+        server.updateTag(tag);
     }
 
     public void changeTag(){
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("TagSettings.fxml"));
-        try {
-            Parent parent = (Parent) fxmlLoader.load();
-            Stage stage = new Stage();
-            stage.setTitle("Tag Settings");
-            stage.setScene(new Scene(parent));
-            stage.show();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+//        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("TagSettings.fxml"));
+//        try {
+//            Popup popup
+//            Parent parent = (Parent) fxmlLoader.load();
+//            Stage stage = new Stage();
+//            stage.setTitle("Tag Settings");
+//            stage.setScene(new Scene(parent));
+//            stage.show();
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        }
+        mainCtrl.showTagSettings(tag);
     }
     public void delete(){
         Board board = client.getBoardCtrl().getBoard();

@@ -91,6 +91,9 @@ public class EditCardCtrl implements SceneCtrl {
         Board curBoard = client.getBoardCtrl().getBoard();
         for(Tag tag : curBoard.getTagList()){
                 TagCtrl tagCtrl = factory.create(TagCtrl.class, tag);
+                if(card.getTags().contains(tag)){
+                    tagCtrl.isAssigned = true;
+                }
                 tagCtrl.loadData(tag);
                 tagArea.getChildren().add(tagCtrl.getNode());
         }
@@ -169,6 +172,7 @@ public class EditCardCtrl implements SceneCtrl {
             return;
         }
         mainCtrl.showMainView();
-        throw new RuntimeException("Sorry, but the card you were editing or the list it was part of has been permanently deleted.");
+        throw new RuntimeException("Sorry, but the card you were " +
+                "editing or the list it was part of has been permanently deleted.");
     }
 }

@@ -65,7 +65,7 @@ public class TagController {
         return ResponseEntity.ok(tag);
     }
     @PutMapping("/update/{id}")
-    public ResponseEntity<Tag> update(@RequestBody Tag tag) {
+    public ResponseEntity<Tag> update(@RequestBody Tag tag, @PathVariable("id") long id) {
         final Optional<Tag> optTag = tagRepository.findById(tag.getId());
         if(optTag.isEmpty()) {
             return ResponseEntity.notFound().build();

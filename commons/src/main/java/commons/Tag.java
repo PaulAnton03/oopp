@@ -1,5 +1,8 @@
 package commons;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerator;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.*;
 import javax.persistence.*;
 import java.util.HashSet;
@@ -10,12 +13,15 @@ import java.util.Set;
 @Data
 @Entity
 @RequiredArgsConstructor
+@JsonIdentityInfo(scope = Tag.class,
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id")
 public class Tag implements DBEntity {
 
 
     @Id
-    @SequenceGenerator(name = "tags_seq", sequenceName = "TAGS_SEQ")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "tags_seq")
+//    @SequenceGenerator(name = "tags_seq", sequenceName = "TAGS_SEQ")
+//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "tags_seq")
     protected long id;
 
     @Getter

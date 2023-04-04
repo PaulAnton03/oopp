@@ -89,6 +89,8 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Tag>, Initi
     public void loadData(Card card) {
         this.card = card;
         title.setText(card.getTitle());
+        if(tagArea.getChildren() != null)
+            tagArea.getChildren().clear();
         description.setText(card.getDescription());
         for (Tag tag : card.getTags()){
             TagCtrl tagCtrl = factory.create(TagCtrl.class, tag);

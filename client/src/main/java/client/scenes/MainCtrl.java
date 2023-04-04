@@ -17,6 +17,7 @@ package client.scenes;
 
 import client.utils.*;
 import commons.Board;
+import commons.Tag;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.paint.Color;
@@ -61,6 +62,9 @@ public class MainCtrl {
     private EditCardCtrl editCardCtrl;
     private Scene editCard;
 
+    private TagSettingsCtrl tagSettingsCtrl;
+    private Scene tagSettingsScene;
+
     private AddListCtrl addListCtrl;
     private Scene addList;
 
@@ -78,7 +82,8 @@ public class MainCtrl {
     private SceneCtrl activeCtrl;
 
     @Inject
-    public MainCtrl(ServerUtils server, ClientUtils client, ComponentFactory factory, ClientPreferences clientPreferences) {
+    public MainCtrl(ServerUtils server, ClientUtils client,
+                    ComponentFactory factory, ClientPreferences clientPreferences) {
         this.server = server;
         this.client = client;
         this.factory = factory;
@@ -100,6 +105,7 @@ public class MainCtrl {
         private Pair<EditCardCtrl, Parent> editCard;
         private Pair<PasswordProtectedCtrl, Parent> pswProtected;
         private Pair<AdminPasswordCtrl, Parent> adminPsw;
+        private Pair<TagSettingsCtrl, Parent> tagSettings;
     }
 
     public void initialize(Stage primaryStage, ScenesBuilder builder) {
@@ -137,6 +143,9 @@ public class MainCtrl {
 
         this.adminPasswordCtrl = builder.getAdminPsw().getKey();
         this.adminPassword = new Scene(builder.getAdminPsw().getValue());
+
+        this.tagSettingsCtrl = builder.tagSettings.getKey();
+        this.tagSettingsScene = new Scene(builder.getTagSettings().getValue());
 
         primaryStage.setResizable(true);
         showConnect();
@@ -253,6 +262,12 @@ public class MainCtrl {
         activeCtrl = passwordProtectedCtrl;
     }
 
+    public void showTagSettings(Tag tag){
+        primaryStage.setTitle("Tag Settings");
+        tagSettingsCtrl.loadData(tag);
+        primaryStage.setScene(tagSettingsScene);
+        activeCtrl = tagSettingsCtrl;
+    }
     public void stop() {
         server.stop();
     }
