@@ -46,7 +46,7 @@ public class ThemeUtils {
 
     @Data
     @AllArgsConstructor
-    public class Theme {
+    public static class Theme {
         private String name;
         private String boardColor;
         private String cardColor;
@@ -56,11 +56,17 @@ public class ThemeUtils {
         public String toString() {
             return name;
         }
+
+        public static List<Theme> getPredefinedThemes() {
+            return Arrays.asList(
+                    new Theme("Default", "#ffffffff", "#ffffffff", "#b2b2ebff", Font.font("Arial")),
+                    new Theme("Dark", "#000000ff", "#000000ff", "#000000ff", Font.font("Arial")));
+        }
+
+        public static Theme valueOf(String theme) {
+            return getPredefinedThemes().stream().filter(t -> t.getName().equals(theme)).findFirst().orElse(null);
+        }
     }
 
-    public List<Theme> getPredefinedThemes() {
-        return Arrays.asList(
-                new Theme("Default", "#ffffffff", "#ffffffff", "#b2b2ebff", Font.font("Arial")),
-                new Theme("Dark", "#000000ff", "#000000ff", "#000000ff", Font.font("Arial")));
-    }
+
 }
