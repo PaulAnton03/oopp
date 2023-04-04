@@ -51,56 +51,5 @@ class TagTest {
         assertTrue(tag.getCards().contains(card2));
     }
 
-    @Test
-    void getRed() {
-        Tag tag = new Tag();
-        tag.setRed(10);
-        assertEquals(10, tag.getRed());
-    }
 
-    @Test
-    void getBlue() {
-        Tag tag = new Tag();
-        tag.setBlue(102);
-        assertEquals(102, tag.getBlue());
-    }
-
-    @Test
-    void getGreen() {
-        Tag tag = new Tag();
-        tag.setGreen(1);
-        assertEquals(1, tag.getGreen());
-    }
-
-    @Test
-    void setRed() {
-        Tag tag = new Tag();
-        tag.setRed(1);
-        assertEquals(1, tag.getRed());
-    }
-
-    @Test
-    void setBlue() {
-        Tag tag = new Tag();
-        tag.setBlue(1);
-        assertEquals(1, tag.getBlue());
-    }
-
-    @Test
-    void setGreen() {
-        Tag tag = new Tag();
-        tag.setGreen(1);
-        assertEquals(1, tag.getGreen());
-    }
-
-    @Test
-    void colorTest(){
-        Tag tag = new Tag();
-        tag.setRed(255);
-        tag.setGreen(0);
-        tag.setBlue(0);
-        assertEquals(255, tag.getRed());
-        assertEquals(0, tag.getGreen());
-        assertEquals(0, tag.getBlue());
-    }
 }
