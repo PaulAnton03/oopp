@@ -25,12 +25,12 @@ public class ThemeUtils {
         if (fontName == null) return;
         Font font = Font.font(fontName);
         if(font == null) return;
-        updateStyle(clientUtils.getBoardCtrl().getNode());
-        clientUtils.getCardListCtrls().values().forEach(c -> updateStyle(c.getNode()));
-        clientUtils.getCardCtrls().values().forEach(c -> updateStyle(c.getNode()));
+        updateStyle(clientUtils.getBoardCtrl().getNode(), font);
+        clientUtils.getCardListCtrls().values().forEach(c -> updateStyle(c.getNode(), font));
+        clientUtils.getCardCtrls().values().forEach(c -> updateStyle(c.getNode(), font));
     }
 
-    private void updateStyle(Parent node) {
+    private void updateStyle(Parent node, Font font) {
         String style = node.getStyle();
         boolean containsFont = style.contains("-fx-font-family");
         if (!containsFont) style += "-fx-font-family: " + font.getName() + ";";

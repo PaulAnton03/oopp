@@ -70,8 +70,16 @@ public class ThemeEditorCtrl implements SceneCtrl {
 
     @FXML
     void applyChanges() {
-        //todo-apply
+        setColors();
+        server.updateBoard(board);
         goBack();
+    }
+
+    void setColors() {
+        board.setBoardColor(mainCtrl.turnColorIntoString(this.boardColor.getValue()));
+        board.setListColor(mainCtrl.turnColorIntoString(this.listColor.getValue()));
+        board.setCardColor(mainCtrl.turnColorIntoString(this.cardColor.getValue()));
+        board.setFont(boardFont.getValue());
     }
 
     @FXML
