@@ -20,10 +20,11 @@ public class ThemeUtils {
         this.clientUtils = clientUtils;
     }
 
-    private Font font;
 
-    public void updateFont() {
-        if (font == null) return;
+    public void updateFont(String fontName) {
+        if (fontName == null) return;
+        Font font = Font.font(fontName);
+        if(font == null) return;
         updateStyle(clientUtils.getBoardCtrl().getNode());
         clientUtils.getCardListCtrls().values().forEach(c -> updateStyle(c.getNode()));
         clientUtils.getCardCtrls().values().forEach(c -> updateStyle(c.getNode()));
