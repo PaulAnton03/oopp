@@ -1,30 +1,17 @@
 package commons;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.OrderColumn;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
-
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIncludeProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Entity
@@ -34,8 +21,8 @@ import lombok.RequiredArgsConstructor;
 public class CardList implements DBEntity {
 
     @Id
-    @SequenceGenerator(name="card_lists_seq", sequenceName="CARD_LISTS_SEQ")
-    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="card_lists_seq")
+    @SequenceGenerator(name = "card_lists_seq", sequenceName = "CARD_LISTS_SEQ")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "card_lists_seq")
     protected long id;
 
     @OneToMany(mappedBy = "cardList", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
@@ -52,19 +39,12 @@ public class CardList implements DBEntity {
     @NonNull
     private String title;
 
-    @NonNull
-    private String color;
-
-    @JsonIgnore
-    private final String defaultColor = "#b2b2ebff";
-
     public CardList() {
         this.title = "New Card List";
     }
 
     public CardList(String title) {
         this.title = title;
-        this.color = defaultColor;
     }
 
     public boolean removeCard(Card card) {
@@ -88,7 +68,7 @@ public class CardList implements DBEntity {
 
     @Override
     public String toString() {
-        return "CardList [id=" + id + ", title=" + title + ", color=" + color + ", cards=" + cards + "]";
+        return "CardList [id=" + id + ", title=" + title + ", cards=" + cards + "]";
     }
 
     /**
@@ -97,16 +77,10 @@ public class CardList implements DBEntity {
     @JsonIgnore
     public boolean isNetworkValid() {
         return this.getCards() != null
-                && !isNullOrEmpty(this.getTitle())
-                && !isNullOrEmpty(this.getColor());
+                && !isNullOrEmpty(this.getTitle());
     }
 
     private static boolean isNullOrEmpty(String s) {
         return s == null || s.isEmpty();
-    }
-
-    @JsonIgnore
-    public String getDefaultColor() {
-        return defaultColor;
     }
 }
