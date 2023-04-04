@@ -82,6 +82,7 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Card/* TODO
 
     @Override
     public void loadData(Card card) {
+        flowPane.getChildren().removeAll();
         this.card = card;
         title.setText(card.getTitle());
         description.setText(card.getDescription());
