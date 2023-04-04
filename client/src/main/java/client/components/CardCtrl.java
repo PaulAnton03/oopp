@@ -86,7 +86,7 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Card/* TODO
         this.card = card;
         title.setText(card.getTitle());
         description.setText(card.getDescription());
-        for(int a = 0; a < card.getCardTagId().length; a++ ){
+        for(int a = 0; a < card.getCardTagId().length; a++){
             System.out.println("now on loadData card: " + a);
             System.out.println(card.getCardTagText()[a]);
             System.out.println(card.getCardTagId()[a]);

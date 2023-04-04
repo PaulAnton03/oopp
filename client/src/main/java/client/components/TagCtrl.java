@@ -75,6 +75,8 @@ public class TagCtrl implements Component<Tag>{
             Card card = client.getCard(editCardCtrl.getCardId());
             if(isAssigned){
                 isAssigned = false;
+                unAssignFromCard(card);
+                System.out.println("UnAssigned Card!");
             } else {
                 isAssigned = true;
                 assignThisToCard(card);
@@ -94,6 +96,17 @@ public class TagCtrl implements Component<Tag>{
         card.getCardTagText()[freePosition] = tag.getText();
         card.getCardTagId()[freePosition] = (int) tag.getId();
         card.getCardTagColor()[freePosition] = tag.getColor();
+        server.updateCard(card);
+    }
+
+    public void unAssignFromCard(Card card){
+        for(int i = 0; i < card.getCardTagId().length; i++){
+            if(card.getCardTagId()[i] == tag.getId()){
+                card.getCardTagText()[i] = "";
+                card.getCardTagId()[i] = 0;
+                card.getCardTagColor()[i] = "";
+            }
+        }
         server.updateCard(card);
     }
 
