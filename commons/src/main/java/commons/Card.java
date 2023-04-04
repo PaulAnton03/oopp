@@ -50,7 +50,6 @@ public class Card implements DBEntity {
     private Set<Tag> tags = new HashSet<>();
 
     @ManyToMany(targetEntity = commons.Tag.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinTable(name = "cards_tags")
     public Set<Tag> getTags(){
         return tags;
     }
