@@ -6,6 +6,7 @@ import client.utils.Logger;
 import client.utils.ServerUtils;
 import commons.Card;
 import commons.CardList;
+import commons.SubTask;
 import javafx.animation.*;
 import javafx.css.PseudoClass;
 import javafx.fxml.FXML;
@@ -32,9 +33,10 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.stream.IntStream;
 
 @EqualsAndHashCode
-public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Card/* TODO: change to TAG */>, Initializable {
+public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, SubTask>, Initializable {
     private final MainCtrl mainCtrl;
     private final ServerUtils server;
     private final ClientUtils client;
@@ -68,7 +70,9 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Card/* TODO
     }
 
     @Override
-    public Parent getNode() { return cardView; }
+    public Parent getNode() {
+        return cardView;
+    }
 
     @Override
     public void loadData(Card card) {
@@ -83,7 +87,7 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Card/* TODO
     }
 
     public void editCard() {
-        if(!client.getBoardCtrl().getBoard().isEditable()) {
+        if (!client.getBoardCtrl().getBoard().isEditable()) {
             throw new IllegalStateException("You do not have permissions to edit this board.");
         }
         mainCtrl.showEditCard(this.getCard().getId());
@@ -102,13 +106,27 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Card/* TODO
     }
 
     public void remove() {
-        client.getCardCtrls().remove(card.getId());
         removeChildren();
+        client.getCardCtrls().remove(card.getId());
     }
 
-    public void removeChildren() {}
+    public void removeChildren() {
+        for (SubTask subTask : this.card.getSubtasks()) {
+            client.getSubTaskCtrl(subTask.getId()).remove();
+        }
+    }
 
-    public void replaceChild(Card card /* TODO: Change to Tag tag */) {}
+    @Override
+    public void replaceChild(SubTask subTask) {
+        int idx = IntStream.range(0, card.getSubtasks().size())
+                .filter(i -> card.getSubtasks().get(i).getId() == subTask.getId())
+                .findFirst()
+                .orElse(-1);
+        if (idx == -1)
+            throw new IllegalStateException("Attempting to replace subtask in card that does not already exist.");
+        card.getSubtasks().set(idx, subTask);
+        subTask.setCard(card);
+    }
 
     // CSS class that defines style for the highlighted card
     private static final PseudoClass HIGHLIGHT_PSEUDO_CLASS = PseudoClass.getPseudoClass("highlight");
@@ -187,7 +205,8 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Card/* TODO
         fts.forEach(ft -> {
             ft.setDelay(ftDelay);
             ft.setFromValue(0.0);
-            ft.setToValue(0.6);});
+            ft.setToValue(0.6);
+        });
         buttonsVisibilityPT = new ParallelTransition(fts.get(0), fts.get(1));
         // Set button icons and behaviour
         try (var binInputStream = getClass().getResourceAsStream("/client/images/bin.png");
@@ -210,7 +229,8 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Card/* TODO
         // Set card view event handlers
         cardView.setOnMouseEntered(event -> {
             focus();
-            client.changeSelection(card.getId());});
+            client.changeSelection(card.getId());
+        });
         cardView.setOnMouseExited(event -> unfocus());
         cardView.setOnDragDetected(event -> {
             Logger.log("Card " + getCard().getTitle() + " drag detected");

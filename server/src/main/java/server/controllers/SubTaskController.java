@@ -71,6 +71,8 @@ public class SubTaskController {
                 () -> card.get().getSubtasks().add(subTask));
         subTask.setFinished(false);
         subTaskRepository.save(subTask);
+        if (messagingTemplate != null)
+            messagingTemplate.convertAndSend("/topic/board/" + subTask.getCard().getCardList().getBoard().getId() + "/card/" + subTask.getCard().getId() + "/subtasks/create", subTask);
         return ResponseEntity.ok(subTask);
     }
 
@@ -85,6 +87,8 @@ public class SubTaskController {
             subTask.getCard().removeSubTask(subTask.getId());
         }
         subTaskRepository.deleteById(subTask.getId());
+        if (messagingTemplate != null)
+            messagingTemplate.convertAndSend("/topic/board/" + subTask.getCard().getCardList().getBoard().getId() + "/card/" + subTask.getCard().getId() + "/subtasks/delete", subTask);
         return ResponseEntity.ok(subTask);
     }
 

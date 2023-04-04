@@ -4,13 +4,9 @@ import static client.Main.FXML;
 
 import java.util.Map;
 
+import client.components.*;
 import com.google.inject.Inject;
 
-import client.components.BoardCtrl;
-import client.components.BoardJoinCtrl;
-import client.components.CardCtrl;
-import client.components.CardListCtrl;
-import client.components.Component;
 import commons.DBEntity;
 
 public class ComponentFactory {
@@ -22,10 +18,11 @@ public class ComponentFactory {
     }
 
     private Map<Class<? extends Component<?>>, String> fxmlFileName = Map.of(
-        BoardCtrl.class, "Board.fxml",
+            BoardCtrl.class, "Board.fxml",
             CardListCtrl.class, "CardList.fxml",
             CardCtrl.class, "Card.fxml",
-            BoardJoinCtrl.class, "BoardJoin.fxml"
+            BoardJoinCtrl.class, "BoardJoin.fxml",
+            SubTaskCtrl.class, "SubTask.fxml"
     );
 
     /**
@@ -37,10 +34,11 @@ public class ComponentFactory {
      *   CardCtrl cardCtrl = factory.create(CardCtrl.class, card);
      *   }
      * </pre>
+     *
      * @param ctrlClass controller class for this component
-     * @param data data to populate the component with
-     * @param <T> controller type
-     * @param <D> data type
+     * @param data      data to populate the component with
+     * @param <T>       controller type
+     * @param <D>       data type
      * @return controller for the new component
      */
     public <T extends Component<D>, D extends DBEntity> T create(Class<T> ctrlClass, D data) {
@@ -51,6 +49,8 @@ public class ComponentFactory {
             client.getCardCtrls().put(data.getId(), (CardCtrl) ctrl);
         } else if (ctrlClass == CardListCtrl.class) {
             client.getCardListCtrls().put(data.getId(), (CardListCtrl) ctrl);
+        } else if (ctrlClass == SubTaskCtrl.class) {
+            client.getSubTaskCtrls().put(data.getId(), (SubTaskCtrl) ctrl);
         }
 
         ctrl.loadData(data);

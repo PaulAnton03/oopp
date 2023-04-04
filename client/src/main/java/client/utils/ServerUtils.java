@@ -18,6 +18,7 @@ package client.utils;
 import commons.Board;
 import commons.Card;
 import commons.CardList;
+import commons.SubTask;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.client.Invocation;
@@ -76,8 +77,8 @@ public class ServerUtils {
 //        throw new IllegalStateException();
     }
 
-    public <T> void registerForMessages(String dest, Class<T> type, Consumer<T> consumer) {
-        session.subscribe(dest, new StompFrameHandler() {
+    public <T> StompSession.Subscription registerForMessages(String dest, Class<T> type, Consumer<T> consumer) {
+        return session.subscribe(dest, new StompFrameHandler() {
             @Override
             public Type getPayloadType(StompHeaders headers) {
                 return type;
@@ -97,6 +98,29 @@ public class ServerUtils {
         var type = new GenericType<List<Board>>() {
         };
         return invocation.submit(type).get();
+    }
+
+    public SubTask getSubTask(long id) {
+        WebTarget webTarget = webTargetFromPath("/subtasks/{id}").resolveTemplate("id", id);
+        return webTargetAddDefault(webTarget).get(new GenericType<>() {
+        });
+    }
+
+    public SubTask addSubTask(SubTask subTask) {
+        WebTarget webTarget = webTargetFromPath("/subtasks/create")
+                .queryParam("cardId", subTask.getCard().getId());
+        return webTargetAddDefault(webTarget).post(Entity.entity(subTask, APPLICATION_JSON), SubTask.class);
+    }
+
+    public SubTask updateSubTask(SubTask subTask) {
+        WebTarget webTarget = webTargetFromPath("/subtasks/update/{id}").resolveTemplate("id", subTask.getId());
+        return webTargetAddDefault(webTarget).put(Entity.entity(subTask, APPLICATION_JSON), SubTask.class);
+    }
+
+    public SubTask deleteSubTask(long id) {
+        WebTarget webTarget = webTargetFromPath("/subtasks/delete/{id}").resolveTemplate("id", id);
+        return webTargetAddDefault(webTarget).delete(new GenericType<>() {
+        });
     }
 
 
