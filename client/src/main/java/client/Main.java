@@ -54,6 +54,7 @@ public class Main extends Application {
         builder.setEditList(FXML.load(ListSettingsCtrl.class, "client", "scenes", "ListSettings.fxml"));
         builder.setPswProtected(FXML.load(PasswordProtectedCtrl.class, "client", "scenes", "PasswordProtected.fxml"));
         builder.setAdminPsw(FXML.load(AdminPasswordCtrl.class, "client", "scenes", "AdminPassword.fxml"));
+        builder.setThemeEditor(FXML.load(ThemeEditorCtrl.class, "client", "scenes", "ThemeEditor.fxml"));
 
         mainCtrl = INJECTOR.getInstance(MainCtrl.class);
         mainCtrl.initialize(primaryStage, builder);

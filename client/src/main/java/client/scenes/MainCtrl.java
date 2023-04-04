@@ -74,8 +74,12 @@ public class MainCtrl {
     private AdminPasswordCtrl adminPasswordCtrl;
     private Scene adminPassword;
 
+    private ThemeEditorCtrl themeEditorCtrl;
+    private Scene themeEdit;
+
     @Getter
     private SceneCtrl activeCtrl;
+
 
     @Inject
     public MainCtrl(ServerUtils server, ClientUtils client, ComponentFactory factory, ClientPreferences clientPreferences) {
@@ -100,6 +104,7 @@ public class MainCtrl {
         private Pair<EditCardCtrl, Parent> editCard;
         private Pair<PasswordProtectedCtrl, Parent> pswProtected;
         private Pair<AdminPasswordCtrl, Parent> adminPsw;
+        private Pair<ThemeEditorCtrl, Parent> themeEditor;
     }
 
     public void initialize(Stage primaryStage, ScenesBuilder builder) {
@@ -137,6 +142,9 @@ public class MainCtrl {
 
         this.adminPasswordCtrl = builder.getAdminPsw().getKey();
         this.adminPassword = new Scene(builder.getAdminPsw().getValue());
+
+        this.themeEditorCtrl = builder.getThemeEditor().getKey();
+        this.themeEdit = new Scene(builder.getThemeEditor().getValue());
 
         primaryStage.setResizable(true);
         showConnect();
@@ -251,6 +259,11 @@ public class MainCtrl {
         passwordProtectedCtrl.loadData(pswProtectedBoard);
         primaryStage.setScene(passwordProtected);
         activeCtrl = passwordProtectedCtrl;
+    }
+
+    public void showThemeEditor() {
+        primaryStage.setTitle("Theme editor");
+        primaryStage.setScene(themeEdit);
     }
 
     public void stop() {

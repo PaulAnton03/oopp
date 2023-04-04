@@ -115,4 +115,10 @@ public class BoardSettingsCtrl implements SceneCtrl {
     public void revalidate() {
 
     }
+
+    @FXML
+    public void editTheme() {
+        clearForm();
+        mainCtrl.showThemeEditor();
+    }
 }
