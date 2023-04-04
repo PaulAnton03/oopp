@@ -52,6 +52,10 @@ public class ThemeUtils {
         private String cardColor;
         private String listColor;
         private Font font;
+
+        public String toString() {
+            return name;
+        }
     }
 
     public List<Theme> getPredefinedThemes() {
