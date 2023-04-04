@@ -4,6 +4,7 @@ import client.utils.ClientPreferences;
 import client.utils.Logger;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
+import commons.Board;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 
@@ -16,6 +17,8 @@ public class ServerConnectCtrl implements SceneCtrl{
     private final ClientPreferences clientPreferences;
     @FXML
     private TextField serverInput;
+    @FXML
+    private TextField inviteKeyInput;
 
     @Inject
     public ServerConnectCtrl(ServerUtils server, MainCtrl mainCtrl,ClientPreferences clientPreferences) {
@@ -25,33 +28,59 @@ public class ServerConnectCtrl implements SceneCtrl{
     }
 
     public void connect() {
+        if (checkInviteKey() || serverInput.getText().isEmpty()) {
+            connectToServer();
+        } else {
+            checkCustomServer();
+        }
+    }
+
+    private boolean checkInviteKey() {
+        String inviteKey = inviteKeyInput.getText();
+        if (inviteKey.isEmpty()) return false;
+
+        // Parse the invite key
+        // The key format is: "join-talio#<server address>#<board id>(#<password>)"
+        if (!inviteKey.matches("^join-talio#.{5,30}#[0-9]+(?:#.+)?$")) {
+            throw new RuntimeException("The invite key is invalid, maybe copy it again");
+        }
+        String[] parts = inviteKey.split("#");
+
+        serverUtils.setServerPath(parts[1]);
+        final long boardId = Long.parseLong(parts[2]);
+        clientPreferences.setDefaultBoardId(boardId);
+        if (parts.length > 3) {
+            clientPreferences.setPasswordForBoard(boardId, parts[3]);
+        }
+
+        // Check if the board id references real board
+        try {
+            Board board = serverUtils.getBoard(boardId);
+            if (board.getPassword() != null &&
+                    !board.getPassword().equals(clientPreferences.getPasswordForBoard(boardId).orElse(null))) {
+                throw new Exception();
+            }
+            return true;
+        } catch(Exception e) {
+            throw new RuntimeException("The invite key is invalid, maybe copy it again");
+        }
+    }
+
+    private void checkCustomServer() {
         String serverPath = serverInput.getText();
 
-        if (!serverPath.isEmpty()) {
-            if (!handleCustomServer(serverPath)) {
-                return;
-            }
-        }
+        boolean isRunningAdmin = serverPath.startsWith("//admin");
+        serverUtils.setAdmin(isRunningAdmin);
+        serverUtils.setServerPath(isRunningAdmin ? serverPath.substring(7) : serverPath);
 
-        connectToServer();
+        if (isRunningAdmin) {
+            checkAdminPassword();
+        } else {
+            connectToServer();
+        }
     }
 
-    private boolean handleCustomServer(String serverPath) {
-        boolean admin = serverPath.startsWith("admin//");
-        if (admin) {
-            serverPath = serverPath.substring(7);
-        }
-        serverUtils.setAdmin(admin);
-        serverUtils.setServerPath(serverPath);
-
-        if (admin) {
-            askForAdminPassword();
-            return false;
-        }
-        return true;
-    }
-
-    private void askForAdminPassword() {
+    private void checkAdminPassword() {
         CompletableFuture<Boolean> correctPassword = mainCtrl.getAdminPasswordCtrl().loadFuture();
         mainCtrl.showAdminPasswordProtected();
         correctPassword.thenAccept((correct) -> {
@@ -64,7 +93,11 @@ public class ServerConnectCtrl implements SceneCtrl{
 
     private void connectToServer() {
         // Connect to server
-        serverUtils.connect();
+        try {
+            serverUtils.connect();
+        } catch (Exception e) {
+            throw new RuntimeException("Server address invalid");
+        }
         mainCtrl.showMainView();
         Logger.log("Connecting to server: " + serverUtils.getServerPath());
     }
