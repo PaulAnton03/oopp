@@ -33,6 +33,9 @@ public class Board implements DBEntity {
     @JsonIgnore
     private boolean editable = true;
 
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
+    List<Tag> tagList = new ArrayList<>();
+
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @OrderColumn(name = "card_list_index")
     private List<CardList> cardLists = new ArrayList<>();

@@ -50,9 +50,12 @@ public class Card implements DBEntity {
             joinColumns = {@JoinColumn(name = "card_id")},
             inverseJoinColumns = {@JoinColumn(name = "tag_id")}
     )
-
     @ManyToMany(cascade = CascadeType.ALL)
     private Set<Tag> tags = new HashSet<>();
+
+
+
+    //Board->Tag OneToMany, Tag -> Board ManyToOne,  taglerden cardlara manytomany, hem card dan tage, hem tagden hem carda.
 
     @NonNull
     private String title;

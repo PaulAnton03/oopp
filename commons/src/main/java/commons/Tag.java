@@ -24,16 +24,11 @@ public class Tag implements DBEntity {
     @ManyToMany(mappedBy = "tags", cascade = CascadeType.ALL)
     private Set<Card> cards = new HashSet<>();
 
+    @ManyToOne
+    private Board board;
+
     private String text;
 
-    @Getter
-    @Setter
-    private int red;
-    @Getter
-    @Setter
-    private int blue;
-    @Getter
-    @Setter
-    private int green;
+    private String color;
 
 }

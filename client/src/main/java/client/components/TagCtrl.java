@@ -54,11 +54,14 @@ public class TagCtrl implements Component<Tag>, DBEntityCtrl<Tag, Tag> {
             return;
         }
         label.setText(tag.getText());
-        color = Color.rgb(tag.getRed(), tag.getBlue(),
-                tag.getGreen());
-        String string = "-fx-background-color: #" + color;
+        String col = tag.getColor();
+        if(tag.getColor() == null){
+            col = "FFFFFF";
+        }
+
+        String string = "-fx-background-color: #" + col;
         string = string.replaceAll("0x", "");
-       // anchorPane.setStyle(string);
+        anchorPane.setStyle(string);
     }
 
     @Override

@@ -38,8 +38,6 @@ public class EditCardCtrl implements SceneCtrl {
     @FXML
     private ColorPicker colourPicker;
 
-    @FXML
-    private ComboBox comboBox;
 
     @Inject
     public EditCardCtrl(ServerUtils server, ClientUtils client, MainCtrl mainCtrl, ExceptionHandler exceptionHandler) {
@@ -105,13 +103,17 @@ public class EditCardCtrl implements SceneCtrl {
     public void createTag(){
         Tag tag = new Tag();
         tag.setText(tagField.getText());
-        tag.setRed((int) colourPicker.getValue().getRed());
-        tag.setBlue((int) colourPicker.getValue().getBlue());
-        tag.setGreen((int) colourPicker.getValue().getGreen());
+        if(colourPicker.getValue() != null)
+            tag.setColor(colourPicker.getValue().toString());
         client.getCard(cardId).getTags().add(tag);
+        client.getBoardCtrl().getBoard().getTagList().add(tag);
         tag.getCards().add(client.getCard(cardId));
+        tag.setBoard(client.getBoardCtrl().getBoard());
         server.createTag(tag);
-        new Alert(Alert.AlertType.INFORMATION, "New Tag Added!");
+        server.updateCard(client.getCard(cardId));
+        server.updateBoard(client.getBoardCtrl().getBoard());
+        System.out.println(client.getCard(cardId));
+        System.out.println(client.getBoardCtrl().getBoard());
     }
 
     public void assignTag(){
