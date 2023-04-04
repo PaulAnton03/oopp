@@ -56,7 +56,7 @@ public class CardList implements DBEntity {
     private String color;
 
     @JsonIgnore
-    private final String defaultColor = "#b2b2ebff";
+    private final String defaultColor = "";
 
     public CardList() {
         this.title = "New Card List";

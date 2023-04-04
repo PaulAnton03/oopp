@@ -104,7 +104,8 @@ public class MainViewCtrl implements SceneCtrl {
 
         BoardCtrl boardCtrl = factory.create(BoardCtrl.class, board);
         boardContainer.setContent(boardCtrl.getNode());
-        boardContainer.setStyle("-fx-background: " + board.getColor());
+        // TODO: Make this work with themes
+        boardContainer.setStyle("-fx-background: " + "#ffffffff");
         displayBoardName.setText(board.getName());
         warning.setVisible(!board.isEditable());
         registerForMessages();
