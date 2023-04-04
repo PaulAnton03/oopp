@@ -80,6 +80,10 @@ public class CardList implements DBEntity {
         return "CardList [id=" + id + ", title=" + title + ", cards=" + cards + "]";
     }
 
+    public String toCardString(){
+        return id + title;
+    }
+
     /**
      * @return Is {@link CardList} valid for network transfer
      */

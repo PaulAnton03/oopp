@@ -31,9 +31,9 @@ public class Board implements DBEntity {
 //    @Setter
 //    @OneToOne(targetEntity = Tag.class)
     //private List<String[], int[], String[]> boardTagList = new ArrayList<>();
-    private String[] boardTagText = new String[32];
-    private int[] boardTagId = new int[32];
-    private String[] boardTagColor = new String[32];
+//    private String[] boardTagText = new String[32];
+//    private int[] boardTagId = new int[32];
+//    private String[] boardTagColor = new String[32];
 
 
     @Getter

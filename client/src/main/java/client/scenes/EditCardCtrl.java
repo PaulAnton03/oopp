@@ -57,10 +57,7 @@ public class EditCardCtrl implements SceneCtrl {
     private TextField changeTitle;
     @FXML
     private TextArea changeDesc;
-
-
-
-
+    
     @FXML
     private FlowPane tagArea;
 
@@ -99,15 +96,16 @@ public class EditCardCtrl implements SceneCtrl {
         }
     }
 
-
     public void cancel() {
         resetState();
         mainCtrl.showMainView();
     }
 
     public void createTag() {
-        Board board = client.getBoardCtrl().getBoard();
-        Board board1 = server.getBoard(board.getId());
+        Card card = server.getCard(cardId);
+        System.out.println(card);
+        Board board = card.getCardList().getBoard();
+        System.out.println(board);
         String tagText = "";
         String tagColor = "";
         if (tagField == null) {
