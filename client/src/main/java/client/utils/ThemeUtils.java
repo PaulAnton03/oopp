@@ -63,7 +63,7 @@ public class ThemeUtils {
                     new Theme("Dark", "#000000ff", "#000000ff", "#000000ff", Font.font("Arial")));
         }
 
-        public Theme valueOf(String theme) {
+        public static Theme valueOf(String theme) {
             return getPredefinedThemes().stream().filter(t -> t.getName().equals(theme)).findFirst().orElse(null);
         }
     }
