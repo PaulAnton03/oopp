@@ -75,6 +75,8 @@ public class CardListCtrl implements Component<CardList>, DBEntityCtrl<CardList,
             CardCtrl cardCtrl = factory.create(CardCtrl.class, card);
             cardListView.getChildren().add(cardCtrl.getNode());
         }
+
+        title.setStyle("-fx-text-fill: " + cardList.getBoard().getFontColor());
     }
 
     public void refresh() {

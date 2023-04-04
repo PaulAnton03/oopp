@@ -40,7 +40,8 @@ public class Board implements DBEntity {
     @NonNull
     private String cardColor;
 
-    private String font;
+    @NonNull
+    private String fontColor;
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @OrderColumn(name = "card_list_index")
     private List<CardList> cardLists = new ArrayList<>();
@@ -50,6 +51,7 @@ public class Board implements DBEntity {
         this.boardColor = "#ffffffff";
         this.cardColor = "#ffffffff";
         this.listColor = "#b2b2ebff";
+        this.fontColor = "#000000ff";
     }
 
     /**

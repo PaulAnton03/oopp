@@ -19,7 +19,6 @@ import client.utils.*;
 import commons.Board;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.paint.Color;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import javafx.util.Pair;
@@ -79,7 +78,6 @@ public class MainCtrl {
 
     @Getter
     private SceneCtrl activeCtrl;
-
 
     @Inject
     public MainCtrl(ServerUtils server, ClientUtils client, ComponentFactory factory, ClientPreferences clientPreferences) {
@@ -270,9 +268,5 @@ public class MainCtrl {
 
     public void stop() {
         server.stop();
-    }
-
-    public String turnColorIntoString(Color color) {
-        return color.toString().replace("0x", "#");
     }
 }

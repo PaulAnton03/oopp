@@ -9,7 +9,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ComboBox;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -36,7 +35,7 @@ public class ThemeEditorCtrl implements SceneCtrl {
     private ColorPicker boardColor;
 
     @FXML
-    private ComboBox<String> boardFont;
+    private ColorPicker fontColor;
 
     @FXML
     private ColorPicker cardColor;
@@ -51,21 +50,16 @@ public class ThemeEditorCtrl implements SceneCtrl {
         presets.setValue(null);
         board = client.getBoardCtrl().getBoard();
         presets.getItems().clear();
-        boardFont.getItems().clear();
         List<ThemeUtils.Theme> loadPresets = ThemeUtils.Theme.getPredefinedThemes();
         presets.getItems().addAll(loadPresets.stream().map(ThemeUtils.Theme::toString).collect(Collectors.toList()));
-        boardFont.getItems().addAll(Font.getFamilies());
-        loadDefaultValues(board.getBoardColor(), board.getListColor(), board.getCardColor(), board.getFont());
+        loadDefaultValues(board.getBoardColor(), board.getListColor(), board.getCardColor(), board.getFontColor());
     }
 
-    private void loadDefaultValues(String boardColor, String listColor, String cardColor, String font) {
+    private void loadDefaultValues(String boardColor, String listColor, String cardColor, String fontColor) {
         this.boardColor.setValue(Color.valueOf(boardColor));
         this.listColor.setValue(Color.valueOf(listColor));
         this.cardColor.setValue(Color.valueOf(cardColor));
-        if(font == null)
-            boardFont.setValue(Font.getDefault().getFamily());
-        else
-            boardFont.setValue(font);
+        this.fontColor.setValue(Color.valueOf(fontColor));
     }
 
     @FXML
@@ -76,10 +70,10 @@ public class ThemeEditorCtrl implements SceneCtrl {
     }
 
     void setColors() {
-        board.setBoardColor(mainCtrl.turnColorIntoString(this.boardColor.getValue()));
-        board.setListColor(mainCtrl.turnColorIntoString(this.listColor.getValue()));
-        board.setCardColor(mainCtrl.turnColorIntoString(this.cardColor.getValue()));
-        board.setFont(boardFont.getValue());
+        board.setBoardColor(themeUtils.turnColorIntoString(this.boardColor.getValue()));
+        board.setListColor(themeUtils.turnColorIntoString(this.listColor.getValue()));
+        board.setCardColor(themeUtils.turnColorIntoString(this.cardColor.getValue()));
+        board.setFontColor(themeUtils.turnColorIntoString(this.fontColor.getValue()));
     }
 
     @FXML
@@ -91,7 +85,7 @@ public class ThemeEditorCtrl implements SceneCtrl {
     public void loadPreset(ActionEvent event) {
         String selected = presets.getValue();
         var theme = ThemeUtils.Theme.valueOf(selected);
-        loadDefaultValues(theme.getBoardColor(), theme.getListColor(), theme.getCardColor(), theme.getFont().getFamily());
+        loadDefaultValues(theme.getBoardColor(), theme.getListColor(), theme.getCardColor(), theme.getFontColor());
     }
 
 }

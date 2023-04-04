@@ -20,6 +20,8 @@ public class CreateBoardCtrl implements SceneCtrl {
     private final ComponentFactory factory;
     private final ClientPreferences clientPrefs;
 
+    private final ThemeUtils themeUtils;
+
     @FXML
     private TextField boardName;
     @FXML
@@ -33,17 +35,17 @@ public class CreateBoardCtrl implements SceneCtrl {
 
     @Inject
     public CreateBoardCtrl(ServerUtils server, ClientUtils client, MainCtrl mainCtrl,
-                           ComponentFactory factory, ClientPreferences clientPrefs) {
+                           ComponentFactory factory, ClientPreferences clientPrefs, ThemeUtils themeUtils) {
         this.client = client;
         this.mainCtrl = mainCtrl;
         this.server = server;
         this.factory = factory;
         this.clientPrefs = clientPrefs;
+        this.themeUtils = themeUtils;
     }
 
     public void createBoard() {
-
-        String color = mainCtrl.turnColorIntoString(boardColor.getValue());
+        String color = themeUtils.turnColorIntoString(boardColor.getValue());
         final Board newBoard = new Board(boardName.getText());
         if (passwordUsed.isSelected()) {
             newBoard.setPassword(boardPassword.getText());

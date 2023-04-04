@@ -81,6 +81,8 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Card/* TODO
             unhighlight();
         }
         cardView.setStyle("-fx-background-color: " + card.getCardList().getBoard().getCardColor());
+        title.setStyle("-fx-text-fill: " + card.getCardList().getBoard().getFontColor());
+        description.setStyle("-fx-text-fill: " + card.getCardList().getBoard().getFontColor());
     }
 
     public void editCard() {
