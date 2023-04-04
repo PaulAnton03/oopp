@@ -32,7 +32,7 @@ public class KeyEventHandler implements EventHandler<KeyEvent> {
 
     public void handle(KeyEvent e) {
         if (client.getCardCtrl(client.getSelectedCardId()) != null
-            && client.isEditingCardTitle())
+            && client.getEditedCardTitle() != null)
             return;
         switch (e.getCode()) {
             case LEFT:

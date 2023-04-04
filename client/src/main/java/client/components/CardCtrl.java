@@ -82,7 +82,7 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Card/* TODO
         description.setText(card.getDescription());
         if (client.getSelectedCardId() == card.getId()) {
             highlight();
-            if (client.isEditingCardTitle())
+            if (client.getEditedCardTitle() != null)
                 editTitle();
         } else {
             unhighlight();
@@ -128,13 +128,10 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Card/* TODO
         titleField.setDisable(false);
         titleField.setVisible(true);
         titleField.requestFocus();
-        if (!client.isEditingCardTitle()) {
-            titleField.setText(card.getTitle());
-            client.setEditingCardTitle(true);
+        if (client.getEditedCardTitle() == null) {
             client.setEditedCardTitle(card.getTitle());
-        } else {
-            titleField.setText(client.getEditedCardTitle());
         }
+        titleField.setText(client.getEditedCardTitle());
     }
 
     public void highlight() {
@@ -145,7 +142,7 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Card/* TODO
     public void unhighlight() {
         cardView.getStyleClass().remove("highlight");
         if (client.getSelectedCardId() == card.getId()
-            && client.isEditingCardTitle())
+            && client.getEditedCardTitle() != null)
             saveTitle();
     }
 
@@ -167,10 +164,10 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Card/* TODO
     public void onTitleFieldKeyPressed(KeyEvent e) {
         if (e.getCode() == KeyCode.ENTER) {
             saveTitle();
-            client.setEditingCardTitle(false);
+            client.setEditedCardTitle(null);
         } else if (e.getCode() == KeyCode.ESCAPE) {
             stopEditTitle();
-            client.setEditingCardTitle(false);
+            client.setEditedCardTitle(null);
         }
     }
 

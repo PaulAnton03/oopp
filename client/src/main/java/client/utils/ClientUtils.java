@@ -17,10 +17,7 @@ public class ClientUtils {
     private long activeCardListId;
     @Getter
     @Setter
-    private boolean isEditingCardTitle;
-    @Getter
-    @Setter
-    private String editedCardTitle;
+    private String editedCardTitle; /* Always set to null when not editing a title */
     @Getter
     @Setter
     private long selectedCardId = -1;
@@ -70,7 +67,7 @@ public class ClientUtils {
         if (cardCtrl != null)
             cardCtrl.unhighlight();
         this.selectedCardId = selectedCardId;
-        this.isEditingCardTitle = false;
+        this.editedCardTitle = null;
         getCardCtrl(selectedCardId).highlight();
     }
 }
