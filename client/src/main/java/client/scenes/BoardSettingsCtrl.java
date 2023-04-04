@@ -4,11 +4,13 @@ import client.utils.*;
 import com.google.inject.Inject;
 
 import commons.Board;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.TextField;
+import javafx.scene.paint.Color;
 
 public class BoardSettingsCtrl implements SceneCtrl {
 
@@ -24,9 +26,13 @@ public class BoardSettingsCtrl implements SceneCtrl {
     private TextField boardPassword;
     @FXML
     private CheckBox passwordUsed;
+    @FXML
+    private TextField boardName;
 
     @FXML
     private Button deleteBoardButton;
+
+    private Color color;
 
     @Inject
     public BoardSettingsCtrl(ServerUtils server, ClientUtils client, MainCtrl mainCtrl,
@@ -37,15 +43,21 @@ public class BoardSettingsCtrl implements SceneCtrl {
         this.clientPrefs = clientPrefs;
     }
 
+    public void loadData() {
+        boardName.setText(client.getBoardCtrl().getBoard().getName());
+    }
+
     public void saveChanges() {
         Board board = client.getBoardCtrl().getBoard();
         if (board == null) {
             Logger.log("No board selected", Logger.LogLevel.ERROR);
             throw new IllegalStateException("Something went wrong, no board selected!");
         }
+        board.setName(boardName.getText());
+        String color = mainCtrl.turnColorIntoString(boardColor.getValue());
+        board.setColor(color);
         board.setPassword(passwordUsed.isSelected() ? boardPassword.getText() : null);
         server.updateBoard(board);
-        client.getBoardCtrl().refresh();
         clearForm();
         mainCtrl.showMainView();
     }
@@ -66,6 +78,10 @@ public class BoardSettingsCtrl implements SceneCtrl {
     public void goBack() {
         clearForm();
         mainCtrl.showMainView();
+    }
+
+    public void pickColor(ActionEvent action){
+        color = boardColor.getValue();
     }
 
     public void clearForm() {

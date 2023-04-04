@@ -42,8 +42,14 @@ import javafx.util.Duration;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
+import javax.inject.Inject;
+import java.io.IOException;
+import java.net.URL;
+import java.util.List;
+import java.util.ResourceBundle;
+
 @EqualsAndHashCode
-public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Tag>, Initializable {
+public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Card/* TODO: change to TAG */>, Initializable {
     private final MainCtrl mainCtrl;
     private final ComponentFactory factory;
     private final ServerUtils server;
@@ -204,8 +210,7 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Tag>, Initi
         fts.forEach(ft -> {
             ft.setDelay(ftDelay);
             ft.setFromValue(0.0);
-            ft.setToValue(0.6);
-        });
+            ft.setToValue(0.6);});
         buttonsVisibilityPT = new ParallelTransition(fts.get(0), fts.get(1));
 
         // Set button icons and behaviour
@@ -229,12 +234,11 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Tag>, Initi
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
-
         // Set card view event handlers
-        cardView.setOnMouseEntered(event -> focus());
+        cardView.setOnMouseEntered(event -> {
+            focus();
+            client.changeSelection(card.getId());});
         cardView.setOnMouseExited(event -> unfocus());
-
         cardView.setOnDragDetected(event -> {
             Logger.log("Card " + getCard().getTitle() + " drag detected");
 
@@ -265,7 +269,6 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Tag>, Initi
             client.getBoardCtrl().refresh();
             event.consume();
         });
-
         cardView.setOnMouseClicked(event -> {
             if (event.getClickCount() == 2) {
                 editCard();

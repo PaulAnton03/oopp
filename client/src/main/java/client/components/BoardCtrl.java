@@ -47,6 +47,7 @@ public class BoardCtrl implements Component<Board>, DBEntityCtrl<Board, CardList
         this.board = board;
         client.clearBoardData();
         client.setBoardCtrl(this);
+        boardView.setStyle("-fx-background-color: " + board.getColor());
 
         final long listWidthPlusGap = 300;
         boardView.setMinWidth(board.getCardLists().size() * listWidthPlusGap);
@@ -86,9 +87,9 @@ public class BoardCtrl implements Component<Board>, DBEntityCtrl<Board, CardList
     }
 
     private void switchSelectedCardList(int diff) {
-        int cardListIdx = 0;
+        int cardListIdx = diff;
         if (client.getCardCtrl(client.getSelectedCardId()) != null) {
-            cardListIdx = board.getCardLists().indexOf(client.getCardList(client.getCard(client.getSelectedCardId()).getCardList().getId())) + diff;
+            cardListIdx += board.getCardLists().indexOf(client.getCardList(client.getCard(client.getSelectedCardId()).getCardList().getId()));
         }
         if (cardListIdx < 0 || cardListIdx >= board.getCardLists().size())
             return;
@@ -130,7 +131,6 @@ public class BoardCtrl implements Component<Board>, DBEntityCtrl<Board, CardList
         cardList.getCards().set(cardIdx, cardList.getCards().get(destCardIdx));
         cardList.getCards().set(destCardIdx, card);
         server.updateCardList(cardList);
-        client.getCardListCtrl(cardList.getId()).refresh(); // TODO: WEBSOCKETS
     }
 
     public void handleKeyEvent(KeyEvent e) {

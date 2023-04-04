@@ -3,7 +3,10 @@ package commons;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import lombok.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -27,20 +30,14 @@ public class Board implements DBEntity {
     /* If null the board will not have a password. */
     private String password;
 
-//    @Getter
-//    @Setter
-//    @OneToOne(targetEntity = Tag.class)
-    //private List<String[], int[], String[]> boardTagList = new ArrayList<>();
-//    private String[] boardTagText = new String[32];
-//    private int[] boardTagId = new int[32];
-//    private String[] boardTagColor = new String[32];
-
-
-    @Getter
-    @Setter
-    private int idGenerator = 0;
     @JsonIgnore
     private boolean editable = true;
+
+    @JsonIgnore
+    private final String defaultColor = "#ffffffff";
+
+    @NonNull
+    private String color;
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
     List<Tag> tagList = new ArrayList<>();
@@ -48,6 +45,11 @@ public class Board implements DBEntity {
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @OrderColumn(name = "card_list_index")
     private List<CardList> cardLists = new ArrayList<>();
+
+    public Board(String name) {
+        this.name = name;
+        this.color = "#ffffffff";
+    }
 
     /**
      * Adds an empty {@link CardList} to the board.
@@ -102,7 +104,7 @@ public class Board implements DBEntity {
 
     @Override
     public String toString() {
-        return "Board [id=" + id + ", name=" + name + ", password=" + password + ", cardLists=" + cardLists + "]";
+        return "Board [id=" + id + ", name=" + name + ", password=" + password + ", color=" + color + ", cardLists=" + cardLists + "]";
     }
 
 
@@ -117,11 +119,17 @@ public class Board implements DBEntity {
     @JsonIgnore
     public boolean isNetworkValid() {
         return this.cardLists != null
-                && !isNullOrEmpty(this.getName());
+                && !isNullOrEmpty(this.getName())
+                && !isNullOrEmpty(this.getColor());
     }
 
     @JsonIgnore
     public boolean isEditable() {
         return editable;
+    }
+
+    @JsonIgnore
+    public String getDefaultColor() {
+        return defaultColor;
     }
 }
