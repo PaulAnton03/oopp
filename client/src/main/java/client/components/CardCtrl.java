@@ -49,7 +49,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 @EqualsAndHashCode
-public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Card/* TODO: change to TAG */>, Initializable {
+public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Tag>, Initializable {
     private final MainCtrl mainCtrl;
     private final ComponentFactory factory;
     private final ServerUtils server;

@@ -105,6 +105,7 @@ public class EditCardCtrl implements SceneCtrl {
         Card card = server.getCard(cardId);
         System.out.println(card);
         Board board = card.getCardList().getBoard();
+        System.out.println(card.getCardList());
         System.out.println(board);
         String tagText = "";
         String tagColor = "";

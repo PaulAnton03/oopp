@@ -51,9 +51,6 @@ public class ComponentFactory {
         } else if (ctrlClass == TagCtrl.class){
             client.getTagCtrls().put(data.getId(), (TagCtrl) ctrl);
         }
-        else if (ctrlClass == TagCtrl.class){
-            client.getTagCtrls().put(data.getId(), (TagCtrl) ctrl);
-        }
         ctrl.loadData(data);
         return ctrl;
     }
