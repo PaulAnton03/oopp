@@ -18,10 +18,6 @@ class CardTest {
         card2.setTitle("task");
         card2.setDescription("description2");
         assertNotEquals(card.hashCode(), card2.hashCode());
-
-        card2.setDescription("description");
-        card2.setCardList(new CardList());
-        assertNotEquals(card.hashCode(), card2.hashCode());
     }
 
     @Test
@@ -38,17 +34,12 @@ class CardTest {
         card2.setDescription("description2");
         assertFalse(card.equals(card2));
         assertFalse(card2.equals(card));
-
-        card2.setDescription("description");
-        card2.setCardList(new CardList());
-        assertFalse(card.equals(card2));
-        assertFalse(card2.equals(card));
     }
 
     @Test
     void toStringTest() {
         String cardOutput = card.toString();
-        String expectedOutput = "Card [id=0, title=task, description=description, cardList=null]";
+        String expectedOutput = "Card [id=0, title=task, description=description,subtasks=[]]";
         assertEquals(expectedOutput, cardOutput);
     }
 

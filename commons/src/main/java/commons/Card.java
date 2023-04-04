@@ -1,18 +1,12 @@
 package commons;
 
-import javax.persistence.*;
-
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIncludeProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import lombok.*;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -63,7 +57,7 @@ public class Card implements DBEntity {
 
     @Override
     public String toString() {
-        return "Card [id=" + id + ", title=" + title + ", description=" + description + ",subtasks= " + subtasks + "]";
+        return "Card [id=" + id + ", title=" + title + ", description=" + description + ",subtasks=" + subtasks + "]";
     }
 
     /**
