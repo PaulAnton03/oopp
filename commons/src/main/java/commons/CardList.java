@@ -41,7 +41,7 @@ public class CardList implements DBEntity {
 
     @EqualsAndHashCode.Exclude
     @JsonIgnore
-    private final String defaultColor = "#b2b2ebff";
+    private final String defaultColor = "";
 
     public CardList() {
         this.title = "New Card List";
