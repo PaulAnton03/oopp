@@ -8,6 +8,42 @@ class CardTest {
     Card card = new Card("task", "description");
 
     @Test
+    void hashCodeTest() {
+        Card card2 = new Card("task", "description");
+        assertEquals(card.hashCode(), card2.hashCode());
+
+        card2.setTitle("task2");
+        assertNotEquals(card.hashCode(), card2.hashCode());
+
+        card2.setTitle("task");
+        card2.setDescription("description2");
+        assertNotEquals(card.hashCode(), card2.hashCode());
+    }
+
+    @Test
+    void equalsTest() {
+        Card card2 = new Card("task", "description");
+        assertTrue(card.equals(card2));
+        assertTrue(card2.equals(card));
+
+        card2.setTitle("task2");
+        assertFalse(card.equals(card2));
+        assertFalse(card2.equals(card));
+
+        card2.setTitle("task");
+        card2.setDescription("description2");
+        assertFalse(card.equals(card2));
+        assertFalse(card2.equals(card));
+    }
+
+    @Test
+    void toStringTest() {
+        String cardOutput = card.toString();
+        String expectedOutput = "Card [id=0, title=task, description=description,subtasks=[]]";
+        assertEquals(expectedOutput, cardOutput);
+    }
+
+    @Test
     void SetGetCardList() {
         CardList list = new CardList();
         card.setCardList(list);
@@ -23,6 +59,8 @@ class CardTest {
     void setTitle() {
         card.setTitle("Title.");
         assertEquals(card.getTitle(), "Title.");
+
+        card.setTitle("task");
     }
 
     @Test
