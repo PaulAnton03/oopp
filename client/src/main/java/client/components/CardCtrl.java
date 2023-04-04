@@ -2,7 +2,6 @@ package client.components;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.HashSet;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -15,6 +14,7 @@ import commons.Card;
 import commons.CardList;
 import commons.Tag;
 import client.utils.ClientUtils;
+import client.utils.ComponentFactory;
 import client.utils.Logger;
 import client.utils.ServerUtils;
 import commons.Card;
@@ -47,7 +47,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 @EqualsAndHashCode
-public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Tag>, Initializable {
+public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Card/* TODO: change to TAG */>, Initializable {
     private final MainCtrl mainCtrl;
     private final ComponentFactory factory;
     private final ServerUtils server;
@@ -70,7 +70,7 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Tag>, Initi
     private FlowPane tagArea;
 
     @Inject
-    public CardCtrl(MainCtrl mainCtrl, ServerUtils server, ComponentFactory factory, ClientUtils client) {
+    public CardCtrl(MainCtrl mainCtrl, ServerUtils server, ClientUtils client, ComponentFactory factory) {
         this.mainCtrl = mainCtrl;
         this.factory = factory;
         this.server = server;
@@ -91,6 +91,7 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Tag>, Initi
 
         for (Tag tag : card.getTags()){
             TagCtrl tagCtrl = factory.create(TagCtrl.class, tag);
+            tagCtrl.loadData(tag);
             tagArea.getChildren().add(tagCtrl.getNode());
         }
         if (client.getSelectedCardId() == card.getId()) {
@@ -126,7 +127,10 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Tag>, Initi
 
     public void removeChildren() {}
 
-    public void replaceChild(Card card /* TODO: Change to Tag tag */) {}
+    public void replaceChild(Tag tag) {
+
+    }
+
 
     // CSS class that defines style for the highlighted card
     private static final PseudoClass HIGHLIGHT_PSEUDO_CLASS = PseudoClass.getPseudoClass("highlight");
@@ -196,7 +200,6 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Tag>, Initi
         unhighlight();
         deleteButton.setOpacity(0.0);
         editButton.setOpacity(0.0);
-
         // Create show/hide transition for buttons
         final Duration ftDuration = Duration.millis(200);
         final Duration ftDelay = Duration.millis(200);

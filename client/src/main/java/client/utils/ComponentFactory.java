@@ -48,6 +48,8 @@ public class ComponentFactory {
             client.getCardCtrls().put(data.getId(), (CardCtrl) ctrl);
         } else if (ctrlClass == CardListCtrl.class) {
             client.getCardListCtrls().put(data.getId(), (CardListCtrl) ctrl);
+        } else if (ctrlClass == TagCtrl.class){
+            client.getTagCtrls().put(data.getId(), (TagCtrl) ctrl);
         }
         else if (ctrlClass == TagCtrl.class){
             client.getTagCtrls().put(data.getId(), (TagCtrl) ctrl);

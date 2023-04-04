@@ -38,6 +38,7 @@ public class ClientUtils {
     public void clearBoardData() {
         this.cardListCtrls = new HashMap<>();
         this.cardCtrls = new HashMap<>();
+        this.tagCtrls = new HashMap<>();
         this.boardCtrl = null;
     }
 

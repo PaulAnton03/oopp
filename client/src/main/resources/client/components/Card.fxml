@@ -3,15 +3,12 @@
 <?import java.lang.String?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.*?>
-<?import java.lang.String?>
-<VBox fx:id="cardView" maxHeight="150.0" maxWidth="400.0" prefWidth="250.0" spacing="5.0" stylesheets="/client/styles/card.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.components.CardCtrl">
 
+<VBox fx:id="cardView" maxHeight="150.0" maxWidth="400.0" prefWidth="250.0" spacing="5.0" stylesheets="/client/styles/card.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.components.CardCtrl">
    <children>
       <AnchorPane prefHeight="36.0" prefWidth="230.0" styleClass="titlePane">
          <children>
@@ -20,10 +17,8 @@
             <Label fx:id="title" layoutY="-1.0" prefHeight="34.0" styleClass="title" text="Title" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
          </children>
       </AnchorPane>
-
-      <FlowPane fx:id="tagArea" prefHeight="27.0" prefWidth="230.0" vgap="5.0" />
       <Label fx:id="description" alignment="TOP_LEFT" minHeight="0.0" minWidth="100.0" wrapText="true" />
-
+      <FlowPane fx:id="flowPane" prefHeight="24.0" prefWidth="230.0" />
    </children>
    <opaqueInsets>
       <Insets />

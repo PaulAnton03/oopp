@@ -34,7 +34,7 @@ public class BoardJoinCtrl implements Component<Board> {
     @Override
     public void loadData(Board board) {
         this.board = board;
-        if(board.getPassword() == null) lockImage.setVisible(false);
+        if (board.getPassword() == null) lockImage.setVisible(false);
         label.setText(board.getName());
     }
 

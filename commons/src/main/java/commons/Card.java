@@ -61,6 +61,12 @@ public class Card implements DBEntity {
     private String title;
     @NonNull
     private String description;
+//
+//    @OneToOne(targetEntity = Tag.class)
+    //private List<Triple<String, Integer, String>> tagList = new ArrayList<>();
+    private String[] cardTagText = new String[10];
+    private int[] cardTagId = new int[10];
+    private String[] cardTagColor = new String[10];
 
     public boolean removeTag(long id) {
         Tag tag = this.getTags().stream().filter(c -> c.getId() == id).findFirst().orElse(null);
@@ -90,7 +96,13 @@ public class Card implements DBEntity {
 
     @Override
     public String toString() {
-        return "Card [id=" + id + ", title=" + title + ", description=" + description + ",subtasks= " + subtasks + "]";
+        String tags = "";
+        for(int i = 0; i < getCardTagId().length; i++){
+            if(getCardTagId()[i] > 0)
+                tags += getCardTagText()[i] + ", ";
+        }
+        return "Card [id=" + id + ", title=" + title + ", description=" + description + ",subtasks= " + subtasks + "]"
+                + " Tags: " + tags;
     }
 
     /**
