@@ -4,6 +4,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 
@@ -14,6 +15,7 @@
             <Button fx:id="editButton" alignment="CENTER" contentDisplay="CENTER" layoutX="178.0" layoutY="5.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#editCard" prefHeight="32.0" prefWidth="32.0" style="-fx-font-size: 20; -fx-padding: 0;" AnchorPane.rightAnchor="38.0" AnchorPane.topAnchor="0.0" />
             <Button fx:id="deleteButton" layoutX="217.0" layoutY="5.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#delete" prefHeight="32.0" prefWidth="32.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
             <Label fx:id="title" layoutY="-1.0" prefHeight="34.0" styleClass="title" text="Title" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
+            <TextField fx:id="titleField" disable="true" layoutY="6.0" onKeyPressed="#onTitleFieldKeyPressed" prefHeight="24.0" prefWidth="152.0" promptText="Task Name" />
          </children>
       </AnchorPane>
       <Label fx:id="description" alignment="TOP_LEFT" minHeight="0.0" minWidth="100.0" styleClass="description" wrapText="true" />

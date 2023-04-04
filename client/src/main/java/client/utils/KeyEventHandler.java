@@ -4,6 +4,7 @@ import client.scenes.MainCtrl;
 import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
 public class KeyEventHandler implements EventHandler<KeyEvent> {
@@ -30,7 +31,20 @@ public class KeyEventHandler implements EventHandler<KeyEvent> {
     }
 
     public void handle(KeyEvent e) {
-        switch (e.getCode()) {
+        if (client.getCardCtrl(client.getSelectedCardId()) != null
+            && client.getCardCtrl(client.getSelectedCardId()).isTitleEditing()) {
+            switch (e.getCode()) {
+                case ESCAPE:
+                    client.getCardCtrl(client.getSelectedCardId()).stopEditTitle();
+                    break;
+                case ENTER:
+                    client.getCardCtrl(client.getSelectedCardId()).saveTitle();
+                    break;
+                default:
+                    break;
+            }
+        } else {
+                    switch (e.getCode()) {
             case LEFT:
             case RIGHT:
             case UP:
@@ -52,9 +66,14 @@ public class KeyEventHandler implements EventHandler<KeyEvent> {
                     mainCtrl.getEditCardCtrl().cancel();
                 }
                 break;
+            case E:
+                if (mainCtrl.getActiveCtrl() == mainCtrl.getMainViewCtrl()
+                    && client.getCardCtrl(client.getSelectedCardId()) != null) {
+                    client.getCardCtrl(client.getSelectedCardId()).editTitle();
+                }
             default:
                 break;
         }
     }
-
+        }
 }

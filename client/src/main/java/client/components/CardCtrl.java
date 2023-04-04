@@ -15,10 +15,13 @@ import javafx.scene.Parent;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.Dragboard;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -52,6 +55,11 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Card/* TODO
     private Button editButton;
     @FXML
     private Button deleteButton;
+    @FXML
+    private TextField titleField;
+
+    @Getter
+    private boolean isTitleEditing;
 
     @Inject
     public CardCtrl(MainCtrl mainCtrl, ServerUtils serverUtils, ClientUtils client) {
@@ -113,6 +121,15 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Card/* TODO
     // CSS class that defines style for the highlighted card
     private static final PseudoClass HIGHLIGHT_PSEUDO_CLASS = PseudoClass.getPseudoClass("highlight");
 
+    public void editTitle() {
+        if (!isTitleEditing) {
+            titleField.setDisable(false);
+            titleField.setVisible(true);
+            titleField.setText(card.getTitle());
+            isTitleEditing = true;
+        }
+    }
+
     public void highlight() {
         if (!cardView.getStyleClass().contains("highlight"))
             cardView.getStyleClass().add("highlight");
@@ -120,6 +137,29 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Card/* TODO
 
     public void unhighlight() {
         cardView.getStyleClass().remove("highlight");
+        saveTitle();
+    }
+
+    public void stopEditTitle() {
+        titleField.setDisable(true);
+        titleField.setVisible(false);
+        titleField.setText(null);
+        isTitleEditing = false;
+    }
+
+    private void saveTitle() {
+        if (titleField.getText() != null
+            && !titleField.getText().isEmpty()
+            && !titleField.getText().equals(card.getTitle())) {
+            card.setTitle(titleField.getText());
+            server.updateCard(card);
+        }
+        stopEditTitle();
+    }
+
+    public void onTitleFieldKeyPressed(KeyEvent e) {
+        if (e.getCode() == KeyCode.ENTER || e.getCode() == KeyCode.ESCAPE)
+            saveTitle();
     }
 
     public void focus() {
