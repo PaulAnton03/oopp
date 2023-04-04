@@ -4,8 +4,6 @@ import client.utils.ClientUtils;
 import client.utils.ServerUtils;
 import client.utils.ThemeUtils;
 import commons.Board;
-import commons.Card;
-import commons.CardList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ColorPicker;
@@ -50,8 +48,10 @@ public class ThemeEditorCtrl implements SceneCtrl {
     private ComboBox<String> presets;
 
     public void loadData() {
+        presets.setValue(null);
         board = client.getBoardCtrl().getBoard();
         presets.getItems().clear();
+        boardFont.getItems().clear();
         List<ThemeUtils.Theme> loadPresets = ThemeUtils.Theme.getPredefinedThemes();
         presets.getItems().addAll(loadPresets.stream().map(ThemeUtils.Theme::toString).collect(Collectors.toList()));
         boardFont.getItems().addAll(Font.getFamilies());
