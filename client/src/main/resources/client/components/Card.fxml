@@ -18,7 +18,7 @@
          </children>
       </AnchorPane>
       <Label fx:id="description" alignment="TOP_LEFT" minHeight="0.0" minWidth="100.0" wrapText="true" />
-      <FlowPane fx:id="flowPane" prefHeight="24.0" prefWidth="230.0" />
+      <FlowPane fx:id="tagArea" prefHeight="24.0" prefWidth="230.0" />
    </children>
    <opaqueInsets>
       <Insets />

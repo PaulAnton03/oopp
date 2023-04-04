@@ -74,7 +74,7 @@ public class EditCardCtrl implements SceneCtrl {
     }
 
     public void saveCardChanges() {
-        Card card = server.getCard(cardId);
+        Card card = client.getCard(cardId);
         card.setTitle(changeTitle.getText());
         card.setDescription(changeDesc.getText());
         server.updateCard(card);
@@ -102,7 +102,7 @@ public class EditCardCtrl implements SceneCtrl {
     }
 
     public void createTag() {
-        Card card = server.getCard(cardId);
+        Card card = client.getCard(cardId);
         System.out.println(card);
         Board board = card.getCardList().getBoard();
         System.out.println(card.getCardList());
@@ -141,7 +141,7 @@ public class EditCardCtrl implements SceneCtrl {
     }
 
     public void editTag() {
-        Card card = server.getCard(cardId);
+        Card card = client.getCard(cardId);
         server.updateTag(card.getTags().iterator().next());
     }
 
@@ -160,7 +160,7 @@ public class EditCardCtrl implements SceneCtrl {
     public void resetState() {
         this.changeTitle.setText("");
         this.changeDesc.setText("");
-        tagArea.getChildren().removeAll();
+        tagArea.getChildren().clear();
     }
 
     @Override

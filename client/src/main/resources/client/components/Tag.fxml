@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="20.0" prefWidth="40.0" styleClass="tag" stylesheets="/client/styles/tag.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.components.TagCtrl">
+<AnchorPane fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#clickAssigning" prefHeight="20.0" prefWidth="40.0" styleClass="tag" stylesheets="/client/styles/tag.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.components.TagCtrl">
    <children>
       <Label fx:id="label" alignment="CENTER" contentDisplay="CENTER" prefHeight="20.0" prefWidth="40.0" text="Label" textAlignment="CENTER">
          <font>

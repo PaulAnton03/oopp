@@ -62,7 +62,7 @@ public class TagCtrl implements Component<Tag>{
     @FXML
     private Text savedText;
 
-    private Parent parent = null;
+
 
     @Inject
     public TagCtrl(MainCtrl mainCtrl, ServerUtils server, ClientUtils client) {
@@ -169,7 +169,7 @@ public class TagCtrl implements Component<Tag>{
     public void changeTag(){
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("TagSettings.fxml"));
         try {
-            parent = (Parent) fxmlLoader.load();
+            Parent parent = (Parent) fxmlLoader.load();
             Stage stage = new Stage();
             stage.setTitle("Tag Settings");
             stage.setScene(new Scene(parent));
