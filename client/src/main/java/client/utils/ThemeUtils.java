@@ -26,7 +26,7 @@ public class ThemeUtils {
         if (font == null) return;
         updateStyle(clientUtils.getBoardCtrl().getNode());
         clientUtils.getCardListCtrls().values().forEach(c -> updateStyle(c.getNode()));
-        clientUtils.getCardCtrls().values().forEach(c -> updateStyle(c.getNode());
+        clientUtils.getCardCtrls().values().forEach(c -> updateStyle(c.getNode()));
     }
 
     private void updateStyle(Parent node) {

@@ -9,8 +9,11 @@ import commons.CardList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ComboBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 
 import javax.inject.Inject;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class ThemeEditorCtrl implements SceneCtrl {
@@ -36,7 +39,7 @@ public class ThemeEditorCtrl implements SceneCtrl {
     private ColorPicker boardColor;
 
     @FXML
-    private ComboBox<?> boardFont;
+    private ComboBox<String> boardFont;
 
     @FXML
     private ColorPicker cardColor;
@@ -45,11 +48,20 @@ public class ThemeEditorCtrl implements SceneCtrl {
     private ColorPicker listColor;
 
     @FXML
-    private ComboBox<?> presets;
+    private ComboBox<String> presets;
 
     public void loadData() {
-        List<Theme> loadPresets = themeUtils.getPredefinedThemes();
-        presets.getItems().addAll(loadPresets.stream().map(c -> c.toString()).collect(Collectors.toList()));
+        presets.getItems().clear();
+        List<ThemeUtils.Theme> loadPresets = themeUtils.getPredefinedThemes();
+        presets.getItems().addAll(loadPresets.stream().map(ThemeUtils.Theme::toString).collect(Collectors.toList()));
+        boardFont.getItems().addAll(Font.getFamilies());
+        loadDefaultValues();
+    }
+
+    private void loadDefaultValues() {
+        boardColor.setValue(Color.valueOf(board.getColor()));
+        listColor.setValue(Color.valueOf(cardList.getColor()));
+        cardColor.setValue(Color.valueOf(card.getColor()));
     }
 
     @FXML

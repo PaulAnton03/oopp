@@ -45,6 +45,21 @@ public class Card implements DBEntity {
     private String title;
     @NonNull
     private String description;
+    @NonNull
+    private String color;
+
+    @JsonIgnore
+    private String defaultColor = "#ffffffff";
+
+    public Card(String title) {
+        this.title = title;
+        this.color = defaultColor;
+    }
+    public Card(String title, String description) {
+        this.title = title;
+        this.description = description;
+        this.color = defaultColor;
+    }
 
     public boolean removeSubTask(SubTask subTask) {
         return this.subtasks.remove(subTask);
