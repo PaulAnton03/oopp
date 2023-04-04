@@ -22,8 +22,6 @@ public class BoardSettingsCtrl implements SceneCtrl {
     private final ClientPreferences clientPrefs;
 
     @FXML
-    private ColorPicker boardColor;
-    @FXML
     private TextField boardPassword;
     @FXML
     private CheckBox passwordUsed;
@@ -34,7 +32,6 @@ public class BoardSettingsCtrl implements SceneCtrl {
     @FXML
     private AnchorPane inviteKeyFooter;
 
-    private Color color;
 
     @Inject
     public BoardSettingsCtrl(ServerUtils server, ClientUtils client, MainCtrl mainCtrl,
@@ -64,8 +61,6 @@ public class BoardSettingsCtrl implements SceneCtrl {
             throw new IllegalStateException("Something went wrong, no board selected!");
         }
         board.setName(boardName.getText());
-        String color = mainCtrl.turnColorIntoString(boardColor.getValue());
-        board.setColor(color);
         board.setPassword(passwordUsed.isSelected() ? boardPassword.getText() : null);
         server.updateBoard(board);
         clearForm();

@@ -44,7 +44,7 @@ public class CreateBoardCtrl implements SceneCtrl {
     public void createBoard() {
 
         String color = mainCtrl.turnColorIntoString(boardColor.getValue());
-        final Board newBoard = new Board(boardName.getText(), color);
+        final Board newBoard = new Board(boardName.getText());
         if (passwordUsed.isSelected()) {
             newBoard.setPassword(boardPassword.getText());
         }

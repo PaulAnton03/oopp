@@ -24,8 +24,6 @@ public class ThemeEditorCtrl implements SceneCtrl {
     private final MainCtrl mainCtrl;
     private final ThemeUtils themeUtils;
     private Board board;
-    private CardList cardList;
-    private Card card;
 
     @Inject
     public ThemeEditorCtrl(ClientUtils client, ServerUtils server,
@@ -52,6 +50,7 @@ public class ThemeEditorCtrl implements SceneCtrl {
     private ComboBox<String> presets;
 
     public void loadData() {
+        board = client.getBoardCtrl().getBoard();
         presets.getItems().clear();
         List<ThemeUtils.Theme> loadPresets = ThemeUtils.Theme.getPredefinedThemes();
         presets.getItems().addAll(loadPresets.stream().map(ThemeUtils.Theme::toString).collect(Collectors.toList()));
