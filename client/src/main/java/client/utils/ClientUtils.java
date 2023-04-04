@@ -20,6 +20,9 @@ public class ClientUtils {
     private String editedCardTitle; /* Always set to null when not editing a title */
     @Getter
     @Setter
+    private int caretPosition;
+    @Getter
+    @Setter
     private long selectedCardId = -1;
 
     @Getter
@@ -63,11 +66,19 @@ public class ClientUtils {
     }
 
     public void changeSelection(long selectedCardId) {
+        if (selectedCardId == this.selectedCardId)
+            return;
         CardCtrl cardCtrl = getCardCtrl(this.selectedCardId);
         if (cardCtrl != null)
             cardCtrl.unhighlight();
         this.selectedCardId = selectedCardId;
         this.editedCardTitle = null;
         getCardCtrl(selectedCardId).highlight();
+    }
+
+    public void postRefresh() {
+        if (getCardCtrl(getSelectedCardId()) != null
+            && getEditedCardTitle() != null)
+            getCardCtrl(getSelectedCardId()).getTitleField().requestFocus();
     }
 }

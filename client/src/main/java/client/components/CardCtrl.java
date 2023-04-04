@@ -60,6 +60,7 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Card/* TODO
     private Button editButton;
     @FXML
     private Button deleteButton;
+    @Getter
     @FXML
     private TextField titleField;
 
@@ -134,7 +135,7 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Card/* TODO
         cardView.getStyleClass().remove("highlight");
         if (client.getSelectedCardId() == card.getId()
             && client.getEditedCardTitle() != null)
-            saveTitle();
+            stopEditTitle();
     }
 
     public void editTitle() {
@@ -142,9 +143,12 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Card/* TODO
         titleField.setVisible(true);
         title.setVisible(false);
         titleField.requestFocus();
-        if (client.getEditedCardTitle() == null)
+        if (client.getEditedCardTitle() == null) {
             client.setEditedCardTitle(card.getTitle());
+            client.setCaretPosition(card.getTitle().length());
+        }
         titleField.setText(client.getEditedCardTitle());
+        titleField.positionCaret(client.getCaretPosition());
     }
 
     public void stopEditTitle() {
@@ -166,12 +170,14 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Card/* TODO
 
     public void onTitleFieldKeyTyped(KeyEvent e) {
         char c = e.getCharacter().charAt(0);
-        if (c == 033) /* ESC */
+        if (c == 033) { /* ESC */
             stopEditTitle();
-        else if (c == 015) /* CR (ENTER) */
+        } else if (c == 015) { /* CR (ENTER) */
             saveTitle();
-        else if (StringUtil.isPrintableChar(c))
+        } else if (StringUtil.isPrintableChar(c)) {
             client.setEditedCardTitle(titleField.getText());
+            client.setCaretPosition(titleField.getCaretPosition());
+        }
     }
 
     public void focus() {
