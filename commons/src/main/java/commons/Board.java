@@ -20,9 +20,9 @@ import java.util.Objects;
 @Table(name = "boards")
 @JsonIdentityInfo(scope = Board.class, generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Board implements DBEntity {
+
     @Id
-    @SequenceGenerator(name = "boards_seq", sequenceName = "BOARDS_SEQ")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "boards_seq")
+    @GeneratedValue(strategy = GenerationType.AUTO)
     protected long id;
 
     @NonNull

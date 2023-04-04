@@ -34,8 +34,7 @@ import lombok.RequiredArgsConstructor;
 public class CardList implements DBEntity {
 
     @Id
-    @SequenceGenerator(name="card_lists_seq", sequenceName="CARD_LISTS_SEQ")
-    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="card_lists_seq")
+    @GeneratedValue(strategy = GenerationType.AUTO)
     protected long id;
 
     @OneToMany(mappedBy = "cardList", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)

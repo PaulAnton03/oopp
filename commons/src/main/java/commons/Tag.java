@@ -20,8 +20,7 @@ public class Tag implements DBEntity {
 
 
     @Id
-//    @SequenceGenerator(name = "tags_seq", sequenceName = "TAGS_SEQ")
-//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "tags_seq")
+    @GeneratedValue(strategy = GenerationType.AUTO)
     protected long id;
 
     @Getter

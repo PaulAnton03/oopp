@@ -7,11 +7,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIncludeProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 
 import java.util.HashSet;
@@ -29,13 +25,13 @@ import java.util.Set;
 public class Card implements DBEntity {
 
     @Id
-    @SequenceGenerator(name = "cards_seq", sequenceName = "CARDS_SEQ")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "cards_seq")
+    @GeneratedValue(strategy = GenerationType.AUTO)
     protected long id;
 
     @OneToMany(mappedBy = "card", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderColumn(name = "subtask_index")
     @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     private List<SubTask> subtasks = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
@@ -43,6 +39,7 @@ public class Card implements DBEntity {
     @OrderColumn(name = "card_index")
     @JsonIncludeProperties("id")
     @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     private CardList cardList;
 
     @JoinTable(
@@ -51,6 +48,8 @@ public class Card implements DBEntity {
             inverseJoinColumns = {@JoinColumn(name = "tag_id")}
     )
     @ManyToMany(cascade = CascadeType.ALL)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private Set<Tag> tags = new HashSet<>();
 
 
