@@ -17,20 +17,16 @@ public class ThemeUtils {
         this.clientUtils = clientUtils;
     }
 
-    private Font boardFont;
-    private Font listFont;
-    private Font cardFont;
+    private Font font;
 
     public void updateFont() {
-        if (boardFont != null)
-            updateStyle(clientUtils.getBoardCtrl().getNode(), boardFont);
-        if (listFont != null)
-            clientUtils.getCardListCtrls().values().forEach(c -> updateStyle(c.getNode(), listFont));
-        if (cardFont != null)
-            clientUtils.getCardCtrls().values().forEach(c -> updateStyle(c.getNode(), cardFont));
+        if(font == null) return;
+        updateStyle(clientUtils.getBoardCtrl().getNode());
+        clientUtils.getCardListCtrls().values().forEach(c -> updateStyle(c.getNode()));
+        clientUtils.getCardCtrls().values().forEach(c -> updateStyle(c.getNode());
     }
 
-    private void updateStyle(Parent node, Font font) {
+    private void updateStyle(Parent node) {
         String style = node.getStyle();
         boolean containsFont = style.contains("-fx-font-family");
         if (!containsFont) style += "-fx-font-family: " + font.getName() + ";";

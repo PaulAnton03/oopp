@@ -1,13 +1,11 @@
 package client.scenes;
 
-import client.utils.ClientPreferences;
 import client.utils.ClientUtils;
 import client.utils.ServerUtils;
-import javafx.event.ActionEvent;
+import client.utils.ThemeUtils;
 import javafx.fxml.FXML;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ComboBox;
-import org.springframework.ui.context.Theme;
 
 import javax.inject.Inject;
 
