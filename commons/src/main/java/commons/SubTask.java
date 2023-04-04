@@ -44,10 +44,6 @@ public class SubTask implements DBEntity {
      */
     @JsonIgnore
     public boolean isNetworkValid() {
-        return !isNullOrEmpty(this.getTitle());
-    }
-
-    private static boolean isNullOrEmpty(String s) {
-        return s == null || s.isEmpty();
+        return !StringUtil.isNullOrEmpty(this.getTitle());
     }
 }

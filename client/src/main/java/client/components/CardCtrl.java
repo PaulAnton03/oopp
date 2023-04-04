@@ -6,6 +6,7 @@ import client.utils.Logger;
 import client.utils.ServerUtils;
 import commons.Card;
 import commons.CardList;
+import commons.StringUtil;
 import javafx.animation.*;
 import javafx.css.PseudoClass;
 import javafx.fxml.FXML;
@@ -96,10 +97,6 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Card/* TODO
         mainCtrl.showEditCard(this.getCard().getId());
     }
 
-    public void onTitleFieldKeyTyped(KeyEvent e) {
-        client.setEditedCardTitle(titleField.getText());
-    }
-
     public void delete() {
         if (!client.getBoardCtrl().getBoard().isEditable()) {
             throw new IllegalStateException("You do not have permissions to edit this board.");
@@ -124,16 +121,6 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Card/* TODO
     // CSS class that defines style for the highlighted card
     private static final PseudoClass HIGHLIGHT_PSEUDO_CLASS = PseudoClass.getPseudoClass("highlight");
 
-    public void editTitle() {
-        titleField.setDisable(false);
-        titleField.setVisible(true);
-        titleField.requestFocus();
-        if (client.getEditedCardTitle() == null) {
-            client.setEditedCardTitle(card.getTitle());
-        }
-        titleField.setText(client.getEditedCardTitle());
-    }
-
     public void highlight() {
         if (!cardView.getStyleClass().contains("highlight"))
             cardView.getStyleClass().add("highlight");
@@ -146,9 +133,21 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Card/* TODO
             saveTitle();
     }
 
+    public void editTitle() {
+        titleField.setDisable(false);
+        titleField.setVisible(true);
+        titleField.requestFocus();
+        if (client.getEditedCardTitle() == null) {
+            client.setEditedCardTitle(card.getTitle());
+        }
+        titleField.setText(client.getEditedCardTitle());
+    }
+
     public void stopEditTitle() {
         titleField.setDisable(true);
         titleField.setVisible(false);
+        client.setEditedCardTitle(null);
+        System.out.println("DISABLED");
     }
 
     public void saveTitle() {
@@ -161,14 +160,14 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Card/* TODO
         stopEditTitle();
     }
 
-    public void onTitleFieldKeyPressed(KeyEvent e) {
-        if (e.getCode() == KeyCode.ENTER) {
-            saveTitle();
-            client.setEditedCardTitle(null);
-        } else if (e.getCode() == KeyCode.ESCAPE) {
+    public void onTitleFieldKeyTyped(KeyEvent e) {
+        char c = e.getCharacter().charAt(0);
+        if (c == 033) /* ESC */
             stopEditTitle();
-            client.setEditedCardTitle(null);
-        }
+        else if (c == 015) /* CR (ENTER) */
+            saveTitle();
+        else if (StringUtil.isPrintableChar(e.getCharacter().charAt(0)))
+            client.setEditedCardTitle(titleField.getText());
     }
 
     public void focus() {
