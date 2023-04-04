@@ -2,18 +2,16 @@ package client.scenes;
 
 import client.utils.*;
 import com.google.inject.Inject;
-
 import commons.Board;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.TextField;
-import javafx.scene.paint.Color;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
 
 public class BoardSettingsCtrl implements SceneCtrl {
 
@@ -90,10 +88,6 @@ public class BoardSettingsCtrl implements SceneCtrl {
     public void goBack() {
         clearForm();
         mainCtrl.showMainView();
-    }
-
-    public void pickColor(ActionEvent action){
-        color = boardColor.getValue();
     }
 
     public void clearForm() {
