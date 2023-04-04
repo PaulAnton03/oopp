@@ -2,6 +2,7 @@ package client.scenes;
 
 import javax.inject.Inject;
 
+import client.components.TagCtrl;
 import client.utils.ClientUtils;
 import client.utils.ExceptionHandler;
 import client.utils.ServerUtils;
@@ -57,13 +58,7 @@ public class EditCardCtrl implements SceneCtrl {
     @FXML
     private TextArea changeDesc;
 
-    @FXML
-    private Button addTagButton;
 
-    @FXML
-    private TextField tagField;
-    @FXML
-    private ColorPicker colourPicker;
 
 
     @FXML
@@ -101,9 +96,9 @@ public class EditCardCtrl implements SceneCtrl {
                 TagCtrl tagCtrl = factory.create(TagCtrl.class, tag);
                 tagCtrl.loadData(tag);
                 tagArea.getChildren().add(tagCtrl.getNode());
-            }
         }
     }
+
 
     public void cancel() {
         resetState();

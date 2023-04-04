@@ -14,7 +14,6 @@ import commons.Card;
 import commons.CardList;
 import commons.Tag;
 import client.utils.ClientUtils;
-import client.utils.ComponentFactory;
 import client.utils.Logger;
 import client.utils.ServerUtils;
 import commons.Card;
@@ -47,7 +46,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 @EqualsAndHashCode
-public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Card/* TODO: change to TAG */>, Initializable {
+public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Tag>, Initializable {
     private final MainCtrl mainCtrl;
     private final ComponentFactory factory;
     private final ServerUtils server;
