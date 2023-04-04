@@ -1,15 +1,17 @@
 package client.scenes;
 
-import client.utils.ClientPreferences;
 import client.utils.ClientUtils;
 import client.utils.ServerUtils;
-import javafx.event.ActionEvent;
+import client.utils.ThemeUtils;
+import commons.Board;
+import commons.Card;
+import commons.CardList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ComboBox;
-import org.springframework.ui.context.Theme;
 
 import javax.inject.Inject;
+import java.util.stream.Collectors;
 
 public class ThemeEditorCtrl implements SceneCtrl {
 
@@ -17,6 +19,9 @@ public class ThemeEditorCtrl implements SceneCtrl {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
     private final ThemeUtils themeUtils;
+    private Board board;
+    private CardList cardList;
+    private Card card;
 
     @Inject
     public ThemeEditorCtrl(ClientUtils client, ServerUtils server,
@@ -37,16 +42,15 @@ public class ThemeEditorCtrl implements SceneCtrl {
     private ColorPicker cardColor;
 
     @FXML
-    private ComboBox<?> cardFont;
-
-    @FXML
     private ColorPicker listColor;
 
     @FXML
-    private ComboBox<?> listFont;
-
-    @FXML
     private ComboBox<?> presets;
+
+    public void loadData() {
+        List<Theme> loadPresets = themeUtils.getPredefinedThemes();
+        presets.getItems().addAll(loadPresets.stream().map(c -> c.toString()).collect(Collectors.toList()));
+    }
 
     @FXML
     void applyChanges() {
@@ -56,7 +60,7 @@ public class ThemeEditorCtrl implements SceneCtrl {
 
     @FXML
     void goBack() {
-
+        mainCtrl.showMainView();
     }
 
 }
