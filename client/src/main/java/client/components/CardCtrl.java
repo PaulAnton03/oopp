@@ -176,8 +176,8 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Card/* TODO
             saveTitle();
         } else if (StringUtil.isPrintableChar(c)) {
             client.setEditedCardTitle(titleField.getText());
-            client.setCaretPosition(titleField.getCaretPosition());
         }
+        client.setCaretPosition(titleField.getCaretPosition());
     }
 
     public void focus() {
