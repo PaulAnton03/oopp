@@ -17,6 +17,12 @@ public class ClientUtils {
     private long activeCardListId;
     @Getter
     @Setter
+    private boolean isEditingCardTitle;
+    @Getter
+    @Setter
+    private String editedCardTitle;
+    @Getter
+    @Setter
     private long selectedCardId = -1;
 
     @Getter
@@ -64,6 +70,7 @@ public class ClientUtils {
         if (cardCtrl != null)
             cardCtrl.unhighlight();
         this.selectedCardId = selectedCardId;
+        this.isEditingCardTitle = false;
         getCardCtrl(selectedCardId).highlight();
     }
 }

@@ -32,19 +32,9 @@ public class KeyEventHandler implements EventHandler<KeyEvent> {
 
     public void handle(KeyEvent e) {
         if (client.getCardCtrl(client.getSelectedCardId()) != null
-            && client.getCardCtrl(client.getSelectedCardId()).isTitleEditing()) {
-            switch (e.getCode()) {
-                case ESCAPE:
-                    client.getCardCtrl(client.getSelectedCardId()).stopEditTitle();
-                    break;
-                case ENTER:
-                    client.getCardCtrl(client.getSelectedCardId()).saveTitle();
-                    break;
-                default:
-                    break;
-            }
-        } else {
-                    switch (e.getCode()) {
+            && client.isEditingCardTitle())
+            return;
+        switch (e.getCode()) {
             case LEFT:
             case RIGHT:
             case UP:
@@ -69,11 +59,11 @@ public class KeyEventHandler implements EventHandler<KeyEvent> {
             case E:
                 if (mainCtrl.getActiveCtrl() == mainCtrl.getMainViewCtrl()
                     && client.getCardCtrl(client.getSelectedCardId()) != null) {
+                    e.consume();
                     client.getCardCtrl(client.getSelectedCardId()).editTitle();
                 }
             default:
                 break;
         }
     }
-        }
 }

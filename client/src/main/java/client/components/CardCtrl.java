@@ -58,9 +58,6 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Card/* TODO
     @FXML
     private TextField titleField;
 
-    @Getter
-    private boolean isTitleEditing;
-
     @Inject
     public CardCtrl(MainCtrl mainCtrl, ServerUtils serverUtils, ClientUtils client) {
         this.mainCtrl = mainCtrl;
@@ -85,6 +82,8 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Card/* TODO
         description.setText(card.getDescription());
         if (client.getSelectedCardId() == card.getId()) {
             highlight();
+            if (client.isEditingCardTitle())
+                editTitle();
         } else {
             unhighlight();
         }
@@ -95,6 +94,10 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Card/* TODO
             throw new IllegalStateException("You do not have permissions to edit this board.");
         }
         mainCtrl.showEditCard(this.getCard().getId());
+    }
+
+    public void onTitleFieldKeyTyped(KeyEvent e) {
+        client.setEditedCardTitle(titleField.getText());
     }
 
     public void delete() {
@@ -122,11 +125,15 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Card/* TODO
     private static final PseudoClass HIGHLIGHT_PSEUDO_CLASS = PseudoClass.getPseudoClass("highlight");
 
     public void editTitle() {
-        if (!isTitleEditing) {
-            titleField.setDisable(false);
-            titleField.setVisible(true);
+        titleField.setDisable(false);
+        titleField.setVisible(true);
+        titleField.requestFocus();
+        if (!client.isEditingCardTitle()) {
             titleField.setText(card.getTitle());
-            isTitleEditing = true;
+            client.setEditingCardTitle(true);
+            client.setEditedCardTitle(card.getTitle());
+        } else {
+            titleField.setText(client.getEditedCardTitle());
         }
     }
 
@@ -137,17 +144,17 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Card/* TODO
 
     public void unhighlight() {
         cardView.getStyleClass().remove("highlight");
-        saveTitle();
+        if (client.getSelectedCardId() == card.getId()
+            && client.isEditingCardTitle())
+            saveTitle();
     }
 
     public void stopEditTitle() {
         titleField.setDisable(true);
         titleField.setVisible(false);
-        titleField.setText(null);
-        isTitleEditing = false;
     }
 
-    private void saveTitle() {
+    public void saveTitle() {
         if (titleField.getText() != null
             && !titleField.getText().isEmpty()
             && !titleField.getText().equals(card.getTitle())) {
@@ -158,8 +165,13 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Card/* TODO
     }
 
     public void onTitleFieldKeyPressed(KeyEvent e) {
-        if (e.getCode() == KeyCode.ENTER || e.getCode() == KeyCode.ESCAPE)
+        if (e.getCode() == KeyCode.ENTER) {
             saveTitle();
+            client.setEditingCardTitle(false);
+        } else if (e.getCode() == KeyCode.ESCAPE) {
+            stopEditTitle();
+            client.setEditingCardTitle(false);
+        }
     }
 
     public void focus() {
@@ -215,7 +227,6 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Card/* TODO
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         // Hide buttons, unhighlight card
-        unhighlight();
         deleteButton.setOpacity(0.0);
         editButton.setOpacity(0.0);
         // Create show/hide transition for buttons
