@@ -93,7 +93,7 @@ public class CardList implements DBEntity {
 
     public String toCardString(){
         return "id of the cardList:" + id + "title: " +
-                title + "Board of Cardlist " + board;
+                title + "Board of Cardlist " + board.getName();
     }
 
     public Board getBoard(){
