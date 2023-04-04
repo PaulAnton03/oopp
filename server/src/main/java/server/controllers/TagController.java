@@ -1,11 +1,13 @@
 package server.controllers;
 
+import commons.Board;
 import commons.Tag;
 import commons.Card;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import server.database.BoardRepository;
 import server.database.CardRepository;
 import server.database.TagRepository;
 
@@ -19,9 +21,12 @@ public class TagController {
     private final TagRepository tagRepository;
     private final CardRepository cardRepository;
 
-    public TagController(TagRepository tagRepository, CardRepository cardRepository){
+    private final BoardRepository boardRepository;
+
+    public TagController(TagRepository tagRepository, CardRepository cardRepository, BoardRepository boardRepository){
         this.tagRepository = tagRepository;
         this.cardRepository = cardRepository;
+        this.boardRepository = boardRepository;
     }
 
     @GetMapping(path = { "", "/"})
@@ -40,10 +45,9 @@ public class TagController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<Tag> create(@RequestBody Tag tag){
-
+    public ResponseEntity<Tag> create(@RequestBody Tag tag, @RequestParam long boardId){
+        Board board = boardRepository.getById(boardId);
         tagRepository.save(tag);
-        System.out.println("Yo before return");
         return ResponseEntity.ok(tag);
     }
 

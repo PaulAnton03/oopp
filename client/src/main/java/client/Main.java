@@ -39,8 +39,8 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException {
-        Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler());
-
+//        Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler());
+//
         ScenesBuilder builder = new ScenesBuilder();
 
         builder.setConnect(FXML.load(ServerConnectCtrl.class, "client", "scenes", "ServerConnect.fxml"));
