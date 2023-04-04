@@ -1,5 +1,12 @@
 package client.components;
 
+import java.io.IOException;
+import java.net.URL;
+import java.util.List;
+import java.util.ResourceBundle;
+
+import javax.inject.Inject;
+
 import client.scenes.MainCtrl;
 import client.utils.ClientUtils;
 import client.utils.Logger;
@@ -7,7 +14,11 @@ import client.utils.ServerUtils;
 import commons.Card;
 import commons.CardList;
 import commons.StringUtil;
-import javafx.animation.*;
+import javafx.animation.Animation;
+import javafx.animation.FadeTransition;
+import javafx.animation.ParallelTransition;
+import javafx.animation.ScaleTransition;
+import javafx.animation.Transition;
 import javafx.css.PseudoClass;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -21,7 +32,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.Dragboard;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.VBox;
@@ -30,12 +40,6 @@ import javafx.scene.transform.Transform;
 import javafx.util.Duration;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-
-import javax.inject.Inject;
-import java.io.IOException;
-import java.net.URL;
-import java.util.List;
-import java.util.ResourceBundle;
 
 @EqualsAndHashCode
 public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Card/* TODO: change to TAG */>, Initializable {
@@ -136,18 +140,18 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Card/* TODO
     public void editTitle() {
         titleField.setDisable(false);
         titleField.setVisible(true);
+        title.setVisible(false);
         titleField.requestFocus();
-        if (client.getEditedCardTitle() == null) {
+        if (client.getEditedCardTitle() == null)
             client.setEditedCardTitle(card.getTitle());
-        }
         titleField.setText(client.getEditedCardTitle());
     }
 
     public void stopEditTitle() {
         titleField.setDisable(true);
         titleField.setVisible(false);
+        title.setVisible(true);
         client.setEditedCardTitle(null);
-        System.out.println("DISABLED");
     }
 
     public void saveTitle() {
@@ -166,7 +170,7 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Card/* TODO
             stopEditTitle();
         else if (c == 015) /* CR (ENTER) */
             saveTitle();
-        else if (StringUtil.isPrintableChar(e.getCharacter().charAt(0)))
+        else if (StringUtil.isPrintableChar(c))
             client.setEditedCardTitle(titleField.getText());
     }
 

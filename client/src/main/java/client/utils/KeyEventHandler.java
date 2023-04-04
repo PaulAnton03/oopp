@@ -4,7 +4,6 @@ import client.scenes.MainCtrl;
 import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
 public class KeyEventHandler implements EventHandler<KeyEvent> {
@@ -24,6 +23,7 @@ public class KeyEventHandler implements EventHandler<KeyEvent> {
             + "\nShift + Arrow keys: Shift selected card up/down"
             + "\nEnter : Edit selected card"
             + "\nBackspace/Del : Delete selected card"
+            + "\nE : Edit selected card's title"
             + "\nEsc : Close task details menu"
             + "\n? : Show this menu"
         );
