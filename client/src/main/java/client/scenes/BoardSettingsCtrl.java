@@ -88,9 +88,4 @@ public class BoardSettingsCtrl implements SceneCtrl {
         boardPassword.setText("");
         passwordUsed.setSelected(false);
     }
-
-    @Override
-    public void revalidate() {
-
-    }
 }

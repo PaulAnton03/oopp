@@ -9,7 +9,7 @@ import javafx.scene.control.TextField;
 
 import java.util.concurrent.CompletableFuture;
 
-public class ServerConnectCtrl {
+public class ServerConnectCtrl implements SceneCtrl{
 
     private final ServerUtils serverUtils;
     private final MainCtrl mainCtrl;
