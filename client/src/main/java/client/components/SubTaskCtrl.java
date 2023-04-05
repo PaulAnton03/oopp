@@ -89,6 +89,10 @@ public class SubTaskCtrl implements Component<SubTask>, Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         title.focusedProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue) {
+                if (title.getText().equals("")) {
+                    title.setText(subTask.getTitle());
+                    throw new RuntimeException("SubTask title cannot be empty");
+                }
                 subTask.setTitle(title.getText());
                 server.updateSubTask(subTask);
             }
