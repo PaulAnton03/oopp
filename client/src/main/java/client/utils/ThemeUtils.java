@@ -62,7 +62,7 @@ public class ThemeUtils {
             return Arrays.asList(
                     new Theme("Default", "#ffffffff", "#ffffffff", "#b2b2ebff", Font.font("Arial")),
                     new Theme("Dark", "#302c2cff", "#857676ff", "#423838ff", Font.font("Arial")),
-                    new Theme("Cherry", "#ff867dff", "#f76157ff", "#000000ff", Font.font("Arial")),
+                    new Theme("Cherry", "#ff867dff", "#f76157ff", "#4d4d4dff", Font.font("Arial")),
                     new Theme("Space", "#84618fff", "#684373ff", "#b591bfff", Font.font("Arial")));
         }
 
