@@ -120,7 +120,6 @@ public class MainViewCtrl implements SceneCtrl {
 
         long boardId = client.getBoardCtrl().getBoard().getId();
 
-
         /**
          * This method call handles the deletion,addition and updating of a subtask on the current board by
          * using the registerForMessages method of the server, which refreshes the CardCtrl of the subtask
@@ -132,9 +131,7 @@ public class MainViewCtrl implements SceneCtrl {
                 public void run() {
                     client.getCardCtrl(client.getCard(s.getCard().getId()).getId()).refresh();
                     mainCtrl.getActiveCtrl().revalidate();
-                }
-            });
-
+                }});
         });
 
         /**
@@ -148,9 +145,7 @@ public class MainViewCtrl implements SceneCtrl {
                 public void run() {
                     client.getCardListCtrl(c.getCardList().getId()).refresh();
                     mainCtrl.getActiveCtrl().revalidate();
-                }
-            });
-
+                }});
         });
 
         /**
@@ -164,8 +159,7 @@ public class MainViewCtrl implements SceneCtrl {
                 public void run() {
                     client.getBoardCtrl().refresh();
                     mainCtrl.getActiveCtrl().revalidate();
-                }
-            });
+                }});
         });
 
         server.registerForMessages("/topic/board/" + boardId + "/update", Board.class, b -> {
@@ -178,8 +172,7 @@ public class MainViewCtrl implements SceneCtrl {
                         client.getBoardCtrl().refresh();
                         mainCtrl.getActiveCtrl().revalidate();
                     }
-                }
-            });
+                }});
         });
 
         /**
@@ -193,10 +186,8 @@ public class MainViewCtrl implements SceneCtrl {
                     client.setBoardCtrl(null);
                     mainCtrl.showJoin();
                     throw new RuntimeException("Sorry, but the board you are currently viewing has been permanently deleted.");
-                }
-            });
+                }});
         });
-
     }
 
     @Override
