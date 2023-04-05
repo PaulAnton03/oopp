@@ -72,7 +72,8 @@ public class SubTaskController {
         subTask.setFinished(false);
         subTaskRepository.save(subTask);
         if (messagingTemplate != null)
-            messagingTemplate.convertAndSend("/topic/board/" + subTask.getCard().getCardList().getBoard().getId() + "/card/" + subTask.getCard().getId() + "/subtasks/create", subTask);
+            messagingTemplate.convertAndSend("/topic/board/" + subTask.getCard().getCardList().getBoard().getId() +
+                    "/card/" + subTask.getCard().getId() + "/subtasks/create", subTask);
         return ResponseEntity.ok(subTask);
     }
 
@@ -88,7 +89,8 @@ public class SubTaskController {
         }
         subTaskRepository.deleteById(subTask.getId());
         if (messagingTemplate != null)
-            messagingTemplate.convertAndSend("/topic/board/" + subTask.getCard().getCardList().getBoard().getId() + "/card/" + subTask.getCard().getId() + "/subtasks/delete", subTask);
+            messagingTemplate.convertAndSend("/topic/board/" + subTask.getCard().getCardList().getBoard().getId()
+                    + "/card/" + subTask.getCard().getId() + "/subtasks/delete", subTask);
         return ResponseEntity.ok(subTask);
     }
 
@@ -102,6 +104,8 @@ public class SubTaskController {
             return ResponseEntity.notFound().build();
         }
         SubTask updated = subTaskRepository.save(subTask);
+        long boardId = cardRepository.findById(subTask.getCard().getId()).get().getCardList().getBoard().getId();
+        messagingTemplate.convertAndSend("/topic/board/" + boardId + "/card/" + subTask.getCard().getId() + "/subtasks/update", subTask);
         return ResponseEntity.ok(updated);
     }
 }

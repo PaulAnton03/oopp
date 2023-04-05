@@ -11,7 +11,7 @@
     <children>
         <AnchorPane prefHeight="60.0" prefWidth="409.0">
             <children>
-                <CheckBox fx:id="checkBox" layoutX="22.0" layoutY="21.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="16.0" />
+                <CheckBox fx:id="checkBox" layoutX="22.0" layoutY="21.0" mnemonicParsing="false" onAction="#checkBoxClicked" prefHeight="18.0" prefWidth="16.0" />
                 <Button fx:id="deleteButton" layoutX="440.0" layoutY="7.0" mnemonicParsing="false" onAction="#delete" text="X" textFill="RED">
                     <font>
                         <Font size="22.0" />

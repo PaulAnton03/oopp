@@ -5,7 +5,6 @@ import client.utils.ClientUtils;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.SubTask;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -72,6 +71,11 @@ public class SubTaskCtrl implements Component<SubTask>, Initializable {
         this.subTask = server.deleteSubTask(subTask.getId());
     }
 
+    public void checkBoxClicked() {
+        subTask.setFinished(!subTask.getFinished());
+        server.updateSubTask(subTask);
+    }
+
     public void refresh() {
         loadData(server.getSubTask(subTask.getId()));
     }
@@ -83,6 +87,11 @@ public class SubTaskCtrl implements Component<SubTask>, Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
+        title.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue) {
+                subTask.setTitle(title.getText());
+                server.updateSubTask(subTask);
+            }
+        });
     }
 }

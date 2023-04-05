@@ -33,10 +33,9 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.stream.IntStream;
 
 @EqualsAndHashCode
-public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, SubTask>, Initializable {
+public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Card/* TODO: change to TAG */>, Initializable {
     private final MainCtrl mainCtrl;
     private final ServerUtils server;
     private final ClientUtils client;
@@ -54,6 +53,12 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, SubTask>, I
     private Button editButton;
     @FXML
     private Button deleteButton;
+
+    @FXML
+    private Label finishedSubTasks;
+
+    @FXML
+    private Label subTasksCount;
 
     @Inject
     public CardCtrl(MainCtrl mainCtrl, ServerUtils serverUtils, ClientUtils client) {
@@ -84,6 +89,14 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, SubTask>, I
         } else {
             unhighlight();
         }
+        subTasksCount.setText(String.valueOf(card.getSubtasks().size()));
+        if (card.getSubtasks().size() == 0) {
+            finishedSubTasks.setText("0");
+            return;
+        }
+        finishedSubTasks.setText(String.valueOf(card.getSubtasks().stream()
+                .filter(SubTask::getFinished).count()));
+
     }
 
     public void editCard() {
@@ -106,26 +119,14 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, SubTask>, I
     }
 
     public void remove() {
-        removeChildren();
         client.getCardCtrls().remove(card.getId());
+        removeChildren();
     }
 
     public void removeChildren() {
-        for (SubTask subTask : this.card.getSubtasks()) {
-            client.getSubTaskCtrl(subTask.getId()).remove();
-        }
     }
 
-    @Override
-    public void replaceChild(SubTask subTask) {
-        int idx = IntStream.range(0, card.getSubtasks().size())
-                .filter(i -> card.getSubtasks().get(i).getId() == subTask.getId())
-                .findFirst()
-                .orElse(-1);
-        if (idx == -1)
-            throw new IllegalStateException("Attempting to replace subtask in card that does not already exist.");
-        card.getSubtasks().set(idx, subTask);
-        subTask.setCard(card);
+    public void replaceChild(Card card /* TODO: Change to Tag tag */) {
     }
 
     // CSS class that defines style for the highlighted card
@@ -192,7 +193,6 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, SubTask>, I
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // Hide buttons, unhighlight card
         unhighlight();
         deleteButton.setOpacity(0.0);
         editButton.setOpacity(0.0);

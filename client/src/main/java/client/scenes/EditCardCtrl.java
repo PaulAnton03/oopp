@@ -2,7 +2,6 @@ package client.scenes;
 
 import javax.inject.Inject;
 
-import client.components.Component;
 import client.components.SubTaskCtrl;
 import client.utils.ClientUtils;
 import client.utils.ComponentFactory;
@@ -12,7 +11,6 @@ import commons.Card;
 import commons.SubTask;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.scene.Parent;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
@@ -43,7 +41,8 @@ public class EditCardCtrl implements SceneCtrl {
 
     private StompSession.Subscription subscriptionDelete;
 
-    private int subTaskCount;
+    private StompSession.Subscription subscriptionUpdate;
+
 
     @Inject
     public EditCardCtrl(ServerUtils server, ClientUtils client, MainCtrl mainCtrl, ComponentFactory factory, ExceptionHandler exceptionHandler) {
@@ -68,7 +67,6 @@ public class EditCardCtrl implements SceneCtrl {
     public void loadData(long cardId) {
         this.cardId = cardId;
         Card card = client.getCard(cardId);
-        subTaskCount = card.getSubtasks().size();
         changeTitle.setText(card.getTitle());
         changeDesc.setText(card.getDescription());
         for (SubTask subTask : card.getSubtasks()) {
@@ -86,7 +84,6 @@ public class EditCardCtrl implements SceneCtrl {
                 public void run() {
                     SubTaskCtrl subTaskCtrl = factory.create(SubTaskCtrl.class, s);
                     subTaskView.getChildren().add(subTaskCtrl.getNode());
-                    System.out.println(s.getCard());
                 }
             });
 
@@ -95,8 +92,16 @@ public class EditCardCtrl implements SceneCtrl {
             Platform.runLater(new Runnable() {
                 @Override
                 public void run() {
-                    subTaskCount--;
                     subTaskView.getChildren().remove(client.getSubTaskCtrl(s.getId()).getNode());
+                }
+            });
+
+        });
+        subscriptionUpdate = server.registerForMessages("/topic/board/" + boardId + "/card/" + cardId + "/subtasks/update", SubTask.class, s -> {
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    client.getSubTaskCtrl(s.getId()).loadData(s);
                 }
             });
 
@@ -107,8 +112,7 @@ public class EditCardCtrl implements SceneCtrl {
         if (!client.getBoardCtrl().getBoard().isEditable()) {
             throw new IllegalStateException("You do not have permissions to edit this board.");
         }
-        SubTask subTask = new SubTask("SubTask " + subTaskCount, false);
-        subTaskCount++;
+        SubTask subTask = new SubTask("SubTask ", false);
         subTask.setCard(client.getCard(cardId));
         server.addSubTask(subTask);
     }
@@ -124,6 +128,7 @@ public class EditCardCtrl implements SceneCtrl {
         subTaskView.getChildren().clear();
         subscriptionCreate.unsubscribe();
         subscriptionDelete.unsubscribe();
+        subscriptionUpdate.unsubscribe();
     }
 
     @Override
