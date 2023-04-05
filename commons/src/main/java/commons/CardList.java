@@ -4,10 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIncludeProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -16,6 +13,7 @@ import java.util.List;
 @Data
 @Entity
 @RequiredArgsConstructor
+@NoArgsConstructor(force = true)
 @Table(name = "card_lists")
 @JsonIdentityInfo(scope = CardList.class, generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class CardList implements DBEntity {
@@ -38,10 +36,6 @@ public class CardList implements DBEntity {
 
     @NonNull
     private String title;
-
-    public CardList() {
-        this.title = "New Card List";
-    }
 
     public boolean removeCard(Card card) {
         return this.cards.remove(card);

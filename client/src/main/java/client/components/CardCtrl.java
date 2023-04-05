@@ -80,7 +80,10 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Card/* TODO
         } else {
             unhighlight();
         }
-        cardView.setStyle("-fx-background-color: " + card.getCardList().getBoard().getCardColor());
+        //todo - This is the least elegant solution I could find that works.
+        // We should keep investigating that empty constructor and the problems its causing
+        cardView.setStyle("-fx-background-color: " + server.getBoard(server.getCardList(server.getCard(card.getId()).getCardList().
+                getId()).getBoard().getId()).getCardColor());
     }
 
     public void editCard() {

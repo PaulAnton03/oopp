@@ -69,7 +69,10 @@ public class CardListCtrl implements Component<CardList>, DBEntityCtrl<CardList,
             removeChildren();
         this.cardList = cardList;
         title.setText(cardList.getTitle());
-        cardListBackground.setStyle("-fx-background-color: " + cardList.getBoard().getListColor());
+        //todo - This is the least elegant solution I could find that works.
+        // We should keep investigating that empty constructor and the problems its causing
+        cardListBackground.setStyle("-fx-background-color: " + server.getBoard(server.getCardList(cardList.getId()).
+                getBoard().getId()).getListColor());
 
         for (Card card : cardList.getCards()) {
             CardCtrl cardCtrl = factory.create(CardCtrl.class, card);
