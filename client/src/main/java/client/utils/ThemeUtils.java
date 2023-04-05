@@ -36,7 +36,7 @@ public class ThemeUtils {
             return Arrays.asList(
                     new Theme("Default", "#ffffffff", "#ffffffff", "#b2b2ebff", "#000000ff"),
                     new Theme("Dark", "#302c2cff", "#857676ff", "#423838ff", "#000000ff"),
-                    new Theme("Cherry", "#ff867dff", "#f76157ff", "#000000ff", "#000000ff"),
+                    new Theme("Cherry", "#ff867dff", "#f76157ff", "#000000ff", "#ffffffff"),
                     new Theme("Space", "#84618fff", "#684373ff", "#b591bfff", "#000000ff"));
         }
 

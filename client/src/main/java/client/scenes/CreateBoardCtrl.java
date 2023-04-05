@@ -53,7 +53,7 @@ public class CreateBoardCtrl implements SceneCtrl {
         board.setBoardColor(theme.getBoardColor());
         board.setListColor(theme.getListColor());
         board.setCardColor(theme.getCardColor());
-        board.setFont(null);
+        board.setFontColor(theme.getFontColor());
     }
 
     public void createBoard() {

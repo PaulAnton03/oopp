@@ -83,9 +83,11 @@ public class ThemeEditorCtrl implements SceneCtrl {
 
     @FXML
     public void loadPreset(ActionEvent event) {
-        String selected = presets.getValue();
-        var theme = ThemeUtils.Theme.valueOf(selected);
-        loadDefaultValues(theme.getBoardColor(), theme.getListColor(), theme.getCardColor(), theme.getFontColor());
+        try {
+            String selected = presets.getValue();
+            var theme = ThemeUtils.Theme.valueOf(selected);
+            loadDefaultValues(theme.getBoardColor(), theme.getListColor(), theme.getCardColor(), theme.getFontColor());
+        } catch (Exception ignored) {}
     }
 
 }
