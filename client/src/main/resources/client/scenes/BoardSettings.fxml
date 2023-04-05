@@ -84,4 +84,15 @@
          </padding>
       </GridPane>
    </center>
+   <bottom>
+      <AnchorPane fx:id="inviteKeyFooter" prefWidth="600.0" BorderPane.alignment="CENTER">
+         <children>
+            <Button layoutX="314.0" layoutY="5.0" mnemonicParsing="false" onAction="#copyInviteKey" prefWidth="110.0" styleClass="formButton" text="Copy invite key" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="155.0" />
+            <TextField fx:id="inviteKeyField" editable="false" layoutX="431.0" layoutY="5.0" onAction="#copyInviteKey" prefWidth="150.0" styleClass="formTextInput" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" />
+         </children>
+         <padding>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </padding>
+      </AnchorPane>
+   </bottom>
 </BorderPane>

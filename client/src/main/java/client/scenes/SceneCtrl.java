@@ -1,6 +1,5 @@
 package client.scenes;
 
 public interface SceneCtrl {
-
-    public void revalidate();
+    public default void revalidate() {};
 }
