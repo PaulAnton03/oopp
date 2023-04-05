@@ -22,8 +22,6 @@ public class CreateBoardCtrl implements SceneCtrl {
     private final ClientPreferences clientPrefs;
     private final ThemeUtils themeUtils;
 
-    private final ThemeUtils themeUtils;
-
     @FXML
     private TextField boardName;
     @FXML
