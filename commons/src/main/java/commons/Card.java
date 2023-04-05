@@ -49,7 +49,12 @@ public class Card implements DBEntity {
     @ElementCollection
     private Set<Tag> tags = new HashSet<>();
 
-    @ManyToMany(targetEntity = commons.Tag.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToMany(targetEntity = commons.Tag.class, fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @JoinTable(name = "cards_tags",
+            joinColumns = @JoinColumn(name="card_id", referencedColumnName = "id"),
+            inverseJoinColumns =
+            @JoinColumn(name="tag_id", referencedColumnName = "id")
+    )
     public Set<Tag> getTags(){
         return tags;
     }

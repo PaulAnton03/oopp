@@ -47,6 +47,7 @@ public class TagController {
     @PostMapping("/create")
     public ResponseEntity<Tag> create(@RequestBody Tag tag, @RequestParam long boardId){
         Board board = boardRepository.getById(boardId);
+        board.getTagList().add(tag);
         tagRepository.save(tag);
         return ResponseEntity.ok(tag);
     }
@@ -57,12 +58,16 @@ public class TagController {
         if(optTag.isEmpty()){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Tag not found");
         }
-        Tag tag = optTag.get();
-        for(Card  c : tag.getCards()){
-            c.getTags().remove(tag);
+        Tag repoTag = optTag.get();
+        for(Card  c : repoTag.getCards()){
+            c.getTags().remove(repoTag);
         }
-        tagRepository.deleteById(tag.getId());
-        return ResponseEntity.ok(tag);
+        Board board = boardRepository.getById(repoTag.getBoard().getId());
+        if(board.getTagList().contains(repoTag)){
+            board.getTagList().remove(repoTag);
+        }
+        tagRepository.deleteById(repoTag.getId());
+        return ResponseEntity.ok(repoTag);
     }
     @PutMapping("/update/{id}")
     public ResponseEntity<Tag> update(@RequestBody Tag tag, @PathVariable("id") long id) {

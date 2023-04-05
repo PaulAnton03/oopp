@@ -3,6 +3,7 @@ package client.scenes;
 import client.utils.ClientUtils;
 import client.utils.ServerUtils;
 import commons.Board;
+import commons.Card;
 import commons.Tag;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -45,6 +46,8 @@ public class TagSettingsCtrl implements SceneCtrl{
     @FXML
     private AnchorPane anchorPane;
 
+    private Card card;
+
 
     @Inject
     public TagSettingsCtrl(MainCtrl mainCtrl, ServerUtils server, ClientUtils client) {
@@ -56,8 +59,10 @@ public class TagSettingsCtrl implements SceneCtrl{
         loader.setRoot(this);
     }
 
-    public void loadData(Tag tag){
+    public void loadData(Tag tag, Card card){
+        resetState();
         this.tag = tag;
+        this.card = card;
     }
 
     public Parent getNode(){
@@ -99,9 +104,12 @@ public class TagSettingsCtrl implements SceneCtrl{
 
     public void delete(){
         Board board = client.getBoardCtrl().getBoard();
-        board.getTagList().remove(tag);
-        server.updateBoard(board);
+
+
         server.deleteTag(tag.getId());
+        if(board.getTagList().contains(tag))
+            board.getTagList().remove(tag);
+        server.updateBoard(board);
         this.savedText.setText("Deleted Tag");
         mainCtrl.showMainView();
     }
@@ -112,6 +120,10 @@ public class TagSettingsCtrl implements SceneCtrl{
     }
 
     public void cancelButtonAction(){
-        mainCtrl.showMainView();
+        if(card != null)
+            mainCtrl.showEditCard(card.getId());
+        else {
+            mainCtrl.showMainView();
+        }
     }
 }

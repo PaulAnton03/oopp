@@ -108,11 +108,13 @@ public class TagCtrl implements Component<Tag>{
     @FXML
     public void clickAssigning(MouseEvent event){
         if(mainCtrl.getActiveCtrl().getClass() == EditCardCtrl.class){
+            EditCardCtrl editCardCtrl = (EditCardCtrl) mainCtrl.getActiveCtrl();
+            Card card1 = client.getCard(editCardCtrl.getCardId());
             if(event.getClickCount() == 2){
-                changeTag();
+                changeTag(card1);
             }
             else if(event.getClickCount() == 1){
-                EditCardCtrl editCardCtrl = (EditCardCtrl) mainCtrl.getActiveCtrl();
+                EditCardCtrl editCardCtrl1 = (EditCardCtrl) mainCtrl.getActiveCtrl();
                 Card card = client.getCard(editCardCtrl.getCardId());
                 if(isAssigned){
                     isAssigned = false;
@@ -141,19 +143,8 @@ public class TagCtrl implements Component<Tag>{
         server.updateTag(tag);
     }
 
-    public void changeTag(){
-//        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("TagSettings.fxml"));
-//        try {
-//            Popup popup
-//            Parent parent = (Parent) fxmlLoader.load();
-//            Stage stage = new Stage();
-//            stage.setTitle("Tag Settings");
-//            stage.setScene(new Scene(parent));
-//            stage.show();
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
-        mainCtrl.showTagSettings(tag);
+    public void changeTag(Card card){
+        mainCtrl.showTagSettings(tag, card);
     }
     public void delete(){
         Board board = client.getBoardCtrl().getBoard();

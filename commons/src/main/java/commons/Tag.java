@@ -21,22 +21,11 @@ public class Tag implements DBEntity {
     protected long id;
 
     @Getter
-    @JsonIgnore
+    //@JsonIgnore
     @EqualsAndHashCode.Exclude
-    @ManyToMany(targetEntity = commons.Card.class, mappedBy = "tags", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToMany(targetEntity = commons.Card.class, mappedBy = "tags",
+            cascade = CascadeType.PERSIST,fetch = FetchType.EAGER)
     @ElementCollection
-    @JoinTable(name = "cards_tags",
-                joinColumns = @JoinColumn(name="tag_id", referencedColumnName = "id"),
-                inverseJoinColumns =
-                @JoinColumn(name="card_id", referencedColumnName = "id")
-    )
-//    @JoinTable(
-//            name="CUST_PHONE",
-//            joinColumns=
-//            @JoinColumn(name="CUST_ID", referencedColumnName="ID"),
-//            inverseJoinColumns=
-//            @JoinColumn(name="PHONE_ID", referencedColumnName="ID")
-//    )
     private Set<Card> cards = new HashSet<>();
 
 

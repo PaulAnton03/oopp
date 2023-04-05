@@ -17,6 +17,7 @@ package client.scenes;
 
 import client.utils.*;
 import commons.Board;
+import commons.Card;
 import commons.Tag;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -262,9 +263,9 @@ public class MainCtrl {
         activeCtrl = passwordProtectedCtrl;
     }
 
-    public void showTagSettings(Tag tag){
+    public void showTagSettings(Tag tag, Card card){
         primaryStage.setTitle("Tag Settings");
-        tagSettingsCtrl.loadData(tag);
+        tagSettingsCtrl.loadData(tag, card);
         primaryStage.setScene(tagSettingsScene);
         activeCtrl = tagSettingsCtrl;
     }

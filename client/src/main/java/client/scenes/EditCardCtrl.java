@@ -84,6 +84,7 @@ public class EditCardCtrl implements SceneCtrl {
     }
 
     public void loadData(long cardId) {
+        resetState();
         this.cardId = cardId;
         Card card = server.getCard(cardId);
         changeTitle.setText(card.getTitle());
@@ -124,10 +125,13 @@ public class EditCardCtrl implements SceneCtrl {
         }
         Tag tag = new Tag();
         tag.setText(tagText);
-        tag.setBoard(board);
+        tag.setBoard(board); //because adding it to the board will save it
         tag.setColor(tagColor);
+        server.createTag(tag); //this includes adding to board
+        if(!board.getTagList().contains(tag)){
+            board.getTagList().add(tag);
+        }
         server.updateBoard(board);
-        server.createTag(tag);
         resetState();
         loadData(cardId);
         System.out.println("Tag created: " + tag);
