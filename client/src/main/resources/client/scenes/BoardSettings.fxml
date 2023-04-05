@@ -62,7 +62,7 @@
                         <String fx:value="deleteButton" />
                      </styleClass>
                   </Button>
-                  <Button layoutX="14.0" layoutY="49.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#editTheme" prefHeight="30.0" prefWidth="145.0" text="Theme editor" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" />
+                  <Button layoutX="14.0" layoutY="49.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#editTheme" prefHeight="30.0" prefWidth="145.0" styleClass="formButton" text="Theme editor" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" />
                </children>
             </AnchorPane>
             <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="30.0" prefWidth="300.0" GridPane.rowIndex="1">
