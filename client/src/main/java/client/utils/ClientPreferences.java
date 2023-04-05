@@ -92,6 +92,7 @@ public class ClientPreferences {
     public void removeJoinedBoard(long boardId) {
         savedBoards.remove(String.valueOf(boardId));
         savedPasswords.remove(String.valueOf(boardId));
+        commonPrefs.remove(DEFAULT_BOARD_KEY);
     }
 
     /**
