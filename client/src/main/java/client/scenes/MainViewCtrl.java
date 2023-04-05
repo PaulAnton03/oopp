@@ -107,6 +107,7 @@ public class MainViewCtrl implements SceneCtrl {
         boardContainer.setStyle("-fx-background: " + board.getBoardColor());
         displayBoardName.setText(board.getName());
         warning.setVisible(!board.isEditable());
+        server.connect();
         registerForMessages();
     }
 

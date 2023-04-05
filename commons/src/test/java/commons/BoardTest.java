@@ -16,6 +16,72 @@ class BoardTest {
     }
 
     @Test
+    void toStringTest() {
+        String boardOutput = board.toString();
+        String expectedOutput = "Board [id=0, name=title, password=null, cardLists=[]]";
+        assertEquals(expectedOutput, boardOutput);
+    }
+
+    @Test
+    void hashCodeTest() {
+        Board board2 = new Board("title");
+        assertEquals(board.hashCode(), board2.hashCode());
+
+        board2.setName("title2");
+        assertNotEquals(board.hashCode(), board2.hashCode());
+
+        board2.setName("title");
+        board2.setPassword("password");
+        assertNotEquals(board.hashCode(), board2.hashCode());
+
+        board2.setPassword(null);
+        assertEquals(board.hashCode(), board2.hashCode());
+
+        board2.addCardList();
+        assertNotEquals(board.hashCode(), board2.hashCode());
+    }
+
+    @Test
+    void constructorTest() {
+        Board board2 = new Board("title");
+        assertNotNull(board2);
+        assertEquals(board2.getName(), "title");
+        assertNull(board2.getPassword());
+
+        board2 = new Board("title");
+        assertNotNull(board2);
+        assertEquals(board2.getName(), "title");
+        assertNull(board2.getPassword());
+    }
+
+    @Test
+    void setEditable() {
+        board.setEditable(true);
+        assertTrue(board.isEditable());
+        board.setEditable(false);
+        assertFalse(board.isEditable());
+    }
+
+    @Test
+    void equalsTest() {
+        Board board2 = new Board("title");
+        assertEquals(board, board2);
+
+        board2.setName("title2");
+        assertNotEquals(board, board2);
+
+        board2.setName("title");
+        board2.setPassword("password");
+        assertNotEquals(board, board2);
+
+        board2.setPassword(null);
+        assertEquals(board, board2);
+
+        board2.addCardList();
+        assertNotEquals(board, board2);
+    }
+
+    @Test
     void setName() {
         board.setName("Title.");
         assertEquals(board.getName(), "Title.");

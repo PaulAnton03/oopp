@@ -62,7 +62,7 @@ public class Card implements DBEntity {
 
     @Override
     public String toString() {
-        return "Card [id=" + id + ", title=" + title + ", description=" + description + ",subtasks= " + subtasks + "]";
+        return "Card [id=" + id + ", title=" + title + ", description=" + description + ",subtasks=" + subtasks + "]";
     }
 
     /**

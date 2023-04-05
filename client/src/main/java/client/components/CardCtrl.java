@@ -75,6 +75,7 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Card/* TODO
         this.card = card;
         title.setText(card.getTitle());
         description.setText(card.getDescription());
+        client.getCardListCtrl(card.getCardList().getId()).replaceChild(card);
         if (client.getSelectedCardId() == card.getId()) {
             highlight();
         } else {
@@ -101,7 +102,6 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Card/* TODO
 
     public void refresh() {
         loadData(server.getCard(card.getId()));
-        client.getCardListCtrl(card.getCardList().getId()).replaceChild(card);
     }
 
     public void remove() {

@@ -69,6 +69,7 @@ public class CardListCtrl implements Component<CardList>, DBEntityCtrl<CardList,
             removeChildren();
         this.cardList = cardList;
         title.setText(cardList.getTitle());
+        client.getBoardCtrl().replaceChild(cardList);
         cardListBackground.setStyle("-fx-background-color: " + cardList.getBoard().getListColor());
 
         for (Card card : cardList.getCards()) {
@@ -80,10 +81,8 @@ public class CardListCtrl implements Component<CardList>, DBEntityCtrl<CardList,
     }
 
     public void refresh() {
-        System.out.println(server.getCardList(cardList.getId()));
         cardListView.getChildren().clear();
         loadData(server.getCardList(cardList.getId()));
-        client.getBoardCtrl().replaceChild(cardList);
     }
 
     public void remove() {
