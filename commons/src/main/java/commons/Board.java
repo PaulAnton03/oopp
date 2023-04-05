@@ -79,6 +79,11 @@ public class Board implements DBEntity {
         return true;
     }
 
+    public void addTag(Tag tag) {
+        tagList.add(tag);
+        tag.setBoard(this);
+    }
+
     /**
      * Removes a {@link CardList} from the board.
      *

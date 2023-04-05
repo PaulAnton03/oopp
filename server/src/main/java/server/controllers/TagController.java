@@ -46,10 +46,12 @@ public class TagController {
 
     @PostMapping("/create")
     public ResponseEntity<Tag> create(@RequestBody Tag tag, @RequestParam long boardId){
-//        Board board = boardRepository.getById(boardId);
-//        board.getTagList().add(tag);
+        Board board = boardRepository.getById(boardId);
+        board.addTag(tag);
+       // tagRepository.save(tag); //Cascaded so no need
+        boardRepository.save(board);
+        tagRepository.save(tag); //hmm but maybe we still need it
         System.out.println("Created tag! : " + tag.getId());
-        tagRepository.save(tag);
         return ResponseEntity.ok(tag);
     }
 

@@ -105,6 +105,7 @@ public class EditCardCtrl implements SceneCtrl {
         mainCtrl.showMainView();
     }
 
+    @FXML
     public void createTag() {
         Card card = client.getCard(cardId);
         System.out.println(card);
@@ -127,11 +128,13 @@ public class EditCardCtrl implements SceneCtrl {
         tag.setText(tagText);
         tag.setBoard(board); //because adding it to the board will save it
         tag.setColor(tagColor);
+
         server.createTag(tag); //this includes adding to board
-        if(!board.getTagList().contains(tag)){
-            board.getTagList().add(tag);
-        }
-        server.updateBoard(board);
+//        if(!board.getTagList().contains(tag)){
+//            board.getTagList().add(tag);
+//        }
+        server.updateBoard(board); //I think not useful
+        //client.getBoardCtrl().refresh();
         resetState();
         loadData(cardId);
         System.out.println("Tag created: " + tag);
