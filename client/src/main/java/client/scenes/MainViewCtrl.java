@@ -10,6 +10,7 @@ import client.utils.ServerUtils;
 import commons.Board;
 import commons.Card;
 import commons.CardList;
+import commons.SubTask;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -54,7 +55,7 @@ public class MainViewCtrl implements SceneCtrl {
 
     @FXML
     void btnAddClicked(ActionEvent event) {
-        if(!client.getBoardCtrl().getBoard().isEditable()) {
+        if (!client.getBoardCtrl().getBoard().isEditable()) {
             throw new IllegalStateException("You do not have permissions to edit this board.");
         }
         mainCtrl.showAddList();
@@ -77,7 +78,7 @@ public class MainViewCtrl implements SceneCtrl {
 
     @FXML
     void btnSettingsClicked(ActionEvent event) {
-        if(!client.getBoardCtrl().getBoard().isEditable()) {
+        if (!client.getBoardCtrl().getBoard().isEditable()) {
             throw new IllegalStateException("You do not have permissions to edit this board.");
         }
         mainCtrl.showSettings();
@@ -118,6 +119,23 @@ public class MainViewCtrl implements SceneCtrl {
     public void registerForMessages() {
 
         long boardId = client.getBoardCtrl().getBoard().getId();
+
+
+        /**
+         * This method call handles the deletion,addition and updating of a subtask on the current board by
+         * using the registerForMessages method of the server, which refreshes the CardCtrl of the subtask
+         * in question.
+         */
+        server.registerForMessages("/topic/board/" + boardId + "/subtasks", SubTask.class, s -> {
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    client.getCardCtrl(client.getCard(s.getCard().getId()).getId()).refresh();
+                    mainCtrl.getActiveCtrl().revalidate();
+                }
+            });
+
+        });
 
         /**
          * This method call handles the deletion,addition and updating of a card on the current board by
@@ -180,6 +198,7 @@ public class MainViewCtrl implements SceneCtrl {
         });
 
     }
+
     @Override
     public void revalidate() {
 
