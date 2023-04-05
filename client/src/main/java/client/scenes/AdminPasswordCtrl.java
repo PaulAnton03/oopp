@@ -7,7 +7,7 @@ import javafx.scene.control.TextField;
 import javax.inject.Inject;
 import java.util.concurrent.CompletableFuture;
 
-public class AdminPasswordCtrl {
+public class AdminPasswordCtrl implements SceneCtrl {
     private MainCtrl mainCtrl;
     private ExceptionHandler exceptionHandler;
     @FXML

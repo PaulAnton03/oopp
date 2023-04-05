@@ -6,11 +6,14 @@ import com.google.inject.Inject;
 import commons.Board;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
+import javafx.scene.control.Alert;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
+import javafx.scene.input.Clipboard;
+import javafx.scene.input.ClipboardContent;
+import javafx.scene.layout.AnchorPane;
 
 public class BoardSettingsCtrl implements SceneCtrl {
 
@@ -28,9 +31,10 @@ public class BoardSettingsCtrl implements SceneCtrl {
     private CheckBox passwordUsed;
     @FXML
     private TextField boardName;
-
     @FXML
-    private Button deleteBoardButton;
+    private TextField inviteKeyField;
+    @FXML
+    private AnchorPane inviteKeyFooter;
 
     private Color color;
 
@@ -45,6 +49,14 @@ public class BoardSettingsCtrl implements SceneCtrl {
 
     public void loadData() {
         boardName.setText(client.getBoardCtrl().getBoard().getName());
+
+        Board board = client.getBoardCtrl().getBoard();
+        // The key format is: "join-talio#<server address>#<board id>(#<password>)"
+        String inviteKey = "join-talio#" + server.getServerPath() + "#" + board.getId();
+        if (board.getPassword() != null) {
+            inviteKey += "#" + board.getPassword();
+        }
+        inviteKeyField.setText(inviteKey);
     }
 
     public void saveChanges() {
@@ -87,6 +99,16 @@ public class BoardSettingsCtrl implements SceneCtrl {
     public void clearForm() {
         boardPassword.setText("");
         passwordUsed.setSelected(false);
+    }
+
+    public void copyInviteKey() {
+        Clipboard clipboard = Clipboard.getSystemClipboard();
+        ClipboardContent content = new ClipboardContent();
+        content.putString(inviteKeyField.getText());
+        clipboard.setContent(content);
+        Alert inviteKeyCopied = new Alert(Alert.AlertType.CONFIRMATION);
+        inviteKeyCopied.setContentText("Invite key copied!");
+        inviteKeyCopied.show();
     }
 
     @Override

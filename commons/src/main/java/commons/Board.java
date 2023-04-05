@@ -3,10 +3,7 @@ package commons;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -33,6 +30,7 @@ public class Board implements DBEntity {
     @JsonIgnore
     private boolean editable = true;
 
+    @EqualsAndHashCode.Exclude
     @JsonIgnore
     private final String defaultColor = "#ffffffff";
 
