@@ -76,14 +76,6 @@ public class SubTaskCtrl implements Component<SubTask>, Initializable {
         server.updateSubTask(subTask);
     }
 
-    public void refresh() {
-        loadData(server.getSubTask(subTask.getId()));
-    }
-
-    public void remove() {
-        client.getSubTaskCtrls().remove(subTask.getId());
-    }
-
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
