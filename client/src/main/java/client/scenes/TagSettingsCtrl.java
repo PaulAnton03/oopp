@@ -106,6 +106,7 @@ public class TagSettingsCtrl implements SceneCtrl{
         Board board = client.getBoardCtrl().getBoard();
 
 
+
         server.deleteTag(tag.getId());
         if(board.getTagList().contains(tag))
             board.getTagList().remove(tag);

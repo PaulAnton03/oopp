@@ -24,7 +24,7 @@ public class Tag implements DBEntity {
     //@JsonIgnore
     @EqualsAndHashCode.Exclude
     @ManyToMany(targetEntity = commons.Card.class, mappedBy = "tags",
-            cascade = CascadeType.PERSIST,fetch = FetchType.EAGER)
+            cascade = CascadeType.PERSIST,fetch = FetchType.LAZY)
     @ElementCollection
     private Set<Card> cards = new HashSet<>();
 
@@ -33,7 +33,7 @@ public class Tag implements DBEntity {
 //        return cards;
 //    }
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     private Board board;

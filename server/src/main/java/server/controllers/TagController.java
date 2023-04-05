@@ -46,17 +46,19 @@ public class TagController {
 
     @PostMapping("/create")
     public ResponseEntity<Tag> create(@RequestBody Tag tag, @RequestParam long boardId){
-        Board board = boardRepository.getById(boardId);
-        board.getTagList().add(tag);
+//        Board board = boardRepository.getById(boardId);
+//        board.getTagList().add(tag);
+        System.out.println("Created tag! : " + tag.getId());
         tagRepository.save(tag);
         return ResponseEntity.ok(tag);
     }
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Tag> delete(@PathVariable("id") long id){
+        System.out.println("Deleted tag!"+ id);
         final Optional<Tag> optTag = tagRepository.findById(id);
         if(optTag.isEmpty()){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Tag not found");
+            throw new ResponseStatusException(HttpStatus.NOT_IMPLEMENTED, "Tag not found");
         }
         Tag repoTag = optTag.get();
         for(Card  c : repoTag.getCards()){

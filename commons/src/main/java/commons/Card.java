@@ -47,14 +47,15 @@ public class Card implements DBEntity {
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @ElementCollection
-    private Set<Tag> tags = new HashSet<>();
-
     @ManyToMany(targetEntity = commons.Tag.class, fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     @JoinTable(name = "cards_tags",
             joinColumns = @JoinColumn(name="card_id", referencedColumnName = "id"),
             inverseJoinColumns =
             @JoinColumn(name="tag_id", referencedColumnName = "id")
     )
+    private Set<Tag> tags = new HashSet<>();
+
+
     public Set<Tag> getTags(){
         return tags;
     }
@@ -84,6 +85,7 @@ public class Card implements DBEntity {
     public boolean removeSubTask(SubTask subTask) {
         return this.subtasks.remove(subTask);
     }
+
 
     public boolean removeSubTask(long id) {
         SubTask subTask = this.getSubtasks().stream().filter(s -> s.getId() == id).findFirst().orElse(null);
