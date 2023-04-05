@@ -228,6 +228,7 @@ public class MainCtrl {
     }
 
     public void showCreate() {
+        createBoardCtrl.loadData();
         primaryStage.setTitle("Create board");
         primaryStage.setScene(create);
         activeCtrl = createBoardCtrl;
