@@ -132,15 +132,15 @@ public class TagCtrl implements Component<Tag>{
     public void assignThisToCard(Card card){
         System.out.println("Assigning is called");
         card.getTags().add(tag);
-        tag.getCards().add(card);
-        //server.updateCard(card);
+     //   tag.getCards().add(card);
+    //    server.updateCard(card);
     }
 
     public void unAssignFromCard(Card card){
         card.getTags().remove(tag);
-        tag.getCards().remove(card);
-        server.updateCard(card);
-        server.updateTag(tag);
+     //   tag.getCards().remove(card);
+   //     server.updateCard(card);
+      //  server.updateTag(tag);
     }
 
     public void changeTag(Card card){
@@ -148,8 +148,8 @@ public class TagCtrl implements Component<Tag>{
     }
     public void delete(){
         Board board = client.getBoardCtrl().getBoard();
-        board.getTagList().remove(tag);
-        server.updateBoard(board);
+  //      board.getTagList().remove(tag);
+  //      server.updateBoard(board);
         server.deleteTag(tag.getId());
         this.savedText.setText("Deleted Tag");
     }

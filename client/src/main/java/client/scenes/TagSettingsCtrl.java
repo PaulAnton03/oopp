@@ -63,6 +63,7 @@ public class TagSettingsCtrl implements SceneCtrl{
         resetState();
         this.tag = tag;
         this.card = card;
+        textField.setText(tag.getText());
     }
 
     public Parent getNode(){
@@ -76,15 +77,14 @@ public class TagSettingsCtrl implements SceneCtrl{
             this.savedText.setText("Error: Could not find tag!!");
             return;
         }
-        if(colorPicker.getValue() != null){
-            color = colorPicker.getValue();
+        if(color != null){
             tag.setColor(color.toString());
         }
         if(textField.getText() != null){
             tag.setText(textField.getText());
         }
-        if(!board.getTagList().contains(tag))
-            board.getTagList().add(tag);
+//        if(!board.getTagList().contains(tag))
+//            board.getTagList().add(tag);
 //        else{
 //            for(Tag tag1 : board.getTagList()){
 //                if(tag1.getId() == tag.getId()){
@@ -92,25 +92,21 @@ public class TagSettingsCtrl implements SceneCtrl{
 //                }
 //            }
 //        }
-     //   server.updateTag(tag);
-        server.updateBoard(board);
+        server.updateTag(tag, board.getId());
+     //   server.updateBoard(board);
 
         this.savedText.setText("Saved!");
     }
-
     public void pickColor(ActionEvent event){
         color = colorPicker.getValue();
     }
 
     public void delete(){
-        Board board = client.getBoardCtrl().getBoard();
-
-
-
+  //      Board board = client.getBoardCtrl().getBoard();
         server.deleteTag(tag.getId());
-        if(board.getTagList().contains(tag))
-            board.getTagList().remove(tag);
-        server.updateBoard(board);
+//        if(board.getTagList().contains(tag))
+//            board.getTagList().remove(tag);
+  //      server.updateBoard(board);
         this.savedText.setText("Deleted Tag");
         mainCtrl.showMainView();
     }

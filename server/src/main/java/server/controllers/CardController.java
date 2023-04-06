@@ -119,7 +119,7 @@ public class CardController {
     public ResponseEntity<Card> addTag(@RequestBody Card card, @PathVariable("id") long id){
         final Optional<Card> optionalCard = cardRepository.findById(id);
         if (optionalCard.isEmpty()) {
-            return ResponseEntity.notFound().build();
+          //  return ResponseEntity.notFound().build();
         }
         Optional<Tag> optionalTag = tagRepository.findById(id);
         Tag tag = optionalTag.get();

@@ -81,7 +81,7 @@ public class Board implements DBEntity {
 
     public void addTag(Tag tag) {
         tagList.add(tag);
-        tag.setBoard(this);
+       // tag.setBoard(this);
     }
 
     public boolean removeTag(long id){

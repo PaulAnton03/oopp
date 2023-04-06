@@ -219,14 +219,15 @@ public class ServerUtils {
         return webTargetAddDefault(webTarget).get(new GenericType<>(){});
     }
 
-    public Tag updateTag(Tag tag){
-        WebTarget webTarget = webTargetFromPath("/tags/update/{id}").resolveTemplate("id", tag.getId());
+    public Tag updateTag(Tag tag, long board_id){
+        WebTarget webTarget = webTargetFromPath("/tags/update/{id}").resolveTemplate("id", tag.getId())
+                .queryParam("boardId", board_id);
         return webTargetAddDefault(webTarget).put(Entity.entity(tag, APPLICATION_JSON), Tag.class);
     }
 
-    public Tag createTag(Tag tag, long id){
+    public Tag createTag(Tag tag, long board_id){
         WebTarget webTarget = webTargetFromPath("/tags/create")
-                .queryParam("boardId", id);
+                .queryParam("boardId", board_id);
         return webTargetAddDefault(webTarget).post(Entity.entity(tag, APPLICATION_JSON), Tag.class);
     }
 

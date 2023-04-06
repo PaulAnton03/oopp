@@ -49,14 +49,13 @@ public class TagController {
         Board board = boardRepository.getById(boardId);
         if(!board.getTagList().contains(tag)){
             board.addTag(tag);
-        }
-        if(board.getTagList().contains((tag))){
+        } else{
             System.out.println("This tag already exists in board!");
         }
        // tagRepository.save(tag); //Cascaded so no need
         tag.setBoard(board);
 
-       tagRepository.save(tag); //hmm but maybe we still need it
+        tagRepository.save(tag); //hmm but maybe we still need it
         System.out.println("Created tag! : " + tag.getId());
         return ResponseEntity.ok(tag);
     }
@@ -84,13 +83,21 @@ public class TagController {
         return ResponseEntity.ok(repoTag);
     }
     @PutMapping("/update/{id}")
-    public ResponseEntity<Tag> update(@RequestBody Tag tag, @PathVariable("id") long id) {
+    public ResponseEntity<Tag> update(@RequestBody Tag tag, @PathVariable("id") long id, @RequestParam long boardId) {
+        if(!tag.isNetworkValid()){
+            System.out.println("tag is not network valid!");
+            return ResponseEntity.badRequest().build();
+        }
         final Optional<Tag> optTag = tagRepository.findById(tag.getId());
         if(optTag.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
-        Tag updated = tagRepository.save(tag);
-        return ResponseEntity.ok(updated);
+        Board board = boardRepository.findById(boardId).get();
+        tag.setBoard(board);
+        tagRepository.save(tag);
+        //boardRepository.save(tag.getBoard()); //by saving board
+        //we save  things from topdown
+        return ResponseEntity.ok(optTag.get());
     }
 }
 

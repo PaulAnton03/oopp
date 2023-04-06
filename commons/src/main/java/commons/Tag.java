@@ -29,10 +29,6 @@ public class Tag implements DBEntity {
     private Set<Card> cards = new HashSet<>();
 
 
-//    public Set<Card> getCards(){
-//        return cards;
-//    }
-
     @ManyToOne(cascade = CascadeType.ALL)
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
@@ -41,7 +37,7 @@ public class Tag implements DBEntity {
 
     private String text;
 
-    private String color;
+    private String color = "ffffffff";
 
     @Override
     public boolean equals(Object o) {
@@ -54,5 +50,17 @@ public class Tag implements DBEntity {
     @Override
     public int hashCode() {
         return Objects.hash(getId());
+    }
+
+    @JsonIgnore
+    public static boolean isNullOrEmpty(String s){
+        return s == null || s.isEmpty();
+    }
+
+    @JsonIgnore
+    public boolean isNetworkValid() {
+        return this.board != null
+                && !isNullOrEmpty(this.getText())
+                && !isNullOrEmpty(this.getColor());
     }
 }
