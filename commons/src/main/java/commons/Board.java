@@ -84,6 +84,17 @@ public class Board implements DBEntity {
         tag.setBoard(this);
     }
 
+    public boolean removeTag(long id){
+        Tag tag = this.getTagList().stream().filter(c -> c.getId() == id).findFirst().orElse(null);
+        if(tag == null)
+            return false;
+        return removeTag(tag);
+    }
+    public boolean removeTag(Tag tag){
+        return this.tagList.remove(tag);
+    }
+
+
     /**
      * Removes a {@link CardList} from the board.
      *

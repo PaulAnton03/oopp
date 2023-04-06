@@ -86,7 +86,7 @@ public class EditCardCtrl implements SceneCtrl {
     public void loadData(long cardId) {
         resetState();
         this.cardId = cardId;
-        Card card = server.getCard(cardId);
+        Card card = client.getCard(cardId); // was from server
         changeTitle.setText(card.getTitle());
         changeDesc.setText(card.getDescription());
         Board curBoard = client.getBoardCtrl().getBoard();
@@ -129,14 +129,17 @@ public class EditCardCtrl implements SceneCtrl {
         tag.setBoard(board); //because adding it to the board will save it
         tag.setColor(tagColor);
 
-        server.createTag(tag); //this includes adding to board
+        server.createTag(tag, board.getId()); //this includes adding to board
 //        if(!board.getTagList().contains(tag)){
 //            board.getTagList().add(tag);
 //        }
-        server.updateBoard(board); //I think not useful
-        //client.getBoardCtrl().refresh();
-        resetState();
-        loadData(cardId);
+  //      server.updateBoard(board); //I think not useful
+  //      client.getBoardCtrl().refresh();
+        //resetState();
+        //loadData(cardId);
+        TagCtrl tagCtrl = factory.create(TagCtrl.class, tag);
+        tagCtrl.loadData(tag);
+        tagArea.getChildren().add(tagCtrl.getNode());
         System.out.println("Tag created: " + tag);
     }
 

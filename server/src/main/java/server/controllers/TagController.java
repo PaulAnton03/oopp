@@ -47,30 +47,40 @@ public class TagController {
     @PostMapping("/create")
     public ResponseEntity<Tag> create(@RequestBody Tag tag, @RequestParam long boardId){
         Board board = boardRepository.getById(boardId);
-        board.addTag(tag);
+        if(!board.getTagList().contains(tag)){
+            board.addTag(tag);
+        }
+        if(board.getTagList().contains((tag))){
+            System.out.println("This tag already exists in board!");
+        }
        // tagRepository.save(tag); //Cascaded so no need
-        boardRepository.save(board);
-        tagRepository.save(tag); //hmm but maybe we still need it
+        tag.setBoard(board);
+
+       tagRepository.save(tag); //hmm but maybe we still need it
         System.out.println("Created tag! : " + tag.getId());
         return ResponseEntity.ok(tag);
     }
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Tag> delete(@PathVariable("id") long id){
-        System.out.println("Deleted tag!"+ id);
         final Optional<Tag> optTag = tagRepository.findById(id);
         if(optTag.isEmpty()){
             throw new ResponseStatusException(HttpStatus.NOT_IMPLEMENTED, "Tag not found");
         }
         Tag repoTag = optTag.get();
-        for(Card  c : repoTag.getCards()){
-            c.getTags().remove(repoTag);
-        }
-        Board board = boardRepository.getById(repoTag.getBoard().getId());
-        if(board.getTagList().contains(repoTag)){
-            board.getTagList().remove(repoTag);
+//        for(Card  c : repoTag.getCards()){
+//            c.getTags().remove(repoTag);
+//        }
+//        Board board = boardRepository.getById(repoTag.getBoard().getId());
+//        if(board.getTagList().contains(repoTag)){
+//            board.getTagList().remove(repoTag);
+//        }
+        if(repoTag.getBoard() != null){
+            repoTag.getBoard().removeTag(repoTag.getId());
         }
         tagRepository.deleteById(repoTag.getId());
+        System.out.println("Deleted tag!"+ id);
+        //todo messagingTemplate?
         return ResponseEntity.ok(repoTag);
     }
     @PutMapping("/update/{id}")

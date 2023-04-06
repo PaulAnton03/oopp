@@ -224,9 +224,9 @@ public class ServerUtils {
         return webTargetAddDefault(webTarget).put(Entity.entity(tag, APPLICATION_JSON), Tag.class);
     }
 
-    public Tag createTag(Tag tag){
+    public Tag createTag(Tag tag, long id){
         WebTarget webTarget = webTargetFromPath("/tags/create")
-                .queryParam("boardId", tag.getBoard().getId());
+                .queryParam("boardId", id);
         return webTargetAddDefault(webTarget).post(Entity.entity(tag, APPLICATION_JSON), Tag.class);
     }
 
