@@ -2,6 +2,7 @@ package client.utils;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.prefs.BackingStoreException;
@@ -89,9 +90,17 @@ public class ClientPreferences {
         savedBoards.put(String.valueOf(boardId), "");
     }
 
+    public boolean containsJoinedBoard(long boardId) {
+        try {
+            return Arrays.stream(savedBoards.keys()).collect(Collectors.toList()).contains(String.valueOf(boardId));
+        } catch(BackingStoreException e) {
+            return false;
+        }
+    }
     public void removeJoinedBoard(long boardId) {
         savedBoards.remove(String.valueOf(boardId));
         savedPasswords.remove(String.valueOf(boardId));
+        commonPrefs.remove(DEFAULT_BOARD_KEY);
     }
 
     /**

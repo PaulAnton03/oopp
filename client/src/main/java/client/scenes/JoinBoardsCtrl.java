@@ -50,7 +50,8 @@ public class JoinBoardsCtrl implements SceneCtrl {
         worker = new Thread(() -> {
             while (running.get()) {
                 try {
-                    var updatedBoards = server.longPollBoards();
+                    var updatedBoards = server.longPollBoards().stream()
+                            .filter(b -> clientPrefs.containsJoinedBoard(b.getId())).collect(Collectors.toList());
                     if (updatedBoards != null && !updatedBoards.equals(currentBoards)) {
                         Platform.runLater(() -> updateBoards(updatedBoards));
                         currentBoards = updatedBoards;
