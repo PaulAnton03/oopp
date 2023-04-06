@@ -132,6 +132,7 @@ public class MainViewCtrl implements SceneCtrl {
                 public void run() {
                     client.getCardCtrl(client.getCard(s.getCard().getId()).getId()).refresh();
                     mainCtrl.getActiveCtrl().revalidate();
+                    client.postRefresh();
                 }});
         });
 
@@ -196,6 +197,7 @@ public class MainViewCtrl implements SceneCtrl {
                 }});
         });
     }
+
     @Override
     public void revalidate() {
 
