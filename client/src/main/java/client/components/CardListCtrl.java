@@ -13,6 +13,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.Dragboard;
@@ -51,6 +52,9 @@ public class CardListCtrl implements Component<CardList>, DBEntityCtrl<CardList,
     @FXML
     private AnchorPane cardListBackground;
 
+    @FXML
+    private ScrollPane scrollPane;
+
     @Inject
     public CardListCtrl(ClientUtils client, ServerUtils server, MainCtrl mainCtrl, ComponentFactory factory) {
         this.client = client;
@@ -60,7 +64,7 @@ public class CardListCtrl implements Component<CardList>, DBEntityCtrl<CardList,
     }
 
     public Parent getNode() {
-        return cardListView.getParent();
+        return cardListBackground;
     }
 
     @Override
@@ -71,6 +75,8 @@ public class CardListCtrl implements Component<CardList>, DBEntityCtrl<CardList,
         title.setText(cardList.getTitle());
         client.getBoardCtrl().replaceChild(cardList);
         cardListBackground.setStyle("-fx-background-color: " + cardList.getBoard().getListColor());
+        scrollPane.setStyle("-fx-background-color: " + cardList.getBoard().getListColor());
+        cardListView.setStyle("-fx-background-color: " + cardList.getBoard().getListColor());
 
         for (Card card : cardList.getCards()) {
             CardCtrl cardCtrl = factory.create(CardCtrl.class, card);
