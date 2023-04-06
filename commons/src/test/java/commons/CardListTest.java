@@ -32,24 +32,16 @@ class CardListTest {
         assertEquals(cardList1.getTitle(), "MyList");
         assertNotNull(cardList1.getCards());
 
-        cardList1 = new CardList("MyList", "color");
+        cardList1 = new CardList("MyList");
         assertNotNull(cardList1);
         assertEquals(cardList1.getTitle(), "MyList");
         assertNotNull(cardList1.getCards());
     }
 
     @Test
-    void setColor() {
-        cardList.setColor("color");
-        assertEquals("color", cardList.getColor());
-
-        cardList = new CardList("MyList");
-    }
-
-    @Test
     void toStringTest() {
         String cardListOutput = cardList.toString();
-        String expectedOutput = "CardList [id=0, title=MyList, color=#b2b2ebff, cards=[]]";
+        String expectedOutput = "CardList [id=0, title=MyList, cards=[]]";
         assertEquals(expectedOutput, cardListOutput);
     }
 

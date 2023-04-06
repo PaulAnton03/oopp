@@ -1,13 +1,12 @@
 package client.utils;
 
-import static client.Main.FXML;
+import client.components.*;
+import com.google.inject.Inject;
+import commons.DBEntity;
 
 import java.util.Map;
 
-import client.components.*;
-import com.google.inject.Inject;
-
-import commons.DBEntity;
+import static client.Main.FXML;
 
 public class ComponentFactory {
     private ClientUtils client;

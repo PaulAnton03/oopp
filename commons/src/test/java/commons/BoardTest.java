@@ -18,7 +18,7 @@ class BoardTest {
     @Test
     void toStringTest() {
         String boardOutput = board.toString();
-        String expectedOutput = "Board [id=0, name=title, password=null, color=#ffffffff, cardLists=[]]";
+        String expectedOutput = "Board [id=0, name=title, password=null, cardLists=[]]";
         assertEquals(expectedOutput, boardOutput);
     }
 
@@ -35,10 +35,8 @@ class BoardTest {
         assertNotEquals(board.hashCode(), board2.hashCode());
 
         board2.setPassword(null);
-        board2.setColor("#00000000");
-        assertNotEquals(board.hashCode(), board2.hashCode());
+        assertEquals(board.hashCode(), board2.hashCode());
 
-        board2.setColor("#ffffffff");
         board2.addCardList();
         assertNotEquals(board.hashCode(), board2.hashCode());
     }
@@ -50,11 +48,10 @@ class BoardTest {
         assertEquals(board2.getName(), "title");
         assertNull(board2.getPassword());
 
-        board2 = new Board("title", "color");
+        board2 = new Board("title");
         assertNotNull(board2);
         assertEquals(board2.getName(), "title");
         assertNull(board2.getPassword());
-        assertEquals(board2.getColor(), "color");
     }
 
     @Test
@@ -78,10 +75,8 @@ class BoardTest {
         assertNotEquals(board, board2);
 
         board2.setPassword(null);
-        board2.setColor("#00000000");
-        assertNotEquals(board, board2);
+        assertEquals(board, board2);
 
-        board2.setColor("#ffffffff");
         board2.addCardList();
         assertNotEquals(board, board2);
     }

@@ -2,15 +2,11 @@ package client.scenes;
 
 import client.utils.*;
 import com.google.inject.Inject;
-
 import commons.Board;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.CheckBox;
-import javafx.scene.control.ColorPicker;
 import javafx.scene.control.TextField;
-import javafx.scene.paint.Color;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.layout.AnchorPane;
@@ -24,8 +20,6 @@ public class BoardSettingsCtrl implements SceneCtrl {
     private final ClientPreferences clientPrefs;
 
     @FXML
-    private ColorPicker boardColor;
-    @FXML
     private TextField boardPassword;
     @FXML
     private CheckBox passwordUsed;
@@ -36,7 +30,6 @@ public class BoardSettingsCtrl implements SceneCtrl {
     @FXML
     private AnchorPane inviteKeyFooter;
 
-    private Color color;
 
     @Inject
     public BoardSettingsCtrl(ServerUtils server, ClientUtils client, MainCtrl mainCtrl,
@@ -66,8 +59,6 @@ public class BoardSettingsCtrl implements SceneCtrl {
             throw new IllegalStateException("Something went wrong, no board selected!");
         }
         board.setName(boardName.getText());
-        String color = mainCtrl.turnColorIntoString(boardColor.getValue());
-        board.setColor(color);
         board.setPassword(passwordUsed.isSelected() ? boardPassword.getText() : null);
         server.updateBoard(board);
         clearForm();
@@ -92,10 +83,6 @@ public class BoardSettingsCtrl implements SceneCtrl {
         mainCtrl.showMainView();
     }
 
-    public void pickColor(ActionEvent action){
-        color = boardColor.getValue();
-    }
-
     public void clearForm() {
         boardPassword.setText("");
         passwordUsed.setSelected(false);
@@ -114,5 +101,11 @@ public class BoardSettingsCtrl implements SceneCtrl {
     @Override
     public void revalidate() {
 
+    }
+
+    @FXML
+    public void editTheme() {
+        clearForm();
+        mainCtrl.showThemeEditor();
     }
 }

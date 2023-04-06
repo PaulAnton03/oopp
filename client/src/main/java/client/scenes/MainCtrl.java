@@ -19,7 +19,6 @@ import client.utils.*;
 import commons.Board;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.paint.Color;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import javafx.util.Pair;
@@ -74,6 +73,9 @@ public class MainCtrl {
     private AdminPasswordCtrl adminPasswordCtrl;
     private Scene adminPassword;
 
+    private ThemeEditorCtrl themeEditorCtrl;
+    private Scene themeEdit;
+
     @Getter
     private SceneCtrl activeCtrl;
 
@@ -100,6 +102,7 @@ public class MainCtrl {
         private Pair<EditCardCtrl, Parent> editCard;
         private Pair<PasswordProtectedCtrl, Parent> pswProtected;
         private Pair<AdminPasswordCtrl, Parent> adminPsw;
+        private Pair<ThemeEditorCtrl, Parent> themeEditor;
     }
 
     public void initialize(Stage primaryStage, ScenesBuilder builder) {
@@ -137,6 +140,9 @@ public class MainCtrl {
 
         this.adminPasswordCtrl = builder.getAdminPsw().getKey();
         this.adminPassword = new Scene(builder.getAdminPsw().getValue());
+
+        this.themeEditorCtrl = builder.getThemeEditor().getKey();
+        this.themeEdit = new Scene(builder.getThemeEditor().getValue());
 
         primaryStage.setResizable(true);
         showConnect();
@@ -221,6 +227,7 @@ public class MainCtrl {
     }
 
     public void showCreate() {
+        createBoardCtrl.loadData();
         primaryStage.setTitle("Create board");
         primaryStage.setScene(create);
         activeCtrl = createBoardCtrl;
@@ -253,11 +260,14 @@ public class MainCtrl {
         activeCtrl = passwordProtectedCtrl;
     }
 
-    public void stop() {
-        server.stop();
+    public void showThemeEditor() {
+        activeCtrl = themeEditorCtrl;
+        primaryStage.setTitle("Theme editor");
+        themeEditorCtrl.loadData();
+        primaryStage.setScene(themeEdit);
     }
 
-    public String turnColorIntoString(Color color) {
-        return color.toString().replace("0x", "#");
+    public void stop() {
+        server.stop();
     }
 }

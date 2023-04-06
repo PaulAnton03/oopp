@@ -84,11 +84,15 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Card/* TODO
         this.card = card;
         title.setText(card.getTitle());
         description.setText(card.getDescription());
+        client.getCardListCtrl(card.getCardList().getId()).replaceChild(card);
         if (client.getSelectedCardId() == card.getId()) {
             highlight();
         } else {
             unhighlight();
         }
+        cardView.setStyle("-fx-background-color: " + card.getCardList().getBoard().getCardColor());
+        title.setStyle("-fx-text-fill: " + card.getCardList().getBoard().getFontColor());
+        description.setStyle("-fx-text-fill: " + card.getCardList().getBoard().getFontColor());
         subTasksCount.setText(String.valueOf(card.getSubtasks().size()));
         if (card.getSubtasks().size() == 0) {
             finishedSubTasks.setText("0");
@@ -96,7 +100,6 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Card/* TODO
         }
         finishedSubTasks.setText(String.valueOf(card.getSubtasks().stream()
                 .filter(SubTask::getFinished).count()));
-
     }
 
     public void editCard() {
@@ -115,7 +118,6 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Card/* TODO
 
     public void refresh() {
         loadData(server.getCard(card.getId()));
-        client.getCardListCtrl(card.getCardList().getId()).replaceChild(card);
     }
 
     public void remove() {
