@@ -30,20 +30,25 @@ public class Board implements DBEntity {
     @JsonIgnore
     private boolean editable = true;
 
-    @EqualsAndHashCode.Exclude
-    @JsonIgnore
-    private final String defaultColor = "#ffffffff";
+    @NonNull
+    private String boardColor;
+    @NonNull
+    private String listColor;
+    @NonNull
+    private String cardColor;
 
     @NonNull
-    private String color;
-
+    private String fontColor;
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @OrderColumn(name = "card_list_index")
     private List<CardList> cardLists = new ArrayList<>();
 
     public Board(String name) {
         this.name = name;
-        this.color = "#ffffffff";
+        this.boardColor = "#ffffffff";
+        this.cardColor = "#ffffffff";
+        this.listColor = "#b2b2ebff";
+        this.fontColor = "#000000ff";
     }
 
     /**
@@ -99,7 +104,7 @@ public class Board implements DBEntity {
 
     @Override
     public String toString() {
-        return "Board [id=" + id + ", name=" + name + ", password=" + password + ", color=" + color + ", cardLists=" + cardLists + "]";
+        return "Board [id=" + id + ", name=" + name + ", password=" + password + ", cardLists=" + cardLists + "]";
     }
 
 
@@ -109,17 +114,11 @@ public class Board implements DBEntity {
     @JsonIgnore
     public boolean isNetworkValid() {
         return this.cardLists != null
-                && !StringUtil.isNullOrEmpty(this.getName())
-                && !StringUtil.isNullOrEmpty(this.getColor());
+                && !StringUtil.isNullOrEmpty(this.getName());
     }
 
     @JsonIgnore
     public boolean isEditable() {
         return editable;
-    }
-
-    @JsonIgnore
-    public String getDefaultColor() {
-        return defaultColor;
     }
 }

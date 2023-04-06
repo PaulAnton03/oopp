@@ -19,6 +19,8 @@ import javafx.animation.FadeTransition;
 import javafx.animation.ParallelTransition;
 import javafx.animation.ScaleTransition;
 import javafx.animation.Transition;
+import commons.SubTask;
+import javafx.animation.*;
 import javafx.css.PseudoClass;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -64,6 +66,12 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Card/* TODO
     @FXML
     private TextField titleField;
 
+    @FXML
+    private Label finishedSubTasks;
+
+    @FXML
+    private Label subTasksCount;
+
     @Inject
     public CardCtrl(MainCtrl mainCtrl, ServerUtils serverUtils, ClientUtils client) {
         this.mainCtrl = mainCtrl;
@@ -79,13 +87,16 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Card/* TODO
     }
 
     @Override
-    public Parent getNode() { return cardView; }
+    public Parent getNode() {
+        return cardView;
+    }
 
     @Override
     public void loadData(Card card) {
         this.card = card;
         title.setText(card.getTitle());
         description.setText(card.getDescription());
+        client.getCardListCtrl(card.getCardList().getId()).replaceChild(card);
         if (client.getSelectedCardId() == card.getId()) {
             highlight();
             if (client.getEditedCardTitle() != null)
@@ -93,10 +104,20 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Card/* TODO
         } else {
             unhighlight();
         }
+        cardView.setStyle("-fx-background-color: " + card.getCardList().getBoard().getCardColor());
+        title.setStyle("-fx-text-fill: " + card.getCardList().getBoard().getFontColor());
+        description.setStyle("-fx-text-fill: " + card.getCardList().getBoard().getFontColor());
+        subTasksCount.setText(String.valueOf(card.getSubtasks().size()));
+        if (card.getSubtasks().size() == 0) {
+            finishedSubTasks.setText("0");
+            return;
+        }
+        finishedSubTasks.setText(String.valueOf(card.getSubtasks().stream()
+                .filter(SubTask::getFinished).count()));
     }
 
     public void editCard() {
-        if(!client.getBoardCtrl().getBoard().isEditable()) {
+        if (!client.getBoardCtrl().getBoard().isEditable()) {
             throw new IllegalStateException("You do not have permissions to edit this board.");
         }
         mainCtrl.showEditCard(this.getCard().getId());
@@ -111,7 +132,6 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Card/* TODO
 
     public void refresh() {
         loadData(server.getCard(card.getId()));
-        client.getCardListCtrl(card.getCardList().getId()).replaceChild(card);
     }
 
     public void remove() {
@@ -119,9 +139,11 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Card/* TODO
         removeChildren();
     }
 
-    public void removeChildren() {}
+    public void removeChildren() {
+    }
 
-    public void replaceChild(Card card /* TODO: Change to Tag tag */) {}
+    public void replaceChild(Card card /* TODO: Change to Tag tag */) {
+    }
 
     // CSS class that defines style for the highlighted card
     private static final PseudoClass HIGHLIGHT_PSEUDO_CLASS = PseudoClass.getPseudoClass("highlight");
@@ -244,7 +266,8 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Card/* TODO
         fts.forEach(ft -> {
             ft.setDelay(ftDelay);
             ft.setFromValue(0.0);
-            ft.setToValue(0.6);});
+            ft.setToValue(0.6);
+        });
         buttonsVisibilityPT = new ParallelTransition(fts.get(0), fts.get(1));
         // Set button icons and behaviour
         try (var binInputStream = getClass().getResourceAsStream("/client/images/bin.png");
@@ -267,7 +290,8 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Card/* TODO
         // Set card view event handlers
         cardView.setOnMouseEntered(event -> {
             focus();
-            client.changeSelection(card.getId());});
+            client.changeSelection(card.getId());
+        });
         cardView.setOnMouseExited(event -> unfocus());
         cardView.setOnDragDetected(event -> {
             Logger.log("Card " + getCard().getTitle() + " drag detected");

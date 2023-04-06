@@ -6,6 +6,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
 <VBox fx:id="cardView" maxHeight="150.0" maxWidth="400.0" prefWidth="250.0" spacing="5.0" stylesheets="/client/styles/card.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.components.CardCtrl">
@@ -19,6 +20,13 @@
          </children>
       </AnchorPane>
       <Label fx:id="description" alignment="TOP_LEFT" minHeight="0.0" minWidth="100.0" styleClass="description" wrapText="true" />
+      <HBox prefHeight="33.0" prefWidth="230.0">
+         <children>
+            <Label fx:id="finishedSubTasks" prefHeight="18.0" prefWidth="15.0" text="Label" />
+            <Label prefHeight="18.0" prefWidth="8.0" text="/" />
+            <Label fx:id="subTasksCount" prefHeight="18.0" prefWidth="15.0" text="Label" />
+         </children>
+      </HBox>
    </children>
    <opaqueInsets>
       <Insets />

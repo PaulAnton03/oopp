@@ -68,4 +68,10 @@ public class BoardJoinCtrl implements Component<Board> {
         joinBoardsCtrl.stopPolling();
         mainCtrl.showMainView(board);
     }
+
+    public void onRemove() {
+        clientPreferences.removeJoinedBoard(this.board.getId());
+        joinBoardsCtrl.stopPolling();
+        joinBoardsCtrl.populateBoards();
+    }
 }

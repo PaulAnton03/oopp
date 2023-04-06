@@ -40,6 +40,11 @@ public class Card implements DBEntity {
     @NonNull
     private String description;
 
+    public Card(String title) {
+        this.title = title;
+        this.description = "";
+    }
+
     public boolean removeSubTask(SubTask subTask) {
         return this.subtasks.remove(subTask);
     }

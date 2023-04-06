@@ -15,10 +15,7 @@
  */
 package client;
 
-import client.components.BoardCtrl;
-import client.components.BoardJoinCtrl;
-import client.components.CardCtrl;
-import client.components.CardListCtrl;
+import client.components.*;
 import client.scenes.*;
 import client.utils.ClientUtils;
 import client.utils.ComponentFactory;
@@ -51,6 +48,7 @@ public class MyModule implements Module {
         binder.bind(CardListCtrl.class);
         binder.bind(BoardCtrl.class);
         binder.bind(BoardJoinCtrl.class);
+        binder.bind(SubTaskCtrl.class);
 
         // Utils
         binder.bind(ServerUtils.class).in(Scopes.SINGLETON);
