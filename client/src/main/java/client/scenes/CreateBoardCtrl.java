@@ -62,6 +62,7 @@ public class CreateBoardCtrl implements SceneCtrl {
             newBoard.setPassword(boardPassword.getText());
         }
         ThemeUtils.Theme theme = ThemeUtils.Theme.valueOf(themePicker.getValue());
+        if(theme == null) theme = ThemeUtils.Theme.getPredefinedThemes().get(0);
         loadBoard(newBoard, theme);
         final Board addedBoard = server.addBoard(newBoard);
         Logger.log("Added board " + addedBoard);
