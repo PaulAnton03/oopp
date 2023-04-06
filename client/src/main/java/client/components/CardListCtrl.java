@@ -75,8 +75,8 @@ public class CardListCtrl implements Component<CardList>, DBEntityCtrl<CardList,
         title.setText(cardList.getTitle());
         client.getBoardCtrl().replaceChild(cardList);
         cardListBackground.setStyle("-fx-background-color: " + cardList.getBoard().getListColor());
-        scrollPane.setStyle("-fx-background-color: " + cardList.getBoard().getListColor());
-        cardListView.setStyle("-fx-background-color: " + cardList.getBoard().getListColor());
+        // scrollPane.setStyle("-fx-background-color: " + cardList.getBoard().getListColor());
+        // cardListView.setStyle("-fx-background-color: " + cardList.getBoard().getListColor());
 
         for (Card card : cardList.getCards()) {
             CardCtrl cardCtrl = factory.create(CardCtrl.class, card);
