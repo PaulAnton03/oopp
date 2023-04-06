@@ -143,7 +143,6 @@ public class MainViewCtrl implements SceneCtrl {
             Platform.runLater(new Runnable() {
                 @Override
                 public void run() {
-                    System.out.println(1);
                     client.getCardListCtrl(c.getCardList().getId()).refresh();
                     mainCtrl.getActiveCtrl().revalidate();
                 }});
