@@ -67,10 +67,6 @@ public class CardList implements DBEntity {
     @JsonIgnore
     public boolean isNetworkValid() {
         return this.getCards() != null
-                && !isNullOrEmpty(this.getTitle());
-    }
-
-    private static boolean isNullOrEmpty(String s) {
-        return s == null || s.isEmpty();
+                && !StringUtil.isNullOrEmpty(this.getTitle());
     }
 }

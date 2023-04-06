@@ -132,9 +132,9 @@ public class MainViewCtrl implements SceneCtrl {
                 public void run() {
                     client.getCardCtrl(client.getCard(s.getCard().getId()).getId()).refresh();
                     mainCtrl.getActiveCtrl().revalidate();
+                    client.postRefresh();
                 }});
         });
-
         /**
          * This method call handles the deletion,addition and updating of a card on the current board by
          * using the registerForMessages method of the server, which refreshes the CardListCtrl of the card
@@ -146,9 +146,9 @@ public class MainViewCtrl implements SceneCtrl {
                 public void run() {
                     client.getCardListCtrl(c.getCardList().getId()).refresh();
                     mainCtrl.getActiveCtrl().revalidate();
+                    client.postRefresh();
                 }});
         });
-
         /**
          * This method call handles the deletion,addition and updating of a list on the current board by
          * using the registerForMessages method of the server, which refreshes the BoardCtrl of the list
@@ -160,9 +160,9 @@ public class MainViewCtrl implements SceneCtrl {
                 public void run() {
                     client.getBoardCtrl().refresh();
                     mainCtrl.getActiveCtrl().revalidate();
+                    client.postRefresh();
                 }});
         });
-
         server.registerForMessages("/topic/board/" + boardId + "/update", Board.class, b -> {
             Platform.runLater(new Runnable() {
                 @Override
@@ -173,9 +173,9 @@ public class MainViewCtrl implements SceneCtrl {
                         client.getBoardCtrl().refresh();
                         mainCtrl.getActiveCtrl().revalidate();
                     }
+                    client.postRefresh();
                 }});
         });
-
         /**
          * This method call is used for informing the client that the board they are currently on
          * has been deleted
@@ -190,6 +190,7 @@ public class MainViewCtrl implements SceneCtrl {
                 }});
         });
     }
+
     @Override
     public void revalidate() {
 

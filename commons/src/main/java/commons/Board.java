@@ -108,18 +108,13 @@ public class Board implements DBEntity {
     }
 
 
-    @JsonIgnore
-    private static boolean isNullOrEmpty(String s) {
-        return s == null || s.isEmpty();
-    }
-
     /**
      * @return Is {@link Board} valid for network transfer
      */
     @JsonIgnore
     public boolean isNetworkValid() {
         return this.cardLists != null
-                && !isNullOrEmpty(this.getName());
+                && !StringUtil.isNullOrEmpty(this.getName());
     }
 
     @JsonIgnore

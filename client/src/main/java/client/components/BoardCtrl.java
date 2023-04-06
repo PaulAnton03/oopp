@@ -133,7 +133,8 @@ public class BoardCtrl implements Component<Board>, DBEntityCtrl<Board, CardList
     }
 
     public void handleKeyEvent(KeyEvent e) {
-        if (board.getCardLists() == null || board.getCardLists().size() == 0)
+        if (board.getCardLists() == null
+            || board.getCardLists().size() == 0)
             return;
         switch (e.getCode()) {
             case LEFT:
@@ -157,7 +158,9 @@ public class BoardCtrl implements Component<Board>, DBEntityCtrl<Board, CardList
                 }
                 break;
             case ENTER:
-                mainCtrl.showEditCard(client.getSelectedCardId());
+                if (client.getCardCtrl(client.getSelectedCardId()) != null) {
+                    mainCtrl.showEditCard(client.getSelectedCardId());
+                }
                 break;
             case BACK_SPACE:
             case DELETE:

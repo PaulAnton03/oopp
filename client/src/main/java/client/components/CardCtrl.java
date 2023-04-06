@@ -1,11 +1,24 @@
 package client.components;
 
+import java.io.IOException;
+import java.net.URL;
+import java.util.List;
+import java.util.ResourceBundle;
+
+import javax.inject.Inject;
+
 import client.scenes.MainCtrl;
 import client.utils.ClientUtils;
 import client.utils.Logger;
 import client.utils.ServerUtils;
 import commons.Card;
 import commons.CardList;
+import commons.StringUtil;
+import javafx.animation.Animation;
+import javafx.animation.FadeTransition;
+import javafx.animation.ParallelTransition;
+import javafx.animation.ScaleTransition;
+import javafx.animation.Transition;
 import commons.SubTask;
 import javafx.animation.*;
 import javafx.css.PseudoClass;
@@ -16,10 +29,12 @@ import javafx.scene.Parent;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.Dragboard;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -27,12 +42,6 @@ import javafx.scene.transform.Transform;
 import javafx.util.Duration;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-
-import javax.inject.Inject;
-import java.io.IOException;
-import java.net.URL;
-import java.util.List;
-import java.util.ResourceBundle;
 
 @EqualsAndHashCode
 public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Card/* TODO: change to TAG */>, Initializable {
@@ -53,6 +62,9 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Card/* TODO
     private Button editButton;
     @FXML
     private Button deleteButton;
+    @Getter
+    @FXML
+    private TextField titleField;
 
     @FXML
     private Label finishedSubTasks;
@@ -87,6 +99,8 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Card/* TODO
         client.getCardListCtrl(card.getCardList().getId()).replaceChild(card);
         if (client.getSelectedCardId() == card.getId()) {
             highlight();
+            if (client.getEditedCardTitle() != null)
+                editTitle();
         } else {
             unhighlight();
         }
@@ -141,6 +155,51 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Card/* TODO
 
     public void unhighlight() {
         cardView.getStyleClass().remove("highlight");
+        if (client.getSelectedCardId() == card.getId()
+            && client.getEditedCardTitle() != null)
+            stopEditTitle();
+    }
+
+    public void editTitle() {
+        titleField.setDisable(false);
+        titleField.setVisible(true);
+        title.setVisible(false);
+        titleField.requestFocus();
+        if (client.getEditedCardTitle() == null) {
+            client.setEditedCardTitle(card.getTitle());
+            client.setCaretPosition(card.getTitle().length());
+        }
+        titleField.setText(client.getEditedCardTitle());
+        titleField.positionCaret(client.getCaretPosition());
+    }
+
+    public void stopEditTitle() {
+        titleField.setDisable(true);
+        titleField.setVisible(false);
+        title.setVisible(true);
+        client.setEditedCardTitle(null);
+    }
+
+    public void saveTitle() {
+        if (titleField.getText() != null
+            && !titleField.getText().isEmpty()
+            && !titleField.getText().equals(card.getTitle())) {
+            card.setTitle(titleField.getText());
+            server.updateCard(card);
+        }
+        stopEditTitle();
+    }
+
+    public void onTitleFieldKeyTyped(KeyEvent e) {
+        char c = e.getCharacter().charAt(0);
+        if (c == 033) { /* ESC */
+            stopEditTitle();
+        } else if (c == 015) { /* CR (ENTER) */
+            saveTitle();
+        } else if (StringUtil.isPrintableChar(c)) {
+            client.setEditedCardTitle(titleField.getText());
+        }
+        client.setCaretPosition(titleField.getCaretPosition());
     }
 
     public void focus() {
@@ -195,7 +254,7 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Card/* TODO
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        unhighlight();
+        // Hide buttons, unhighlight card
         deleteButton.setOpacity(0.0);
         editButton.setOpacity(0.0);
         // Create show/hide transition for buttons
