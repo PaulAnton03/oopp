@@ -84,6 +84,8 @@ public class TagController {
     }
     @PutMapping("/update/{id}")
     public ResponseEntity<Tag> update(@RequestBody Tag tag, @PathVariable("id") long id, @RequestParam long boardId) {
+        Board board = boardRepository.findById(boardId).get();
+        tag.setBoard(board);
         if(!tag.isNetworkValid()){
             System.out.println("tag is not network valid!");
             return ResponseEntity.badRequest().build();
@@ -92,7 +94,7 @@ public class TagController {
         if(optTag.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
-        Board board = boardRepository.findById(boardId).get();
+        board = boardRepository.findById(boardId).get();
         tag.setBoard(board);
         tagRepository.save(tag);
         //boardRepository.save(tag.getBoard()); //by saving board

@@ -29,7 +29,7 @@ public class Tag implements DBEntity {
     private Set<Card> cards = new HashSet<>();
 
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     @JsonIgnore
@@ -59,6 +59,9 @@ public class Tag implements DBEntity {
 
     @JsonIgnore
     public boolean isNetworkValid() {
+        System.out.println("Bagli olan board" + this.board.getName());
+        System.out.println("Texti" + this.getText());
+        System.out.println("Color" + this.getColor());
         return this.board != null
                 && !isNullOrEmpty(this.getText())
                 && !isNullOrEmpty(this.getColor());
