@@ -63,6 +63,7 @@ public class MainViewCtrl implements SceneCtrl {
 
     @FXML
     void btnBackClicked(ActionEvent event) {
+        server.disconnect();
         mainCtrl.showConnect();
     }
 

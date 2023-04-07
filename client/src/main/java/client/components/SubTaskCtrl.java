@@ -42,6 +42,12 @@ public class SubTaskCtrl implements Component<SubTask>, Initializable {
     @FXML
     private Button deleteButton;
 
+    @FXML
+    private Button up;
+
+    @FXML
+    private Button down;
+
     @Inject
     public SubTaskCtrl(MainCtrl mainCtrl, ServerUtils server, ClientUtils client) {
         this.mainCtrl = mainCtrl;
@@ -74,6 +80,20 @@ public class SubTaskCtrl implements Component<SubTask>, Initializable {
     public void checkBoxClicked() {
         subTask.setFinished(!subTask.getFinished());
         server.updateSubTask(subTask);
+    }
+
+    public void up() {
+        int currentIndex = mainCtrl.getEditCardCtrl().getSubTaskView().getChildren().indexOf(this.getNode());
+        if (currentIndex > 0) {
+            server.reorderSubTask(subTask, "up");
+        }
+    }
+
+    public void down() {
+        int currentIndex = mainCtrl.getEditCardCtrl().getSubTaskView().getChildren().indexOf(this.getNode());
+        if (currentIndex < mainCtrl.getEditCardCtrl().getSubTaskView().getChildren().size() - 1) {
+            server.reorderSubTask(subTask, "down");
+        }
     }
 
 

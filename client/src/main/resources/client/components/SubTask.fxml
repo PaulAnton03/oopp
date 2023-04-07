@@ -7,17 +7,19 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:id="subTaskView" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="60.0" prefWidth="500.0" stylesheets="/client/styles/addCard.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.components.SubTaskCtrl">
+<VBox fx:id="subTaskView" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="60.0" prefWidth="570.0" stylesheets="/client/styles/addCard.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.components.SubTaskCtrl">
     <children>
-        <AnchorPane prefHeight="60.0" prefWidth="409.0">
+        <AnchorPane prefHeight="60.0" prefWidth="592.0">
             <children>
                 <CheckBox fx:id="checkBox" layoutX="22.0" layoutY="21.0" mnemonicParsing="false" onAction="#checkBoxClicked" prefHeight="18.0" prefWidth="16.0" />
-                <Button fx:id="deleteButton" layoutX="440.0" layoutY="7.0" mnemonicParsing="false" onAction="#delete" text="X" textFill="RED">
+                <Button fx:id="deleteButton" layoutX="513.0" layoutY="7.0" mnemonicParsing="false" onAction="#delete" text="X" textFill="RED">
                     <font>
                         <Font size="22.0" />
                     </font>
                 </Button>
                 <TextField fx:id="title" layoutX="54.0" layoutY="19.0" prefHeight="26.0" prefWidth="376.0" />
+            <Button fx:id="up" layoutX="447.0" layoutY="1.0" mnemonicParsing="false" onAction="#up" text="/\" />
+            <Button fx:id="down" layoutX="447.0" layoutY="33.0" mnemonicParsing="false" onAction="#down" text="\\/" />
             </children>
         </AnchorPane>
     </children>

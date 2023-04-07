@@ -17,6 +17,9 @@ import javafx.scene.layout.VBox;
 import lombok.Getter;
 import org.springframework.messaging.simp.stomp.StompSession;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class EditCardCtrl implements SceneCtrl {
     private final ServerUtils server;
@@ -37,11 +40,7 @@ public class EditCardCtrl implements SceneCtrl {
     @FXML
     private VBox subTaskView;
 
-    private StompSession.Subscription subscriptionCreate;
-
-    private StompSession.Subscription subscriptionDelete;
-
-    private StompSession.Subscription subscriptionUpdate;
+    private final List<StompSession.Subscription> subscriptions = new ArrayList<>();
 
 
     @Inject
@@ -78,7 +77,11 @@ public class EditCardCtrl implements SceneCtrl {
 
     public void registerForMessages() {
         long boardId = client.getCard(cardId).getCardList().getBoard().getId();
-        subscriptionCreate = server.registerForMessages("/topic/board/" + boardId + "/card/" + cardId + "/subtasks/create", SubTask.class, s -> {
+
+        /**
+         * Create SubTask
+         */
+        subscriptions.add(server.registerForMessages("/topic/board/" + boardId + "/card/" + cardId + "/subtasks/create", SubTask.class, s -> {
             Platform.runLater(new Runnable() {
                 @Override
                 public void run() {
@@ -87,8 +90,12 @@ public class EditCardCtrl implements SceneCtrl {
                 }
             });
 
-        });
-        subscriptionDelete = server.registerForMessages("/topic/board/" + boardId + "/card/" + cardId + "/subtasks/delete", SubTask.class, s -> {
+        }));
+
+        /**
+         * Remove SubTask
+         */
+        subscriptions.add(server.registerForMessages("/topic/board/" + boardId + "/card/" + cardId + "/subtasks/delete", SubTask.class, s -> {
             Platform.runLater(new Runnable() {
                 @Override
                 public void run() {
@@ -96,8 +103,12 @@ public class EditCardCtrl implements SceneCtrl {
                 }
             });
 
-        });
-        subscriptionUpdate = server.registerForMessages("/topic/board/" + boardId + "/card/" + cardId + "/subtasks/update", SubTask.class, s -> {
+        }));
+
+        /**
+         * Update SubTask
+         */
+        subscriptions.add(server.registerForMessages("/topic/board/" + boardId + "/card/" + cardId + "/subtasks/update", SubTask.class, s -> {
             Platform.runLater(new Runnable() {
                 @Override
                 public void run() {
@@ -105,7 +116,39 @@ public class EditCardCtrl implements SceneCtrl {
                 }
             });
 
-        });
+        }));
+
+        /**
+         * Reorder SubTask up
+         */
+        subscriptions.add(server.registerForMessages("/topic/board/" + boardId + "/card/" + cardId + "/subtasks/reorder/up", SubTask.class, s -> {
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    SubTaskCtrl ctrl = client.getSubTaskCtrl(s.getId());
+                    int currentIndex = subTaskView.getChildren().indexOf(ctrl.getNode());
+                    subTaskView.getChildren().remove(currentIndex);
+                    subTaskView.getChildren().add(currentIndex - 1, ctrl.getNode());
+                }
+            });
+
+        }));
+
+        /**
+         * Reorder SubTask down
+         */
+        subscriptions.add(server.registerForMessages("/topic/board/" + boardId + "/card/" + cardId + "/subtasks/reorder/down", SubTask.class, s -> {
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    SubTaskCtrl ctrl = client.getSubTaskCtrl(s.getId());
+                    int currentIndex = subTaskView.getChildren().indexOf(ctrl.getNode());
+                    subTaskView.getChildren().remove(currentIndex);
+                    subTaskView.getChildren().add(currentIndex + 1, ctrl.getNode());
+                }
+            });
+
+        }));
     }
 
     public void addSubTask() {
@@ -126,9 +169,7 @@ public class EditCardCtrl implements SceneCtrl {
         this.changeTitle.setText("");
         this.changeDesc.setText("");
         subTaskView.getChildren().clear();
-        subscriptionCreate.unsubscribe();
-        subscriptionDelete.unsubscribe();
-        subscriptionUpdate.unsubscribe();
+        subscriptions.forEach(StompSession.Subscription::unsubscribe);
     }
 
     @Override
