@@ -4,7 +4,6 @@ import client.utils.ExceptionHandler;
 import commons.Board;
 import javafx.fxml.FXML;
 import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
 import lombok.Setter;
 
 import javax.inject.Inject;

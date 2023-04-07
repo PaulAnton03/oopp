@@ -3,7 +3,6 @@ package client.scenes;
 import client.utils.ExceptionHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
 
 import javax.inject.Inject;
 import java.util.concurrent.CompletableFuture;
