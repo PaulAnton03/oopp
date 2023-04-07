@@ -128,7 +128,6 @@ public class EditCardCtrl implements SceneCtrl {
         tag.setText(tagText);
         tag.setBoard(board); //because adding it to the board will save it
         tag.setColor(tagColor);
-
         server.createTag(tag, board.getId()); //this includes adding to board
 //        if(!board.getTagList().contains(tag)){
 //            board.getTagList().add(tag);

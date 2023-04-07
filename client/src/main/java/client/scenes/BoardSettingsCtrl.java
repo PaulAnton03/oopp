@@ -92,7 +92,7 @@ public class BoardSettingsCtrl implements SceneCtrl {
         mainCtrl.showMainView();
     }
 
-    public void pickColor(ActionEvent action){
+    public void pickColor(ActionEvent action) {
         color = boardColor.getValue();
     }
 

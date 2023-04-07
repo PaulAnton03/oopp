@@ -7,11 +7,9 @@ import client.utils.ServerUtils;
 import commons.Board;
 import commons.Card;
 import commons.Tag;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Label;
@@ -21,18 +19,14 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
-import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
-import javafx.stage.Popup;
-import javafx.stage.Stage;
 import lombok.Getter;
 
 import javax.inject.Inject;
-import java.io.IOException;
 
 
-public class TagCtrl implements Component<Tag>{
+public class TagCtrl implements Component<Tag> {
 
     private final MainCtrl mainCtrl;
 
@@ -68,7 +62,6 @@ public class TagCtrl implements Component<Tag>{
     private Text savedText;
 
 
-
     @Inject
     public TagCtrl(MainCtrl mainCtrl, ServerUtils server, ClientUtils client) {
         this.mainCtrl = mainCtrl;
@@ -83,24 +76,24 @@ public class TagCtrl implements Component<Tag>{
     @Override
     public void loadData(Tag tag) {
         this.tag = tag;
-        if(tag == null){
+        if (tag == null) {
             return;
         }
         String col = "";
-        if(tag.getColor() == null){
+        if (tag.getColor() == null) {
             col = "FFFFFF";
-        }else{
+        } else {
             col = tag.getColor();
         }
         label.setText(tag.getText());
         colorString = "-fx-background-color: #" + col;
         colorString = colorString.replaceAll("0x", "");
         anchorPane.setStyle(colorString);
-        if(mainCtrl.getActiveCtrl().getClass() == EditCardCtrl.class){
-            if(isAssigned){
+        if (mainCtrl.getActiveCtrl().getClass() == EditCardCtrl.class) {
+            if (isAssigned) {
                 this.label.setFont(Font.font(label.getFont().getFamily(),
                         FontWeight.EXTRA_BOLD, label.getFont().getSize()));
-            }else{
+            } else {
                 this.label.setFont(Font.font(label.getFont().getFamily(),
                         FontWeight.NORMAL, label.getFont().getSize()));
             }
@@ -114,17 +107,16 @@ public class TagCtrl implements Component<Tag>{
 
 
     @FXML
-    public void clickAssigning(MouseEvent event){
-        if(mainCtrl.getActiveCtrl().getClass() == EditCardCtrl.class){
+    public void clickAssigning(MouseEvent event) {
+        if (mainCtrl.getActiveCtrl().getClass() == EditCardCtrl.class) {
             EditCardCtrl editCardCtrl = (EditCardCtrl) mainCtrl.getActiveCtrl();
             Card card1 = client.getCard(editCardCtrl.getCardId());
-            if(event.getButton() == MouseButton.SECONDARY){
+            if (event.getButton() == MouseButton.SECONDARY) {
                 changeTag(card1);
-            }
-            else if(event.getButton() == MouseButton.PRIMARY){
+            } else if (event.getButton() == MouseButton.PRIMARY) {
                 EditCardCtrl editCardCtrl1 = (EditCardCtrl) mainCtrl.getActiveCtrl();
                 Card card = client.getCard(editCardCtrl.getCardId());
-                if(isAssigned){
+                if (isAssigned) {
                     this.label.setFont(Font.font(label.getFont().getFamily(),
                             FontWeight.NORMAL, label.getFont().getSize()));
 
@@ -142,27 +134,28 @@ public class TagCtrl implements Component<Tag>{
         }
     }
 
-    public void assignThisToCard(Card card){
+    public void assignThisToCard(Card card) {
         System.out.println("Assigning is called");
         card.getTags().add(tag);
-     //   tag.getCards().add(card);
-    //    server.updateCard(card);
+        //   tag.getCards().add(card);
+        //    server.updateCard(card);
     }
 
-    public void unAssignFromCard(Card card){
+    public void unAssignFromCard(Card card) {
         card.getTags().remove(tag);
-     //   tag.getCards().remove(card);
-   //     server.updateCard(card);
-      //  server.updateTag(tag);
+        //   tag.getCards().remove(card);
+        //     server.updateCard(card);
+        //  server.updateTag(tag);
     }
 
-    public void changeTag(Card card){
+    public void changeTag(Card card) {
         mainCtrl.showTagSettings(tag, card);
     }
-    public void delete(){
+
+    public void delete() {
         Board board = client.getBoardCtrl().getBoard();
-  //      board.getTagList().remove(tag);
-  //      server.updateBoard(board);
+        //      board.getTagList().remove(tag);
+        //      server.updateBoard(board);
         server.deleteTag(tag.getId());
         this.savedText.setText("Deleted Tag");
     }
@@ -175,9 +168,10 @@ public class TagCtrl implements Component<Tag>{
     public void removeChildren() {
 
     }
-    public void refresh(){
+
+    public void refresh() {
         loadData(server.getTag(tag.getId()));
-        for(Card card : tag.getCards()){
+        for (Card card : tag.getCards()) {
             client.getCardCtrl(card.getId()).replaceChild(tag);
         }
     }
