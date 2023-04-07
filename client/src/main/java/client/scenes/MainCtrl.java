@@ -15,20 +15,24 @@
  */
 package client.scenes;
 
-import client.utils.*;
+import javax.inject.Inject;
+
+import client.utils.ClientPreferences;
+import client.utils.ClientUtils;
+import client.utils.ComponentFactory;
+import client.utils.KeyEventHandler;
+import client.utils.Logger;
+import client.utils.ServerUtils;
 import commons.Board;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Region;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import javax.inject.Inject;
 
 public class MainCtrl {
     private final ServerUtils server;
