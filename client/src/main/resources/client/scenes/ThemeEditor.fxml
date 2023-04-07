@@ -42,7 +42,7 @@
                <children>
                   <Label alignment="BASELINE_CENTER" prefHeight="50.0" prefWidth="209.0" text="Theme editor" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <font>
-                        <Font size="28.0" />
+                        <Font size="32.0" />
                      </font>
                   </Label>
                </children>
