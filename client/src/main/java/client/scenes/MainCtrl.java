@@ -20,6 +20,8 @@ import commons.Board;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Region;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 import lombok.Getter;
@@ -147,46 +149,56 @@ public class MainCtrl {
         primaryStage.setResizable(true);
         showConnect();
         primaryStage.show();
+        primaryStage.setMaximized(true);
         primaryStage.addEventFilter(KeyEvent.KEY_PRESSED, new KeyEventHandler(client, this));
+    }
+
+    private void showScene(Scene scene) {
+        double w = primaryStage.getWidth();
+        double h = primaryStage.getHeight();
+        Region region = (Region)scene.getRoot();
+        primaryStage.setScene(scene);
+        primaryStage.setWidth(Math.max(Double.isNaN(w) ? 0 : w, region.getMinWidth()));
+        primaryStage.setHeight(Math.max(Double.isNaN(h) ? 0 : h, region.getMinHeight()));
     }
 
     public void showEditCard(long cardId) {
         editCardCtrl.loadData(cardId);
         primaryStage.setTitle("Edit Card");
-        primaryStage.setScene(editCard);
+        showScene(editCard);
         activeCtrl = editCardCtrl;
     }
 
     public void showAdminPasswordProtected() {
         primaryStage.setTitle("Admin password");
-        primaryStage.setScene(adminPassword);
+        showScene(adminPassword);
         activeCtrl = adminPasswordCtrl;
     }
 
     public void showConnect() {
         primaryStage.setTitle("Connect: Talio server");
-        primaryStage.setScene(connect);
+        showScene(connect);
         activeCtrl = serverConnectCtrl;
     }
 
     public void showSettings() {
         boardSettingsCtrl.loadData();
         primaryStage.setTitle("Board Settings");
-        primaryStage.setScene(settings);
+        showScene(settings);
         activeCtrl = boardSettingsCtrl;
     }
 
     public void showAddCard(long cardListId) {
         addCardCtrl.loadData(cardListId);
         primaryStage.setTitle("Add card");
-        primaryStage.setScene(add);
+        showScene(add);
         activeCtrl = addCardCtrl;
     }
 
     public void showMainView(Board board) {
         mainViewCtrl.loadData(board);
         primaryStage.setTitle("Main view");
-        primaryStage.setScene(main);
+        showScene(main);
         clientPreferences.setDefaultBoardId(board.getId());
         boolean okPassword = board.getPassword() != null && !board.getPassword().isEmpty();
         if (board.isEditable() && okPassword)
@@ -205,7 +217,7 @@ public class MainCtrl {
             return;
         }
         primaryStage.setTitle("Main view");
-        primaryStage.setScene(main);
+        showScene(main);
         Board board;
         try {
             board = server.getBoard(boardId);
@@ -229,34 +241,34 @@ public class MainCtrl {
     public void showCreate() {
         createBoardCtrl.loadData();
         primaryStage.setTitle("Create board");
-        primaryStage.setScene(create);
+        showScene(create);
         activeCtrl = createBoardCtrl;
     }
 
     public void showJoin() {
         primaryStage.setTitle("Join boards");
-        primaryStage.setScene(join);
+        showScene(join);
         joinBoardsCtrl.populateBoards();
         activeCtrl = joinBoardsCtrl;
     }
 
     public void showAddList() {
         primaryStage.setTitle("Add list");
-        primaryStage.setScene(addList);
+        showScene(addList);
         activeCtrl = addListCtrl;
     }
 
     public void showListSettings(long cardListId) {
         primaryStage.setTitle("Edit list");
         editListCtrl.loadData(cardListId);
-        primaryStage.setScene(editList);
+        showScene(editList);
         activeCtrl = editListCtrl;
     }
 
     public void showPasswordProtected(Board pswProtectedBoard) {
         primaryStage.setTitle("Password Protected Board");
         passwordProtectedCtrl.loadData(pswProtectedBoard);
-        primaryStage.setScene(passwordProtected);
+        showScene(passwordProtected);
         activeCtrl = passwordProtectedCtrl;
     }
 
@@ -264,7 +276,7 @@ public class MainCtrl {
         activeCtrl = themeEditorCtrl;
         primaryStage.setTitle("Theme editor");
         themeEditorCtrl.loadData();
-        primaryStage.setScene(themeEdit);
+        showScene(themeEdit);
     }
 
     public void stop() {

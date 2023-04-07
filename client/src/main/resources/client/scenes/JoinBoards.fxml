@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.JoinBoardsCtrl">
+<BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.JoinBoardsCtrl">
     <top>
         <HBox prefHeight="50.0" prefWidth="600.0" styleClass="navbar" stylesheets="/client/styles/navbar.css" BorderPane.alignment="CENTER">
             <children>
@@ -31,7 +31,7 @@
     <center>
         <HBox fx:id="grid" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
             <children>
-                <ScrollPane prefHeight="200.0" prefWidth="404.0">
+                <ScrollPane prefHeight="200.0" prefWidth="404.0" HBox.hgrow="ALWAYS">
                     <content>
                         <VBox fx:id="boardPopulation" prefHeight="200.0" prefWidth="389.0">
                      <padding>
