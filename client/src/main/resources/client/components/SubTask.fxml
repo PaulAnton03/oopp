@@ -12,12 +12,12 @@
         <AnchorPane prefHeight="60.0" prefWidth="409.0">
             <children>
                 <CheckBox fx:id="checkBox" layoutX="22.0" layoutY="21.0" mnemonicParsing="false" onAction="#checkBoxClicked" prefHeight="18.0" prefWidth="16.0" />
-                <Button fx:id="deleteButton" layoutX="440.0" layoutY="7.0" mnemonicParsing="false" onAction="#delete" text="X" textFill="RED">
-                    <font>
-                        <Font size="22.0" />
-                    </font>
+                <Button fx:id="deleteButton" layoutX="373.0" layoutY="19.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#delete" prefHeight="26.0" prefWidth="30.0" text="X" textFill="RED">
+               <font>
+                  <Font size="13.0" />
+               </font>
                 </Button>
-                <TextField fx:id="title" layoutX="54.0" layoutY="19.0" prefHeight="26.0" prefWidth="376.0" />
+                <TextField fx:id="title" layoutX="54.0" layoutY="19.0" prefHeight="26.0" prefWidth="300.0" />
             </children>
         </AnchorPane>
     </children>

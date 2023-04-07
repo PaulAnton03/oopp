@@ -83,7 +83,7 @@ public class SubTaskCtrl implements Component<SubTask>, Initializable {
             if (!newValue) {
                 if (title.getText().equals("")) {
                     title.setText(subTask.getTitle());
-                    throw new RuntimeException("SubTask title cannot be empty");
+                    throw new RuntimeException("SubTask Title cannot be empty");
                 }
                 subTask.setTitle(title.getText());
                 server.updateSubTask(subTask);

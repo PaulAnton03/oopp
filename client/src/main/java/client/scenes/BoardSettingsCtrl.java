@@ -84,6 +84,7 @@ public class BoardSettingsCtrl implements SceneCtrl {
     }
 
     public void clearForm() {
+        boardName.setText(client.getBoardCtrl().getBoard().getName());
         boardPassword.setText("");
         passwordUsed.setSelected(false);
     }
