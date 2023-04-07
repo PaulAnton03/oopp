@@ -5,6 +5,7 @@
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
@@ -54,9 +55,9 @@
             </AnchorPane>
             <AnchorPane maxHeight="30.0" maxWidth="300.0" prefHeight="30.0" prefWidth="300.0" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER">
                <children>
-                  <TextField fx:id="boardPassword" layoutX="150.0" minHeight="30.0" prefHeight="28.0" prefWidth="145.0" promptText="Password" styleClass="formTextInput" AnchorPane.rightAnchor="0.0" />
                   <Label prefHeight="32.0" prefWidth="106.0" text="Access password" AnchorPane.leftAnchor="0.0" />
                   <CheckBox fx:id="passwordUsed" layoutX="133.0" mnemonicParsing="false" prefHeight="30.0" styleClass="big" AnchorPane.rightAnchor="155.0" />
+                  <PasswordField fx:id="boardPassword" layoutX="150.0" layoutY="2.0" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="145.0" promptText="Password" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                </children>
             </AnchorPane>
             <AnchorPane maxHeight="31.0" maxWidth="300.0" minHeight="30.0" minWidth="300.0" prefHeight="30.0" prefWidth="413.0" GridPane.rowIndex="4">
