@@ -41,13 +41,13 @@
                 </ScrollPane>
             <AnchorPane prefHeight="200.0" prefWidth="200.0">
                <children>
-                  <Label layoutX="56.0" layoutY="50.0" text="JOIN BOARD" textAlignment="CENTER">
+                  <Label alignment="BASELINE_CENTER" layoutX="-2.0" layoutY="50.0" prefHeight="18.0" prefWidth="198.0" text="JOIN BOARD" textAlignment="CENTER">
                      <font>
                         <Font name="System Bold" size="14.0" />
                      </font>
                   </Label>
-                  <TextField fx:id="boardId" layoutX="24.0" layoutY="88.0" promptText="Board Id" />
-                  <Button fx:id="btnJoin" onAction="#onJoin" layoutX="66.0" layoutY="127.0" mnemonicParsing="false" prefHeight="15.0" prefWidth="65.0" text="ENTER">
+                  <TextField fx:id="boardId" layoutX="24.0" layoutY="88.0" prefHeight="24.0" prefWidth="154.0" promptText="Board Id" />
+                  <Button fx:id="btnJoin" layoutX="66.0" layoutY="127.0" mnemonicParsing="false" onAction="#onJoin" prefHeight="15.0" prefWidth="65.0" text="ENTER">
                      <font>
                         <Font size="9.0" />
                      </font>

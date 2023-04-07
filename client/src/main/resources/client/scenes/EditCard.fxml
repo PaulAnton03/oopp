@@ -18,7 +18,7 @@
    <center>
       <VBox alignment="CENTER" fillWidth="false" prefHeight="538.0" prefWidth="575.0" spacing="15.0">
          <children>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Edit Card" textAlignment="CENTER" wrappingWidth="354.39999999999986">
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Edit Card" textAlignment="CENTER" wrappingWidth="600.0">
                <font>
                   <Font size="32.0" />
                </font>
