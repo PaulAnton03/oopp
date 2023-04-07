@@ -20,13 +20,21 @@ public class Tag implements DBEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected long id;
 
-    @Getter
-    @JsonIgnore
-    @EqualsAndHashCode.Exclude
-    @ManyToMany(targetEntity = commons.Card.class, mappedBy = "tags",
-            cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
-    @ElementCollection
-    private Set<Card> cards = new HashSet<>();
+//    @Getter
+//    @JsonIgnore
+//    @EqualsAndHashCode.Exclude
+//    @ManyToMany(targetEntity = commons.Card.class, mappedBy = "tags",
+//            cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+//    @ElementCollection
+//    private Set<Card> cards = new HashSet<>();
+        @Getter
+        @JsonIgnore
+        @EqualsAndHashCode.Exclude
+        @ManyToMany(targetEntity = commons.Card.class, mappedBy = "tags",
+                cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REFRESH,
+                CascadeType.REMOVE}, fetch = FetchType.LAZY)
+        @ElementCollection
+        private Set<Card> cards = new HashSet<>();
 
 
     @ManyToOne

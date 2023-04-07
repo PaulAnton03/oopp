@@ -16,9 +16,13 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
@@ -94,7 +98,11 @@ public class TagCtrl implements Component<Tag>{
         anchorPane.setStyle(colorString);
         if(mainCtrl.getActiveCtrl().getClass() == EditCardCtrl.class){
             if(isAssigned){
-                label.setText(label.getText() + "*");
+                this.label.setFont(Font.font(label.getFont().getFamily(),
+                        FontWeight.EXTRA_BOLD, label.getFont().getSize()));
+            }else{
+                this.label.setFont(Font.font(label.getFont().getFamily(),
+                        FontWeight.NORMAL, label.getFont().getSize()));
             }
         }
     }
@@ -110,18 +118,23 @@ public class TagCtrl implements Component<Tag>{
         if(mainCtrl.getActiveCtrl().getClass() == EditCardCtrl.class){
             EditCardCtrl editCardCtrl = (EditCardCtrl) mainCtrl.getActiveCtrl();
             Card card1 = client.getCard(editCardCtrl.getCardId());
-            if(event.getClickCount() == 2){
+            if(event.getButton() == MouseButton.SECONDARY){
                 changeTag(card1);
             }
-            else if(event.getClickCount() == 1){
+            else if(event.getButton() == MouseButton.PRIMARY){
                 EditCardCtrl editCardCtrl1 = (EditCardCtrl) mainCtrl.getActiveCtrl();
                 Card card = client.getCard(editCardCtrl.getCardId());
                 if(isAssigned){
+                    this.label.setFont(Font.font(label.getFont().getFamily(),
+                            FontWeight.NORMAL, label.getFont().getSize()));
+
                     isAssigned = false;
                     unAssignFromCard(card);
                     System.out.println("UnAssigned Card!");
                 } else {
                     isAssigned = true;
+                    this.label.setFont(Font.font(label.getFont().getFamily(),
+                            FontWeight.EXTRA_BOLD, label.getFont().getSize()));
                     assignThisToCard(card);
                     System.out.println("Clicked on Tag!");
                 }

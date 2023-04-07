@@ -47,8 +47,9 @@ public class Card implements DBEntity {
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @ElementCollection
-    @ManyToMany(mappedBy = "tags", targetEntity = commons.Tag.class, fetch = FetchType.EAGER,
-            cascade = CascadeType.PERSIST)
+    @ManyToMany(mappedBy = "cards", targetEntity = commons.Tag.class, fetch = FetchType.EAGER,
+            cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REFRESH,
+                    CascadeType.REMOVE})
     @JoinTable(name = "cards_tags",
             joinColumns = @JoinColumn(name="card_id", referencedColumnName = "id"),
             inverseJoinColumns =
