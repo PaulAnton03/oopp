@@ -58,14 +58,14 @@ public class ServerUtils {
     private StompSession session = null;
 
     public void connect() {
-        var client = new StandardWebSocketClient();
         if (session != null) {
-            stomp.stop();
-            stomp = null;
+            session.disconnect();
             session = null;
         }
-        stomp = new WebSocketStompClient(client);
-        stomp.setMessageConverter(new MappingJackson2MessageConverter());
+        if (stomp == null) {
+            stomp = new WebSocketStompClient(new StandardWebSocketClient());
+            stomp.setMessageConverter(new MappingJackson2MessageConverter());
+        }
         try {
             session = stomp.connect("ws://" + serverPath + "/websocket", new StompSessionHandlerAdapter() {
             }).get();
@@ -74,11 +74,6 @@ public class ServerUtils {
         } catch (ExecutionException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    public void disconnect() {
-        stomp.stop();
-        session.disconnect();
     }
 
     public <T> StompSession.Subscription registerForMessages(String dest, Class<T> type, Consumer<T> consumer) {
