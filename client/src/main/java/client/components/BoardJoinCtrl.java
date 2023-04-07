@@ -3,6 +3,7 @@ package client.components;
 import client.scenes.JoinBoardsCtrl;
 import client.scenes.MainCtrl;
 import client.utils.ClientPreferences;
+import client.utils.ClientUtils;
 import client.utils.Logger;
 import client.utils.ServerUtils;
 import commons.Board;
@@ -20,6 +21,8 @@ public class BoardJoinCtrl implements Component<Board> {
     private final MainCtrl mainCtrl;
     private final JoinBoardsCtrl joinBoardsCtrl;
     private final ClientPreferences clientPreferences;
+
+    private final ClientUtils client;
     @FXML
     private Label label;
 
@@ -34,7 +37,7 @@ public class BoardJoinCtrl implements Component<Board> {
     @Override
     public void loadData(Board board) {
         this.board = board;
-        if(board.getPassword() == null) lockImage.setVisible(false);
+        if (board.getPassword() == null) lockImage.setVisible(false);
         label.setText(board.getName());
     }
 
@@ -44,11 +47,13 @@ public class BoardJoinCtrl implements Component<Board> {
     }
 
     @Inject
-    public BoardJoinCtrl(MainCtrl mainCtrl, JoinBoardsCtrl joinBoardsCtrl, ServerUtils server, ClientPreferences clientPreferences) {
+    public BoardJoinCtrl(MainCtrl mainCtrl, JoinBoardsCtrl joinBoardsCtrl, ServerUtils server,
+                         ClientPreferences clientPreferences, ClientUtils client) {
         this.mainCtrl = mainCtrl;
         this.joinBoardsCtrl = joinBoardsCtrl;
         this.server = server;
         this.clientPreferences = clientPreferences;
+        this.client = client;
         FXMLLoader loader = new FXMLLoader(getClass().getResource("BoardJoin.fxml"));
         loader.setController(this);
         loader.setRoot(this);
@@ -66,11 +71,15 @@ public class BoardJoinCtrl implements Component<Board> {
             return;
         }
         joinBoardsCtrl.stopPolling();
+        mainCtrl.getMainViewCtrl().unsubscribe();
         mainCtrl.showMainView(board);
     }
 
     public void onRemove() {
         clientPreferences.removeJoinedBoard(this.board.getId());
+        if (client.getBoardCtrl() != null && client.getBoardCtrl().getBoard().getId() == this.board.getId()) {
+            mainCtrl.getMainViewCtrl().unsubscribe();
+        }
         joinBoardsCtrl.stopPolling();
         joinBoardsCtrl.populateBoards();
     }

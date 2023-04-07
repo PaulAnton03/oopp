@@ -47,11 +47,13 @@ public class PasswordProtectedCtrl implements SceneCtrl {
             return;
         }
         passwordBoard.setEditable(true);
+        mainCtrl.getMainViewCtrl().unsubscribe();
         mainCtrl.showMainView(passwordBoard);
     }
 
     public void readOnly() {
         passwordBoard.setEditable(false);
+        mainCtrl.getMainViewCtrl().unsubscribe();
         mainCtrl.showMainView(passwordBoard);
     }
 }

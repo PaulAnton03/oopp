@@ -75,6 +75,7 @@ public class BoardSettingsCtrl implements SceneCtrl {
         server.deleteBoard(board.getId());
         client.getBoardCtrl().remove();
         Logger.log("Deleted board " + board);
+        mainCtrl.getMainViewCtrl().unsubscribe();
         mainCtrl.showJoin();
     }
 
