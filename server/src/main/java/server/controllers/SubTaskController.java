@@ -108,9 +108,35 @@ public class SubTaskController {
             return ResponseEntity.notFound().build();
         }
         SubTask updated = subTaskRepository.save(subTask);
-        long boardId = cardRepository.findById(subTask.getCard().getId()).get().getCardList().getBoard().getId();
-        messagingTemplate.convertAndSend("/topic/board/" + boardId + "/card/" + subTask.getCard().getId() + "/subtasks/update", subTask);
-        messagingTemplate.convertAndSend("/topic/board/" + updated.getCard().getCardList().getBoard().getId() + "/subtasks", subTask);
+        long boardId = cardRepository.findById(updated.getCard().getId()).get().getCardList().getBoard().getId();
+        messagingTemplate.convertAndSend("/topic/board/" + boardId + "/card/" + subTask.getCard().getId() + "/subtasks/update", updated);
+        messagingTemplate.convertAndSend("/topic/board/" + boardId + "/subtasks", updated);
         return ResponseEntity.ok(updated);
     }
+
+    @PutMapping(value = "/reorder/{id}/{direction}")
+    public ResponseEntity<SubTask> reorder(@RequestBody SubTask subTask, @PathVariable("direction") String direction) {
+        if (!subTask.isNetworkValid()) {
+            return ResponseEntity.badRequest().build();
+        }
+        final Optional<SubTask> optionalSubTask = subTaskRepository.findById(subTask.getId());
+        if (optionalSubTask.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        Card card = cardRepository.findById(subTask.getCard().getId()).get();
+        int subTaskIndex = card.findSubTaskById(subTask.getId());
+        int toBeSwapped;
+        if (direction.equals("up")) {
+            toBeSwapped = subTaskIndex - 1;
+        } else {
+            toBeSwapped = subTaskIndex + 1;
+        }
+        card.swapSubTasks(subTaskIndex, toBeSwapped);
+        cardRepository.save(card);
+        long boardId = card.getCardList().getBoard().getId();
+        messagingTemplate.convertAndSend("/topic/board/" + boardId + "/card/" +
+                subTask.getCard().getId() + "/subtasks/reorder/" + direction, subTask);
+        return ResponseEntity.ok(subTask);
+    }
+
 }
