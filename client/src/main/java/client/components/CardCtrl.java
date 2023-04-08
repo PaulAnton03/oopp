@@ -262,8 +262,7 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Card/* TODO
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         // Hide buttons, unhighlight card
-        deleteButton.setOpacity(0.0);
-        editButton.setOpacity(0.0);
+        deleteButton.setOpacity(0.0); editButton.setOpacity(0.0);
         // Create show/hide transition for buttons
         final Duration ftDuration = Duration.millis(200);
         final Duration ftDelay = Duration.millis(200);
@@ -280,17 +279,13 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Card/* TODO
         try (var binInputStream = getClass().getResourceAsStream("/client/images/bin.png");
              var editInputStream = getClass().getResourceAsStream("/client/images/edit.png")) {
             // Hover behaviour
-            applyButtonHoverStyle(deleteButton);
-            applyButtonHoverStyle(editButton);
+            applyButtonHoverStyle(deleteButton); applyButtonHoverStyle(editButton);
             // Button graphic
             ImageView binIcon = new ImageView(new Image(binInputStream));
             ImageView editIcon = new ImageView(new Image(editInputStream));
-            binIcon.setFitHeight(40);
-            editIcon.setFitHeight(30);
-            binIcon.setPreserveRatio(true);
-            editIcon.setPreserveRatio(true);
-            deleteButton.setGraphic(binIcon);
-            editButton.setGraphic(editIcon);
+            binIcon.setFitHeight(40); editIcon.setFitHeight(30);
+            binIcon.setPreserveRatio(true); editIcon.setPreserveRatio(true);
+            deleteButton.setGraphic(binIcon); editButton.setGraphic(editIcon);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -329,8 +324,7 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Card/* TODO
                 cardListStart.removeCard(card);
                 cardListEnd.addCardAtPosition(card, position);
                 this.card.setCardList(cardListEnd);
-                server.updateCardList(cardListStart);
-                server.updateCardList(cardListEnd);
+                server.updateCardList(cardListStart); server.updateCardList(cardListEnd);
                 client.getBoardCtrl().refresh();
                 event.consume();
             }
