@@ -36,10 +36,8 @@ public class BoardJoinCtrl implements Component<Board> {
         this.board = board;
         if(board.getPassword() == null) lockImage.setVisible(false);
         label.setText(board.getName());
-        if(!board.getBoardColor().equals("#ffffffff")) {
-            pane.setStyle("-fx-background-color: " + board.getBoardColor());
-            label.setStyle("-fx-text-fill: #000000ff");
-        }
+        pane.setStyle("-fx-background-color: " + board.getBoardColor());
+        label.setStyle("-fx-text-fill: #000000ff");
     }
 
     @Override
