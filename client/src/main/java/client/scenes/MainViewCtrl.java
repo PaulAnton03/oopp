@@ -10,6 +10,7 @@ import commons.SubTask;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.ScrollEvent;
@@ -61,9 +62,12 @@ public class MainViewCtrl implements SceneCtrl {
     @FXML
     void btnAddClicked(ActionEvent event) {
         if (!client.getBoardCtrl().getBoard().isEditable()) {
-            throw new IllegalStateException("You do not have permissions to edit this board.");
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setHeaderText("You do not have permissions to edit this board.");
+            alert.showAndWait();
+        } else {
+            mainCtrl.showAddList();
         }
-        mainCtrl.showAddList();
     }
 
     @FXML
@@ -86,9 +90,12 @@ public class MainViewCtrl implements SceneCtrl {
     @FXML
     void btnSettingsClicked(ActionEvent event) {
         if (!client.getBoardCtrl().getBoard().isEditable()) {
-            throw new IllegalStateException("You do not have permissions to edit this board.");
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setHeaderText("You do not have permissions to edit this board.");
+            alert.showAndWait();
+        } else {
+            mainCtrl.showSettings();
         }
-        mainCtrl.showSettings();
     }
 
     public void helpButtonClicked() {
