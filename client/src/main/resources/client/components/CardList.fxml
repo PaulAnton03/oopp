@@ -17,7 +17,7 @@
             <Insets bottom="10.0" left="15.0" right="5.0" top="10.0" />
          </padding>
       </AnchorPane>
-      <ScrollPane fx:id="scrollPane" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" layoutX="-85.0" minHeight="150.0" styleClass="cardScroll" vbarPolicy="NEVER" AnchorPane.bottomAnchor="-1.0" AnchorPane.leftAnchor="-12.0" AnchorPane.rightAnchor="-12.0" AnchorPane.topAnchor="60.0">
+      <ScrollPane fx:id="scrollPane" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" layoutX="-85.0" minHeight="150.0" styleClass="cardScroll" vbarPolicy="NEVER" AnchorPane.bottomAnchor="-1.0" AnchorPane.leftAnchor="-20.0" AnchorPane.rightAnchor="-20.0" AnchorPane.topAnchor="60.0">
          <content>
             <StackPane>
                <children>
@@ -28,7 +28,7 @@
                   </VBox>
                </children>
                <padding>
-                  <Insets left="12.0" right="12.0" top="12.0" />
+                  <Insets bottom="1.0" left="20.0" right="20.0" top="20.0" />
                </padding>
             </StackPane>
          </content>
