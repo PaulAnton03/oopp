@@ -23,6 +23,7 @@ public class KeyEventHandler implements EventHandler<KeyEvent> {
             + "\nShift + Arrow keys: Shift selected card up/down"
             + "\nEnter : Edit selected card"
             + "\nBackspace/Del : Delete selected card"
+            + "\nC : Open color editor"
             + "\nEsc : Close task details menu"
             + "\n? : Show this menu"
         );
@@ -38,6 +39,7 @@ public class KeyEventHandler implements EventHandler<KeyEvent> {
             case ENTER:
             case BACK_SPACE:
             case DELETE:
+            case C:
                 if (mainCtrl.getActiveCtrl() == mainCtrl.getMainViewCtrl()) {
                     client.getBoardCtrl().handleKeyEvent(e);
                 }
