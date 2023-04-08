@@ -6,8 +6,6 @@ import client.utils.ClientUtils;
 import client.utils.ServerUtils;
 import commons.CardList;
 import javafx.fxml.FXML;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ColorPicker;
 import javafx.scene.control.TextField;
 
 public class AddListCtrl implements SceneCtrl {
@@ -17,8 +15,6 @@ public class AddListCtrl implements SceneCtrl {
     private final ClientUtils client;
 
     @FXML private TextField title;
-    @FXML private ColorPicker listColor;
-    @FXML private CheckBox useDefault;
 
     @Inject
     public AddListCtrl(MainCtrl mainCtrl, ServerUtils server, ClientUtils client) {
