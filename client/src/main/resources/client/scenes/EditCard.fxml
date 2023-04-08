@@ -14,11 +14,11 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane prefWidth="575.0" stylesheets="/client/styles/addCard.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.EditCardCtrl">
+<BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" stylesheets="/client/styles/addCard.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.EditCardCtrl">
    <center>
       <VBox alignment="CENTER" fillWidth="false" prefHeight="538.0" prefWidth="575.0" spacing="15.0">
          <children>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Edit Card" textAlignment="CENTER" wrappingWidth="354.39999999999986">
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Edit Card" textAlignment="CENTER" wrappingWidth="600.0">
                <font>
                   <Font size="32.0" />
                </font>
@@ -66,7 +66,7 @@
    <top>
       <HBox prefHeight="50.0" prefWidth="600.0" styleClass="navbar" BorderPane.alignment="CENTER">
          <children>
-            <Button mnemonicParsing="false" onAction="#cancel" prefHeight="51.0" prefWidth="612.0" text="Back">
+            <Button mnemonicParsing="false" onAction="#cancel" prefHeight="51.0" prefWidth="612.0" text="Back" HBox.hgrow="ALWAYS">
                <font>
                   <Font size="16.0" />
                </font>
