@@ -173,6 +173,12 @@ public class EditCardCtrl implements SceneCtrl {
         subscriptions.clear();
     }
 
+    public void clearForm() {
+        Card card = client.getCard(cardId);
+        this.changeTitle.setText(card.getTitle());
+        this.changeDesc.setText(card.getDescription());
+    }
+
     @Override
     public void revalidate() {
         if (client.getCardCtrls().containsKey(cardId)) {
