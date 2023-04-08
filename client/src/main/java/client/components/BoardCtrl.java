@@ -166,6 +166,9 @@ public class BoardCtrl implements Component<Board>, DBEntityCtrl<Board, CardList
             case DELETE:
                 client.getCardCtrl(client.getSelectedCardId()).delete();
                 break;
+            case C:
+                mainCtrl.showThemeEditor();
+                break;
             default:
                 break;
         }

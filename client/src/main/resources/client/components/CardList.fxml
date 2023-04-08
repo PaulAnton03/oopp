@@ -3,12 +3,11 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.VBox?>
-
-<AnchorPane fx:id="cardListBackground" maxHeight="1.7976931348623157E308" maxWidth="270.0" styleClass="cardList" stylesheets="/client/styles/cardList.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.components.CardListCtrl">
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.*?>
+<AnchorPane fx:id="cardListBackground" maxHeight="1.7976931348623157E308" prefWidth="300.0" styleClass="cardList" stylesheets="/client/styles/cardList.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.components.CardListCtrl">
    <children>
-      <AnchorPane maxHeight="-Infinity" minHeight="-Infinity" prefHeight="60.0" prefWidth="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <AnchorPane maxHeight="-Infinity" minHeight="-Infinity" prefHeight="60.0" prefWidth="200.0" styleClass="listTitlePane" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <Button fx:id="addCardButton" alignment="CENTER_RIGHT" layoutX="119.0" layoutY="9.0" mnemonicParsing="false" onAction="#addCard" prefHeight="30.0" prefWidth="30.0" AnchorPane.rightAnchor="40.0" />
             <Button fx:id="listSettingsButton" alignment="CENTER_RIGHT" layoutX="162.0" layoutY="9.0" mnemonicParsing="false" onAction="#listSettings" prefHeight="30.0" prefWidth="30.0" AnchorPane.rightAnchor="0.0" />
@@ -18,10 +17,21 @@
             <Insets bottom="10.0" left="15.0" right="5.0" top="10.0" />
          </padding>
       </AnchorPane>
-      <VBox fx:id="cardListView" layoutY="54.0" maxHeight="1.7976931348623157E308" maxWidth="270.0" minHeight="150.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="60.0">
-         <padding>
-            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-         </padding>
-      </VBox>
+      <ScrollPane fx:id="scrollPane" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" layoutX="-85.0" minHeight="150.0" styleClass="cardScroll" vbarPolicy="NEVER" AnchorPane.bottomAnchor="-1.0" AnchorPane.leftAnchor="-20.0" AnchorPane.rightAnchor="-20.0" AnchorPane.topAnchor="60.0">
+         <content>
+            <StackPane>
+               <children>
+                  <VBox fx:id="cardListView" alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="10.0">
+                     <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </padding>
+                  </VBox>
+               </children>
+               <padding>
+                  <Insets bottom="1.0" left="20.0" right="20.0" top="20.0" />
+               </padding>
+            </StackPane>
+         </content>
+      </ScrollPane>
    </children>
 </AnchorPane>
