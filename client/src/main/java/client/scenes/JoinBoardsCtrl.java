@@ -7,19 +7,23 @@ import client.utils.ComponentFactory;
 import client.utils.ServerUtils;
 import commons.Board;
 import jakarta.ws.rs.NotFoundException;
+import jakarta.ws.rs.client.ClientBuilder;
+import jakarta.ws.rs.core.Response;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
+import org.glassfish.jersey.client.ClientConfig;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
+
+import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
 public class JoinBoardsCtrl implements SceneCtrl {
 
@@ -37,6 +41,8 @@ public class JoinBoardsCtrl implements SceneCtrl {
 
     @FXML
     private Button btnJoin;
+    //TODO: Join Board based on Id. Don't forget to unsubscribe from
+    // current board if there is one
 
     private Thread worker;
 
@@ -49,16 +55,21 @@ public class JoinBoardsCtrl implements SceneCtrl {
         running.set(true);
         worker = new Thread(() -> {
             while (running.get()) {
-                try {
-                    var updatedBoards = server.longPollBoards().stream()
+                var res = ClientBuilder.newClient(new ClientConfig())
+                        .target("http://" + server.getServerPath() + "/boards/updates")
+                        .request(APPLICATION_JSON)
+                        .accept(APPLICATION_JSON)
+                        .get(Response.class);
+                if (res.getStatus() == 204)
+                    continue;
+                List<Board> updatedBoards;
+                if (server.isAdmin()) {
+                    updatedBoards = server.getBoards();
+                } else {
+                    updatedBoards = server.getBoards().stream()
                             .filter(b -> clientPrefs.containsJoinedBoard(b.getId())).collect(Collectors.toList());
-                    if (updatedBoards != null && !updatedBoards.equals(currentBoards)) {
-                        Platform.runLater(() -> updateBoards(updatedBoards));
-                        currentBoards = updatedBoards;
-                    }
-                } catch (InterruptedException | ExecutionException e) {
-
                 }
+                Platform.runLater(() -> updateBoards(updatedBoards));
             }
         });
         worker.start();
@@ -83,6 +94,7 @@ public class JoinBoardsCtrl implements SceneCtrl {
                     .map(board -> factory.create(BoardJoinCtrl.class, board).getNode())
                     .collect(Collectors.toList());
             boardPopulation.getChildren().addAll(boardJoinNodes);
+            startPolling();
             return;
         }
         try {

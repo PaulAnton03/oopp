@@ -58,14 +58,8 @@ public class ServerUtils {
     private StompSession session = null;
 
     public void connect() {
-        if (session != null) {
-            session.disconnect();
-            session = null;
-        }
-        if (stomp == null) {
-            stomp = new WebSocketStompClient(new StandardWebSocketClient());
-            stomp.setMessageConverter(new MappingJackson2MessageConverter());
-        }
+        stomp = new WebSocketStompClient(new StandardWebSocketClient());
+        stomp.setMessageConverter(new MappingJackson2MessageConverter());
         try {
             session = stomp.connect("ws://" + serverPath + "/websocket", new StompSessionHandlerAdapter() {
             }).get();
@@ -74,6 +68,11 @@ public class ServerUtils {
         } catch (ExecutionException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public void disconnect() {
+        stomp.stop();
+        session.disconnect();
     }
 
     public <T> StompSession.Subscription registerForMessages(String dest, Class<T> type, Consumer<T> consumer) {
@@ -90,15 +89,6 @@ public class ServerUtils {
         });
     }
 
-    public List<Board> longPollBoards() throws InterruptedException, ExecutionException {
-        var target = ClientBuilder.newClient(new ClientConfig())
-                .target("http://" + serverPath + "/boards");
-        var invocation = target.request(APPLICATION_JSON).buildGet();
-        var type = new GenericType<List<Board>>() {
-        };
-        return invocation.submit(type).get();
-    }
-
     public SubTask getSubTask(long id) {
         WebTarget webTarget = webTargetFromPath("/subtasks/{id}").resolveTemplate("id", id);
         return webTargetAddDefault(webTarget).get(new GenericType<>() {
@@ -113,6 +103,11 @@ public class ServerUtils {
 
     public SubTask updateSubTask(SubTask subTask) {
         WebTarget webTarget = webTargetFromPath("/subtasks/update/{id}").resolveTemplate("id", subTask.getId());
+        return webTargetAddDefault(webTarget).put(Entity.entity(subTask, APPLICATION_JSON), SubTask.class);
+    }
+
+    public SubTask reorderSubTask(SubTask subTask,String direction) {
+        WebTarget webTarget = webTargetFromPath("/subtasks/reorder/{id}/"+direction).resolveTemplate("id", subTask.getId());
         return webTargetAddDefault(webTarget).put(Entity.entity(subTask, APPLICATION_JSON), SubTask.class);
     }
 

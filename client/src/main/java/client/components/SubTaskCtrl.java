@@ -12,7 +12,9 @@ import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.VBox;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
@@ -30,17 +32,22 @@ public class SubTaskCtrl implements Component<SubTask>, Initializable {
     private SubTask subTask;
 
     @FXML
-    private VBox subTaskView;
+    private HBox subTaskView;
 
     @FXML
     private TextField title;
 
     @FXML
-
     private CheckBox checkBox;
 
     @FXML
     private Button deleteButton;
+
+    @FXML
+    private Button up;
+
+    @FXML
+    private Button down;
 
     @Inject
     public SubTaskCtrl(MainCtrl mainCtrl, ServerUtils server, ClientUtils client) {
@@ -76,6 +83,20 @@ public class SubTaskCtrl implements Component<SubTask>, Initializable {
         server.updateSubTask(subTask);
     }
 
+    public void up() {
+        int currentIndex = mainCtrl.getEditCardCtrl().getSubTaskView().getChildren().indexOf(this.getNode());
+        if (currentIndex > 0) {
+            server.reorderSubTask(subTask, "up");
+        }
+    }
+
+    public void down() {
+        int currentIndex = mainCtrl.getEditCardCtrl().getSubTaskView().getChildren().indexOf(this.getNode());
+        if (currentIndex < mainCtrl.getEditCardCtrl().getSubTaskView().getChildren().size() - 1) {
+            server.reorderSubTask(subTask, "down");
+        }
+    }
+
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -83,11 +104,21 @@ public class SubTaskCtrl implements Component<SubTask>, Initializable {
             if (!newValue) {
                 if (title.getText().equals("")) {
                     title.setText(subTask.getTitle());
-                    throw new RuntimeException("SubTask title cannot be empty");
+                    throw new RuntimeException("SubTask Title cannot be empty");
                 }
                 subTask.setTitle(title.getText());
                 server.updateSubTask(subTask);
             }
         });
+        var upStream = getClass().getResourceAsStream("/client/images/upArrow.png");
+        var downStream = getClass().getResourceAsStream("/client/images/downArrow.png");
+        ImageView upImage = new ImageView(new Image(upStream));
+        ImageView downImage = new ImageView(new Image(downStream));
+        upImage.setFitHeight(25);
+        upImage.setFitWidth(25);
+        downImage.setFitHeight(25);
+        downImage.setFitWidth(25);
+        up.setGraphic(upImage);
+        down.setGraphic(downImage);
     }
 }

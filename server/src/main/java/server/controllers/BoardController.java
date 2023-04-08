@@ -2,13 +2,17 @@ package server.controllers;
 
 import commons.Board;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.context.request.async.DeferredResult;
 import org.springframework.web.server.ResponseStatusException;
 import server.database.BoardRepository;
 import server.database.CardListRepository;
@@ -35,6 +39,23 @@ public class BoardController {
     public ResponseEntity<List<Board>> getAll() {
         return ResponseEntity.ok(boardRepository.findAll());
     }
+
+    private Map<Object, Consumer<Board>> listeners = new HashMap<>();
+
+    @GetMapping("/updates")
+    public DeferredResult<ResponseEntity<Board>> getUpdates() {
+        var noContent = ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        var res = new DeferredResult<ResponseEntity<Board>>(5000L, noContent);
+        var key = new Object();
+        listeners.put(key, q -> {
+            res.setResult(ResponseEntity.ok(q));
+        });
+        res.onCompletion(() -> {
+            listeners.remove(key);
+        });
+        return res;
+    }
+
 
     @GetMapping("/name/{name}")
     public ResponseEntity<Board> getByName(@PathVariable("name") String name) {
@@ -64,7 +85,10 @@ public class BoardController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Board with name " + board.getName() + " already exists");
         }
         Board boardSaved = boardRepository.save(board);
-        if(messagingTemplate!=null){
+        listeners.forEach((k, l) -> {
+            l.accept(board);
+        });
+        if (messagingTemplate != null) {
             messagingTemplate.convertAndSend("/topic/board/" + board.getId() + "/create", board);
         }
         return ResponseEntity.ok(boardSaved);
@@ -78,6 +102,9 @@ public class BoardController {
         }
         final Board board = optBoard.get();
         boardRepository.deleteById(board.getId());
+        listeners.forEach((k, l) -> {
+            l.accept(board);
+        });
         messagingTemplate.convertAndSend("/topic/board/" + board.getId() + "/delete", board);
         return ResponseEntity.ok(board);
     }
@@ -93,6 +120,9 @@ public class BoardController {
             return ResponseEntity.notFound().build();
         }
         Board updated = boardRepository.save(board);
+        listeners.forEach((k, l) -> {
+            l.accept(board);
+        });
         messagingTemplate.convertAndSend("/topic/board/" + board.getId() + "/update", board);
         return ResponseEntity.ok(updated);
     }

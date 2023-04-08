@@ -8,6 +8,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Data
@@ -70,10 +71,18 @@ public class Card implements DBEntity {
      */
     @JsonIgnore
     public boolean isNetworkValid() {
-        return !isNullOrEmpty(this.getTitle());
+        return !StringUtil.isNullOrEmpty(this.getTitle());
     }
 
-    private static boolean isNullOrEmpty(String s) {
-        return s == null || s.isEmpty();
+    public int findSubTaskById(long id) {
+        for (int i = 0; i < subtasks.size(); i++) {
+            if (subtasks.get(i).getId() == id)
+                return i;
+        }
+        return -1;
+    }
+
+    public void swapSubTasks(int index1, int index2) {
+        Collections.swap(subtasks, index1, index2);
     }
 }

@@ -8,6 +8,7 @@ import commons.CardList;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
 import java.util.List;
@@ -25,7 +26,7 @@ public class CreateBoardCtrl implements SceneCtrl {
     @FXML
     private TextField boardName;
     @FXML
-    private TextField boardPassword;
+    private PasswordField boardPassword;
     @FXML
     private CheckBox passwordUsed;
     @FXML
@@ -43,7 +44,7 @@ public class CreateBoardCtrl implements SceneCtrl {
     }
 
     public void loadData() {
-        themePicker.setValue("");
+        themePicker.setValue("Default");
         themePicker.getItems().clear();
         List<ThemeUtils.Theme> predefined = ThemeUtils.Theme.getPredefinedThemes();
         themePicker.getItems().addAll(predefined.stream().map(ThemeUtils.Theme::toString).collect(Collectors.toList()));
@@ -57,6 +58,8 @@ public class CreateBoardCtrl implements SceneCtrl {
     }
 
     public void createBoard() {
+        if(boardName.getText().isEmpty())
+            throw new IllegalStateException("The board must have a name");
         final Board newBoard = new Board(boardName.getText());
         if (passwordUsed.isSelected()) {
             newBoard.setPassword(boardPassword.getText());
@@ -77,6 +80,7 @@ public class CreateBoardCtrl implements SceneCtrl {
         client.setBoardCtrl(boardCtrl);
         clientPrefs.setDefaultBoardId(addedBoard.getId());
         clientPrefs.addJoinedBoard(addedBoard.getId());
+        mainCtrl.getMainViewCtrl().unsubscribe();
         mainCtrl.showMainView();
     }
 

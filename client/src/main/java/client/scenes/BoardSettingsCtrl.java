@@ -6,6 +6,7 @@ import commons.Board;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
@@ -20,7 +21,7 @@ public class BoardSettingsCtrl implements SceneCtrl {
     private final ClientPreferences clientPrefs;
 
     @FXML
-    private TextField boardPassword;
+    private PasswordField boardPassword;
     @FXML
     private CheckBox passwordUsed;
     @FXML
@@ -75,6 +76,7 @@ public class BoardSettingsCtrl implements SceneCtrl {
         server.deleteBoard(board.getId());
         client.getBoardCtrl().remove();
         Logger.log("Deleted board " + board);
+        mainCtrl.getMainViewCtrl().unsubscribe();
         mainCtrl.showJoin();
     }
 
@@ -84,6 +86,7 @@ public class BoardSettingsCtrl implements SceneCtrl {
     }
 
     public void clearForm() {
+        boardName.setText(client.getBoardCtrl().getBoard().getName());
         boardPassword.setText("");
         passwordUsed.setSelected(false);
     }

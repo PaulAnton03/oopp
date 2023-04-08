@@ -1,51 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.CheckBox?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.TextArea?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
-<?import javafx.scene.text.Text?>
-
-<BorderPane prefWidth="575.0" stylesheets="/client/styles/addCard.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.EditCardCtrl">
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefWidth="600.0" stylesheets="/client/styles/addCard.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.EditCardCtrl">
    <center>
-      <VBox alignment="CENTER" fillWidth="false" prefHeight="538.0" prefWidth="575.0" spacing="20.0">
+      <VBox alignment="CENTER" fillWidth="false" prefHeight="650.0" prefWidth="600.0" spacing="15.0">
          <children>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Edit Card" textAlignment="CENTER" wrappingWidth="354.39999999999986">
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Edit Card" textAlignment="CENTER" wrappingWidth="600.0">
                <font>
-                  <Font size="42.0" />
+                  <Font size="32.0" />
                </font>
             </Text>
-            <TextField fx:id="changeTitle" prefHeight="42.0" prefWidth="392.0" promptText="Title" styleClass="formTextInput" />
-            <TextArea fx:id="changeDesc" prefHeight="122.0" prefWidth="396.0" promptText="Description" styleClass="formTextInput" />
-            <AnchorPane prefHeight="26.0" prefWidth="171.0">
+            <TextField fx:id="changeTitle" prefHeight="40.0" prefWidth="400.0" promptText="Title" styleClass="formTextInput" VBox.vgrow="ALWAYS" />
+            <TextArea fx:id="changeDesc" prefHeight="100.0" prefWidth="400.0" promptText="Description" styleClass="formTextInput" VBox.vgrow="NEVER" />
+            <AnchorPane prefHeight="27.0" prefWidth="400.0">
                <children>
-                  <Button layoutX="200.0" layoutY="-1.0" mnemonicParsing="false" onAction="#cancel" prefHeight="19.0" prefWidth="70.0" styleClass="formButton" text="Cancel" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                  <Button layoutX="99.0" layoutY="-1.0" mnemonicParsing="false" onAction="#saveCardChanges" prefHeight="26.0" prefWidth="75.0" styleClass="formButton" text="Save" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                  <Button layoutX="276.0" layoutY="1.0" mnemonicParsing="false" onAction="#addSubTask" styleClass="formButton" text="+" AnchorPane.leftAnchor="100.0" AnchorPane.topAnchor="0.0" />
+                  <Label contentDisplay="CENTER" layoutX="14.0" layoutY="7.0" prefHeight="25.0" prefWidth="84.0" text="SubTasks" textAlignment="CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <font>
+                        <Font size="16.0" />
+                     </font></Label>
                </children>
             </AnchorPane>
-            <AnchorPane prefHeight="35.0" prefWidth="551.0">
-               <children>
-                  <Button layoutX="29.0" mnemonicParsing="false" onAction="#addSubTask" text="+" AnchorPane.leftAnchor="29.0" AnchorPane.topAnchor="0.0" />
-                  <Label layoutX="248.0" layoutY="3.0" prefHeight="18.0" prefWidth="54.0" text="SubTasks" textAlignment="JUSTIFY" />
-               </children>
-            </AnchorPane>
-            <ScrollPane hbarPolicy="NEVER" prefHeight="128.0" prefWidth="600.0">
+            <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" prefHeight="150.0" prefWidth="400.0" VBox.vgrow="NEVER">
                <content>
-                  <VBox fx:id="subTaskView" prefHeight="120.0" prefWidth="576.0" />
+                  <VBox fx:id="subTaskView" prefWidth="400.0" />
                </content></ScrollPane>
-            <Label prefHeight="19.0" prefWidth="44.0" text="Tags">
+            <Label prefWidth="400.0" text="Tags">
                <font>
-                  <Font size="15.0" />
+                  <Font size="16.0" />
                </font>
             </Label>
-            <HBox alignment="CENTER_LEFT" prefHeight="35.0" prefWidth="404.0" spacing="10.0">
+            <HBox alignment="CENTER" prefHeight="35.0" prefWidth="400.0" spacing="10.0">
                <children>
                   <CheckBox mnemonicParsing="false" text="Important" />
                   <CheckBox layoutX="10.0" layoutY="10.0" mnemonicParsing="false" text="Chores" />
@@ -53,13 +41,22 @@
                   <CheckBox layoutX="156.0" layoutY="10.0" mnemonicParsing="false" text="Optional" />
                </children>
             </HBox>
+            <AnchorPane prefHeight="26.0" prefWidth="171.0">
+               <children>
+                  <Button layoutX="200.0" layoutY="-1.0" mnemonicParsing="false" onAction="#clearForm" prefHeight="19.0" prefWidth="70.0" styleClass="formButton" text="Clear" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                  <Button layoutX="99.0" layoutY="-1.0" mnemonicParsing="false" onAction="#saveCardChanges" prefHeight="26.0" prefWidth="75.0" styleClass="formButton" text="Save" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
+               </children>
+            </AnchorPane>
          </children>
+         <padding>
+            <Insets top="5.0" />
+         </padding>
       </VBox>
    </center>
    <top>
       <HBox prefHeight="50.0" prefWidth="600.0" styleClass="navbar" BorderPane.alignment="CENTER">
          <children>
-            <Button mnemonicParsing="false" onAction="#cancel" prefHeight="51.0" prefWidth="612.0" text="Back">
+            <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#cancel" prefHeight="51.0" prefWidth="2000.0" text="Back" HBox.hgrow="ALWAYS">
                <font>
                   <Font size="16.0" />
                </font>
