@@ -5,7 +5,7 @@
 <?import javafx.scene.text.*?>
 <BorderPane fx:id="root" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.MainViewCtrl" stylesheets="/client/styles/mainView.css">
    <top>
-      <HBox prefHeight="50.0" prefWidth="600.0" styleClass="navbar" BorderPane.alignment="CENTER">
+      <HBox prefHeight="50.0" prefWidth="600.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" styleClass="navbar" BorderPane.alignment="CENTER">
          <children>
             <Button fx:id="navbarBackButton" mnemonicParsing="false" onAction="#btnBackClicked" prefHeight="60.0" prefWidth="2000.0" text="Disconnect">
                <font>

@@ -3,7 +3,7 @@ package client.scenes;
 import client.utils.ExceptionHandler;
 import commons.Board;
 import javafx.fxml.FXML;
-import javafx.scene.control.TextField;
+import javafx.scene.control.PasswordField;
 import lombok.Setter;
 
 import javax.inject.Inject;
@@ -13,7 +13,7 @@ public class PasswordProtectedCtrl implements SceneCtrl {
     private MainCtrl mainCtrl;
     private ExceptionHandler exceptionHandler;
     @FXML
-    private TextField passwordField;
+    private PasswordField passwordField;
 
     @Setter
     private Board passwordBoard;
