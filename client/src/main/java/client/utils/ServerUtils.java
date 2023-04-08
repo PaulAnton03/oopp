@@ -15,10 +15,7 @@
  */
 package client.utils;
 
-import commons.Board;
-import commons.Card;
-import commons.CardList;
-import commons.Tag;
+import commons.*;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.client.Invocation;
@@ -235,6 +232,18 @@ public class ServerUtils {
         WebTarget webTarget = webTargetFromPath("/tags/delete/{id}").resolveTemplate("id", id);
         return webTargetAddDefault(webTarget).delete(new GenericType<>(){});
     }
+
+    public CardTag getCardTag(long id){
+        WebTarget webTarget = webTargetFromPath("/cardtags/{id}").resolveTemplate("id", id);
+        return webTargetAddDefault(webTarget).get(new GenericType<>(){});
+    }
+    public CardTag createCardTag(CardTag cardTag) {
+        WebTarget webTarget = webTargetFromPath("/cardtags/create").resolveTemplate("id", cardTag.getId());
+        return webTargetAddDefault(webTarget).post(Entity.entity(cardTag, APPLICATION_JSON), CardTag.class);
+    }
+
+    public void deleteCardTag()
+        public void updateCardTag()
 
     // For TESTING purpose
     public Board getBoardTest() {
