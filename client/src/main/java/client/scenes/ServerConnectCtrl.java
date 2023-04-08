@@ -10,7 +10,7 @@ import javafx.scene.control.TextField;
 
 import java.util.concurrent.CompletableFuture;
 
-public class ServerConnectCtrl implements SceneCtrl{
+public class ServerConnectCtrl implements SceneCtrl {
 
     private final ServerUtils serverUtils;
     private final MainCtrl mainCtrl;
@@ -21,7 +21,7 @@ public class ServerConnectCtrl implements SceneCtrl{
     private TextField inviteKeyInput;
 
     @Inject
-    public ServerConnectCtrl(ServerUtils server, MainCtrl mainCtrl,ClientPreferences clientPreferences) {
+    public ServerConnectCtrl(ServerUtils server, MainCtrl mainCtrl, ClientPreferences clientPreferences) {
         this.mainCtrl = mainCtrl;
         this.serverUtils = server;
         this.clientPreferences = clientPreferences;
@@ -61,7 +61,7 @@ public class ServerConnectCtrl implements SceneCtrl{
                 throw new Exception();
             }
             return true;
-        } catch(Exception e) {
+        } catch (Exception e) {
             throw new RuntimeException("The invite key is invalid, maybe copy it again");
         }
     }

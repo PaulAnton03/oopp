@@ -79,6 +79,7 @@ public class CreateBoardCtrl implements SceneCtrl {
         client.setBoardCtrl(boardCtrl);
         clientPrefs.setDefaultBoardId(addedBoard.getId());
         clientPrefs.addJoinedBoard(addedBoard.getId());
+        mainCtrl.getMainViewCtrl().unsubscribe();
         mainCtrl.showMainView();
     }
 
