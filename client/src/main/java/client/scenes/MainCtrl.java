@@ -153,7 +153,8 @@ public class MainCtrl {
         primaryStage.setResizable(true);
         showConnect();
         primaryStage.show();
-        primaryStage.setMaximized(true);
+        primaryStage.setWidth(1000);
+        primaryStage.setHeight(600);
         primaryStage.addEventFilter(KeyEvent.KEY_PRESSED, new KeyEventHandler(client, this));
     }
 
