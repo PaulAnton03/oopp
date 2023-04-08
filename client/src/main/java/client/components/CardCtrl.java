@@ -20,13 +20,14 @@ import javafx.animation.ParallelTransition;
 import javafx.animation.ScaleTransition;
 import javafx.animation.Transition;
 import commons.SubTask;
-import javafx.animation.*;
 import javafx.css.PseudoClass;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.SnapshotParameters;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -118,16 +119,22 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Card/* TODO
 
     public void editCard() {
         if (!client.getBoardCtrl().getBoard().isEditable()) {
-            throw new IllegalStateException("You do not have permissions to edit this board.");
+            Alert alert = new Alert(AlertType.WARNING);
+            alert.setHeaderText("You do not have permissions to edit this board.");
+            alert.showAndWait();
+        } else {
+            mainCtrl.showEditCard(this.getCard().getId());
         }
-        mainCtrl.showEditCard(this.getCard().getId());
     }
 
     public void delete() {
         if (!client.getBoardCtrl().getBoard().isEditable()) {
-            throw new IllegalStateException("You do not have permissions to edit this board.");
+            Alert alert = new Alert(AlertType.WARNING);
+            alert.setHeaderText("You do not have permissions to edit this board.");
+            alert.showAndWait();
+        } else {
+            this.card = server.deleteCard(card.getId());
         }
-        this.card = server.deleteCard(card.getId());
     }
 
     public void refresh() {
@@ -306,21 +313,27 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Card/* TODO
             event.consume();
         });
         cardView.setOnDragDone(event -> {
-            CardList cardListStart = card.getCardList();
-            CardList cardListEnd = client.getActiveCardList();
-            int position;
-            try {
-                position = (Integer) client.getActiveCardListCtrl().getCardListView().getUserData();
-            } catch (Exception e) {
-                return;
+            if (!client.getBoardCtrl().getBoard().isEditable()) {
+                Alert alert = new Alert(AlertType.WARNING);
+                alert.setHeaderText("You do not have permissions to edit this board.");
+                alert.showAndWait();
+            } else {
+                CardList cardListStart = card.getCardList();
+                CardList cardListEnd = client.getActiveCardList();
+                int position;
+                try {
+                    position = (Integer) client.getActiveCardListCtrl().getCardListView().getUserData();
+                } catch (Exception e) {
+                    return;
+                }
+                cardListStart.removeCard(card);
+                cardListEnd.addCardAtPosition(card, position);
+                this.card.setCardList(cardListEnd);
+                server.updateCardList(cardListStart);
+                server.updateCardList(cardListEnd);
+                client.getBoardCtrl().refresh();
+                event.consume();
             }
-            cardListStart.removeCard(card);
-            cardListEnd.addCardAtPosition(card, position);
-            this.card.setCardList(cardListEnd);
-            server.updateCardList(cardListStart);
-            server.updateCardList(cardListEnd);
-            client.getBoardCtrl().refresh();
-            event.consume();
         });
         cardView.setOnMouseClicked(event -> {
             if (event.getClickCount() == 2) {

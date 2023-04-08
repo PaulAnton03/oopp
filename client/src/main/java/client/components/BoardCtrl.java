@@ -9,6 +9,7 @@ import commons.Card;
 import commons.CardList;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
+import javafx.scene.control.Alert;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import lombok.Getter;
@@ -119,17 +120,23 @@ public class BoardCtrl implements Component<Board>, DBEntityCtrl<Board, CardList
     }
 
     public void shiftSelectedCard(int diff) {
-        Card card = client.getCard(client.getSelectedCardId());
-        if (card == null)
-            return;
-        CardList cardList = card.getCardList();
-        int cardIdx = cardList.getCards().indexOf(card);
-        int destCardIdx = cardIdx + diff;
-        if (destCardIdx < 0 || destCardIdx >= cardList.getCards().size())
-            return;
-        cardList.getCards().set(cardIdx, cardList.getCards().get(destCardIdx));
-        cardList.getCards().set(destCardIdx, card);
-        server.updateCardList(cardList);
+        if(!board.isEditable()) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setHeaderText("You do not have permissions to edit this board.");
+            alert.showAndWait();
+        } else {
+            Card card = client.getCard(client.getSelectedCardId());
+            if (card == null)
+                return;
+            CardList cardList = card.getCardList();
+            int cardIdx = cardList.getCards().indexOf(card);
+            int destCardIdx = cardIdx + diff;
+            if (destCardIdx < 0 || destCardIdx >= cardList.getCards().size())
+                return;
+            cardList.getCards().set(cardIdx, cardList.getCards().get(destCardIdx));
+            cardList.getCards().set(destCardIdx, card);
+            server.updateCardList(cardList);
+        }
     }
 
     public void handleKeyEvent(KeyEvent e) {

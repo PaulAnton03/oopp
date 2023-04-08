@@ -11,6 +11,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -164,16 +165,22 @@ public class CardListCtrl implements Component<CardList>, DBEntityCtrl<CardList,
 
     public void addCard() {
         if (!client.getBoardCtrl().getBoard().isEditable()) {
-            throw new IllegalStateException("You do not have permissions to edit this board.");
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setHeaderText("You do not have permissions to edit this board.");
+            alert.showAndWait();
+        } else {
+            mainCtrl.showAddCard(cardList.getId());
         }
-        mainCtrl.showAddCard(cardList.getId());
     }
 
     public void listSettings() {
         if (!client.getBoardCtrl().getBoard().isEditable()) {
-            throw new IllegalStateException("You do not have permissions to edit this board.");
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setHeaderText("You do not have permissions to edit this board.");
+            alert.showAndWait();
+        } else {
+            mainCtrl.showListSettings(cardList.getId());
         }
-        mainCtrl.showListSettings(cardList.getId());
     }
 
 }
