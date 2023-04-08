@@ -106,6 +106,11 @@ public class ServerUtils {
         return webTargetAddDefault(webTarget).put(Entity.entity(subTask, APPLICATION_JSON), SubTask.class);
     }
 
+    public SubTask reorderSubTask(SubTask subTask,String direction) {
+        WebTarget webTarget = webTargetFromPath("/subtasks/reorder/{id}/"+direction).resolveTemplate("id", subTask.getId());
+        return webTargetAddDefault(webTarget).put(Entity.entity(subTask, APPLICATION_JSON), SubTask.class);
+    }
+
     public SubTask deleteSubTask(long id) {
         WebTarget webTarget = webTargetFromPath("/subtasks/delete/{id}").resolveTemplate("id", id);
         return webTargetAddDefault(webTarget).delete(new GenericType<>() {

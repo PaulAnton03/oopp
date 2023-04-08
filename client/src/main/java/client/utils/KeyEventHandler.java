@@ -15,7 +15,7 @@ public class KeyEventHandler implements EventHandler<KeyEvent> {
         this.mainCtrl = mainCtrl;
     }
 
-    private static void displayKeybinds() {
+    public static void displayKeybinds() {
         Alert alert = new Alert(AlertType.INFORMATION);
         alert.setHeaderText("Keyboard Shortcuts Help");
         alert.setContentText(

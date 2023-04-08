@@ -40,7 +40,7 @@ public class ListSettingsCtrl implements SceneCtrl {
     }
 
     public void resetForm() {
-        listTitle.setText("");
+        listTitle.setText(client.getCardList(cardListId).getTitle());
     }
 
     public void saveChanges() {
