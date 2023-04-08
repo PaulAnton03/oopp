@@ -1,12 +1,8 @@
 package client.scenes;
 
-import com.google.inject.Inject;
-
 import client.components.BoardCtrl;
-import client.utils.ClientUtils;
-import client.utils.ComponentFactory;
-import client.utils.ExceptionHandler;
-import client.utils.ServerUtils;
+import client.utils.*;
+import com.google.inject.Inject;
 import commons.Board;
 import commons.Card;
 import commons.CardList;
@@ -82,6 +78,10 @@ public class MainViewCtrl implements SceneCtrl {
             throw new IllegalStateException("You do not have permissions to edit this board.");
         }
         mainCtrl.showSettings();
+    }
+
+    public void helpButtonClicked() {
+        KeyEventHandler.displayKeybinds();
     }
 
     public void scrollHandler(ScrollEvent event) {
