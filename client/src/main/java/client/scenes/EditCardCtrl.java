@@ -170,6 +170,7 @@ public class EditCardCtrl implements SceneCtrl {
         this.changeDesc.setText("");
         subTaskView.getChildren().clear();
         subscriptions.forEach(StompSession.Subscription::unsubscribe);
+        subscriptions.clear();
     }
 
     @Override
