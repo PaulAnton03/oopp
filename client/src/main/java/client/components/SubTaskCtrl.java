@@ -12,7 +12,7 @@ import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.HBox;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
@@ -30,7 +30,7 @@ public class SubTaskCtrl implements Component<SubTask>, Initializable {
     private SubTask subTask;
 
     @FXML
-    private VBox subTaskView;
+    private HBox subTaskView;
 
     @FXML
     private TextField title;
