@@ -204,8 +204,10 @@ public class MainViewCtrl implements SceneCtrl {
                 @Override
                 public void run() {
                     client.setBoardCtrl(null);
-                    mainCtrl.showJoin();
-                    throw new RuntimeException("Sorry, but the board you are currently viewing has been permanently deleted.");
+                    if(!mainCtrl.getActiveCtrl().equals(mainCtrl.getJoinBoardsCtrl())) {
+                        mainCtrl.showJoin();
+                        throw new RuntimeException("Sorry, but the board you are currently viewing has been permanently deleted.");
+                    }
                 }});
         }));
     }

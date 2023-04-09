@@ -59,6 +59,7 @@ public class MainCtrl {
     private AddCardCtrl addCardCtrl;
     private Scene add;
 
+    @Getter
     private JoinBoardsCtrl joinBoardsCtrl;
     private Scene join;
 
