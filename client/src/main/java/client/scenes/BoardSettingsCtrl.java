@@ -4,7 +4,9 @@ import client.utils.*;
 import com.google.inject.Inject;
 
 import commons.Board;
+import commons.CardList;
 import commons.CardTag;
+import commons.Tag;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -82,8 +84,10 @@ public class BoardSettingsCtrl implements SceneCtrl {
         }
         //this for loop is for deleting cardTags if a tag is in this board.
         for(CardTag cardTag : server.getCardTags()){
-            if(cardTag.getTag().getBoard().equals(board)){
-                server.deleteCardTag(cardTag.getId());
+            for(Tag tag : board.getTagList()){
+                if(tag.equals(cardTag.getTag())){
+                    server.deleteCardTag(cardTag.getId());
+                }
             }
         }
         clientPrefs.removeJoinedBoard(board.getId());
