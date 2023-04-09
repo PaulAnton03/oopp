@@ -202,17 +202,16 @@ public class MainViewCtrl implements SceneCtrl {
                 @Override
                 public void run() {
                     client.setBoardCtrl(null);
+                    mainCtrl.getEditCardCtrl().resetState();
                     unsubscribe();
                     if (!mainCtrl.getActiveCtrl().equals(mainCtrl.getJoinBoardsCtrl())) {
                         mainCtrl.showJoin();
                         throw new RuntimeException("Sorry, but the board you are currently viewing has been permanently deleted.");
                     }
-                }});
-        }));
+                }});}));
     }
 
     public void unsubscribe() {
-        mainCtrl.getEditCardCtrl().resetState();
         subscriptions.forEach(StompSession.Subscription::unsubscribe);
         subscriptions.clear();
         register = true;
