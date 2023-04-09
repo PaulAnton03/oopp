@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface CardTagRepository extends JpaRepository<CardTag, Long> {
+public interface CardTagRepository extends JpaRepository<CardTag, CardTag.CardTagId> {
     List<CardTag> findAllByCardId(Long cardId);
     List<CardTag> findAllByTagId(Long tagId);
     void deleteAllByCardId(Long cardId);

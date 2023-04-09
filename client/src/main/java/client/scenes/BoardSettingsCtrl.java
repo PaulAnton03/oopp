@@ -35,7 +35,6 @@ public class BoardSettingsCtrl implements SceneCtrl {
     private TextField inviteKeyField;
     @FXML
     private AnchorPane inviteKeyFooter;
-
     private Color color;
 
     @Inject

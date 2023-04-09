@@ -30,7 +30,7 @@ public class CardController {
 
     public CardController(SimpMessagingTemplate messagingTemplate, CardRepository cardRepository,
                           CardListRepository cardListRepository, SubTaskRepository subTaskRepository
-    ,TagRepository tagRepository) {
+            , TagRepository tagRepository) {
         this.messagingTemplate = messagingTemplate;
         this.cardRepository = cardRepository;
         this.cardListRepository = cardListRepository;
@@ -116,20 +116,20 @@ public class CardController {
     }
 
     @PutMapping("/addTag/{id}")
-    public ResponseEntity<Card> addTag(@RequestBody Card card, @PathVariable("id") long id){
+    public ResponseEntity<Card> addTag(@RequestBody Card card, @PathVariable("id") long id) {
         final Optional<Card> optionalCard = cardRepository.findById(id);
         if (optionalCard.isEmpty()) {
-          //  return ResponseEntity.notFound().build();
+            //  return ResponseEntity.notFound().build();
         }
         Optional<Tag> optionalTag = tagRepository.findById(id);
         Tag tag = optionalTag.get();
         if (tag == null) {
             tag = new Tag();
         }
-        if (!card.getTags().contains(tag)) {
-            card.getTags().add(tag);
-            tag.getCards().add(card);
-        }
+//        if (!card.getTags().contains(tag)) {
+//            card.getTags().add(tag);
+//            tag.getCardTags().add(card);
+//        }
         Card updated = cardRepository.save(card);
         return ResponseEntity.ok(updated);
     }

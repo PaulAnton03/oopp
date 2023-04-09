@@ -45,10 +45,10 @@ class TagTest {
         Tag tag = new Tag();
         Card card1 = new Card();
         Card card2 = new Card();
-        tag.getCards().add(card1);
-        tag.getCards().add(card2);
-        assertTrue(tag.getCards().contains(card1));
-        assertTrue(tag.getCards().contains(card2));
+        tag.getCardTags().add(card1);
+        tag.getCardTags().add(card2);
+        assertTrue(tag.getCardTags().contains(card1));
+        assertTrue(tag.getCardTags().contains(card2));
     }
 
 

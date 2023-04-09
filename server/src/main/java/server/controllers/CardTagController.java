@@ -17,7 +17,7 @@ public class CardTagController {
     private CardTagRepository cardTagRepository;
 
     @GetMapping("/{id}")
-    public ResponseEntity<CardTag> getCardTag(@PathVariable(value = "id") Long cardTagId) {
+    public ResponseEntity<CardTag> getCardTag(@PathVariable(value = "id") CardTag.CardTagId cardTagId) {
         CardTag cardTag = cardTagRepository.findById(cardTagId)
                 .orElseThrow(() -> new RuntimeException("CardTag not found with id: " + cardTagId));
         return ResponseEntity.ok().body(cardTag);
@@ -29,7 +29,7 @@ public class CardTagController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<CardTag> updateCardTag(@PathVariable(value = "id") Long cardTagId,
+    public ResponseEntity<CardTag> updateCardTag(@PathVariable(value = "id") CardTag.CardTagId cardTagId,
                                                  @RequestBody CardTag cardTagDetails) {
         CardTag cardTag = cardTagRepository.findById(cardTagId)
                 .orElseThrow(() -> new
@@ -41,7 +41,7 @@ public class CardTagController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public Map<String, Boolean> deleteCardTag(@PathVariable(value = "id") Long cardTagId) {
+    public Map<String, Boolean> deleteCardTag(@PathVariable(value = "id") CardTag.CardTagId cardTagId) {
         CardTag cardTag = cardTagRepository.findById(cardTagId)
                 .orElseThrow(() -> new RuntimeException("CardTag not found with id: " + cardTagId));
         cardTagRepository.delete(cardTag);

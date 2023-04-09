@@ -1,32 +1,22 @@
 package client.scenes;
 
-import javax.inject.Inject;
-
 import client.components.TagCtrl;
 import client.utils.ClientUtils;
+import client.utils.ComponentFactory;
 import client.utils.ExceptionHandler;
 import client.utils.ServerUtils;
-import client.utils.ComponentFactory;
 import commons.Board;
 import commons.Card;
 import commons.Tag;
-import commons.Tag;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-
-import javax.inject.Inject;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import lombok.Getter;
 
@@ -57,7 +47,7 @@ public class EditCardCtrl implements SceneCtrl {
     private TextField changeTitle;
     @FXML
     private TextArea changeDesc;
-    
+
     @FXML
     private FlowPane tagArea;
 
@@ -90,13 +80,10 @@ public class EditCardCtrl implements SceneCtrl {
         changeTitle.setText(card.getTitle());
         changeDesc.setText(card.getDescription());
         Board curBoard = client.getBoardCtrl().getBoard();
-        for(Tag tag : curBoard.getTagList()){
-                TagCtrl tagCtrl = factory.create(TagCtrl.class, tag);
-                if(card.getTags().contains(tag)){
-                    tagCtrl.isAssigned = true;
-                }
-                tagCtrl.loadData(tag);
-                tagArea.getChildren().add(tagCtrl.getNode());
+        for (Tag tag : curBoard.getTagList()) {
+            TagCtrl tagCtrl = factory.create(TagCtrl.class, tag);
+            tagCtrl.loadData(tag);
+            tagArea.getChildren().add(tagCtrl.getNode());
         }
     }
 
@@ -132,8 +119,8 @@ public class EditCardCtrl implements SceneCtrl {
 //        if(!board.getTagList().contains(tag)){
 //            board.getTagList().add(tag);
 //        }
-  //      server.updateBoard(board); //I think not useful
-  //      client.getBoardCtrl().refresh();
+        //      server.updateBoard(board); //I think not useful
+        //      client.getBoardCtrl().refresh();
         //resetState();
         //loadData(cardId);
         TagCtrl tagCtrl = factory.create(TagCtrl.class, tag);
@@ -148,13 +135,14 @@ public class EditCardCtrl implements SceneCtrl {
             cancel();
         }
     }
-    public void pickColor(ActionEvent event){
+
+    public void pickColor(ActionEvent event) {
         color = colourPicker.getValue();
     }
 
     public void editTag() {
         Card card = client.getCard(cardId);
-      //  server.updateTag(card.getTags().iterator().next());
+        //  server.updateTag(card.getTags().iterator().next());
     }
 
 //    public void assignTagToCard(long tagId){

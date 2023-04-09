@@ -1,7 +1,6 @@
 package commons;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.ObjectIdGenerator;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.*;
 import javax.persistence.*;
@@ -28,13 +27,11 @@ public class Tag implements DBEntity {
 //    @ElementCollection
 //    private Set<Card> cards = new HashSet<>();
         @Getter
-        @JsonIgnore
         @EqualsAndHashCode.Exclude
-        @ManyToMany(targetEntity = commons.Card.class, mappedBy = "tags",
+        @ManyToMany(mappedBy = "tags",
                 cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REFRESH,
                 CascadeType.REMOVE}, fetch = FetchType.LAZY)
-        @ElementCollection
-        private Set<Card> cards = new HashSet<>();
+        private Set<CardTag> cardTags = new HashSet<>();
 
 
     @ManyToOne

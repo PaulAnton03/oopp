@@ -10,6 +10,7 @@ import java.io.Serializable;
 @Table(name = "cards_tags")
 public class CardTag {
 
+    @Id
     @EmbeddedId
     private CardTagId id;
 
@@ -23,7 +24,6 @@ public class CardTag {
     @JoinColumn(name = "tag_id")
     private Tag tag;
 
-    // constructors, getters and setters
 
     @Data
     @Embeddable

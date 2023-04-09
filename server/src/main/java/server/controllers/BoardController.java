@@ -17,7 +17,6 @@ import server.database.CardRepository;
 @RestController
 @RequestMapping("/boards")
 public class BoardController {
-
     private final SimpMessagingTemplate messagingTemplate;
     private final BoardRepository boardRepository;
     private final CardListRepository cardListRepository;

@@ -43,24 +43,28 @@ public class Card implements DBEntity {
     private CardList cardList;
 
 
+    //    @ToString.Exclude
+//    @EqualsAndHashCode.Exclude
+//    @ElementCollection
+//    @ManyToMany(mappedBy = "cards", targetEntity = commons.Tag.class, fetch = FetchType.EAGER,
+//            cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REFRESH,
+//                    CascadeType.REMOVE})
+//    @JoinTable(name = "cards_tags",
+//            joinColumns = @JoinColumn(name="card_id", referencedColumnName = "id"),
+//            inverseJoinColumns =
+//            @JoinColumn(name="tag_id", referencedColumnName = "id")
+//    )
+//    private Set<Tag> tags = new HashSet<>();
+    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    @JoinTable(name = "cardstags",
+            joinColumns = @JoinColumn(name = "card_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id"))
+    private Set<CardTag> cardTags = new HashSet<>();
 
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
-    @ElementCollection
-    @ManyToMany(mappedBy = "cards", targetEntity = commons.Tag.class, fetch = FetchType.EAGER,
-            cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REFRESH,
-                    CascadeType.REMOVE})
-    @JoinTable(name = "cards_tags",
-            joinColumns = @JoinColumn(name="card_id", referencedColumnName = "id"),
-            inverseJoinColumns =
-            @JoinColumn(name="tag_id", referencedColumnName = "id")
-    )
-    private Set<Tag> tags = new HashSet<>();
 
-
-    public Set<Tag> getTags(){
-        return tags;
-    }
+//    public Set<Tag> getTags(){
+//        return tags;
+//    }
 
 
     //Board->Tag OneToMany, Tag -> Board ManyToOne,
@@ -74,15 +78,15 @@ public class Card implements DBEntity {
 //    @OneToOne(targetEntity = Tag.class)
     //private List<Triple<String, Integer, String>> tagList = new ArrayList<>();
 
-    public boolean removeTag(long id) {
-        Tag tag = this.getTags().stream().filter(c -> c.getId() == id).findFirst().orElse(null);
-        if (tag == null) {
-            return false;
-        } else {
-            this.getTags().remove(tag);
-        }
-        return true;
-    }
+//    public boolean removeTag(long id) {
+//        Tag tag = this.getTags().stream().filter(c -> c.getId() == id).findFirst().orElse(null);
+//        if (tag == null) {
+//            return false;
+//        } else {
+//            this.getTags().remove(tag);
+//        }
+//        return true;
+//    }
 
     public boolean removeSubTask(SubTask subTask) {
         return this.subtasks.remove(subTask);
@@ -103,12 +107,12 @@ public class Card implements DBEntity {
 
     @Override
     public String toString() {
-        String tags = this.getTags().toString();
+
 
         return "Card [id=" + id + ", title=" + title + ", description=" + description +
-                 getCardList().toCardString() +
+                getCardList().toCardString() +
                 ",subtasks= " + subtasks + "]"
-                + " Tags: " + tags;
+                ;
     }
 
     /**

@@ -6,6 +6,7 @@ import client.utils.ClientUtils;
 import client.utils.ServerUtils;
 import commons.Board;
 import commons.Card;
+import commons.CardTag;
 import commons.Tag;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -24,6 +25,7 @@ import javafx.scene.text.Text;
 import lombok.Getter;
 
 import javax.inject.Inject;
+import java.util.stream.Collectors;
 
 
 public class TagCtrl implements Component<Tag> {
@@ -136,13 +138,21 @@ public class TagCtrl implements Component<Tag> {
 
     public void assignThisToCard(Card card) {
         System.out.println("Assigning is called");
-        card.getTags().add(tag);
+        CardTag cardTag = new CardTag();
+        cardTag.setCard(card);
+        cardTag.setTag(tag);
+        server.createCardTag(cardTag);
+        //card.getTags().add(tag);
         //   tag.getCards().add(card);
         //    server.updateCard(card);
     }
 
     public void unAssignFromCard(Card card) {
-        card.getTags().remove(tag);
+        CardTag cardTag = (
+                server.getCardTags().stream()
+                        .filter(cardTag1 -> cardTag1.getCard() == card)
+                        .collect(Collectors.toList()).get(0));
+        server.deleteCardTag(cardTag.getId());
         //   tag.getCards().remove(card);
         //     server.updateCard(card);
         //  server.updateTag(tag);
@@ -171,7 +181,7 @@ public class TagCtrl implements Component<Tag> {
 
     public void refresh() {
         loadData(server.getTag(tag.getId()));
-        for (Card card : tag.getCards()) {
+        for (Card card : tag.getCardTags()) {
             client.getCardCtrl(card.getId()).replaceChild(tag);
         }
     }

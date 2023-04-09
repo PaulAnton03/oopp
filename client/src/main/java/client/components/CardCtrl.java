@@ -12,6 +12,7 @@ import client.utils.ComponentFactory;
 import client.utils.ServerUtils;
 import commons.Card;
 import commons.CardList;
+import commons.CardTag;
 import commons.Tag;
 import client.utils.ClientUtils;
 import client.utils.Logger;
@@ -92,7 +93,8 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Tag>, Initi
         if(tagArea.getChildren() != null)
             tagArea.getChildren().clear();
         description.setText(card.getDescription());
-        for (Tag tag : card.getTags()){
+        for (CardTag cardTag : card.getCardTags()){
+            Tag tag = cardTag.getTag();
             TagCtrl tagCtrl = factory.create(TagCtrl.class, tag);
             tagCtrl.loadData(tag);
             tagArea.getChildren().add(tagCtrl.getNode());
