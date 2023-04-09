@@ -25,7 +25,6 @@ import javafx.scene.text.Text;
 import lombok.Getter;
 
 import javax.inject.Inject;
-import java.util.stream.Collectors;
 
 
 public class TagCtrl implements Component<Tag> {
@@ -138,21 +137,33 @@ public class TagCtrl implements Component<Tag> {
 
     public void assignThisToCard(Card card) {
         System.out.println("Assigning is called");
-        CardTag cardTag = new CardTag();
-        cardTag.setCard(card);
-        cardTag.setTag(tag);
+        CardTag cardTag = new CardTag(card, tag);
+        System.out.println("card set to cardTag: " + card.getTitle());
+//        card.getCardTags().add(cardTag);
+//        tag.getCardTags().add(cardTag);
+        System.out.println("tag set to cardTag: " + tag.getText());
         server.createCardTag(cardTag);
+
         //card.getTags().add(tag);
         //   tag.getCards().add(card);
         //    server.updateCard(card);
     }
 
     public void unAssignFromCard(Card card) {
-        CardTag cardTag = (
-                server.getCardTags().stream()
-                        .filter(cardTag1 -> cardTag1.getCard() == card)
-                        .collect(Collectors.toList()).get(0));
-        server.deleteCardTag(cardTag.getId());
+        for (CardTag cardTag : server.getCardTags()) {
+            if (cardTag.getCard().equals(card)) {
+                server.deleteCardTag(cardTag.getId());
+            }
+        }
+//        CardTag cardTag = (
+//                server.getCardTags().stream()
+//                        .filter(cardTag1 -> cardTag1.getCard().equals(card))
+//                        .collect(Collectors.toList()).get(0));
+//        if(cardTag != null)
+//            server.deleteCardTag(cardTag.getId());
+//        else{
+//            System.out.println("cardTag not found!");
+//        }
         //   tag.getCards().remove(card);
         //     server.updateCard(card);
         //  server.updateTag(tag);
@@ -181,7 +192,8 @@ public class TagCtrl implements Component<Tag> {
 
     public void refresh() {
         loadData(server.getTag(tag.getId()));
-        for (Card card : tag.getCardTags()) {
+        for (CardTag cardTag : tag.getCardTags()) {
+            Card card = cardTag.getCard();
             client.getCardCtrl(card.getId()).replaceChild(tag);
         }
     }

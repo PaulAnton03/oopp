@@ -1,13 +1,16 @@
 package server.controllers;
 
+import commons.Card;
 import commons.CardTag;
+import commons.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import server.database.CardRepository;
 import server.database.CardTagRepository;
+import server.database.TagRepository;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 @RestController
 @RequestMapping("/cardtags")
@@ -16,8 +19,23 @@ public class CardTagController {
     @Autowired
     private CardTagRepository cardTagRepository;
 
+    public CardTagController(CardTagRepository cardTagRepository,
+                             TagRepository tagRepository, CardRepository cardRepository) {
+        this.cardTagRepository = cardTagRepository;
+        this.tagRepository = tagRepository;
+        this.cardRepository = cardRepository;
+    }
+
+    private final TagRepository tagRepository;
+    private final CardRepository cardRepository;
+
+    @GetMapping(path = {"", "/"})
+    public ResponseEntity<List<CardTag>> getAll() {
+        return ResponseEntity.ok(cardTagRepository.findAll());
+    }
+
     @GetMapping("/{id}")
-    public ResponseEntity<CardTag> getCardTag(@PathVariable(value = "id") CardTag.CardTagId cardTagId) {
+    public ResponseEntity<CardTag> getCardTag(@PathVariable(value = "id") Long cardTagId) {
         CardTag cardTag = cardTagRepository.findById(cardTagId)
                 .orElseThrow(() -> new RuntimeException("CardTag not found with id: " + cardTagId));
         return ResponseEntity.ok().body(cardTag);
@@ -25,11 +43,19 @@ public class CardTagController {
 
     @PostMapping("/create")
     public CardTag createCardTag(@RequestBody CardTag cardTag) {
+        Card card = cardTag.getCard();
+        System.out.println("to be combined" + card.getTitle());
+        Tag tag = cardTag.getTag();
+        System.out.println("to be combined" + tag.getText());
+//        tag.getCardTags().add(cardTag);
+//        card.getCardTags().add(cardTag);
+//        tagRepository.save(tag);
+//        cardRepository.save(card);
         return cardTagRepository.save(cardTag);
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<CardTag> updateCardTag(@PathVariable(value = "id") CardTag.CardTagId cardTagId,
+    public ResponseEntity<CardTag> updateCardTag(@PathVariable(value = "id") Long cardTagId,
                                                  @RequestBody CardTag cardTagDetails) {
         CardTag cardTag = cardTagRepository.findById(cardTagId)
                 .orElseThrow(() -> new
@@ -41,13 +67,17 @@ public class CardTagController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public Map<String, Boolean> deleteCardTag(@PathVariable(value = "id") CardTag.CardTagId cardTagId) {
+    public ResponseEntity<CardTag> deleteCardTag(@PathVariable(value = "id") Long cardTagId) {
         CardTag cardTag = cardTagRepository.findById(cardTagId)
                 .orElseThrow(() -> new RuntimeException("CardTag not found with id: " + cardTagId));
+//        Tag tag = cardTag.getTag();
+//        Card card = cardTag.getCard();
+//        tag.getCardTags().remove(cardTag);
+//        card.getCardTags().remove(cardTag);
+//        tagRepository.save(tag);
+//        cardRepository.save(card);
         cardTagRepository.delete(cardTag);
-        Map<String, Boolean> response = new HashMap<>();
-        response.put("deleted", Boolean.TRUE);
-        return response;
+        return ResponseEntity.ok(cardTag);
     }
 
 }

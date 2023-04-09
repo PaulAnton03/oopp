@@ -1,19 +1,15 @@
 package commons;
 
-import javax.persistence.*;
-
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIncludeProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-
 import lombok.*;
 
-
-import java.util.HashSet;
+import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
-
 import java.util.Set;
 
 @Data
@@ -56,15 +52,10 @@ public class Card implements DBEntity {
 //    )
 //    private Set<Tag> tags = new HashSet<>();
     @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
-    @JoinTable(name = "cardstags",
+    @JoinTable(name = "cards_cards_tags",
             joinColumns = @JoinColumn(name = "card_id"),
-            inverseJoinColumns = @JoinColumn(name = "tag_id"))
+            inverseJoinColumns = @JoinColumn(name = "card_tag_id"))
     private Set<CardTag> cardTags = new HashSet<>();
-
-
-//    public Set<Tag> getTags(){
-//        return tags;
-//    }
 
 
     //Board->Tag OneToMany, Tag -> Board ManyToOne,

@@ -7,6 +7,7 @@ import client.utils.ExceptionHandler;
 import client.utils.ServerUtils;
 import commons.Board;
 import commons.Card;
+import commons.CardTag;
 import commons.Tag;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -82,6 +83,12 @@ public class EditCardCtrl implements SceneCtrl {
         Board curBoard = client.getBoardCtrl().getBoard();
         for (Tag tag : curBoard.getTagList()) {
             TagCtrl tagCtrl = factory.create(TagCtrl.class, tag);
+            for (CardTag cardTag : server.getCardTags()) {
+                if (cardTag.getTag().equals(tag) && cardTag.getCard().equals(card)) {
+                    tagCtrl.isAssigned = true;
+                    break;
+                }
+            }
             tagCtrl.loadData(tag);
             tagArea.getChildren().add(tagCtrl.getNode());
         }

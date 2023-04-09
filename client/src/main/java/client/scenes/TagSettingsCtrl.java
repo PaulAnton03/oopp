@@ -4,6 +4,7 @@ import client.utils.ClientUtils;
 import client.utils.ServerUtils;
 import commons.Board;
 import commons.Card;
+import commons.CardTag;
 import commons.Tag;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -18,7 +19,7 @@ import javafx.scene.text.Text;
 
 import javax.inject.Inject;
 
-public class TagSettingsCtrl implements SceneCtrl{
+public class TagSettingsCtrl implements SceneCtrl {
 
     private final MainCtrl mainCtrl;
 
@@ -59,28 +60,28 @@ public class TagSettingsCtrl implements SceneCtrl{
         loader.setRoot(this);
     }
 
-    public void loadData(Tag tag, Card card){
+    public void loadData(Tag tag, Card card) {
         resetState();
         this.tag = tag;
         this.card = card;
         textField.setText(tag.getText());
     }
 
-    public Parent getNode(){
+    public Parent getNode() {
         return anchorPane;
     }
 
     public void saveTagChanges() {
         Board board = client.getBoardCtrl().getBoard();
-        if(tag == null){
+        if (tag == null) {
             System.out.println("Could not find tag!");
             this.savedText.setText("Error: Could not find tag!!");
             return;
         }
-        if(color != null){
+        if (color != null) {
             tag.setColor(color.toString());
         }
-        if(textField.getText() != null){
+        if (textField.getText() != null) {
             tag.setText(textField.getText());
         }
 //        if(!board.getTagList().contains(tag))
@@ -93,31 +94,36 @@ public class TagSettingsCtrl implements SceneCtrl{
 //            }
 //        }
         server.updateTag(tag, board.getId());
-     //   server.updateBoard(board);
+        //   server.updateBoard(board);
 
         this.savedText.setText("Saved!");
     }
-    public void pickColor(ActionEvent event){
+
+    public void pickColor(ActionEvent event) {
         color = colorPicker.getValue();
     }
 
-    public void delete(){
-  //      Board board = client.getBoardCtrl().getBoard();
+    public void delete() {
+        //      Board board = client.getBoardCtrl().getBoard();
+        for (CardTag cardTag : server.getCardTags()) {
+            if (cardTag.getTag().equals(tag))
+                server.deleteCardTag(cardTag.getId());
+        }
         server.deleteTag(tag.getId());
 //        if(board.getTagList().contains(tag))
 //            board.getTagList().remove(tag);
-  //      server.updateBoard(board);
+        //      server.updateBoard(board);
         this.savedText.setText("Deleted Tag");
         mainCtrl.showMainView();
     }
 
-    public void resetState(){
+    public void resetState() {
         this.savedText.setText("");
         this.textField.setText("");
     }
 
-    public void cancelButtonAction(){
-        if(card != null)
+    public void cancelButtonAction() {
+        if (card != null)
             mainCtrl.showEditCard(card.getId());
         else {
             mainCtrl.showMainView();

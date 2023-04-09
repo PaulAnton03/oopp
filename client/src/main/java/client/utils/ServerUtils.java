@@ -219,10 +219,7 @@ public class ServerUtils {
         });
     }
 
-    public List<CardTag> getCardTags(){
-        WebTarget webTarget = webTargetFromPath("/tags");
-        return webTargetAddDefault(webTarget).get(new GenericType<>(){});
-    }
+
     public Tag updateTag(Tag tag, long board_id) {
         WebTarget webTarget = webTargetFromPath("/tags/update/{id}").resolveTemplate("id", tag.getId())
                 .queryParam("boardId", board_id);
@@ -241,24 +238,30 @@ public class ServerUtils {
         });
     }
 
-    public CardTag getCardTag(CardTag.CardTagId id) {
+    public List<CardTag> getCardTags() {
+        WebTarget webTarget = webTargetFromPath("/cardtags");
+        return webTargetAddDefault(webTarget).get(new GenericType<>() {
+        });
+    }
+
+    public CardTag getCardTag(Long id) {
         WebTarget webTarget = webTargetFromPath("/cardtags/{id}").resolveTemplate("id", id);
         return webTargetAddDefault(webTarget).get(new GenericType<>() {
         });
     }
 
     public CardTag createCardTag(CardTag cardTag) {
-        WebTarget webTarget = webTargetFromPath("/cardtags/create").resolveTemplate("id", cardTag.getId());
+        WebTarget webTarget = webTargetFromPath("/cardtags/create");
         return webTargetAddDefault(webTarget).post(Entity.entity(cardTag, APPLICATION_JSON), CardTag.class);
     }
 
-    public CardTag deleteCardTag(CardTag.CardTagId id) {
+    public CardTag deleteCardTag(Long id) {
         WebTarget webTarget = webTargetFromPath("/cardtags/delete/{id}").resolveTemplate("id", id);
         return webTargetAddDefault(webTarget).delete(new GenericType<>() {
         });
     }
 
-    public CardTag updateCardTag(CardTag cardTag, CardTag.CardTagId cardtag_id) {
+    public CardTag updateCardTag(CardTag cardTag, Long cardtag_id) {
         WebTarget webTarget = webTargetFromPath("/cardtags/update/{id}").resolveTemplate("id", cardtag_id);
         return webTargetAddDefault(webTarget).put(Entity.entity(cardTag, APPLICATION_JSON), CardTag.class);
     }

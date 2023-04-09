@@ -1,10 +1,14 @@
 package commons;
+
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.*;
+
 import javax.persistence.*;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
 
 
 @Data
@@ -19,19 +23,16 @@ public class Tag implements DBEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected long id;
 
-//    @Getter
-//    @JsonIgnore
-//    @EqualsAndHashCode.Exclude
-//    @ManyToMany(targetEntity = commons.Card.class, mappedBy = "tags",
-//            cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
-//    @ElementCollection
-//    private Set<Card> cards = new HashSet<>();
-        @Getter
-        @EqualsAndHashCode.Exclude
-        @ManyToMany(mappedBy = "tags",
-                cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REFRESH,
-                CascadeType.REMOVE}, fetch = FetchType.LAZY)
-        private Set<CardTag> cardTags = new HashSet<>();
+
+    @Getter
+    @EqualsAndHashCode.Exclude
+    @ManyToMany(
+            cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REFRESH,
+                    CascadeType.REMOVE}, fetch = FetchType.LAZY)
+    @JoinTable(name = "tags_cards_tags",
+            joinColumns = @JoinColumn(name = "tag_id"),
+            inverseJoinColumns = @JoinColumn(name = "card_tag_id"))
+    private Set<CardTag> cardTags = new HashSet<>();
 
 
     @ManyToOne
@@ -58,7 +59,7 @@ public class Tag implements DBEntity {
     }
 
     @JsonIgnore
-    public static boolean isNullOrEmpty(String s){
+    public static boolean isNullOrEmpty(String s) {
         return s == null || s.isEmpty();
     }
 
