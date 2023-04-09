@@ -21,7 +21,7 @@
                 <Font size="16.0" />
             </font>
         </Label>
-      <Button layoutX="181.0" layoutY="65.0" mnemonicParsing="false" onAction="#onRemove" prefHeight="25.0" prefWidth="85.0" styleClass="btn" text="Leave" />
+      <Button fx:id="leave" layoutX="181.0" layoutY="65.0" mnemonicParsing="false" onAction="#onRemove" prefHeight="25.0" prefWidth="85.0" styleClass="btn" text="Leave" />
     </children>
     <padding>
         <Insets bottom="50.0" />

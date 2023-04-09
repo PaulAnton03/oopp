@@ -29,6 +29,7 @@ public class ServerConnectCtrl implements SceneCtrl {
 
     public void connect() {
         if (checkInviteKey() || serverInput.getText().isEmpty()) {
+            serverUtils.setAdmin(false);
             connectToServer();
         } else {
             checkCustomServer();
@@ -69,7 +70,7 @@ public class ServerConnectCtrl implements SceneCtrl {
     private void checkCustomServer() {
         String serverPath = serverInput.getText();
 
-        boolean isRunningAdmin = serverPath.startsWith("//admin");
+        boolean isRunningAdmin = serverPath.startsWith("admin//");
         serverUtils.setAdmin(isRunningAdmin);
         serverUtils.setServerPath(isRunningAdmin ? serverPath.substring(7) : serverPath);
 
@@ -85,7 +86,7 @@ public class ServerConnectCtrl implements SceneCtrl {
         mainCtrl.showAdminPasswordProtected();
         correctPassword.thenAccept((correct) -> {
             if (correct) {
-                clientPreferences.clearPreferences();
+                //clientPreferences.clearPreferences();
                 connectToServer();
             }
         });
