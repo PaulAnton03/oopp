@@ -150,7 +150,8 @@ public class MainViewCtrl implements SceneCtrl {
                     client.getCardCtrl(client.getCard(s.getCard().getId()).getId()).refresh();
                     mainCtrl.getActiveCtrl().revalidate();
                     client.postRefresh();
-                }});
+                }
+            });
         }));
         /**
          * This method call handles the deletion,addition and updating of a card on the current board by
@@ -161,10 +162,12 @@ public class MainViewCtrl implements SceneCtrl {
             Platform.runLater(new Runnable() {
                 @Override
                 public void run() {
+                    System.out.println(1);
                     client.getCardListCtrl(c.getCardList().getId()).refresh();
                     mainCtrl.getActiveCtrl().revalidate();
                     client.postRefresh();
-                }});
+                }
+            });
         }));
         /**
          * This method call handles the deletion,addition and updating of a list on the current board by
@@ -178,7 +181,8 @@ public class MainViewCtrl implements SceneCtrl {
                     client.getBoardCtrl().refresh();
                     mainCtrl.getActiveCtrl().revalidate();
                     client.postRefresh();
-                }});
+                }
+            });
         }));
         subscriptions.add(server.registerForMessages("/topic/board/" + boardId + "/update", Board.class, b -> {
             Platform.runLater(new Runnable() {
@@ -191,7 +195,8 @@ public class MainViewCtrl implements SceneCtrl {
                         mainCtrl.getActiveCtrl().revalidate();
                     }
                     client.postRefresh();
-                }});
+                }
+            });
         }));
         /**
          * This method call is used for informing the client that the board they are currently on
@@ -203,15 +208,17 @@ public class MainViewCtrl implements SceneCtrl {
                 public void run() {
                     client.setBoardCtrl(null);
                     unsubscribe();
-                    if(!mainCtrl.getActiveCtrl().equals(mainCtrl.getJoinBoardsCtrl())) {
+                    if (!mainCtrl.getActiveCtrl().equals(mainCtrl.getJoinBoardsCtrl())) {
                         mainCtrl.showJoin();
                         throw new RuntimeException("Sorry, but the board you are currently viewing has been permanently deleted.");
                     }
-                }});
+                }
+            });
         }));
     }
 
     public void unsubscribe() {
+        mainCtrl.getEditCardCtrl().resetState();
         subscriptions.forEach(StompSession.Subscription::unsubscribe);
         subscriptions.clear();
         register = true;
