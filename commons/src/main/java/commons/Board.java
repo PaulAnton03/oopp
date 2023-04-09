@@ -41,7 +41,7 @@ public class Board implements DBEntity {
     private String color;
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    List<Tag> tagList = new ArrayList<>();
+    private List<Tag> tagList = new ArrayList<>();
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @OrderColumn(name = "card_list_index")
@@ -77,6 +77,14 @@ public class Board implements DBEntity {
             return false;
         this.cardLists.add(cardList);
         return true;
+    }
+
+    public List<Tag> getTagList() {
+        return tagList;
+    }
+
+    public void setTagList(List<Tag> tagList) {
+        this.tagList = tagList;
     }
 
     public void addTag(Tag tag) {

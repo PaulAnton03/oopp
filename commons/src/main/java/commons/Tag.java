@@ -28,7 +28,7 @@ public class Tag implements DBEntity {
     @EqualsAndHashCode.Exclude
     @ManyToMany(
             cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REFRESH,
-                    CascadeType.REMOVE}, fetch = FetchType.LAZY)
+                       CascadeType.REMOVE}, fetch = FetchType.LAZY)
     @JoinTable(name = "tags_cards_tags",
             joinColumns = @JoinColumn(name = "tag_id"),
             inverseJoinColumns = @JoinColumn(name = "card_tag_id"))
