@@ -9,6 +9,12 @@ import static org.junit.jupiter.api.Assertions.*;
 @ExtendWith(MockitoExtension.class)
 class TagTest {
 
+    Tag tag = new Tag();
+    Board board = new Board("Test Board");
+
+
+
+
     @Test
     void getId() {
         Tag tag = new Tag();
@@ -38,18 +44,26 @@ class TagTest {
         assertEquals("test tag", tag.getText());
     }
 
+    @Test
+    void testGettersAndSetters() {
+        tag.setBoard(board);
+        tag.setText("Test Tag");
+        tag.setColor("00000000");
+        assertEquals(tag.getBoard(), board);
+        assertEquals("Test Tag", tag.getText());
+        assertEquals("00000000", tag.getColor());
 
+    }
 
     @Test
-    void getCards() {
+    void testSetAndGetColor() {
         Tag tag = new Tag();
-        Card card1 = new Card();
-        Card card2 = new Card();
-        tag.getCardTags().add(card1);
-        tag.getCardTags().add(card2);
-        assertTrue(tag.getCardTags().contains(card1));
-        assertTrue(tag.getCardTags().contains(card2));
+        tag.setColor("12345678");
+        assertEquals("12345678", tag.getColor());
     }
+
+
+
 
 
 }

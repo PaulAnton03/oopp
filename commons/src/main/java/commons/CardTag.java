@@ -81,4 +81,5 @@ public class CardTag {
     public void setTag(@NonNull Tag tag) {
         this.tag = tag;
     }
+
 }
