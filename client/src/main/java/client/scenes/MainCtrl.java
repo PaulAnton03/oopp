@@ -170,7 +170,7 @@ public class MainCtrl {
 
     public void showEditCard(long cardId) {
         editCardCtrl.loadData(cardId);
-        primaryStage.setTitle("Edit Card");
+        primaryStage.setTitle("Edit card in list " + client.getCard(cardId).getCardList().getTitle());
         showScene(editCard);
         activeCtrl = editCardCtrl;
     }
@@ -189,21 +189,21 @@ public class MainCtrl {
 
     public void showSettings() {
         boardSettingsCtrl.loadData();
-        primaryStage.setTitle("Board Settings");
+        primaryStage.setTitle("Settings for board " + client.getBoardCtrl().getBoard().getName());
         showScene(settings);
         activeCtrl = boardSettingsCtrl;
     }
 
     public void showAddCard(long cardListId) {
         addCardCtrl.loadData(cardListId);
-        primaryStage.setTitle("Add card");
+        primaryStage.setTitle("Add card to list " + client.getCardList(cardListId).getTitle());
         showScene(add);
         activeCtrl = addCardCtrl;
     }
 
     public void showMainView(Board board) {
         mainViewCtrl.loadData(board);
-        primaryStage.setTitle("Main view");
+        primaryStage.setTitle("Main view for board " + board.getName());
         showScene(main);
         clientPreferences.setDefaultBoardId(board.getId());
         boolean okPassword = board.getPassword() != null && !board.getPassword().isEmpty();
@@ -222,8 +222,6 @@ public class MainCtrl {
             this.showJoin();
             return;
         }
-        primaryStage.setTitle("Main view");
-        showScene(main);
         Board board;
         try {
             board = server.getBoard(boardId);
@@ -259,13 +257,13 @@ public class MainCtrl {
     }
 
     public void showAddList() {
-        primaryStage.setTitle("Add list");
+        primaryStage.setTitle("Add list to board " + client.getBoardCtrl().getBoard().getName());
         showScene(addList);
         activeCtrl = addListCtrl;
     }
 
     public void showListSettings(long cardListId) {
-        primaryStage.setTitle("Edit list");
+        primaryStage.setTitle("Edit list in board " + client.getBoardCtrl().getBoard().getName());
         editListCtrl.loadData(cardListId);
         showScene(editList);
         activeCtrl = editListCtrl;
@@ -280,7 +278,7 @@ public class MainCtrl {
 
     public void showThemeEditor() {
         activeCtrl = themeEditorCtrl;
-        primaryStage.setTitle("Theme editor");
+        primaryStage.setTitle("Theme editor for board " + client.getBoardCtrl().getBoard().getName());
         themeEditorCtrl.loadData();
         showScene(themeEdit);
     }
