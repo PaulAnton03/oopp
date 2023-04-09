@@ -136,7 +136,6 @@ public class MainViewCtrl implements SceneCtrl {
      * user is viewing.
      */
     public void registerForMessages() {
-
         register = false;
         long boardId = client.getBoardCtrl().getBoard().getId();
 
