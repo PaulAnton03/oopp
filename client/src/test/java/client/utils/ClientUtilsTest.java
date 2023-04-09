@@ -14,7 +14,7 @@ public class ClientUtilsTest {
     private static class CardCtrlDummy extends CardCtrl {
         private final Card dummyCard;
         public CardCtrlDummy(Card dummyCard) {
-            super(null, null, null);
+            super(null, null, null, null);
             this.dummyCard = dummyCard;
         }
 
