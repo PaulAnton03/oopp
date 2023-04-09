@@ -44,7 +44,7 @@ public class TagCtrl implements Component<Tag> {
     @FXML
     private AnchorPane anchorPane;
 
-    public boolean isAssigned = false;
+    private boolean isAssigned = false;
 
     private String colorString;
 
@@ -72,6 +72,14 @@ public class TagCtrl implements Component<Tag> {
         loader.setController(this);
         loader.setRoot(this);
 
+    }
+
+    public boolean isAssigned() {
+        return isAssigned;
+    }
+
+    public void setAssigned(boolean assigned) {
+        isAssigned = assigned;
     }
 
     @Override

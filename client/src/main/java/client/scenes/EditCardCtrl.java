@@ -85,7 +85,7 @@ public class EditCardCtrl implements SceneCtrl {
             TagCtrl tagCtrl = factory.create(TagCtrl.class, tag);
             for (CardTag cardTag : server.getCardTags()) {
                 if (cardTag.getTag().equals(tag) && cardTag.getCard().equals(card)) {
-                    tagCtrl.isAssigned = true;
+                    tagCtrl.setAssigned(true);
                     break;
                 }
             }

@@ -62,7 +62,8 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Tag>, Initi
     private FlowPane tagArea;
 
     @Inject
-    public CardCtrl(MainCtrl mainCtrl, ServerUtils server, ClientUtils client, ComponentFactory factory) {
+    public CardCtrl(MainCtrl mainCtrl, ServerUtils server, ClientUtils client,
+                    ComponentFactory factory) {
         this.mainCtrl = mainCtrl;
         this.factory = factory;
         this.server = server;
@@ -164,7 +165,8 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Tag>, Initi
         cardView.setViewOrder(0.0);
     }
 
-    public Transition getOpacityTransition(Node node, double initialOpacity, double finalOpacity, double duration) {
+    public Transition getOpacityTransition(Node node, double initialOpacity,
+                                           double finalOpacity, double duration) {
         FadeTransition ft = new FadeTransition(Duration.millis(duration), node);
         ft.setFromValue(initialOpacity);
         ft.setToValue(finalOpacity);
@@ -198,11 +200,9 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Tag>, Initi
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // Hide buttons, unhighlight card
         unhighlight();
         deleteButton.setOpacity(0.0);
         editButton.setOpacity(0.0);
-        // Create show/hide transition for buttons
         final Duration ftDuration = Duration.millis(200);
         final Duration ftDelay = Duration.millis(200);
         final List<FadeTransition> fts = List.of(
@@ -214,17 +214,12 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Tag>, Initi
             ft.setToValue(0.6);
         });
         buttonsVisibilityPT = new ParallelTransition(fts.get(0), fts.get(1));
-
-        // Set button icons and behaviour
         try (var binInputStream =
                      getClass().getResourceAsStream("/client/images/bin.png");
              var editInputStream =
                      getClass().getResourceAsStream("/client/images/edit.png")) {
-            // Hover behaviour
             applyButtonHoverStyle(deleteButton);
             applyButtonHoverStyle(editButton);
-
-            // Button graphic
             ImageView binIcon = new ImageView(new Image(binInputStream));
             ImageView editIcon = new ImageView(new Image(editInputStream));
             binIcon.setFitHeight(40);
@@ -236,7 +231,6 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Tag>, Initi
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        // Set card view event handlers
         cardView.setOnMouseEntered(event -> {
             focus();
             client.changeSelection(card.getId());

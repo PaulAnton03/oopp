@@ -220,15 +220,15 @@ public class ServerUtils {
     }
 
 
-    public Tag updateTag(Tag tag, long board_id) {
+    public Tag updateTag(Tag tag, long boardId) {
         WebTarget webTarget = webTargetFromPath("/tags/update/{id}").resolveTemplate("id", tag.getId())
-                .queryParam("boardId", board_id);
+                .queryParam("boardId", boardId);
         return webTargetAddDefault(webTarget).put(Entity.entity(tag, APPLICATION_JSON), Tag.class);
     }
 
-    public Tag createTag(Tag tag, long board_id) {
+    public Tag createTag(Tag tag, long boardId) {
         WebTarget webTarget = webTargetFromPath("/tags/create")
-                .queryParam("boardId", board_id);
+                .queryParam("boardId", boardId);
         return webTargetAddDefault(webTarget).post(Entity.entity(tag, APPLICATION_JSON), Tag.class);
     }
 
@@ -261,8 +261,8 @@ public class ServerUtils {
         });
     }
 
-    public CardTag updateCardTag(CardTag cardTag, Long cardtag_id) {
-        WebTarget webTarget = webTargetFromPath("/cardtags/update/{id}").resolveTemplate("id", cardtag_id);
+    public CardTag updateCardTag(CardTag cardTag, Long cardtagId) {
+        WebTarget webTarget = webTargetFromPath("/cardtags/update/{id}").resolveTemplate("id", cardtagId);
         return webTargetAddDefault(webTarget).put(Entity.entity(cardTag, APPLICATION_JSON), CardTag.class);
     }
 
