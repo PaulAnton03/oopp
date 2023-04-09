@@ -4,6 +4,7 @@ import client.utils.*;
 import com.google.inject.Inject;
 
 import commons.Board;
+import commons.CardTag;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -78,6 +79,12 @@ public class BoardSettingsCtrl implements SceneCtrl {
         if (board == null) {
             Logger.log("No board selected", Logger.LogLevel.ERROR);
             throw new IllegalStateException("Something went wrong, no board selected!");
+        }
+        //this for loop is for deleting cardTags if a tag is in this board.
+        for(CardTag cardTag : server.getCardTags()){
+            if(cardTag.getTag().getBoard().equals(board)){
+                server.deleteCardTag(cardTag.getId());
+            }
         }
         clientPrefs.removeJoinedBoard(board.getId());
         server.deleteBoard(board.getId());
