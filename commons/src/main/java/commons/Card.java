@@ -39,45 +39,19 @@ public class Card implements DBEntity {
     private CardList cardList;
 
 
-    //    @ToString.Exclude
-//    @EqualsAndHashCode.Exclude
-//    @ElementCollection
-//    @ManyToMany(mappedBy = "cards", targetEntity = commons.Tag.class, fetch = FetchType.EAGER,
-//            cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REFRESH,
-//                    CascadeType.REMOVE})
-//    @JoinTable(name = "cards_tags",
-//            joinColumns = @JoinColumn(name="card_id", referencedColumnName = "id"),
-//            inverseJoinColumns =
-//            @JoinColumn(name="tag_id", referencedColumnName = "id")
-//    )
-//    private Set<Tag> tags = new HashSet<>();
-    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+
+    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     @JoinTable(name = "cards_cards_tags",
             joinColumns = @JoinColumn(name = "card_id"),
             inverseJoinColumns = @JoinColumn(name = "card_tag_id"))
     private Set<CardTag> cardTags = new HashSet<>();
 
 
-    //Board->Tag OneToMany, Tag -> Board ManyToOne,
-    // taglerden cardlara manytomany, hem card dan tage, hem tagden hem carda.
-
     @NonNull
     private String title;
     @NonNull
     private String description;
-//
-//    @OneToOne(targetEntity = Tag.class)
-    //private List<Triple<String, Integer, String>> tagList = new ArrayList<>();
 
-//    public boolean removeTag(long id) {
-//        Tag tag = this.getTags().stream().filter(c -> c.getId() == id).findFirst().orElse(null);
-//        if (tag == null) {
-//            return false;
-//        } else {
-//            this.getTags().remove(tag);
-//        }
-//        return true;
-//    }
 
     public boolean removeSubTask(SubTask subTask) {
         return this.subtasks.remove(subTask);

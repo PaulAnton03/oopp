@@ -47,10 +47,6 @@ public class CardTagController {
         System.out.println("to be combined" + card.getTitle());
         Tag tag = cardTag.getTag();
         System.out.println("to be combined" + tag.getText());
-//        tag.getCardTags().add(cardTag);
-//        card.getCardTags().add(cardTag);
-//        tagRepository.save(tag);
-//        cardRepository.save(card);
         return cardTagRepository.save(cardTag);
     }
 
@@ -70,12 +66,7 @@ public class CardTagController {
     public ResponseEntity<CardTag> deleteCardTag(@PathVariable(value = "id") Long cardTagId) {
         CardTag cardTag = cardTagRepository.findById(cardTagId)
                 .orElseThrow(() -> new RuntimeException("CardTag not found with id: " + cardTagId));
-//        Tag tag = cardTag.getTag();
-//        Card card = cardTag.getCard();
-//        tag.getCardTags().remove(cardTag);
-//        card.getCardTags().remove(cardTag);
-//        tagRepository.save(tag);
-//        cardRepository.save(card);
+
         cardTagRepository.delete(cardTag);
         return ResponseEntity.ok(cardTag);
     }

@@ -147,14 +147,10 @@ public class TagCtrl implements Component<Tag> {
         System.out.println("Assigning is called");
         CardTag cardTag = new CardTag(card, tag);
         System.out.println("card set to cardTag: " + card.getTitle());
-//        card.getCardTags().add(cardTag);
-//        tag.getCardTags().add(cardTag);
         System.out.println("tag set to cardTag: " + tag.getText());
         server.createCardTag(cardTag);
 
-        //card.getTags().add(tag);
-        //   tag.getCards().add(card);
-        //    server.updateCard(card);
+
     }
 
     public void unAssignFromCard(Card card) {
@@ -163,18 +159,7 @@ public class TagCtrl implements Component<Tag> {
                 server.deleteCardTag(cardTag.getId());
             }
         }
-//        CardTag cardTag = (
-//                server.getCardTags().stream()
-//                        .filter(cardTag1 -> cardTag1.getCard().equals(card))
-//                        .collect(Collectors.toList()).get(0));
-//        if(cardTag != null)
-//            server.deleteCardTag(cardTag.getId());
-//        else{
-//            System.out.println("cardTag not found!");
-//        }
-        //   tag.getCards().remove(card);
-        //     server.updateCard(card);
-        //  server.updateTag(tag);
+//
     }
 
     public void changeTag(Card card) {
@@ -183,8 +168,6 @@ public class TagCtrl implements Component<Tag> {
 
     public void delete() {
         Board board = client.getBoardCtrl().getBoard();
-        //      board.getTagList().remove(tag);
-        //      server.updateBoard(board);
         server.deleteTag(tag.getId());
         this.savedText.setText("Deleted Tag");
     }
@@ -198,11 +181,14 @@ public class TagCtrl implements Component<Tag> {
 
     }
 
-    public void refresh() {
+    public void refresh(Card card) {
         loadData(server.getTag(tag.getId()));
-        for (CardTag cardTag : tag.getCardTags()) {
-            Card card = cardTag.getCard();
-            client.getCardCtrl(card.getId()).replaceChild(tag);
+        for (CardTag cardTag : server.getCardTags()) {
+            if(cardTag.getTag().equals(tag) && cardTag.getCard().equals(card)){
+                client.getCardCtrl(card.getId()).replaceChild(tag);
+            }
+            //todo well this needs to change because card don't actually have
+            //the tag as a child anymore. its instantiated from cardTag
         }
     }
 

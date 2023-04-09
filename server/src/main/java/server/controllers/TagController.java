@@ -4,6 +4,7 @@ import commons.Board;
 import commons.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import server.database.BoardRepository;
@@ -17,15 +18,18 @@ import java.util.Optional;
 @RequestMapping("/tags")
 public class TagController {
 
+    private final SimpMessagingTemplate messagingTemplate;
     private final TagRepository tagRepository;
     private final CardRepository cardRepository;
 
     private final BoardRepository boardRepository;
 
-    public TagController(TagRepository tagRepository, CardRepository cardRepository, BoardRepository boardRepository) {
+    public TagController(TagRepository tagRepository, CardRepository cardRepository,
+                         BoardRepository boardRepository, SimpMessagingTemplate messagingTemplate) {
         this.tagRepository = tagRepository;
         this.cardRepository = cardRepository;
         this.boardRepository = boardRepository;
+        this.messagingTemplate = messagingTemplate;
     }
 
     @GetMapping(path = {"", "/"})
@@ -56,6 +60,9 @@ public class TagController {
 
         tagRepository.save(tag); //hmm but maybe we still need it
         System.out.println("Created tag! : " + tag.getId());
+        if(messagingTemplate != null)
+            messagingTemplate.convertAndSend("/topic/board/" +
+                    tag.getBoard().getId() + "/tags", tag);
         return ResponseEntity.ok(tag);
     }
 
@@ -78,7 +85,8 @@ public class TagController {
         }
         tagRepository.deleteById(repoTag.getId());
         System.out.println("Deleted tag!" + id);
-        //todo messagingTemplate?
+        messagingTemplate.convertAndSend("/topic/board/" + optTag.get().getBoard().getId()
+        + "/tags", optTag.get());
         return ResponseEntity.ok(repoTag);
     }
 
@@ -97,9 +105,10 @@ public class TagController {
         board = boardRepository.findById(boardId).get();
         tag.setBoard(board);
         tagRepository.save(tag);
-        //boardRepository.save(tag.getBoard()); //by saving board
-        //we save  things from topdown
+        messagingTemplate.convertAndSend("/topic/board/" + optTag.get().getBoard().getId()
+                + "/tags", tag);
         return ResponseEntity.ok(optTag.get());
+
     }
 }
 

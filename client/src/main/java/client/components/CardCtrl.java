@@ -113,6 +113,11 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Tag>, Initi
         if (!client.getBoardCtrl().getBoard().isEditable()) {
             throw new IllegalStateException("You do not have permissions to edit this board.");
         }
+        for(CardTag cardTag : server.getCardTags()){
+            if(cardTag.getCard().equals(card)){
+                server.deleteCardTag(cardTag.getId());
+            }
+        }//with this we first delete the relation with cardTag
         this.card = server.deleteCard(card.getId());
 
     }

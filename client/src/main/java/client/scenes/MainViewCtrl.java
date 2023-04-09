@@ -1,5 +1,6 @@
 package client.scenes;
 
+import client.components.TagCtrl;
 import com.google.inject.Inject;
 
 import client.components.BoardCtrl;
@@ -7,9 +8,7 @@ import client.utils.ClientUtils;
 import client.utils.ComponentFactory;
 import client.utils.ExceptionHandler;
 import client.utils.ServerUtils;
-import commons.Board;
-import commons.Card;
-import commons.CardList;
+import commons.*;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -19,6 +18,8 @@ import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.text.Text;
+
+import java.util.stream.Collectors;
 
 
 public class MainViewCtrl implements SceneCtrl {
@@ -44,7 +45,8 @@ public class MainViewCtrl implements SceneCtrl {
     private AnchorPane warning;
 
     @Inject
-    public MainViewCtrl(ServerUtils server, ClientUtils client, MainCtrl mainCtrl, ComponentFactory factory, ExceptionHandler exceptionHandler) {
+    public MainViewCtrl(ServerUtils server, ClientUtils client, MainCtrl mainCtrl,
+                        ComponentFactory factory, ExceptionHandler exceptionHandler) {
         this.server = server;
         this.client = client;
         this.mainCtrl = mainCtrl;
@@ -118,6 +120,26 @@ public class MainViewCtrl implements SceneCtrl {
     public void registerForMessages() {
 
         long boardId = client.getBoardCtrl().getBoard().getId();
+
+        server.registerForMessages("/topic/board/" + boardId + "/tags", Tag.class, c -> {
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    try{
+                        for(CardTag cardTag : c.getCardTags()){
+                            if(cardTag.getTag().equals(c)){
+                                TagCtrl tagCtrl = client.getTagCtrl(c.getId());
+                                tagCtrl.refresh(cardTag.getCard());
+                                mainCtrl.getActiveCtrl().revalidate();
+                            }
+                        }
+                    }catch (Exception e){
+                        System.out.println("Some exception in websockets of tags!");
+                    }
+
+                }
+            });
+        });
 
         /**
          * This method call handles the deletion,addition and updating of a card on the current board by

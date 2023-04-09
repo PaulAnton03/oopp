@@ -104,15 +104,11 @@ public class TagSettingsCtrl implements SceneCtrl {
     }
 
     public void delete() {
-        //      Board board = client.getBoardCtrl().getBoard();
         for (CardTag cardTag : server.getCardTags()) {
             if (cardTag.getTag().equals(tag))
                 server.deleteCardTag(cardTag.getId());
         }
         server.deleteTag(tag.getId());
-//        if(board.getTagList().contains(tag))
-//            board.getTagList().remove(tag);
-        //      server.updateBoard(board);
         this.savedText.setText("Deleted Tag");
         mainCtrl.showMainView();
     }

@@ -2,16 +2,14 @@ package server.controllers;
 
 import commons.Card;
 import commons.CardList;
+import commons.CardTag;
 import commons.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-import server.database.CardListRepository;
-import server.database.CardRepository;
-import server.database.SubTaskRepository;
-import server.database.TagRepository;
+import server.database.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -28,14 +26,17 @@ public class CardController {
 
     private final SubTaskRepository subTaskRepository;
 
+    private final CardTagRepository cardTagRepository;
+
     public CardController(SimpMessagingTemplate messagingTemplate, CardRepository cardRepository,
                           CardListRepository cardListRepository, SubTaskRepository subTaskRepository
-            , TagRepository tagRepository) {
+            , TagRepository tagRepository, CardTagRepository cardTagRepository) {
         this.messagingTemplate = messagingTemplate;
         this.cardRepository = cardRepository;
         this.cardListRepository = cardListRepository;
         this.subTaskRepository = subTaskRepository;
         this.tagRepository = tagRepository;
+        this.cardTagRepository = cardTagRepository;
     }
 
     @GetMapping(path = {"", "/"})
@@ -122,14 +123,8 @@ public class CardController {
             //  return ResponseEntity.notFound().build();
         }
         Optional<Tag> optionalTag = tagRepository.findById(id);
-        Tag tag = optionalTag.get();
-        if (tag == null) {
-            tag = new Tag();
-        }
-//        if (!card.getTags().contains(tag)) {
-//            card.getTags().add(tag);
-//            tag.getCardTags().add(card);
-//        }
+        CardTag cardTag = new CardTag(card, optionalTag.get());
+        card.getCardTags().add(cardTag);
         Card updated = cardRepository.save(card);
         return ResponseEntity.ok(updated);
     }
