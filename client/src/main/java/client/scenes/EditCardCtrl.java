@@ -184,6 +184,7 @@ public class EditCardCtrl implements SceneCtrl {
         if (client.getCardCtrls().containsKey(cardId)) {
             return;
         }
+        resetState();
         mainCtrl.showMainView();
         throw new RuntimeException("Sorry, but the card you were editing or the list it was part of has been permanently deleted.");
     }
