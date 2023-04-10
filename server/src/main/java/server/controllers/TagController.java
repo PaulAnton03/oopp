@@ -79,7 +79,7 @@ public class TagController {
         tagRepository.deleteById(repoTag.getId());
         System.out.println("Deleted tag!" + id);
         messagingTemplate.convertAndSend("/topic/board/" + optTag.get().getBoard().getId()
-        + "/tags", optTag.get());
+            + "/tags", optTag.get());
         return ResponseEntity.ok(repoTag);
     }
 
