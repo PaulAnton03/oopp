@@ -264,24 +264,7 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Tag>, Initi
             } catch (Exception e) {
                 return;
             }
-            List<CardTag> cardTags = new ArrayList<>();
-            for(CardTag cardTag : server.getCardTags()){
-                if(cardTag.getCard().equals(card)){
-                    cardTags.add(cardTag);
-                    server.deleteCardTag(cardTag.getId());
-                }
-            }
-            cardListStart.removeCard(card);
-            cardListEnd.addCardAtPosition(card, position);
-            this.card.setCardList(cardListEnd);
-            server.updateCardList(cardListStart);
-            server.updateCardList(cardListEnd);
-            client.getBoardCtrl().refresh();
-            Card card = server.getCard(server.getCardList(cardListEnd.getId()).getCards().get(position).getId());
-            for(CardTag cardTag : cardTags){
-                cardTag.setCard(card);
-                server.createCardTag(cardTag);
-            }
+            moveCardPosition(cardListStart, cardListEnd, position);
             event.consume();
         });
         cardView.setOnMouseClicked(event -> {
@@ -289,5 +272,26 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Tag>, Initi
                 editCard();
             }
         });
+    }
+
+    private void moveCardPosition(CardList cardListStart, CardList cardListEnd, int position) {
+        List<CardTag> cardTags = new ArrayList<>();
+        for(CardTag cardTag : server.getCardTags()){
+            if(cardTag.getCard().equals(card)){
+                cardTags.add(cardTag);
+                server.deleteCardTag(cardTag.getId());
+            }
+        }
+        cardListStart.removeCard(card);
+        cardListEnd.addCardAtPosition(card, position);
+        this.card.setCardList(cardListEnd);
+        server.updateCardList(cardListStart);
+        server.updateCardList(cardListEnd);
+        client.getBoardCtrl().refresh();
+        Card card = server.getCard(server.getCardList(cardListEnd.getId()).getCards().get(position).getId());
+        for(CardTag cardTag : cardTags){
+            cardTag.setCard(card);
+            server.createCardTag(cardTag);
+        }
     }
 }

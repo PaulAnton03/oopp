@@ -25,7 +25,6 @@ public class MainViewCtrl implements SceneCtrl {
     private final ClientUtils client;
     private final MainCtrl mainCtrl;
     private final ComponentFactory factory;
-
     private final ExceptionHandler exceptionHandler;
 
     @FXML
@@ -53,7 +52,7 @@ public class MainViewCtrl implements SceneCtrl {
 
     @FXML
     void btnAddClicked(ActionEvent event) {
-        if(!client.getBoardCtrl().getBoard().isEditable()) {
+        if (!client.getBoardCtrl().getBoard().isEditable()) {
             throw new IllegalStateException("You do not have permissions to edit this board.");
         }
         mainCtrl.showAddList();
@@ -76,7 +75,7 @@ public class MainViewCtrl implements SceneCtrl {
 
     @FXML
     void btnSettingsClicked(ActionEvent event) {
-        if(!client.getBoardCtrl().getBoard().isEditable()) {
+        if (!client.getBoardCtrl().getBoard().isEditable()) {
             throw new IllegalStateException("You do not have permissions to edit this board.");
         }
         mainCtrl.showSettings();
@@ -118,44 +117,7 @@ public class MainViewCtrl implements SceneCtrl {
 
         long boardId = client.getBoardCtrl().getBoard().getId();
 
-        server.registerForMessages("/topic/board/" + boardId + "/cardtags", CardTag.class, c -> {
-            Platform.runLater(new Runnable() {
-                @Override
-                public void run() {
-                    try{
-                        for(CardTag cardTag : server.getCardTags()){
-                            TagCtrl tagCtrl = client.getTagCtrl(c.getId());
-                            tagCtrl.refresh(cardTag.getCard());
-                            mainCtrl.getActiveCtrl().revalidate();
-
-                        }
-                    }catch (Exception e){
-                        System.out.println("Some exception in websockets of tags!");
-                    }
-
-                }
-            });
-        });
-
-        server.registerForMessages("/topic/board/" + boardId + "/tags", Tag.class, c -> {
-            Platform.runLater(new Runnable() {
-                @Override
-                public void run() {
-                    try{
-                        for(CardTag cardTag : server.getCardTags()){
-                            if(cardTag.getTag().equals(c)){
-                                TagCtrl tagCtrl = client.getTagCtrl(c.getId());
-                                tagCtrl.refresh(cardTag.getCard());
-                                mainCtrl.getActiveCtrl().revalidate();
-                            }
-                        }
-                    }catch (Exception e){
-                        System.out.println("Some exception in websockets of tags!");
-                    }
-
-                }
-            });
-        });
+        tagRegistration(boardId);
 
         /**
          * This method call handles the deletion,addition and updating of a card on the current board by
@@ -212,10 +174,54 @@ public class MainViewCtrl implements SceneCtrl {
                 public void run() {
                     client.setBoardCtrl(null);
                     mainCtrl.showJoin();
-                    throw new RuntimeException("Sorry, but the board you are currently viewing has been permanently deleted.");
+                    throw new RuntimeException("Sorry, but the board you are currently" +
+                            " viewing has been permanently deleted.");
                 }
             });
         });
 
+    }
+
+    private void tagRegistration(long boardId) {
+        server.registerForMessages("/topic/board/" + boardId + "/cardtags",
+                CardTag.class, c -> {
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                for (CardTag cardTag : server.getCardTags()) {
+                                    TagCtrl tagCtrl = client.getTagCtrl(c.getId());
+                                    tagCtrl.refresh(cardTag.getCard());
+                                    mainCtrl.getActiveCtrl().revalidate();
+
+                                }
+                            } catch (Exception e) {
+                                System.out.println("Some exception in websockets of tags!");
+                            }
+
+                        }
+                    });
+                });
+
+        server.registerForMessages("/topic/board/" + boardId + "/tags",
+                Tag.class, c -> {
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                for (CardTag cardTag : server.getCardTags()) {
+                                    if (cardTag.getTag().equals(c)) {
+                                        TagCtrl tagCtrl = client.getTagCtrl(c.getId());
+                                        tagCtrl.refresh(cardTag.getCard());
+                                        mainCtrl.getActiveCtrl().revalidate();
+                                    }
+                                }
+                            } catch (Exception e) {
+                                System.out.println("Some exception in websockets of tags!");
+                            }
+
+                        }
+                    });
+                });
     }
 }
