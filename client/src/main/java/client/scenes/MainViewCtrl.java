@@ -1,20 +1,11 @@
 package client.scenes;
 
 import client.components.BoardCtrl;
-import client.components.CardCtrl;
 import client.components.CardListCtrl;
 import client.components.TagCtrl;
-import client.utils.ClientUtils;
-import client.utils.ComponentFactory;
-import client.utils.ExceptionHandler;
-import client.utils.ServerUtils;
+import client.utils.*;
 import com.google.inject.Inject;
 import commons.*;
-import client.utils.*;
-import commons.Board;
-import commons.Card;
-import commons.CardList;
-import commons.SubTask;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -240,11 +231,9 @@ public class MainViewCtrl implements SceneCtrl {
                             } catch (Exception e) {
                                 System.out.println("Some exception in websockets of CardTags!");
                             }
-
                         }
                     });
                 }));
-
         subscriptions.add(server.registerForMessages("/topic/board/" + boardId + "/tags",
                 Tag.class, c -> {
                     Platform.runLater(new Runnable() {
@@ -258,8 +247,7 @@ public class MainViewCtrl implements SceneCtrl {
                                         mainCtrl.getActiveCtrl().revalidate();
                                     }
                                 }
-                            } catch (Exception e) {
-                                System.out.println("Some exception in websockets of tags!");
+                            } catch (Exception ignored) {
                             }
 
                         }
@@ -276,18 +264,13 @@ public class MainViewCtrl implements SceneCtrl {
                                 for(CardTag cardTag : server.getCardTags()){
                                     if(cardTag.getTag().equals(c)){
                                         board = cardTag.getCard().getCardList().getBoard();
-                                        System.out.println("Board found!: " + board.getName());
-                                        break;
+                                        System.out.println("Board found!: " + board.getName());break;
                                     }
                                 }
                                 if(board != null){
                                     for(CardList cardList : board.getCardLists()){
                                         CardListCtrl cardListCtrl = client.getCardListCtrl(cardList.getId());
                                         cardListCtrl.refresh();
-//                                        for(Card card : cardList.getCards()){
-//                                            CardCtrl cardCtrl = client.getCardCtrl(card.getId());
-//                                            cardCtrl.refresh();
-//                                        }
                                     }
                                 }else{
                                     System.out.println("Board is null, removed tag could not be refreshed from" +

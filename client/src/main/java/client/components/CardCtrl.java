@@ -99,7 +99,6 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Tag>, Initi
             tagArea.getChildren().clear();
         description.setText(card.getDescription());
         client.getCardListCtrl(card.getCardList().getId()).replaceChild(card);
-
         for (CardTag cardTag : server.getCardTags()) {
             System.out.println(cardTag.toString());
             if (cardTag.getCard().equals(card)) {
@@ -281,10 +280,7 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Tag>, Initi
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // Hide buttons, unhighlight card
         deleteButton.setOpacity(0.0); editButton.setOpacity(0.0);
-        // Create show/hide transition for buttons
-//        unhighlight();
         final Duration ftDuration = Duration.millis(200);
         final Duration ftDelay = Duration.millis(200);
         final List<FadeTransition> fts = List.of(

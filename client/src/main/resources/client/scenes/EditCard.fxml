@@ -69,7 +69,7 @@
                   <HBox alignment="CENTER" layoutX="-1.0" layoutY="166.0" prefHeight="57.0" prefWidth="407.0" spacing="50.0">
                      <children>
                         <Button mnemonicParsing="false" onAction="#cancel" prefHeight="26.0" prefWidth="70.0" styleClass="formButton" text="Cancel" />
-                        <Text fx:id="tagAssignText" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+                        <Text fx:id="tagAssignText" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" visible="false" />
                         <Button mnemonicParsing="false" onAction="#saveCardChanges" prefHeight="27.0" prefWidth="70.0" styleClass="formButton" text="Save" />
                      </children>
                   </HBox>
