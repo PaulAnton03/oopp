@@ -21,7 +21,7 @@ public class ComponentFactory {
             CardListCtrl.class, "CardList.fxml",
             CardCtrl.class, "Card.fxml",
             BoardJoinCtrl.class, "BoardJoin.fxml",
-            TagCtrl.class, "Tag.fxml"
+            TagCtrl.class, "Tag.fxml",
             BoardJoinCtrl.class, "BoardJoin.fxml",
             SubTaskCtrl.class, "SubTask.fxml"
     );

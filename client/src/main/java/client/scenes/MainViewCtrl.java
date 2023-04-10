@@ -136,7 +136,6 @@ public class MainViewCtrl implements SceneCtrl {
         if (register)
             registerForMessages();
     }
-
     /**
      * This method is used after loading the data in order to subscribe the client to different endpoints
      * and handle events related to deleting, creating, and updating cards and lists on the current board the
@@ -145,11 +144,6 @@ public class MainViewCtrl implements SceneCtrl {
     public void registerForMessages() {
         register = false;
         long boardId = client.getBoardCtrl().getBoard().getId();
-        /**
-         * This method call handles the deletion,addition and updating of a subtask on the current board by
-         * using the registerForMessages method of the server, which refreshes the CardCtrl of the subtask
-         * in question.
-         */
         subscriptions.add(server.registerForMessages("/topic/board/" + boardId + "/subtasks", SubTask.class, s -> {
             Platform.runLater(new Runnable() {
                 @Override
@@ -159,9 +153,7 @@ public class MainViewCtrl implements SceneCtrl {
                     client.postRefresh();
                 }});
         }));
-
         tagRegistration(boardId);
-
         /**
          * This method call handles the deletion,addition and updating of a card on the current board by
          * using the registerForMessages method of the server, which refreshes the CardListCtrl of the card

@@ -157,18 +157,17 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Tag>, Initi
             alert.setHeaderText("You do not have permissions to edit this board.");
             alert.showAndWait();
         } else {
-            for(CardTag cardTag : server.getCardTags()){
-                if(cardTag.getCard().equals(card)){
+            for(CardTag cardTag : server.getCardTags()) {
+                if (cardTag.getCard().equals(card)) {
                     server.deleteCardTag(cardTag.getId());
                 }
+            }
             this.card = server.deleteCard(card.getId());
         }
-            throw new IllegalStateException("You do not have permissions to edit this board.");
-        }
 
-        }//with this we first delete the relation with cardTag
+    }//with this we first delete the relation with cardTag
 
-    }
+
 
     public void refresh() {
         loadData(server.getCard(card.getId()));

@@ -37,8 +37,6 @@ public class EditCardCtrl implements SceneCtrl {
 
     private ComponentFactory factory;
 
-    private final ComponentFactory factory;
-
     private final ExceptionHandler exceptionHandler;
 
     @Getter
