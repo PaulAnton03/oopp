@@ -184,7 +184,8 @@ public class TagCtrl implements Component<Tag> {
         loadData(server.getTag(tag.getId()));
         for (CardTag cardTag : server.getCardTags()) {
             if(cardTag.getTag().equals(tag) && cardTag.getCard().equals(card)){
-                client.getCardCtrl(card.getId()).replaceChild(tag);
+                System.out.println("refreshed tags");
+                client.getCardCtrl(card.getId()).refresh();
             }
             //todo well this needs to change because card don't actually have
             //the tag as a child anymore. its instantiated from cardTag

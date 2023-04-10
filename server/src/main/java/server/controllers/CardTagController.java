@@ -5,6 +5,7 @@ import commons.CardTag;
 import commons.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 import server.database.CardRepository;
 import server.database.CardTagRepository;
@@ -20,11 +21,14 @@ public class CardTagController {
     private CardTagRepository cardTagRepository;
 
     public CardTagController(CardTagRepository cardTagRepository,
-                             TagRepository tagRepository, CardRepository cardRepository) {
+                             TagRepository tagRepository, CardRepository cardRepository, SimpMessagingTemplate messagingTemplate) {
         this.cardTagRepository = cardTagRepository;
         this.tagRepository = tagRepository;
         this.cardRepository = cardRepository;
+        this.messagingTemplate = messagingTemplate;
     }
+
+    private final SimpMessagingTemplate messagingTemplate;
 
     private final TagRepository tagRepository;
     private final CardRepository cardRepository;
@@ -68,6 +72,9 @@ public class CardTagController {
                 .orElseThrow(() -> new RuntimeException("CardTag not found with id: " + cardTagId));
 
         cardTagRepository.delete(cardTag);
+        messagingTemplate.convertAndSend("/topic/board/" +
+                cardTag.getCard().getCardList().getBoard().getId()
+            + "/cardtags", cardTag);
         return ResponseEntity.ok(cardTag);
     }
 

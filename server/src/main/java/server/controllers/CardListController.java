@@ -96,5 +96,4 @@ public class CardListController {
         return ResponseEntity.ok(updated);
     }
 
-
 }

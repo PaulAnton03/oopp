@@ -55,10 +55,9 @@ public class TagController {
         } else {
             System.out.println("This tag already exists in board!");
         }
-        // tagRepository.save(tag); //Cascaded so no need
-        tag.setBoard(board);
 
-        tagRepository.save(tag); //hmm but maybe we still need it
+        tag.setBoard(board);
+        tagRepository.save(tag);
         System.out.println("Created tag! : " + tag.getId());
         if(messagingTemplate != null)
             messagingTemplate.convertAndSend("/topic/board/" +

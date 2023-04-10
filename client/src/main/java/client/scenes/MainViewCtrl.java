@@ -121,12 +121,31 @@ public class MainViewCtrl implements SceneCtrl {
 
         long boardId = client.getBoardCtrl().getBoard().getId();
 
+        server.registerForMessages("/topic/board/" + boardId + "/cardtags", CardTag.class, c -> {
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    try{
+                        for(CardTag cardTag : server.getCardTags()){
+                            TagCtrl tagCtrl = client.getTagCtrl(c.getId());
+                            tagCtrl.refresh(cardTag.getCard());
+                            mainCtrl.getActiveCtrl().revalidate();
+
+                        }
+                    }catch (Exception e){
+                        System.out.println("Some exception in websockets of tags!");
+                    }
+
+                }
+            });
+        });
+
         server.registerForMessages("/topic/board/" + boardId + "/tags", Tag.class, c -> {
             Platform.runLater(new Runnable() {
                 @Override
                 public void run() {
                     try{
-                        for(CardTag cardTag : c.getCardTags()){
+                        for(CardTag cardTag : server.getCardTags()){
                             if(cardTag.getTag().equals(c)){
                                 TagCtrl tagCtrl = client.getTagCtrl(c.getId());
                                 tagCtrl.refresh(cardTag.getCard());
