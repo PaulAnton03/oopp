@@ -1,13 +1,12 @@
 package client.scenes;
 
-import client.components.TagCtrl;
-import com.google.inject.Inject;
-
 import client.components.BoardCtrl;
+import client.components.TagCtrl;
 import client.utils.ClientUtils;
 import client.utils.ComponentFactory;
 import client.utils.ExceptionHandler;
 import client.utils.ServerUtils;
+import com.google.inject.Inject;
 import commons.*;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -18,8 +17,6 @@ import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.text.Text;
-
-import java.util.stream.Collectors;
 
 
 public class MainViewCtrl implements SceneCtrl {

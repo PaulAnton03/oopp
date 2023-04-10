@@ -35,6 +35,7 @@ import lombok.Getter;
 import javax.inject.Inject;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -263,12 +264,24 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Tag>, Initi
             } catch (Exception e) {
                 return;
             }
+            List<CardTag> cardTags = new ArrayList<>();
+            for(CardTag cardTag : server.getCardTags()){
+                if(cardTag.getCard().equals(card)){
+                    cardTags.add(cardTag);
+                    server.deleteCardTag(cardTag.getId());
+                }
+            }
             cardListStart.removeCard(card);
             cardListEnd.addCardAtPosition(card, position);
             this.card.setCardList(cardListEnd);
             server.updateCardList(cardListStart);
             server.updateCardList(cardListEnd);
             client.getBoardCtrl().refresh();
+            Card card = server.getCard(server.getCardList(cardListEnd.getId()).getCards().get(position).getId());
+            for(CardTag cardTag : cardTags){
+                cardTag.setCard(card);
+                server.createCardTag(cardTag);
+            }
             event.consume();
         });
         cardView.setOnMouseClicked(event -> {

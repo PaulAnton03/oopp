@@ -1,9 +1,5 @@
 package client.components;
 
-import java.util.stream.IntStream;
-
-import javax.inject.Inject;
-
 import client.scenes.MainCtrl;
 import client.utils.ClientUtils;
 import client.utils.ComponentFactory;
@@ -16,6 +12,9 @@ import javafx.scene.Parent;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import lombok.Getter;
+
+import javax.inject.Inject;
+import java.util.stream.IntStream;
 
 public class BoardCtrl implements Component<Board>, DBEntityCtrl<Board, CardList> {
     private final ClientUtils client;
