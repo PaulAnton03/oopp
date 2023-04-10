@@ -1,6 +1,7 @@
 package client.scenes;
 
 import client.components.BoardCtrl;
+import client.components.CardCtrl;
 import client.components.TagCtrl;
 import client.utils.ClientUtils;
 import client.utils.ComponentFactory;
@@ -224,7 +225,7 @@ public class MainViewCtrl implements SceneCtrl {
 
     }
     private void tagRegistration(long boardId) {
-        server.registerForMessages("/topic/board/" + boardId + "/cardtags",
+        subscriptions.add(server.registerForMessages("/topic/board/" + boardId + "/cardtags",
                 CardTag.class, c -> {
                     Platform.runLater(new Runnable() {
                         @Override
@@ -234,17 +235,16 @@ public class MainViewCtrl implements SceneCtrl {
                                     TagCtrl tagCtrl = client.getTagCtrl(c.getId());
                                     tagCtrl.refresh(cardTag.getCard());
                                     mainCtrl.getActiveCtrl().revalidate();
-
                                 }
                             } catch (Exception e) {
-                                System.out.println("Some exception in websockets of tags!");
+                                System.out.println("Some exception in websockets of CardTags!");
                             }
 
                         }
                     });
-                });
+                }));
 
-        server.registerForMessages("/topic/board/" + boardId + "/tags",
+        subscriptions.add(server.registerForMessages("/topic/board/" + boardId + "/tags",
                 Tag.class, c -> {
                     Platform.runLater(new Runnable() {
                         @Override
@@ -263,6 +263,29 @@ public class MainViewCtrl implements SceneCtrl {
 
                         }
                     });
-                });
+                }));
+
+        subscriptions.add(server.registerForMessages("/topic/board/" + boardId + "/tags/delete",
+                Tag.class, c -> {
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                for (CardTag cardTag : server.getCardTags()) {
+                                    if (cardTag.getTag().equals(c)) {
+                                        TagCtrl tagCtrl = client.getTagCtrl(c.getId());
+                                        CardCtrl cardCtrl = client.getCardCtrl(cardTag.getCard().getId());
+                                        cardCtrl.getTagArea().getChildren().remove(cardCtrl.getNode());
+                                        mainCtrl.getActiveCtrl().revalidate();
+                                    }
+                                }
+                            } catch (Exception e) {
+                                System.out.println("Some exception in websockets of tags!");
+                            }
+
+                        }
+                    });
+                }));
+
     }
 }

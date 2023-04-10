@@ -1,6 +1,8 @@
 package server.controllers;
 
 import commons.Board;
+import commons.Card;
+import commons.CardTag;
 import commons.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,8 +11,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import server.database.BoardRepository;
 import server.database.CardRepository;
+import server.database.CardTagRepository;
 import server.database.TagRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,14 +26,18 @@ public class TagController {
     private final TagRepository tagRepository;
     private final CardRepository cardRepository;
 
+    private final CardTagRepository cardTagRepository;
+
     private final BoardRepository boardRepository;
 
     public TagController(TagRepository tagRepository, CardRepository cardRepository,
-                         BoardRepository boardRepository, SimpMessagingTemplate messagingTemplate) {
+                         BoardRepository boardRepository, SimpMessagingTemplate messagingTemplate
+    ,CardTagRepository cardTagRepository) {
         this.tagRepository = tagRepository;
         this.cardRepository = cardRepository;
         this.boardRepository = boardRepository;
         this.messagingTemplate = messagingTemplate;
+        this.cardTagRepository = cardTagRepository;
     }
 
     @GetMapping(path = {"", "/"})
@@ -76,10 +84,11 @@ public class TagController {
         if (repoTag.getBoard() != null) {
             repoTag.getBoard().removeTag(repoTag.getId());
         }
-        tagRepository.deleteById(repoTag.getId());
+
         System.out.println("Deleted tag!" + id);
         messagingTemplate.convertAndSend("/topic/board/" + optTag.get().getBoard().getId()
-            + "/tags", optTag.get());
+            + "/tags/delete", repoTag);
+        tagRepository.deleteById(repoTag.getId());
         return ResponseEntity.ok(repoTag);
     }
 

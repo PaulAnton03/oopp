@@ -119,6 +119,27 @@ public class EditCardCtrl implements SceneCtrl {
 
     public void registerForMessages() {
         long boardId = client.getCard(cardId).getCardList().getBoard().getId();
+        subscriptions.add(server.registerForMessages("/topic/board/" + boardId + "/tags/create", Tag.class, tag -> {
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    TagCtrl tagCtrl = factory.create(TagCtrl.class, tag);
+                    tagCtrl.loadData(tag);
+                    tagArea.getChildren().add(tagCtrl.getNode());
+                }
+            });
+        }));
+        subscriptions.add(server.registerForMessages("/topic/board/" + boardId + "/tags/delete", Tag.class, tag -> {
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    TagCtrl tagCtrl = factory.create(TagCtrl.class, tag);
+                    tagCtrl.loadData(tag);
+                    tagArea.getChildren().add(tagCtrl.getNode());
+                }
+            });
+        }));
+
 
         /**
          * Create SubTask

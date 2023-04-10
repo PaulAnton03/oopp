@@ -32,6 +32,7 @@ import javafx.scene.transform.Transform;
 import javafx.util.Duration;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.Setter;
 
 import javax.inject.Inject;
 import java.io.IOException;
@@ -69,6 +70,9 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Tag>, Initi
 
     @FXML
     private Label subTasksCount;
+
+    @Getter
+    @Setter
     @FXML
     private FlowPane tagArea;
 
