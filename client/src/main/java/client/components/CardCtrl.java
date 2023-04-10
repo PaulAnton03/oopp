@@ -1,29 +1,12 @@
 package client.components;
 
-import java.io.IOException;
-import java.net.URL;
-import java.util.List;
-import java.util.ResourceBundle;
-
-import javax.inject.Inject;
-
 import client.scenes.MainCtrl;
 import client.utils.ClientUtils;
 import client.utils.ComponentFactory;
 import client.utils.Logger;
 import client.utils.ServerUtils;
-import commons.Card;
-import commons.CardList;
-import commons.CardTag;
-import commons.Tag;
+import commons.*;
 import javafx.animation.*;
-import commons.StringUtil;
-import javafx.animation.Animation;
-import javafx.animation.FadeTransition;
-import javafx.animation.ParallelTransition;
-import javafx.animation.ScaleTransition;
-import javafx.animation.Transition;
-import commons.SubTask;
 import javafx.css.PseudoClass;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -297,8 +280,7 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Tag>, Initi
         // Hide buttons, unhighlight card
         deleteButton.setOpacity(0.0); editButton.setOpacity(0.0);
         // Create show/hide transition for buttons
-        unhighlight();
-
+//        unhighlight();
         final Duration ftDuration = Duration.millis(200);
         final Duration ftDelay = Duration.millis(200);
         final List<FadeTransition> fts = List.of(
