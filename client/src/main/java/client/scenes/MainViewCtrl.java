@@ -136,10 +136,8 @@ public class MainViewCtrl implements SceneCtrl {
      * user is viewing.
      */
     public void registerForMessages() {
-
         register = false;
         long boardId = client.getBoardCtrl().getBoard().getId();
-
         /**
          * This method call handles the deletion,addition and updating of a subtask on the current board by
          * using the registerForMessages method of the server, which refreshes the CardCtrl of the subtask
@@ -204,10 +202,13 @@ public class MainViewCtrl implements SceneCtrl {
                 @Override
                 public void run() {
                     client.setBoardCtrl(null);
-                    mainCtrl.showJoin();
-                    throw new RuntimeException("Sorry, but the board you are currently viewing has been permanently deleted.");
-                }});
-        }));
+                    mainCtrl.getEditCardCtrl().resetState();
+                    unsubscribe();
+                    if (!mainCtrl.getActiveCtrl().equals(mainCtrl.getJoinBoardsCtrl())) {
+                        mainCtrl.showJoin();
+                        throw new RuntimeException("Sorry, but the board you are currently viewing has been permanently deleted.");
+                    }
+                }});}));
     }
 
     public void unsubscribe() {

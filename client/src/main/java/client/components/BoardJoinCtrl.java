@@ -11,6 +11,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -30,6 +31,8 @@ public class BoardJoinCtrl implements Component<Board> {
     private AnchorPane pane;
     @FXML
     private ImageView lockImage;
+    @FXML
+    private Button leave;
     private Board board;
 
     private ServerUtils server;
@@ -38,6 +41,8 @@ public class BoardJoinCtrl implements Component<Board> {
     public void loadData(Board board) {
         this.board = board;
         if (board.getPassword() == null) lockImage.setVisible(false);
+        if(server.isAdmin())
+            leave.setVisible(false);
         label.setText(board.getName());
         pane.setStyle("-fx-background-color: " + board.getBoardColor());
         label.setStyle("-fx-text-fill: #000000ff");
