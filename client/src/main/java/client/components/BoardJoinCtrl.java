@@ -40,7 +40,9 @@ public class BoardJoinCtrl implements Component<Board> {
     @Override
     public void loadData(Board board) {
         this.board = board;
-        if (board.getPassword() == null) lockImage.setVisible(false);
+        String savedPassword = clientPreferences.getPasswordForBoard(board.getId()).orElse(null);
+        boolean check = (board.getPassword() == null) || (board.getPassword().equals(savedPassword));
+        lockImage.setVisible(!check);
         if(server.isAdmin())
             leave.setVisible(false);
         label.setText(board.getName());

@@ -138,13 +138,16 @@ public class JoinBoardsCtrl implements SceneCtrl {
 
     public void onJoin(ActionEvent event) {
         stopPolling();
-        String id = this.boardId.getText();
-        long boardId;
-        try {
-            boardId = Long.parseLong(id);
-        } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("Board ID must be a number");
+        String inviteKey = boardId.getText();
+        if (inviteKey.isEmpty()) {
+            throw new RuntimeException("The invite key cannot be empty");
         }
+
+        if (!inviteKey.matches("^join-talio#.{5,30}#[0-9]+(?:#.+)?$")) {
+            throw new RuntimeException("The invite key is invalid, maybe copy it again");
+        }
+        String[] parts = inviteKey.split("#");
+        final long boardId = Long.parseLong(parts[2]);
 
         try {
             server.getBoard(boardId);
