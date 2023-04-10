@@ -360,11 +360,11 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Tag>, Initi
         this.card.setCardList(cardListEnd);
         server.updateCardList(cardListStart);
         server.updateCardList(cardListEnd);
-        client.getBoardCtrl().refresh();
         Card card = server.getCard(server.getCardList(cardListEnd.getId()).getCards().get(position).getId());
         for(CardTag cardTag : cardTags){
             cardTag.setCard(card);
             server.createCardTag(cardTag);
         }
+        client.getBoardCtrl().refresh();
     }
 }
