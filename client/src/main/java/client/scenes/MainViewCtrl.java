@@ -2,6 +2,7 @@ package client.scenes;
 
 import client.components.BoardCtrl;
 import client.components.CardCtrl;
+import client.components.CardListCtrl;
 import client.components.TagCtrl;
 import client.utils.ClientUtils;
 import client.utils.ComponentFactory;
@@ -271,14 +272,28 @@ public class MainViewCtrl implements SceneCtrl {
                         @Override
                         public void run() {
                             try {
-                                for (CardTag cardTag : server.getCardTags()) {
-                                    if (cardTag.getTag().equals(c)) {
-                                        TagCtrl tagCtrl = client.getTagCtrl(c.getId());
-                                        CardCtrl cardCtrl = client.getCardCtrl(cardTag.getCard().getId());
-                                        cardCtrl.getTagArea().getChildren().remove(cardCtrl.getNode());
-                                        mainCtrl.getActiveCtrl().revalidate();
+                                Board board = client.getBoardCtrl().getBoard();
+                                for(CardTag cardTag : server.getCardTags()){
+                                    if(cardTag.getTag().equals(c)){
+                                        board = cardTag.getCard().getCardList().getBoard();
+                                        System.out.println("Board found!: " + board.getName());
+                                        break;
                                     }
                                 }
+                                if(board != null){
+                                    for(CardList cardList : board.getCardLists()){
+                                        CardListCtrl cardListCtrl = client.getCardListCtrl(cardList.getId());
+                                        cardListCtrl.refresh();
+//                                        for(Card card : cardList.getCards()){
+//                                            CardCtrl cardCtrl = client.getCardCtrl(card.getId());
+//                                            cardCtrl.refresh();
+//                                        }
+                                    }
+                                }else{
+                                    System.out.println("Board is null, removed tag could not be refreshed from" +
+                                            " other clients!");
+                                }
+
                             } catch (Exception e) {
                                 System.out.println("Some exception in websockets of tags!");
                             }

@@ -178,6 +178,10 @@ public class TagCtrl implements Component<Tag> {
         Board board = client.getBoardCtrl().getBoard();
         server.deleteTag(tag.getId());
         this.savedText.setText("Deleted Tag");
+        if (mainCtrl.getActiveCtrl().getClass() == EditCardCtrl.class) {
+            EditCardCtrl editCardCtrl = (EditCardCtrl) mainCtrl.getActiveCtrl();
+            editCardCtrl.loadData(editCardCtrl.getCardId());
+        }
     }
 
     public void remove() {

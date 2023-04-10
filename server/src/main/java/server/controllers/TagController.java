@@ -77,14 +77,14 @@ public class TagController {
             throw new ResponseStatusException(HttpStatus.NOT_IMPLEMENTED, "Tag not found");
         }
         Tag repoTag = optTag.get();
-
+        messagingTemplate.convertAndSend("/topic/board/" + optTag.get().getBoard().getId()
+                + "/tags/delete", repoTag);
         if (repoTag.getBoard() != null) {
             repoTag.getBoard().removeTag(repoTag.getId());
         }
-
+        Board board = repoTag.getBoard();
         System.out.println("Deleted tag!" + id);
-        messagingTemplate.convertAndSend("/topic/board/" + optTag.get().getBoard().getId()
-            + "/tags/delete", repoTag);
+
         tagRepository.deleteById(repoTag.getId());
         return ResponseEntity.ok(repoTag);
     }
