@@ -155,7 +155,7 @@ public class TagCtrl implements Component<Tag> {
 
     public void unAssignFromCard(Card card) {
         for (CardTag cardTag : server.getCardTags()) {
-            if (cardTag.getCard().equals(card)) {
+            if (cardTag.getCard().equals(card) && cardTag.getTag().equals(tag)) {
                 server.deleteCardTag(cardTag.getId());
             }
         }
