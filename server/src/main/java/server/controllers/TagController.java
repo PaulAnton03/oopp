@@ -1,8 +1,6 @@
 package server.controllers;
 
 import commons.Board;
-import commons.Card;
-import commons.CardTag;
 import commons.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +12,6 @@ import server.database.CardRepository;
 import server.database.CardTagRepository;
 import server.database.TagRepository;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,7 +29,7 @@ public class TagController {
 
     public TagController(TagRepository tagRepository, CardRepository cardRepository,
                          BoardRepository boardRepository, SimpMessagingTemplate messagingTemplate
-    ,CardTagRepository cardTagRepository) {
+        ,CardTagRepository cardTagRepository) {
         this.tagRepository = tagRepository;
         this.cardRepository = cardRepository;
         this.boardRepository = boardRepository;

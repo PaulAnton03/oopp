@@ -1,31 +1,30 @@
 package client.scenes;
 
-import client.components.BoardCtrl;
-import client.components.TagCtrl;
-import javax.inject.Inject;
 import client.components.SubTaskCtrl;
+import client.components.TagCtrl;
 import client.utils.ClientUtils;
 import client.utils.ComponentFactory;
 import client.utils.ExceptionHandler;
 import client.utils.ServerUtils;
-import commons.Board;
-import commons.Card;
-import commons.CardTag;
-import commons.Tag;
-import javafx.event.ActionEvent;
-import commons.SubTask;
+import commons.*;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.ColorPicker;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import lombok.Getter;
-import javafx.scene.layout.VBox;
 import lombok.Setter;
 import org.springframework.messaging.simp.stomp.StompSession;
+
+import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -120,28 +119,7 @@ public class EditCardCtrl implements SceneCtrl {
 
     public void registerForMessages() {
         long boardId = client.getCard(cardId).getCardList().getBoard().getId();
-        subscriptions.add(server.registerForMessages("/topic/board/" + boardId + "/tags/create", Tag.class, tag -> {
-            Platform.runLater(new Runnable() {
-                @Override
-                public void run() {
-                    TagCtrl tagCtrl = factory.create(TagCtrl.class, tag);
-                    tagCtrl.loadData(tag);
-                    tagArea.getChildren().add(tagCtrl.getNode());
-                }
-            });
-        }));
-        subscriptions.add(server.registerForMessages("/topic/board/" + boardId + "/tags/delete", Tag.class, tag -> {
-            Platform.runLater(new Runnable() {
-                @Override
-                public void run() {
-                    TagCtrl tagCtrl = factory.create(TagCtrl.class, tag);
-                    tagCtrl.loadData(tag);
-                    tagArea.getChildren().add(tagCtrl.getNode());
-                }
-            });
-        }));
-
-
+        tagRegistration(boardId);
         /**
          * Create SubTask
          */
@@ -212,6 +190,29 @@ public class EditCardCtrl implements SceneCtrl {
                 }
             });
 
+        }));
+    }
+
+    private void tagRegistration(long boardId) {
+        subscriptions.add(server.registerForMessages("/topic/board/" + boardId + "/tags/create", Tag.class, tag -> {
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    TagCtrl tagCtrl = factory.create(TagCtrl.class, tag);
+                    tagCtrl.loadData(tag);
+                    tagArea.getChildren().add(tagCtrl.getNode());
+                }
+            });
+        }));
+        subscriptions.add(server.registerForMessages("/topic/board/" + boardId + "/tags/delete", Tag.class, tag -> {
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    TagCtrl tagCtrl = factory.create(TagCtrl.class, tag);
+                    tagCtrl.loadData(tag);
+                    tagArea.getChildren().add(tagCtrl.getNode());
+                }
+            });
         }));
     }
 
