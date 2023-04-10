@@ -144,16 +144,25 @@ public class TagCtrl implements Component<Tag> {
     }
 
     public void assignThisToCard(Card card) {
+        if (mainCtrl.getActiveCtrl().getClass() == EditCardCtrl.class) {
+            EditCardCtrl editCardCtrl = (EditCardCtrl) mainCtrl.getActiveCtrl();
+            editCardCtrl.getTagAssignText().setVisible(true);
+            editCardCtrl.getTagAssignText().setText("Assigned Tag to the Card!");
+        }
+
         System.out.println("Assigning is called");
         CardTag cardTag = new CardTag(card, tag);
         System.out.println("card set to cardTag: " + card.getTitle());
         System.out.println("tag set to cardTag: " + tag.getText());
         server.createCardTag(cardTag);
-
-
     }
 
     public void unAssignFromCard(Card card) {
+        if (mainCtrl.getActiveCtrl().getClass() == EditCardCtrl.class) {
+            EditCardCtrl editCardCtrl = (EditCardCtrl) mainCtrl.getActiveCtrl();
+            editCardCtrl.getTagAssignText().setVisible(true);
+            editCardCtrl.getTagAssignText().setText("Unassigned Tag from the Card!");
+        }
         for (CardTag cardTag : server.getCardTags()) {
             if (cardTag.getCard().equals(card) && cardTag.getTag().equals(tag)) {
                 server.deleteCardTag(cardTag.getId());

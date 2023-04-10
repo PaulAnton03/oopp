@@ -23,6 +23,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import lombok.Getter;
 import javafx.scene.layout.VBox;
+import lombok.Setter;
 import org.springframework.messaging.simp.stomp.StompSession;
 import java.util.ArrayList;
 import java.util.List;
@@ -64,6 +65,10 @@ public class EditCardCtrl implements SceneCtrl {
 
     @FXML
     private Text emptyErr;
+    @Getter
+    @Setter
+    @FXML
+    private Text tagAssignText;
     private final List<StompSession.Subscription> subscriptions = new ArrayList<>();
 
 
@@ -248,6 +253,7 @@ public class EditCardCtrl implements SceneCtrl {
 
 
     public void resetState() {
+        tagAssignText.setVisible(false);
         emptyErr.setVisible(false);
         this.changeTitle.setText("");
         this.changeDesc.setText("");

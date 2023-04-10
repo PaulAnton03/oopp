@@ -56,8 +56,6 @@
                         <ColorPicker fx:id="colourPicker" onAction="#pickColor" prefHeight="25.0" prefWidth="122.0" />
                      </children>
                   </HBox>
-                  <Button layoutX="320.0" layoutY="160.0" mnemonicParsing="false" onAction="#saveCardChanges" prefHeight="27.0" prefWidth="70.0" styleClass="formButton" text="Save" />
-                  <Button layoutX="12.0" layoutY="160.0" mnemonicParsing="false" onAction="#cancel" prefHeight="26.0" prefWidth="70.0" styleClass="formButton" text="Cancel" />
                   <AnchorPane layoutX="9.0" layoutY="23.0" prefHeight="72.0" prefWidth="385.0" style="-fx-background-color: WHITE;">
                      <children>
                         <FlowPane fx:id="tagArea" layoutX="-6.0" prefHeight="72.0" prefWidth="395.0" />
@@ -68,6 +66,13 @@
                         <Font size="11.0" />
                      </font>
                   </Text>
+                  <HBox alignment="CENTER" layoutX="-1.0" layoutY="166.0" prefHeight="57.0" prefWidth="407.0" spacing="50.0">
+                     <children>
+                        <Button mnemonicParsing="false" onAction="#cancel" prefHeight="26.0" prefWidth="70.0" styleClass="formButton" text="Cancel" />
+                        <Text fx:id="tagAssignText" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+                        <Button mnemonicParsing="false" onAction="#saveCardChanges" prefHeight="27.0" prefWidth="70.0" styleClass="formButton" text="Save" />
+                     </children>
+                  </HBox>
                </children>
             </AnchorPane>
          </children>
