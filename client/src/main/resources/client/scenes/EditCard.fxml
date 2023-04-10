@@ -63,6 +63,11 @@
                         <FlowPane fx:id="tagArea" layoutX="-6.0" prefHeight="72.0" prefWidth="395.0" />
                      </children>
                   </AnchorPane>
+                  <Text fx:id="emptyErr" fill="#eb0000" layoutX="114.0" layoutY="153.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Tag name cannot be empty!" visible="false">
+                     <font>
+                        <Font size="11.0" />
+                     </font>
+                  </Text>
                </children>
             </AnchorPane>
          </children>

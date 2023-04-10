@@ -15,14 +15,12 @@ import javafx.event.ActionEvent;
 import commons.SubTask;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ColorPicker;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 import lombok.Getter;
 import javafx.scene.layout.VBox;
 import org.springframework.messaging.simp.stomp.StompSession;
@@ -64,6 +62,8 @@ public class EditCardCtrl implements SceneCtrl {
     @FXML
     private VBox subTaskView;
 
+    @FXML
+    private Text emptyErr;
     private final List<StompSession.Subscription> subscriptions = new ArrayList<>();
 
 
@@ -211,9 +211,11 @@ public class EditCardCtrl implements SceneCtrl {
         System.out.println(board);
         String tagText = "";
         String tagColor = "";
-        if (tagField == null) {
-            tagText = "";
+        if (tagField == null || tagField.getText().equals("")) {
+            emptyErr.setVisible(true);
+            return;
         } else {
+            emptyErr.setVisible(false);
             tagText = tagField.getText();
         }
         if (color == null) {
@@ -246,6 +248,7 @@ public class EditCardCtrl implements SceneCtrl {
 
 
     public void resetState() {
+        emptyErr.setVisible(false);
         this.changeTitle.setText("");
         this.changeDesc.setText("");
         this.tagField.setText("");
