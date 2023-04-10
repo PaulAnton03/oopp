@@ -1,5 +1,6 @@
 package client.scenes;
 
+import client.components.BoardCtrl;
 import client.components.TagCtrl;
 import javax.inject.Inject;
 import client.components.SubTaskCtrl;
@@ -254,11 +255,13 @@ public class EditCardCtrl implements SceneCtrl {
         tag.setBoard(board); //because adding it to the board will save it
         tag.setColor(tagColor);
         server.createTag(tag, board.getId()); //this includes adding to board
-
-        TagCtrl tagCtrl = factory.create(TagCtrl.class, tag);
-        tagCtrl.loadData(tag);
-        tagArea.getChildren().add(tagCtrl.getNode());
-        System.out.println("Tag created: " + tag);
+        mainCtrl.showMainView();
+        mainCtrl.showEditCard(cardId);
+//        Tag newTag = server.getTag(tag.getId());
+//        TagCtrl tagCtrl = factory.create(TagCtrl.class, newTag);
+//        tagCtrl.loadData(newTag);
+//        tagArea.getChildren().add(tagCtrl.getNode());
+//        System.out.println("Tag created: " + newTag);
     }
 
     @FXML
