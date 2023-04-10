@@ -12,7 +12,7 @@
     <children>
       <ImageView fx:id="lockImage" fitHeight="30.0" fitWidth="30.0" layoutX="9.0" layoutY="4.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="5.0">
          <image>
-            <Image url="@../images/lock.png" />
+            <Image url="/client/images/lock.png" />
          </image>
       </ImageView>
         <Button layoutX="181.0" layoutY="23.0" mnemonicParsing="false" onAction="#onSelect" prefHeight="24.0" prefWidth="85.0" styleClass="btn" text="Connect" />
