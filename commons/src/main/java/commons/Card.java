@@ -8,6 +8,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Data
@@ -19,13 +20,13 @@ import java.util.List;
 public class Card implements DBEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @SequenceGenerator(name = "cards_seq", sequenceName = "CARDS_SEQ")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "cards_seq")
     protected long id;
 
-    @OneToMany(mappedBy = "card", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "card", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderColumn(name = "subtask_index")
     @EqualsAndHashCode.Exclude
-    @ToString.Exclude
     private List<SubTask> subtasks = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
@@ -50,11 +51,14 @@ public class Card implements DBEntity {
     @NonNull
     private String description;
 
+    public Card(String title) {
+        this.title = title;
+        this.description = "";
+    }
 
     public boolean removeSubTask(SubTask subTask) {
         return this.subtasks.remove(subTask);
     }
-
 
     public boolean removeSubTask(long id) {
         SubTask subTask = this.getSubtasks().stream().filter(s -> s.getId() == id).findFirst().orElse(null);
@@ -65,17 +69,11 @@ public class Card implements DBEntity {
 
     public void addSubTask(SubTask subTask) {
         this.subtasks.add(subTask);
-
     }
 
     @Override
     public String toString() {
-
-
-        return "Card [id=" + id + ", title=" + title + ", description=" + description +
-                getCardList().toCardString() +
-                ",subtasks= " + subtasks + "]"
-                ;
+        return "Card [id=" + id + ", title=" + title + ", description=" + description + ",subtasks=" + subtasks + "]";
     }
 
     /**
@@ -83,12 +81,18 @@ public class Card implements DBEntity {
      */
     @JsonIgnore
     public boolean isNetworkValid() {
-        return !isNullOrEmpty(this.getTitle());
+        return !StringUtil.isNullOrEmpty(this.getTitle());
     }
 
-    private static boolean isNullOrEmpty(String s) {
-        return s == null || s.isEmpty();
+    public int findSubTaskById(long id) {
+        for (int i = 0; i < subtasks.size(); i++) {
+            if (subtasks.get(i).getId() == id)
+                return i;
+        }
+        return -1;
     }
 
-
+    public void swapSubTasks(int index1, int index2) {
+        Collections.swap(subtasks, index1, index2);
+    }
 }

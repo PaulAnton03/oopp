@@ -1,5 +1,12 @@
 package client.components;
 
+import java.io.IOException;
+import java.net.URL;
+import java.util.List;
+import java.util.ResourceBundle;
+
+import javax.inject.Inject;
+
 import client.scenes.MainCtrl;
 import client.utils.ClientUtils;
 import client.utils.ComponentFactory;
@@ -10,6 +17,13 @@ import commons.CardList;
 import commons.CardTag;
 import commons.Tag;
 import javafx.animation.*;
+import commons.StringUtil;
+import javafx.animation.Animation;
+import javafx.animation.FadeTransition;
+import javafx.animation.ParallelTransition;
+import javafx.animation.ScaleTransition;
+import javafx.animation.Transition;
+import commons.SubTask;
 import javafx.css.PseudoClass;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -17,12 +31,16 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.SnapshotParameters;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.Dragboard;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
@@ -59,6 +77,15 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Tag>, Initi
     private Button editButton;
     @FXML
     private Button deleteButton;
+    @Getter
+    @FXML
+    private TextField titleField;
+
+    @FXML
+    private Label finishedSubTasks;
+
+    @FXML
+    private Label subTasksCount;
     @FXML
     private FlowPane tagArea;
 
@@ -75,9 +102,7 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Tag>, Initi
     }
 
     @Override
-    public Parent getNode() {
-        return cardView;
-    }
+    public Parent getNode() { return cardView; }
 
     @Override
     public void loadData(Card card) {
@@ -86,6 +111,7 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Tag>, Initi
         if (tagArea.getChildren() != null)
             tagArea.getChildren().clear();
         description.setText(card.getDescription());
+        client.getCardListCtrl(card.getCardList().getId()).replaceChild(card);
 
         for (CardTag cardTag : server.getCardTags()) {
             System.out.println(cardTag.toString());
@@ -98,34 +124,54 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Tag>, Initi
         }
         if (client.getSelectedCardId() == card.getId()) {
             highlight();
+            if (client.getEditedCardTitle() != null)
+                editTitle();
         } else {
             unhighlight();
         }
+        cardView.setStyle("-fx-background-color: " + card.getCardList().getBoard().getCardColor());
+        title.setStyle("-fx-text-fill: " + card.getCardList().getBoard().getFontColor());
+        description.setStyle("-fx-text-fill: " + card.getCardList().getBoard().getFontColor());
+        subTasksCount.setText(String.valueOf(card.getSubtasks().size()));
+        if (card.getSubtasks().size() == 0) {
+            finishedSubTasks.setText("0");
+            return;
+        }
+        finishedSubTasks.setText(String.valueOf(card.getSubtasks().stream()
+                .filter(SubTask::getFinished).count()));
     }
 
     public void editCard() {
         if (!client.getBoardCtrl().getBoard().isEditable()) {
-            throw new IllegalStateException("You do not have permissions to edit this board.");
+            Alert alert = new Alert(AlertType.WARNING);
+            alert.setHeaderText("You do not have permissions to edit this board.");
+            alert.showAndWait();
+        } else {
+            mainCtrl.showEditCard(this.getCard().getId());
         }
-        mainCtrl.showEditCard(this.getCard().getId());
     }
 
     public void delete() {
         if (!client.getBoardCtrl().getBoard().isEditable()) {
+            Alert alert = new Alert(AlertType.WARNING);
+            alert.setHeaderText("You do not have permissions to edit this board.");
+            alert.showAndWait();
+        } else {
+            for(CardTag cardTag : server.getCardTags()){
+                if(cardTag.getCard().equals(card)){
+                    server.deleteCardTag(cardTag.getId());
+                }
+            this.card = server.deleteCard(card.getId());
+        }
             throw new IllegalStateException("You do not have permissions to edit this board.");
         }
-        for(CardTag cardTag : server.getCardTags()){
-            if(cardTag.getCard().equals(card)){
-                server.deleteCardTag(cardTag.getId());
-            }
+
         }//with this we first delete the relation with cardTag
-        this.card = server.deleteCard(card.getId());
 
     }
 
     public void refresh() {
         loadData(server.getCard(card.getId()));
-        client.getCardListCtrl(card.getCardList().getId()).replaceChild(card);
     }
 
     public void remove() {
@@ -137,9 +183,7 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Tag>, Initi
     }
 
     public void replaceChild(Tag tag) {
-
     }
-
 
     // CSS class that defines style for the highlighted card
     private static final PseudoClass HIGHLIGHT_PSEUDO_CLASS = PseudoClass.getPseudoClass("highlight");
@@ -151,6 +195,51 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Tag>, Initi
 
     public void unhighlight() {
         cardView.getStyleClass().remove("highlight");
+        if (client.getSelectedCardId() == card.getId()
+            && client.getEditedCardTitle() != null)
+            stopEditTitle();
+    }
+
+    public void editTitle() {
+        titleField.setDisable(false);
+        titleField.setVisible(true);
+        title.setVisible(false);
+        titleField.requestFocus();
+        if (client.getEditedCardTitle() == null) {
+            client.setEditedCardTitle(card.getTitle());
+            client.setCaretPosition(card.getTitle().length());
+        }
+        titleField.setText(client.getEditedCardTitle());
+        titleField.positionCaret(client.getCaretPosition());
+    }
+
+    public void stopEditTitle() {
+        titleField.setDisable(true);
+        titleField.setVisible(false);
+        title.setVisible(true);
+        client.setEditedCardTitle(null);
+    }
+
+    public void saveTitle() {
+        if (titleField.getText() != null
+            && !titleField.getText().isEmpty()
+            && !titleField.getText().equals(card.getTitle())) {
+            card.setTitle(titleField.getText());
+            server.updateCard(card);
+        }
+        stopEditTitle();
+    }
+
+    public void onTitleFieldKeyTyped(KeyEvent e) {
+        char c = e.getCharacter().charAt(0);
+        if (c == 033) { /* ESC */
+            stopEditTitle();
+        } else if (c == 015) { /* CR (ENTER) */
+            saveTitle();
+        } else if (StringUtil.isPrintableChar(c)) {
+            client.setEditedCardTitle(titleField.getText());
+        }
+        client.setCaretPosition(titleField.getCaretPosition());
     }
 
     public void focus() {
@@ -206,9 +295,11 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Tag>, Initi
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        // Hide buttons, unhighlight card
+        deleteButton.setOpacity(0.0); editButton.setOpacity(0.0);
+        // Create show/hide transition for buttons
         unhighlight();
-        deleteButton.setOpacity(0.0);
-        editButton.setOpacity(0.0);
+
         final Duration ftDuration = Duration.millis(200);
         final Duration ftDelay = Duration.millis(200);
         final List<FadeTransition> fts = List.of(
@@ -217,8 +308,7 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Tag>, Initi
         fts.forEach(ft -> {
             ft.setDelay(ftDelay);
             ft.setFromValue(0.0);
-            ft.setToValue(0.6);
-        });
+            ft.setToValue(0.6);});
         buttonsVisibilityPT = new ParallelTransition(fts.get(0), fts.get(1));
         try (var binInputStream =
                      getClass().getResourceAsStream("/client/images/bin.png");
@@ -228,23 +318,19 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Tag>, Initi
             applyButtonHoverStyle(editButton);
             ImageView binIcon = new ImageView(new Image(binInputStream));
             ImageView editIcon = new ImageView(new Image(editInputStream));
-            binIcon.setFitHeight(40);
-            editIcon.setFitHeight(30);
-            binIcon.setPreserveRatio(true);
-            editIcon.setPreserveRatio(true);
-            deleteButton.setGraphic(binIcon);
-            editButton.setGraphic(editIcon);
+            binIcon.setFitHeight(40); editIcon.setFitHeight(30);
+            binIcon.setPreserveRatio(true); editIcon.setPreserveRatio(true);
+            deleteButton.setGraphic(binIcon); editButton.setGraphic(editIcon);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        // Set card view event handlers
         cardView.setOnMouseEntered(event -> {
             focus();
-            client.changeSelection(card.getId());
-        });
+            client.changeSelection(card.getId());});
         cardView.setOnMouseExited(event -> unfocus());
         cardView.setOnDragDetected(event -> {
             Logger.log("Card " + getCard().getTitle() + " drag detected");
-
             SnapshotParameters params = new SnapshotParameters();
             params.setFill(Color.TRANSPARENT);
             params.setTransform(Transform.scale(0.8, 0.8));
@@ -256,16 +342,22 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Tag>, Initi
             event.consume();
         });
         cardView.setOnDragDone(event -> {
-            CardList cardListStart = card.getCardList();
-            CardList cardListEnd = client.getActiveCardList();
-            int position;
-            try {
-                position = (Integer) client.getActiveCardListCtrl().getCardListView().getUserData();
-            } catch (Exception e) {
-                return;
+            if (!client.getBoardCtrl().getBoard().isEditable()) {
+                Alert alert = new Alert(AlertType.WARNING);
+                alert.setHeaderText("You do not have permissions to edit this board.");
+                alert.showAndWait();
+            } else {
+                CardList cardListStart = card.getCardList();
+                CardList cardListEnd = client.getActiveCardList();
+                int position;
+                try {
+                    position = (Integer) client.getActiveCardListCtrl().getCardListView().getUserData();
+                } catch (Exception e) {
+                    return;
+                }
+                moveCardPosition(cardListStart, cardListEnd, position);
+                event.consume();
             }
-            moveCardPosition(cardListStart, cardListEnd, position);
-            event.consume();
         });
         cardView.setOnMouseClicked(event -> {
             if (event.getClickCount() == 2) {

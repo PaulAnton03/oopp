@@ -2,6 +2,7 @@ package commons;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIncludeProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -25,7 +26,8 @@ public class SubTask implements DBEntity {
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "card_id", nullable = false)
-    @JsonIgnore
+    @OrderColumn(name = "subtask_index")
+    @JsonIncludeProperties("id")
     private Card card;
 
     @NonNull
@@ -44,10 +46,6 @@ public class SubTask implements DBEntity {
      */
     @JsonIgnore
     public boolean isNetworkValid() {
-        return !isNullOrEmpty(this.getTitle());
-    }
-
-    private static boolean isNullOrEmpty(String s) {
-        return s == null || s.isEmpty();
+        return !StringUtil.isNullOrEmpty(this.getTitle());
     }
 }

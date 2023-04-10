@@ -71,6 +71,11 @@ public class SubTaskController {
                 () -> card.get().getSubtasks().add(subTask));
         subTask.setFinished(false);
         subTaskRepository.save(subTask);
+        if (messagingTemplate != null) {
+            messagingTemplate.convertAndSend("/topic/board/" + subTask.getCard().getCardList().getBoard().getId() +
+                    "/card/" + subTask.getCard().getId() + "/subtasks/create", subTask);
+            messagingTemplate.convertAndSend("/topic/board/" + subTask.getCard().getCardList().getBoard().getId() + "/subtasks", subTask);
+        }
         return ResponseEntity.ok(subTask);
     }
 
@@ -85,6 +90,11 @@ public class SubTaskController {
             subTask.getCard().removeSubTask(subTask.getId());
         }
         subTaskRepository.deleteById(subTask.getId());
+        if (messagingTemplate != null) {
+            messagingTemplate.convertAndSend("/topic/board/" + subTask.getCard().getCardList().getBoard().getId()
+                    + "/card/" + subTask.getCard().getId() + "/subtasks/delete", subTask);
+            messagingTemplate.convertAndSend("/topic/board/" + subTask.getCard().getCardList().getBoard().getId() + "/subtasks", subTask);
+        }
         return ResponseEntity.ok(subTask);
     }
 
@@ -98,6 +108,35 @@ public class SubTaskController {
             return ResponseEntity.notFound().build();
         }
         SubTask updated = subTaskRepository.save(subTask);
+        long boardId = cardRepository.findById(updated.getCard().getId()).get().getCardList().getBoard().getId();
+        messagingTemplate.convertAndSend("/topic/board/" + boardId + "/card/" + subTask.getCard().getId() + "/subtasks/update", updated);
+        messagingTemplate.convertAndSend("/topic/board/" + boardId + "/subtasks", updated);
         return ResponseEntity.ok(updated);
     }
+
+    @PutMapping(value = "/reorder/{id}/{direction}")
+    public ResponseEntity<SubTask> reorder(@RequestBody SubTask subTask, @PathVariable("direction") String direction) {
+        if (!subTask.isNetworkValid()) {
+            return ResponseEntity.badRequest().build();
+        }
+        final Optional<SubTask> optionalSubTask = subTaskRepository.findById(subTask.getId());
+        if (optionalSubTask.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        Card card = cardRepository.findById(subTask.getCard().getId()).get();
+        int subTaskIndex = card.findSubTaskById(subTask.getId());
+        int toBeSwapped;
+        if (direction.equals("up")) {
+            toBeSwapped = subTaskIndex - 1;
+        } else {
+            toBeSwapped = subTaskIndex + 1;
+        }
+        card.swapSubTasks(subTaskIndex, toBeSwapped);
+        cardRepository.save(card);
+        long boardId = card.getCardList().getBoard().getId();
+        messagingTemplate.convertAndSend("/topic/board/" + boardId + "/card/" +
+                subTask.getCard().getId() + "/subtasks/reorder/" + direction, subTask);
+        return ResponseEntity.ok(subTask);
+    }
+
 }

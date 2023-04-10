@@ -15,7 +15,7 @@ public class KeyEventHandler implements EventHandler<KeyEvent> {
         this.mainCtrl = mainCtrl;
     }
 
-    private static void displayKeybinds() {
+    public static void displayKeybinds() {
         Alert alert = new Alert(AlertType.INFORMATION);
         alert.setHeaderText("Keyboard Shortcuts Help");
         alert.setContentText(
@@ -23,6 +23,8 @@ public class KeyEventHandler implements EventHandler<KeyEvent> {
             + "\nShift + Arrow keys: Shift selected card up/down"
             + "\nEnter : Edit selected card"
             + "\nBackspace/Del : Delete selected card"
+            + "\nC : Open color editor"
+            + "\nE : Edit selected card's title"
             + "\nEsc : Close task details menu"
             + "\n? : Show this menu"
         );
@@ -30,6 +32,12 @@ public class KeyEventHandler implements EventHandler<KeyEvent> {
     }
 
     public void handle(KeyEvent e) {
+        if (client.getCardCtrl(client.getSelectedCardId()) != null
+            && client.getEditedCardTitle() != null) {
+
+            client.getCardCtrl(client.getSelectedCardId()).getTitleField().requestFocus();
+            return;
+        }
         switch (e.getCode()) {
             case LEFT:
             case RIGHT:
@@ -38,6 +46,7 @@ public class KeyEventHandler implements EventHandler<KeyEvent> {
             case ENTER:
             case BACK_SPACE:
             case DELETE:
+            case C:
                 if (mainCtrl.getActiveCtrl() == mainCtrl.getMainViewCtrl()) {
                     client.getBoardCtrl().handleKeyEvent(e);
                 }
@@ -52,9 +61,14 @@ public class KeyEventHandler implements EventHandler<KeyEvent> {
                     mainCtrl.getEditCardCtrl().cancel();
                 }
                 break;
+            case E:
+                if (mainCtrl.getActiveCtrl() == mainCtrl.getMainViewCtrl()
+                    && client.getCardCtrl(client.getSelectedCardId()) != null) {
+                    e.consume();
+                    client.getCardCtrl(client.getSelectedCardId()).editTitle();
+                }
             default:
                 break;
         }
     }
-
 }

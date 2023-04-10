@@ -7,9 +7,11 @@ import client.components.BoardCtrl;
 import client.components.CardCtrl;
 import client.components.CardListCtrl;
 import client.components.TagCtrl;
+import client.components.SubTaskCtrl;
 import commons.Card;
 import commons.CardList;
 import commons.Tag;
+import commons.SubTask;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,6 +19,12 @@ public class ClientUtils {
     @Getter
     @Setter
     private long activeCardListId;
+    @Getter
+    @Setter
+    private String editedCardTitle; /* Always set to null when not editing a title */
+    @Getter
+    @Setter
+    private int caretPosition;
     @Getter
     @Setter
     private long selectedCardId = -1;
@@ -33,12 +41,18 @@ public class ClientUtils {
 
     @Getter
     @Setter
+    private Map<Long, SubTaskCtrl> subTaskCtrls = new HashMap<>();
+
+
+    @Getter
+    @Setter
     private  Map<Long, TagCtrl> tagCtrls = new HashMap<>();
 
     public void clearBoardData() {
         this.cardListCtrls = new HashMap<>();
         this.cardCtrls = new HashMap<>();
         this.tagCtrls = new HashMap<>();
+        this.subTaskCtrls = new HashMap<>();
         this.boardCtrl = null;
     }
 
@@ -52,6 +66,14 @@ public class ClientUtils {
 
     public CardList getCardList(long id) {
         return cardListCtrls.get(id).getCardList();
+    }
+
+    public SubTask getSubTask(long id) {
+        return subTaskCtrls.get(id).getSubTask();
+    }
+
+    public SubTaskCtrl getSubTaskCtrl(long id) {
+        return subTaskCtrls.get(id);
     }
 
     public Card getCard(long id) {
@@ -75,10 +97,19 @@ public class ClientUtils {
     }
 
     public void changeSelection(long selectedCardId) {
+        if (selectedCardId == this.selectedCardId)
+            return;
         CardCtrl cardCtrl = getCardCtrl(this.selectedCardId);
         if (cardCtrl != null)
             cardCtrl.unhighlight();
         this.selectedCardId = selectedCardId;
+        this.editedCardTitle = null;
         getCardCtrl(selectedCardId).highlight();
+    }
+
+    public void postRefresh() {
+        if (getCardCtrl(getSelectedCardId()) != null
+            && getEditedCardTitle() != null)
+            getCardCtrl(getSelectedCardId()).getTitleField().requestFocus();
     }
 }

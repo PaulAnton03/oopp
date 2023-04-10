@@ -5,12 +5,14 @@ import client.utils.*;
 import com.google.inject.Inject;
 import commons.Board;
 import commons.CardList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
-import javafx.scene.control.ColorPicker;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.paint.Color;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class CreateBoardCtrl implements SceneCtrl {
 
@@ -19,35 +21,52 @@ public class CreateBoardCtrl implements SceneCtrl {
     private final MainCtrl mainCtrl;
     private final ComponentFactory factory;
     private final ClientPreferences clientPrefs;
+    private final ThemeUtils themeUtils;
 
     @FXML
     private TextField boardName;
     @FXML
-    private ColorPicker boardColor;
-    @FXML
-    private TextField boardPassword;
+    private PasswordField boardPassword;
     @FXML
     private CheckBox passwordUsed;
-
-    private Color color;
+    @FXML
+    private ComboBox<String> themePicker;
 
     @Inject
     public CreateBoardCtrl(ServerUtils server, ClientUtils client, MainCtrl mainCtrl,
-                           ComponentFactory factory, ClientPreferences clientPrefs) {
+                           ComponentFactory factory, ClientPreferences clientPrefs, ThemeUtils themeUtils) {
         this.client = client;
         this.mainCtrl = mainCtrl;
         this.server = server;
         this.factory = factory;
         this.clientPrefs = clientPrefs;
+        this.themeUtils = themeUtils;
+    }
+
+    public void loadData() {
+        themePicker.setValue("Default");
+        themePicker.getItems().clear();
+        List<ThemeUtils.Theme> predefined = ThemeUtils.Theme.getPredefinedThemes();
+        themePicker.getItems().addAll(predefined.stream().map(ThemeUtils.Theme::toString).collect(Collectors.toList()));
+    }
+
+    public void loadBoard(Board board, ThemeUtils.Theme theme) {
+        board.setBoardColor(theme.getBoardColor());
+        board.setListColor(theme.getListColor());
+        board.setCardColor(theme.getCardColor());
+        board.setFontColor(theme.getFontColor());
     }
 
     public void createBoard() {
-
-        String color = mainCtrl.turnColorIntoString(boardColor.getValue());
-        final Board newBoard = new Board(boardName.getText(), color);
+        if(boardName.getText().isEmpty())
+            throw new IllegalStateException("The board must have a name");
+        final Board newBoard = new Board(boardName.getText());
         if (passwordUsed.isSelected()) {
             newBoard.setPassword(boardPassword.getText());
         }
+        ThemeUtils.Theme theme = ThemeUtils.Theme.valueOf(themePicker.getValue());
+        if(theme == null) theme = ThemeUtils.Theme.getPredefinedThemes().get(0);
+        loadBoard(newBoard, theme);
         final Board addedBoard = server.addBoard(newBoard);
         Logger.log("Added board " + addedBoard);
 
@@ -61,16 +80,13 @@ public class CreateBoardCtrl implements SceneCtrl {
         client.setBoardCtrl(boardCtrl);
         clientPrefs.setDefaultBoardId(addedBoard.getId());
         clientPrefs.addJoinedBoard(addedBoard.getId());
+        mainCtrl.getMainViewCtrl().unsubscribe();
         mainCtrl.showMainView();
     }
 
     public void goBack() {
         clear();
         mainCtrl.showMainView();
-    }
-
-    public void pickColor(ActionEvent action){
-        color = boardColor.getValue();
     }
 
     public void clear() {

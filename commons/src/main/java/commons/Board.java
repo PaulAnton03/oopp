@@ -3,10 +3,7 @@ package commons;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -20,9 +17,9 @@ import java.util.Objects;
 @Table(name = "boards")
 @JsonIdentityInfo(scope = Board.class, generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Board implements DBEntity {
-
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @SequenceGenerator(name = "boards_seq", sequenceName = "BOARDS_SEQ")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "boards_seq")
     protected long id;
 
     @NonNull
@@ -34,10 +31,15 @@ public class Board implements DBEntity {
     @JsonIgnore
     private boolean editable = true;
 
-    @JsonIgnore
-    private final String defaultColor = "#ffffffff";
+    @NonNull
+    private String boardColor;
+    @NonNull
+    private String listColor;
+    @NonNull
+    private String cardColor;
 
     @NonNull
+    private String fontColor;
     private String color;
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
@@ -47,10 +49,12 @@ public class Board implements DBEntity {
     @OrderColumn(name = "card_list_index")
     private List<CardList> cardLists = new ArrayList<>();
 
-
     public Board(String name) {
         this.name = name;
-        this.color = "#ffffffff";
+        this.boardColor = "#ffffffff";
+        this.cardColor = "#ffffffff";
+        this.listColor = "#b2b2ebff";
+        this.fontColor = "#000000ff";
     }
 
     /**
@@ -89,7 +93,6 @@ public class Board implements DBEntity {
 
     public void addTag(Tag tag) {
         tagList.add(tag);
-       // tag.setBoard(this);
     }
 
     public boolean removeTag(long id){
@@ -130,7 +133,7 @@ public class Board implements DBEntity {
 
     @Override
     public String toString() {
-        return "Board [id=" + id + ", name=" + name + ", password=" + password + ", color=" + color + ", cardLists=" + cardLists + "]";
+        return "Board [id=" + id + ", name=" + name + ", password=" + password + ", cardLists=" + cardLists + "]";
     }
 
     @Override
@@ -157,17 +160,11 @@ public class Board implements DBEntity {
     @JsonIgnore
     public boolean isNetworkValid() {
         return this.cardLists != null
-                && !isNullOrEmpty(this.getName())
-                && !isNullOrEmpty(this.getColor());
+                && !StringUtil.isNullOrEmpty(this.getName());
     }
 
     @JsonIgnore
     public boolean isEditable() {
         return editable;
-    }
-
-    @JsonIgnore
-    public String getDefaultColor() {
-        return defaultColor;
     }
 }

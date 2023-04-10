@@ -4,14 +4,25 @@
     -fx-background-radius: 5px;
 }
 
-.cardList > AnchorPane > Button {
+.cardScroll {
+    -fx-background-color: transparent;
+}
+
+.cardScroll > * {
+    -fx-background-color: transparent;
+}
+
+.cardList Button {
     -fx-base: transparent;
     -fx-background-color: transparent;
+}
+
+.listTitlePane > Button {
     -fx-opacity: 0.6;
 }
 
-.cardList > AnchorPane > Button:hover {
-    -fx-opacity: 1.0;
+.listTitlePane > Button:hover {
+    -fx-opacity: 1;
 }
 
 .listTitle {

@@ -11,8 +11,10 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.Dragboard;
@@ -52,6 +54,9 @@ public class CardListCtrl implements Component<CardList>, DBEntityCtrl<CardList,
     @FXML
     private AnchorPane cardListBackground;
 
+    @FXML
+    private ScrollPane scrollPane;
+
     @Inject
     public CardListCtrl(ClientUtils client, ServerUtils server, MainCtrl mainCtrl, ComponentFactory factory) {
         this.client = client;
@@ -61,7 +66,7 @@ public class CardListCtrl implements Component<CardList>, DBEntityCtrl<CardList,
     }
 
     public Parent getNode() {
-        return cardListView.getParent();
+        return cardListBackground;
     }
 
     @Override
@@ -70,19 +75,22 @@ public class CardListCtrl implements Component<CardList>, DBEntityCtrl<CardList,
             removeChildren();
         this.cardList = cardList;
         title.setText(cardList.getTitle());
-        cardListBackground.setStyle("-fx-background-color: " + cardList.getColor());
+        client.getBoardCtrl().replaceChild(cardList);
+        cardListBackground.setStyle("-fx-background-color: " + cardList.getBoard().getListColor());
+        // scrollPane.setStyle("-fx-background-color: " + cardList.getBoard().getListColor());
+        // cardListView.setStyle("-fx-background-color: " + cardList.getBoard().getListColor());
 
         for (Card card : cardList.getCards()) {
             CardCtrl cardCtrl = factory.create(CardCtrl.class, card);
             cardListView.getChildren().add(cardCtrl.getNode());
         }
+
+        title.setStyle("-fx-text-fill: " + cardList.getBoard().getFontColor());
     }
 
     public void refresh() {
-        System.out.println(server.getCardList(cardList.getId()));
         cardListView.getChildren().clear();
         loadData(server.getCardList(cardList.getId()));
-        client.getBoardCtrl().replaceChild(cardList);
     }
 
     public void remove() {
@@ -98,9 +106,9 @@ public class CardListCtrl implements Component<CardList>, DBEntityCtrl<CardList,
 
     public void replaceChild(Card card) {
         int idx = IntStream.range(0, cardList.getCards().size())
-            .filter(i -> cardList.getCards().get(i).getId() == card.getId())
-            .findFirst()
-            .orElse(-1);
+                .filter(i -> cardList.getCards().get(i).getId() == card.getId())
+                .findFirst()
+                .orElse(-1);
         if (idx == -1)
             throw new IllegalStateException("Attempting to replace card in card list that does not already exist.");
         cardList.getCards().set(idx, card);
@@ -152,7 +160,7 @@ public class CardListCtrl implements Component<CardList>, DBEntityCtrl<CardList,
             }
 
             ((Node) event.getSource()).setUserData(Math.min(nodes.size(),
-                            nearestPositionDistance.getKey() + (isPositionAbove ? 1 : 0)));
+                    nearestPositionDistance.getKey() + (isPositionAbove ? 1 : 0)));
             Logger.log("Position: " + nearestPositionDistance.getKey());
             Logger.log("Distance: " + nearestPositionDistance.getValue());
             Logger.log("Is above? " + isPositionAbove);
@@ -163,17 +171,23 @@ public class CardListCtrl implements Component<CardList>, DBEntityCtrl<CardList,
     }
 
     public void addCard() {
-        if(!client.getBoardCtrl().getBoard().isEditable()) {
-            throw new IllegalStateException("You do not have permissions to edit this board.");
+        if (!client.getBoardCtrl().getBoard().isEditable()) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setHeaderText("You do not have permissions to edit this board.");
+            alert.showAndWait();
+        } else {
+            mainCtrl.showAddCard(cardList.getId());
         }
-        mainCtrl.showAddCard(cardList.getId());
     }
 
     public void listSettings() {
-        if(!client.getBoardCtrl().getBoard().isEditable()) {
-            throw new IllegalStateException("You do not have permissions to edit this board.");
+        if (!client.getBoardCtrl().getBoard().isEditable()) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setHeaderText("You do not have permissions to edit this board.");
+            alert.showAndWait();
+        } else {
+            mainCtrl.showListSettings(cardList.getId());
         }
-        mainCtrl.showListSettings(cardList.getId());
     }
 
 }

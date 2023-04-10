@@ -1,5 +1,5 @@
 .card {
-    -fx-background-radius: 5px;
+    -fx-background-radius: 3px;
     -fx-background-color: white;
 }
 
@@ -21,14 +21,6 @@
 .titlePane > .title {
     -fx-max-width: 220;
     -fx-font-size: 20px;
-}
-
-.title {
-    -fx-text-fill: black;
-}
-
-.description {
-    -fx-text-fill: black;
 }
 
 .card > .description {

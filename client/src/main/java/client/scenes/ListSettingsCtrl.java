@@ -42,20 +42,12 @@ public class ListSettingsCtrl implements SceneCtrl {
     }
 
     public void resetForm() {
-        listTitle.setText("");
+        listTitle.setText(client.getCardList(cardListId).getTitle());
     }
 
     public void saveChanges() {
         CardList cardList = client.getCardList(cardListId);
-        String color = mainCtrl.turnColorIntoString(listColor.getValue());
-        if(color.equals(client.getBoardCtrl().getBoard().getColor())) {
-            throw new IllegalStateException("List color cannot be the same as board color. Please select a different color");
-        }
         cardList.setTitle(listTitle.getText());
-        if(useDefault.isSelected())
-            cardList.setColor(cardList.getDefaultColor());
-        else
-            cardList.setColor(color);
         server.updateCardList(cardList);
         client.getBoardCtrl().refresh();
         mainCtrl.showMainView();

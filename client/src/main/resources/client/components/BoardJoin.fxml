@@ -7,19 +7,21 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
+
 <AnchorPane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="110.0" prefWidth="268.0" styleClass="pane" stylesheets="/client/styles/board-join.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.components.BoardJoinCtrl">
     <children>
-      <ImageView fitHeight="30.0" fitWidth="30.0" layoutX="9.0" layoutY="4.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="5.0" fx:id="lockImage">
+      <ImageView fx:id="lockImage" fitHeight="30.0" fitWidth="30.0" layoutX="9.0" layoutY="4.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="5.0">
          <image>
             <Image url="@../images/lock.png" />
          </image>
       </ImageView>
-        <Button layoutX="194.0" layoutY="43.0" mnemonicParsing="false" onAction="#onSelect" styleClass="btn" text="Connect" />
+        <Button layoutX="181.0" layoutY="23.0" mnemonicParsing="false" onAction="#onSelect" prefHeight="24.0" prefWidth="85.0" styleClass="btn" text="Connect" />
         <Label fx:id="label" layoutX="26.0" layoutY="21.0" prefHeight="69.0" prefWidth="158.0" text="BOARD NAME" wrapText="true">
             <font>
                 <Font size="16.0" />
             </font>
         </Label>
+      <Button fx:id="leave" layoutX="181.0" layoutY="65.0" mnemonicParsing="false" onAction="#onRemove" prefHeight="25.0" prefWidth="85.0" styleClass="btn" text="Leave" />
     </children>
     <padding>
         <Insets bottom="50.0" />

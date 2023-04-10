@@ -8,15 +8,25 @@ import client.utils.ExceptionHandler;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.*;
+import client.utils.*;
+import commons.Board;
+import commons.Card;
+import commons.CardList;
+import commons.SubTask;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.text.Text;
+import org.springframework.messaging.simp.stomp.StompSession;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class MainViewCtrl implements SceneCtrl {
@@ -25,6 +35,7 @@ public class MainViewCtrl implements SceneCtrl {
     private final ClientUtils client;
     private final MainCtrl mainCtrl;
     private final ComponentFactory factory;
+
     private final ExceptionHandler exceptionHandler;
 
     @FXML
@@ -40,6 +51,11 @@ public class MainViewCtrl implements SceneCtrl {
     @FXML
     private AnchorPane warning;
 
+
+    private final List<StompSession.Subscription> subscriptions = new ArrayList<>();
+
+    private boolean register = true;
+
     @Inject
     public MainViewCtrl(ServerUtils server, ClientUtils client, MainCtrl mainCtrl,
                         ComponentFactory factory, ExceptionHandler exceptionHandler) {
@@ -53,13 +69,18 @@ public class MainViewCtrl implements SceneCtrl {
     @FXML
     void btnAddClicked(ActionEvent event) {
         if (!client.getBoardCtrl().getBoard().isEditable()) {
-            throw new IllegalStateException("You do not have permissions to edit this board.");
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setHeaderText("You do not have permissions to edit this board.");
+            alert.showAndWait();
+        } else {
+            mainCtrl.showAddList();
         }
-        mainCtrl.showAddList();
     }
 
     @FXML
     void btnBackClicked(ActionEvent event) {
+        unsubscribe();
+        server.disconnect();
         mainCtrl.showConnect();
     }
 
@@ -76,9 +97,16 @@ public class MainViewCtrl implements SceneCtrl {
     @FXML
     void btnSettingsClicked(ActionEvent event) {
         if (!client.getBoardCtrl().getBoard().isEditable()) {
-            throw new IllegalStateException("You do not have permissions to edit this board.");
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setHeaderText("You do not have permissions to edit this board.");
+            alert.showAndWait();
+        } else {
+            mainCtrl.showSettings();
         }
-        mainCtrl.showSettings();
+    }
+
+    public void helpButtonClicked() {
+        KeyEventHandler.displayKeybinds();
     }
 
     public void scrollHandler(ScrollEvent event) {
@@ -102,10 +130,11 @@ public class MainViewCtrl implements SceneCtrl {
 
         BoardCtrl boardCtrl = factory.create(BoardCtrl.class, board);
         boardContainer.setContent(boardCtrl.getNode());
-        boardContainer.setStyle("-fx-background: " + board.getColor());
+        boardContainer.setStyle("-fx-background: " + board.getBoardColor());
         displayBoardName.setText(board.getName());
         warning.setVisible(!board.isEditable());
-        registerForMessages();
+        if (register)
+            registerForMessages();
     }
 
     /**
@@ -114,8 +143,22 @@ public class MainViewCtrl implements SceneCtrl {
      * user is viewing.
      */
     public void registerForMessages() {
-
+        register = false;
         long boardId = client.getBoardCtrl().getBoard().getId();
+        /**
+         * This method call handles the deletion,addition and updating of a subtask on the current board by
+         * using the registerForMessages method of the server, which refreshes the CardCtrl of the subtask
+         * in question.
+         */
+        subscriptions.add(server.registerForMessages("/topic/board/" + boardId + "/subtasks", SubTask.class, s -> {
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    client.getCardCtrl(client.getCard(s.getCard().getId()).getId()).refresh();
+                    mainCtrl.getActiveCtrl().revalidate();
+                    client.postRefresh();
+                }});
+        }));
 
         tagRegistration(boardId);
 
@@ -124,33 +167,30 @@ public class MainViewCtrl implements SceneCtrl {
          * using the registerForMessages method of the server, which refreshes the CardListCtrl of the card
          * in question.
          */
-        server.registerForMessages("/topic/board/" + boardId + "/cards", Card.class, c -> {
+        subscriptions.add(server.registerForMessages("/topic/board/" + boardId + "/cards", Card.class, c -> {
             Platform.runLater(new Runnable() {
                 @Override
                 public void run() {
                     client.getCardListCtrl(c.getCardList().getId()).refresh();
                     mainCtrl.getActiveCtrl().revalidate();
-                }
-            });
-
-        });
-
+                    client.postRefresh();
+                }});
+        }));
         /**
          * This method call handles the deletion,addition and updating of a list on the current board by
          * using the registerForMessages method of the server, which refreshes the BoardCtrl of the list
          * in question.
          */
-        server.registerForMessages("/topic/board/" + boardId + "/lists", CardList.class, l -> {
+        subscriptions.add(server.registerForMessages("/topic/board/" + boardId + "/lists", CardList.class, l -> {
             Platform.runLater(new Runnable() {
                 @Override
                 public void run() {
                     client.getBoardCtrl().refresh();
                     mainCtrl.getActiveCtrl().revalidate();
-                }
-            });
-        });
-
-        server.registerForMessages("/topic/board/" + boardId + "/update", Board.class, b -> {
+                    client.postRefresh();
+                }});
+        }));
+        subscriptions.add(server.registerForMessages("/topic/board/" + boardId + "/update", Board.class, b -> {
             Platform.runLater(new Runnable() {
                 @Override
                 public void run() {
@@ -160,28 +200,37 @@ public class MainViewCtrl implements SceneCtrl {
                         client.getBoardCtrl().refresh();
                         mainCtrl.getActiveCtrl().revalidate();
                     }
-                }
-            });
-        });
-
+                    client.postRefresh();
+                }});
+        }));
         /**
          * This method call is used for informing the client that the board they are currently on
          * has been deleted
          */
-        server.registerForMessages("/topic/board/" + boardId + "/delete", Board.class, b -> {
+        subscriptions.add(server.registerForMessages("/topic/board/" + boardId + "/delete", Board.class, b -> {
             Platform.runLater(new Runnable() {
                 @Override
                 public void run() {
                     client.setBoardCtrl(null);
-                    mainCtrl.showJoin();
-                    throw new RuntimeException("Sorry, but the board you are currently" +
-                            " viewing has been permanently deleted.");
-                }
-            });
-        });
-
+                    mainCtrl.getEditCardCtrl().resetState();
+                    unsubscribe();
+                    if (!mainCtrl.getActiveCtrl().equals(mainCtrl.getJoinBoardsCtrl())) {
+                        mainCtrl.showJoin();
+                        throw new RuntimeException("Sorry, but the board you are currently viewing has been permanently deleted.");
+                    }
+                }});}));
     }
 
+    public void unsubscribe() {
+        subscriptions.forEach(StompSession.Subscription::unsubscribe);
+        subscriptions.clear();
+        register = true;
+    }
+
+    @Override
+    public void revalidate() {
+
+    }
     private void tagRegistration(long boardId) {
         server.registerForMessages("/topic/board/" + boardId + "/cardtags",
                 CardTag.class, c -> {
