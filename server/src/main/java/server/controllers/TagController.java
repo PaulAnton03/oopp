@@ -73,13 +73,7 @@ public class TagController {
             throw new ResponseStatusException(HttpStatus.NOT_IMPLEMENTED, "Tag not found");
         }
         Tag repoTag = optTag.get();
-//        for(Card  c : repoTag.getCards()){
-//            c.getTags().remove(repoTag);
-//        }
-//        Board board = boardRepository.getById(repoTag.getBoard().getId());
-//        if(board.getTagList().contains(repoTag)){
-//            board.getTagList().remove(repoTag);
-//        }
+
         if (repoTag.getBoard() != null) {
             repoTag.getBoard().removeTag(repoTag.getId());
         }

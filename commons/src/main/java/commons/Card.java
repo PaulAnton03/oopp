@@ -8,9 +8,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Data
 @Entity
@@ -44,7 +42,7 @@ public class Card implements DBEntity {
     @JoinTable(name = "cards_cards_tags",
             joinColumns = @JoinColumn(name = "card_id"),
             inverseJoinColumns = @JoinColumn(name = "card_tag_id"))
-    private Set<CardTag> cardTags = new HashSet<>();
+    private List<CardTag> cardTags = new ArrayList<>();
 
 
     @NonNull

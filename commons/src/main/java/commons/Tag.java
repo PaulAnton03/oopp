@@ -6,9 +6,9 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 
 @Data
@@ -32,7 +32,7 @@ public class Tag implements DBEntity {
     @JoinTable(name = "tags_cards_tags",
             joinColumns = @JoinColumn(name = "tag_id"),
             inverseJoinColumns = @JoinColumn(name = "card_tag_id"))
-    private Set<CardTag> cardTags = new HashSet<>();
+    private List<CardTag> cardTags = new ArrayList<>();
 
 
     @ManyToOne

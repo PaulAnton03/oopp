@@ -159,7 +159,6 @@ public class TagCtrl implements Component<Tag> {
                 server.deleteCardTag(cardTag.getId());
             }
         }
-//
     }
 
     public void changeTag(Card card) {
