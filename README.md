@@ -5,7 +5,7 @@ This information can be added throughout the course, except for the names of the
 Add your own name (do not add the names for others!) to the section below.
 
 ## Description of project
-Talio is a task management application that enables users to organize their work into lists and prioritize them. The application has a client-server architecture where users can connect to a server to manage their tasks. The application is built with Spring/JavaFX and uses HTTP,JSON, and WebSockets for client-server communication.
+Talio is a task management application that enables users to organize their work into lists and prioritize them. The application has a client-server architecture where users can connect to a server to manage their tasks, allowing users to access their boards from anywhere at anytime, over the internet. The application is built with Spring and JavaFX, and uses HTTP, JSON, and WebSockets for client-server communication.
 
 ## Group members
 
@@ -25,17 +25,17 @@ Talio is a task management application that enables users to organize their work
 <!-- - (please make sure the photos have the same size) -->
 
 ## How to run it
--In order for a user to host his/her own server, they have to run the java file located at "server\src\main\java\server\Main.java".
--In order for a user to connect to a Talio server, they have to run the java file located at "client\src\main\java\client\Main.java".
-They will be prompted to join a server using an url, or join a board directly using a join-key.
+- To host a server on port 8080, call `gradlew bootRun`
+- To run a client, call `gradlew run`
+- To run the tests and other checks, call `gradlew check`
 
 ## How to contribute to it
-You develop your features on a separate branch, push the changes to origin, and make a merge request.
+You must develop your features on a separate branch, push the changes to origin, and create a merge request.
 
 Take time to understand the project's codebase, structure, and functionality. Once you're familiar with the code you can begin coding, make sure you respect the style standards. Then, create a merge request and once your pipeline has passed await approval from 2 of our team members.
 
 ## Copyright / License (opt.)
-Copyright 2021 Delft University of Technology
+Copyright 2021-2023 Delft University of Technology
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -48,4 +48,3 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
-
