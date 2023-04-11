@@ -83,6 +83,9 @@ public class EditCardCtrl implements SceneCtrl {
     }
 
     public void saveCardChanges() {
+        if(changeTitle.getText().isEmpty()) {
+            throw new IllegalStateException("Card must have a title");
+        }
         Card card = client.getCard(cardId);
         card.setTitle(changeTitle.getText());
         card.setDescription(changeDesc.getText());

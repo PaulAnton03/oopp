@@ -59,6 +59,9 @@ public class BoardSettingsCtrl implements SceneCtrl {
     }
 
     public void saveChanges() {
+        if(boardName.getText().isEmpty()) {
+            throw new IllegalStateException("Board must have a name");
+        }
         Board board = client.getBoardCtrl().getBoard();
         if (board == null) {
             Logger.log("No board selected", Logger.LogLevel.ERROR);

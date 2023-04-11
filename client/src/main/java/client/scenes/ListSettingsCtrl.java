@@ -46,6 +46,9 @@ public class ListSettingsCtrl implements SceneCtrl {
     }
 
     public void saveChanges() {
+        if(listTitle.getText().isEmpty()) {
+            throw new IllegalStateException("List must have a title");
+        }
         CardList cardList = client.getCardList(cardListId);
         cardList.setTitle(listTitle.getText());
         server.updateCardList(cardList);

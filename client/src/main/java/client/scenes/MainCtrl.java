@@ -31,6 +31,7 @@ import javafx.scene.Scene;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Region;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Pair;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -161,11 +162,13 @@ public class MainCtrl {
         this.tagSettingsCtrl = builder.tagSettings.getKey();
         this.tagSettingsScene = new Scene(builder.getTagSettings().getValue());
 
+        primaryStage.initStyle(StageStyle.UTILITY);
         primaryStage.setResizable(true);
         showConnect();
         primaryStage.show();
         primaryStage.setWidth(1000);
         primaryStage.setHeight(600);
+
         primaryStage.addEventFilter(KeyEvent.KEY_PRESSED, new KeyEventHandler(client, this));
     }
 
