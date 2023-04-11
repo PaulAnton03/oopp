@@ -40,11 +40,6 @@
                <content>
                   <VBox fx:id="subTaskView" prefWidth="400.0" />
                </content></ScrollPane>
-            <Label prefHeight="14.0" prefWidth="400.0" text="Tags">
-               <font>
-                  <Font size="16.0" />
-               </font>
-            </Label>
             <AnchorPane prefHeight="200.0" prefWidth="404.0">
                <children>
                   <Label layoutX="9.0" layoutY="6.0" text="Select Tags" />

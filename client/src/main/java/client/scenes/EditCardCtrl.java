@@ -198,9 +198,8 @@ public class EditCardCtrl implements SceneCtrl {
             Platform.runLater(new Runnable() {
                 @Override
                 public void run() {
-                    TagCtrl tagCtrl = factory.create(TagCtrl.class, tag);
-                    tagCtrl.loadData(tag);
-                    tagArea.getChildren().add(tagCtrl.getNode());
+                    mainCtrl.showMainView();
+                    mainCtrl.showEditCard(cardId);
                 }
             });
         }));
@@ -208,9 +207,15 @@ public class EditCardCtrl implements SceneCtrl {
             Platform.runLater(new Runnable() {
                 @Override
                 public void run() {
-                    TagCtrl tagCtrl = factory.create(TagCtrl.class, tag);
-                    tagCtrl.loadData(tag);
-                    tagArea.getChildren().add(tagCtrl.getNode());
+                    mainCtrl.showMainView();
+                    mainCtrl.showEditCard(cardId);
+                }
+            });
+        }));subscriptions.add(server.registerForMessages("/topic/board/" + boardId + "/tags", Tag.class, tag -> {
+            Platform.runLater(new Runnable() {@Override
+                public void run() {
+                    mainCtrl.showMainView();
+                    mainCtrl.showEditCard(cardId);
                 }
             });
         }));
