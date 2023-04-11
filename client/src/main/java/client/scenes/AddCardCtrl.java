@@ -36,6 +36,9 @@ public class AddCardCtrl implements SceneCtrl {
     }
 
     public void ok() {
+        if(title.getText().isEmpty()) {
+            throw new IllegalStateException("Card must have a title");
+        }
         Card card = new Card(title.getText(), description.getText());
         card.setCardList(client.getCardList(cardListId));
         server.addCard(card);
