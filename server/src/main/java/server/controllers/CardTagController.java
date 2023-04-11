@@ -1,5 +1,6 @@
 package server.controllers;
 
+import commons.Board;
 import commons.Card;
 import commons.CardTag;
 import commons.Tag;
@@ -7,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
+import server.database.BoardRepository;
 import server.database.CardRepository;
 import server.database.CardTagRepository;
 import server.database.TagRepository;
@@ -21,16 +23,19 @@ public class CardTagController {
     private CardTagRepository cardTagRepository;
 
     public CardTagController(CardTagRepository cardTagRepository,
-                             TagRepository tagRepository, CardRepository cardRepository, SimpMessagingTemplate messagingTemplate) {
+                             TagRepository tagRepository, CardRepository cardRepository, SimpMessagingTemplate messagingTemplate,
+        BoardRepository boardRepository) {
         this.cardTagRepository = cardTagRepository;
         this.tagRepository = tagRepository;
         this.cardRepository = cardRepository;
         this.messagingTemplate = messagingTemplate;
+        this.boardRepository = boardRepository;
     }
 
     private final SimpMessagingTemplate messagingTemplate;
 
     private final TagRepository tagRepository;
+    private final BoardRepository boardRepository;
     private final CardRepository cardRepository;
 
     @GetMapping(path = {"", "/"})
@@ -46,11 +51,14 @@ public class CardTagController {
     }
 
     @PostMapping("/create")
-    public CardTag createCardTag(@RequestBody CardTag cardTag) {
+    public CardTag createCardTag(@RequestBody CardTag cardTag, @RequestParam long boardId) {
+        Board board = boardRepository.getById(boardId);
         Card card = cardTag.getCard();
         System.out.println("to be combined" + card.getTitle());
         Tag tag = cardTag.getTag();
         System.out.println("to be combined" + tag.getText());
+        messagingTemplate.convertAndSend("/topic/board/" + board.getId()
+                + "/cardtags/create", cardTag);
         return cardTagRepository.save(cardTag);
     }
 
@@ -63,14 +71,15 @@ public class CardTagController {
         cardTag.setCard(cardTagDetails.getCard());
         cardTag.setTag(cardTagDetails.getTag());
         final CardTag updatedCardTag = cardTagRepository.save(cardTag);
+        messagingTemplate.convertAndSend("/topic/board/" + updatedCardTag.getCard().
+                getCardList().getBoard().getId()
+                + "/cardtags", cardTag);
         return ResponseEntity.ok(updatedCardTag);
     }
-
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<CardTag> deleteCardTag(@PathVariable(value = "id") Long cardTagId) {
         CardTag cardTag = cardTagRepository.findById(cardTagId)
                 .orElseThrow(() -> new RuntimeException("CardTag not found with id: " + cardTagId));
-
         cardTagRepository.delete(cardTag);
         messagingTemplate.convertAndSend("/topic/board/" +
                 cardTag.getCard().getCardList().getBoard().getId()

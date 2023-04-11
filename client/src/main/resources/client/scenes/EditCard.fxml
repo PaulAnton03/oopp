@@ -16,17 +16,17 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefWidth="600.0" stylesheets="/client/styles/addCard.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.EditCardCtrl">
+<BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="700.0" prefHeight="700.0" prefWidth="600.0" stylesheets="/client/styles/addCard.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.EditCardCtrl">
    <center>
-      <VBox alignment="CENTER" fillWidth="false" prefHeight="650.0" prefWidth="600.0" spacing="15.0">
+      <VBox alignment="CENTER" fillWidth="false" prefHeight="650.0" prefWidth="600.0" spacing="10.0">
          <children>
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Edit Card" textAlignment="CENTER" wrappingWidth="600.0">
                <font>
                   <Font size="32.0" />
                </font>
             </Text>
-            <TextField fx:id="changeTitle" prefHeight="40.0" prefWidth="400.0" promptText="Title" styleClass="formTextInput" VBox.vgrow="ALWAYS" />
-            <TextArea fx:id="changeDesc" prefHeight="100.0" prefWidth="400.0" promptText="Description" styleClass="formTextInput" VBox.vgrow="NEVER" />
+            <TextField fx:id="changeTitle" prefHeight="34.0" prefWidth="400.0" promptText="Title" styleClass="formTextInput" VBox.vgrow="ALWAYS" />
+            <TextArea fx:id="changeDesc" prefHeight="72.0" prefWidth="400.0" promptText="Description" styleClass="formTextInput" VBox.vgrow="NEVER" />
             <AnchorPane prefHeight="27.0" prefWidth="400.0">
                <children>
                   <Button layoutX="276.0" layoutY="1.0" mnemonicParsing="false" onAction="#addSubTask" styleClass="formButton" text="+" AnchorPane.leftAnchor="100.0" AnchorPane.topAnchor="0.0" />
@@ -36,14 +36,14 @@
                      </font></Label>
                </children>
             </AnchorPane>
-            <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" prefHeight="150.0" prefWidth="400.0" VBox.vgrow="NEVER">
+            <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" prefHeight="99.0" prefWidth="400.0" VBox.vgrow="NEVER">
                <content>
-                  <VBox fx:id="subTaskView" prefWidth="400.0" />
+                  <VBox fx:id="subTaskView" prefHeight="149.0" prefWidth="398.0" />
                </content></ScrollPane>
-            <AnchorPane prefHeight="200.0" prefWidth="404.0">
+            <AnchorPane minHeight="-Infinity" prefHeight="149.0" prefWidth="406.0">
                <children>
-                  <Label layoutX="9.0" layoutY="6.0" text="Select Tags" />
-                  <HBox alignment="CENTER" layoutX="1.0" layoutY="100.0" prefHeight="41.0" prefWidth="403.0" spacing="20.0">
+                  <Label layoutX="9.0" layoutY="33.0" text="Select Tags" AnchorPane.topAnchor="10.0" />
+                  <HBox alignment="CENTER" layoutX="2.0" layoutY="128.0" prefHeight="41.0" prefWidth="403.0" spacing="20.0" AnchorPane.topAnchor="100.0">
                      <children>
                         <Label text="New Tag" />
                         <Button fx:id="addTagButton" mnemonicParsing="false" onAction="#createTag" text="+" />
@@ -51,9 +51,9 @@
                         <ColorPicker fx:id="colourPicker" onAction="#pickColor" prefHeight="25.0" prefWidth="122.0" />
                      </children>
                   </HBox>
-                  <AnchorPane layoutX="9.0" layoutY="23.0" prefHeight="72.0" prefWidth="385.0" style="-fx-background-color: WHITE;">
+                  <AnchorPane layoutX="9.0" layoutY="50.0" prefHeight="72.0" prefWidth="385.0" style="-fx-background-color: WHITE;" AnchorPane.topAnchor="30.0">
                      <children>
-                        <FlowPane fx:id="tagArea" layoutX="-6.0" prefHeight="72.0" prefWidth="395.0" />
+                        <FlowPane fx:id="tagArea" layoutX="-6.0" prefHeight="72.0" prefWidth="395.0" AnchorPane.topAnchor="0.0" />
                      </children>
                   </AnchorPane>
                   <Text fx:id="emptyErr" fill="#eb0000" layoutX="114.0" layoutY="153.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Tag name cannot be empty!" visible="false">
@@ -61,7 +61,7 @@
                         <Font size="11.0" />
                      </font>
                   </Text>
-                  <HBox alignment="CENTER" layoutX="-1.0" layoutY="166.0" prefHeight="57.0" prefWidth="407.0" spacing="50.0">
+                  <HBox alignment="CENTER" layoutX="-1.0" layoutY="179.0" prefHeight="44.0" prefWidth="407.0" spacing="50.0">
                      <children>
                         <Button mnemonicParsing="false" onAction="#cancel" prefHeight="26.0" prefWidth="70.0" styleClass="formButton" text="Cancel" />
                         <Text fx:id="tagAssignText" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" visible="false" />
@@ -72,7 +72,7 @@
             </AnchorPane>
          </children>
          <padding>
-            <Insets top="5.0" />
+            <Insets bottom="120.0" top="5.0" />
          </padding>
       </VBox>
    </center>
@@ -88,6 +88,6 @@
       </HBox>
    </top>
    <bottom>
-      <Pane prefHeight="34.0" prefWidth="600.0" BorderPane.alignment="CENTER" />
+      <Pane prefHeight="20.0" prefWidth="600.0" BorderPane.alignment="CENTER" />
    </bottom>
 </BorderPane>

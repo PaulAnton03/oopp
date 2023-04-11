@@ -267,9 +267,8 @@ public class ServerUtils {
         return webTargetAddDefault(webTarget).get(new GenericType<>() {
         });
     }
-
-    public CardTag createCardTag(CardTag cardTag) {
-        WebTarget webTarget = webTargetFromPath("/cardtags/create");
+    public CardTag createCardTag(CardTag cardTag, long boardId) {
+        WebTarget webTarget = webTargetFromPath("/cardtags/create").queryParam("boardId", boardId);
         return webTargetAddDefault(webTarget).post(Entity.entity(cardTag, APPLICATION_JSON), CardTag.class);
     }
 

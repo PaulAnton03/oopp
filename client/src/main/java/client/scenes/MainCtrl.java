@@ -89,10 +89,8 @@ public class MainCtrl {
 
     private ThemeEditorCtrl themeEditorCtrl;
     private Scene themeEdit;
-
     @Getter
     private SceneCtrl activeCtrl;
-
     @Inject
     public MainCtrl(ServerUtils server, ClientUtils client,
                     ComponentFactory factory, ClientPreferences clientPreferences) {
@@ -242,7 +240,6 @@ public class MainCtrl {
             this.showJoin();
             return;
         }
-
         String password = clientPreferences.getPasswordForBoard(boardId).orElse(null);
         if (board.getPassword() != null && !board.getPassword().equals(password)) {
             Logger.log("Saved password for board " + boardId + " is not correct, cannot show main view.", Logger.LogLevel.WARN);

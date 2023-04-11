@@ -24,7 +24,6 @@ public class ComponentFactory {
             TagCtrl.class, "Tag.fxml",
             SubTaskCtrl.class, "SubTask.fxml"
     );
-
     /**
      * Method for creating new components populated with data.
      * <pre>
@@ -54,7 +53,6 @@ public class ComponentFactory {
         } else if (ctrlClass == SubTaskCtrl.class) {
             client.getSubTaskCtrls().put(data.getId(), (SubTaskCtrl) ctrl);
         }
-
         ctrl.loadData(data);
         return ctrl;
     }

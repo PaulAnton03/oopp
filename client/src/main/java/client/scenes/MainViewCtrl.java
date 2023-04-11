@@ -1,6 +1,7 @@
 package client.scenes;
 
 import client.components.BoardCtrl;
+import client.components.CardCtrl;
 import client.components.CardListCtrl;
 import client.components.TagCtrl;
 import client.utils.*;
@@ -222,36 +223,49 @@ public class MainViewCtrl implements SceneCtrl {
                         @Override
                         public void run() {
                             try {
-                                for (CardTag cardTag : server.getCardTags()) {
-                                    TagCtrl tagCtrl = client.getTagCtrl(c.getId());
-                                    tagCtrl.refresh(cardTag.getCard());
-                                    mainCtrl.getActiveCtrl().revalidate();
-                                }
+                                client.getCardCtrl(c.getCard().getId()).refresh();
+                                client.postRefresh();
+
                             } catch (Exception e) {
                                 System.out.println("Some exception in websockets of CardTags!");
                             }
                         }
                     })));
+        subscriptions.add(server.registerForMessages("/topic/board/" + boardId + "/cardtags/create",
+                CardTag.class, c -> Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            client.getBoardCtrl().refresh();
+                            for (CardTag cardTag : server.getCardTags()) {
+                                CardCtrl cardCtrl = client.getCardCtrl(c.getCard().getId());
+                                cardCtrl.refresh();
+//                                mainCtrl.getActiveCtrl().revalidate();
+                                client.postRefresh();
+                            }
+                        } catch (Exception e) {
+                            System.out.println("Some exception in websockets of CardTags Creation!");
+                        }
+                    }
+                })));
         subscriptions.add(server.registerForMessages("/topic/board/" + boardId + "/tags",
                 Tag.class, c -> {
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
                             try {
+                                client.getBoardCtrl().refresh();
                                 for (CardTag cardTag : server.getCardTags()) {
                                     if (cardTag.getTag().equals(c)) {
                                         TagCtrl tagCtrl = client.getTagCtrl(c.getId());
                                         tagCtrl.refresh(cardTag.getCard());
-                                        mainCtrl.getActiveCtrl().revalidate();
+//                                        mainCtrl.getActiveCtrl().revalidate();
                                     }
                                 }
-                            } catch (Exception ignored) {
-                            }
-
+                            } catch (Exception ignored) {}
                         }
                     });
                 }));
-
         subscriptions.add(server.registerForMessages("/topic/board/" + boardId + "/tags/delete",
                 Tag.class, c -> {
                     Platform.runLater(new Runnable() {
@@ -259,12 +273,7 @@ public class MainViewCtrl implements SceneCtrl {
                         public void run() {
                             try {
                                 Board board = client.getBoardCtrl().getBoard();
-                                for(CardTag cardTag : server.getCardTags()){
-                                    if(cardTag.getTag().equals(c)){
-                                        board = cardTag.getCard().getCardList().getBoard();
-                                        System.out.println("Board found!: " + board.getName());break;
-                                    }
-                                }
+                                client.getBoardCtrl().refresh();
                                 if(board != null){
                                     for(CardList cardList : board.getCardLists()){
                                         CardListCtrl cardListCtrl = client.getCardListCtrl(cardList.getId());
@@ -274,7 +283,6 @@ public class MainViewCtrl implements SceneCtrl {
                                     System.out.println("Board is null, removed tag could not be refreshed from" +
                                             " other clients!");
                                 }
-
                             } catch (Exception e) {
                                 System.out.println("Some exception in websockets of tags!");
                             }
@@ -282,6 +290,5 @@ public class MainViewCtrl implements SceneCtrl {
                         }
                     });
                 }));
-
     }
 }

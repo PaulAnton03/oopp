@@ -132,21 +132,10 @@ public class Board implements DBEntity {
 
     @Override
     public String toString() {
-        return "Board [id=" + id + ", name=" + name + ", password=" + password + ", cardLists=" + cardLists + "]";
+        return "Board [id=" + id + ", name=" + name + ", password=" + password + ", cardLists="
+                + cardLists +", tags="+ tagList + "]";
     }
 
-//    @Override
-//    public boolean equals(Object o) {
-//        if (this == o) return true;
-//        if (!(o instanceof Board)) return false;
-//        Board board = (Board) o;
-//        return getId() == board.getId();
-//    }
-
-//    @Override
-//    public int hashCode() {
-//        return Objects.hash(getId());
-//    }
 
     @JsonIgnore
     private static boolean isNullOrEmpty(String s) {

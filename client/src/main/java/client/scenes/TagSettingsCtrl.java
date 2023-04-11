@@ -110,7 +110,12 @@ public class TagSettingsCtrl implements SceneCtrl {
         }
         server.deleteTag(tag.getId());
         this.savedText.setText("Deleted Tag");
-        mainCtrl.showMainView();
+        if (card != null)
+            mainCtrl.showEditCard(card.getId());
+        else {
+            mainCtrl.showMainView();
+        }
+//        mainCtrl.showMainView();
     }
 
     public void resetState() {

@@ -153,7 +153,7 @@ public class TagCtrl implements Component<Tag> {
         CardTag cardTag = new CardTag(card, tag);
         System.out.println("card set to cardTag: " + card.getTitle());
         System.out.println("tag set to cardTag: " + tag.getText());
-        server.createCardTag(cardTag);
+        server.createCardTag(cardTag, client.getBoardCtrl().getBoard().getId());
     }
 
     public void unAssignFromCard(Card card) {

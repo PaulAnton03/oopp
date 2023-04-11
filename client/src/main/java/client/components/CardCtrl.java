@@ -363,7 +363,7 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Tag>, Initi
         Card card = server.getCard(server.getCardList(cardListEnd.getId()).getCards().get(position).getId());
         for(CardTag cardTag : cardTags){
             cardTag.setCard(card);
-            server.createCardTag(cardTag);
+            server.createCardTag(cardTag, client.getBoardCtrl().getBoard().getId());
         }
         client.getBoardCtrl().refresh();
     }

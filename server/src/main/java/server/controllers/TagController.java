@@ -60,7 +60,6 @@ public class TagController {
         } else {
             System.out.println("This tag already exists in board!");
         }
-
         tag.setBoard(board);
         tagRepository.save(tag);
         System.out.println("Created tag! : " + tag.getId());
@@ -107,7 +106,6 @@ public class TagController {
         messagingTemplate.convertAndSend("/topic/board/" + optTag.get().getBoard().getId()
                 + "/tags", tag);
         return ResponseEntity.ok(optTag.get());
-
     }
 }
 

@@ -133,7 +133,6 @@ public class EditCardCtrl implements SceneCtrl {
             });
 
         }));
-
         /**
          * Remove SubTask
          */
@@ -159,7 +158,6 @@ public class EditCardCtrl implements SceneCtrl {
             });
 
         }));
-
         /**
          * Reorder SubTask up
          */
@@ -175,22 +173,20 @@ public class EditCardCtrl implements SceneCtrl {
             });
 
         }));
-
         /**
          * Reorder SubTask down
          */
-        subscriptions.add(server.registerForMessages("/topic/board/" + boardId + "/card/" + cardId + "/subtasks/reorder/down", SubTask.class, s -> {
-            Platform.runLater(new Runnable() {
-                @Override
-                public void run() {
-                    SubTaskCtrl ctrl = client.getSubTaskCtrl(s.getId());
-                    int currentIndex = subTaskView.getChildren().indexOf(ctrl.getNode());
-                    subTaskView.getChildren().remove(currentIndex);
-                    subTaskView.getChildren().add(currentIndex + 1, ctrl.getNode());
-                }
-            });
-
-        }));
+        subscriptions.add(server.registerForMessages("/topic/board/" + boardId + "/card/" + cardId +
+                "/subtasks/reorder/down", SubTask.class, s -> {Platform.runLater(new Runnable() {
+                    @Override
+                  public void run() {
+                        SubTaskCtrl ctrl = client.getSubTaskCtrl(s.getId());
+                        int currentIndex = subTaskView.getChildren().indexOf(ctrl.getNode());
+                        subTaskView.getChildren().remove(currentIndex);
+                        subTaskView.getChildren().add(currentIndex + 1, ctrl.getNode());
+                    }
+                });
+            }));
     }
 
     private void tagRegistration(long boardId) {
@@ -198,8 +194,8 @@ public class EditCardCtrl implements SceneCtrl {
             Platform.runLater(new Runnable() {
                 @Override
                 public void run() {
-                    mainCtrl.showMainView();
-                    mainCtrl.showEditCard(cardId);
+                    client.getBoardCtrl().refresh();
+                    loadData(cardId);
                 }
             });
         }));
@@ -207,15 +203,17 @@ public class EditCardCtrl implements SceneCtrl {
             Platform.runLater(new Runnable() {
                 @Override
                 public void run() {
-                    mainCtrl.showMainView();
-                    mainCtrl.showEditCard(cardId);
+                    client.getBoardCtrl().refresh();
+                    loadData(cardId);
                 }
             });
-        }));subscriptions.add(server.registerForMessages("/topic/board/" + boardId + "/tags", Tag.class, tag -> {
-            Platform.runLater(new Runnable() {@Override
+        }));
+        subscriptions.add(server.registerForMessages("/topic/board/" + boardId + "/tags", Tag.class, tag -> {
+            Platform.runLater(new Runnable() {
+                @Override
                 public void run() {
-                    mainCtrl.showMainView();
-                    mainCtrl.showEditCard(cardId);
+                    client.getBoardCtrl().refresh();
+                    loadData(cardId);
                 }
             });
         }));
@@ -231,6 +229,8 @@ public class EditCardCtrl implements SceneCtrl {
     }
 
     public void cancel() {
+        server.updateCard(client.getCard(cardId));
+        client.getCardCtrl(cardId).refresh();
         resetState();
         mainCtrl.showMainView();
     }
@@ -261,13 +261,6 @@ public class EditCardCtrl implements SceneCtrl {
         tag.setBoard(board); //because adding it to the board will save it
         tag.setColor(tagColor);
         server.createTag(tag, board.getId()); //this includes adding to board
-        mainCtrl.showMainView();
-        mainCtrl.showEditCard(cardId);
-//        Tag newTag = server.getTag(tag.getId());
-//        TagCtrl tagCtrl = factory.create(TagCtrl.class, newTag);
-//        tagCtrl.loadData(newTag);
-//        tagArea.getChildren().add(tagCtrl.getNode());
-//        System.out.println("Tag created: " + newTag);
     }
 
     @FXML
