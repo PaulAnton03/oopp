@@ -17,6 +17,7 @@ package client;
 
 import client.scenes.*;
 import client.scenes.MainCtrl.ScenesBuilder;
+import client.utils.ExceptionHandler;
 import com.google.inject.Injector;
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -38,7 +39,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException {
-       // Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler());
+        Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler());
 
         ScenesBuilder builder = new ScenesBuilder();
 

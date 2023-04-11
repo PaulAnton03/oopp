@@ -162,7 +162,6 @@ public class MainCtrl {
         this.tagSettingsCtrl = builder.tagSettings.getKey();
         this.tagSettingsScene = new Scene(builder.getTagSettings().getValue());
 
-        primaryStage.initStyle(StageStyle.UTILITY);
         primaryStage.setResizable(true);
         showConnect();
         primaryStage.show();
