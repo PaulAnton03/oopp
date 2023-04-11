@@ -218,8 +218,7 @@ public class MainViewCtrl implements SceneCtrl {
     }
     private void tagRegistration(long boardId) {
         subscriptions.add(server.registerForMessages("/topic/board/" + boardId + "/cardtags",
-                CardTag.class, c -> {
-                    Platform.runLater(new Runnable() {
+                CardTag.class, c -> Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
                             try {
@@ -232,8 +231,7 @@ public class MainViewCtrl implements SceneCtrl {
                                 System.out.println("Some exception in websockets of CardTags!");
                             }
                         }
-                    });
-                }));
+                    })));
         subscriptions.add(server.registerForMessages("/topic/board/" + boardId + "/tags",
                 Tag.class, c -> {
                     Platform.runLater(new Runnable() {

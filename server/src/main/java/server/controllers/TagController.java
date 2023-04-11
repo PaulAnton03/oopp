@@ -74,7 +74,7 @@ public class TagController {
     public ResponseEntity<Tag> delete(@PathVariable("id") long id) {
         final Optional<Tag> optTag = tagRepository.findById(id);
         if (optTag.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_IMPLEMENTED, "Tag not found");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Tag not found");
         }
         Tag repoTag = optTag.get();
         messagingTemplate.convertAndSend("/topic/board/" + optTag.get().getBoard().getId()

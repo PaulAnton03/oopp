@@ -128,7 +128,6 @@ public class TagCtrl implements Component<Tag> {
                 if (isAssigned) {
                     this.label.setFont(Font.font(label.getFont().getFamily(),
                             FontWeight.NORMAL, label.getFont().getSize()));
-
                     isAssigned = false;
                     unAssignFromCard(card);
                     System.out.println("UnAssigned Card!");
@@ -190,7 +189,6 @@ public class TagCtrl implements Component<Tag> {
 
 
     public void removeChildren() {
-
     }
 
     public void refresh(Card card) {
@@ -200,12 +198,8 @@ public class TagCtrl implements Component<Tag> {
                 System.out.println("refreshed tags");
                 client.getCardCtrl(card.getId()).refresh();
             }
-            //todo well this needs to change because card don't actually have
-            //the tag as a child anymore. its instantiated from cardTag
         }
     }
-
     public void replaceChild(Tag tag) {
-
     }
 }
