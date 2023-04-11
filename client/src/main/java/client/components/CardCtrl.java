@@ -1,27 +1,15 @@
 package client.components;
 
-import java.io.IOException;
-import java.net.URL;
-import java.util.List;
-import java.util.ResourceBundle;
-
-import javax.inject.Inject;
-
 import client.scenes.MainCtrl;
 import client.utils.ClientUtils;
+import client.utils.ComponentFactory;
 import client.utils.Logger;
 import client.utils.ServerUtils;
-import commons.Card;
-import commons.CardList;
-import commons.StringUtil;
-import javafx.animation.Animation;
-import javafx.animation.FadeTransition;
-import javafx.animation.ParallelTransition;
-import javafx.animation.ScaleTransition;
-import javafx.animation.Transition;
-import commons.SubTask;
+import commons.*;
+import javafx.animation.*;
 import javafx.css.PseudoClass;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -37,16 +25,26 @@ import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.TransferMode;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.transform.Transform;
 import javafx.util.Duration;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.Setter;
+
+import javax.inject.Inject;
+import java.io.IOException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ResourceBundle;
 
 @EqualsAndHashCode
-public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Card/* TODO: change to TAG */>, Initializable {
+public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Tag>, Initializable {
     private final MainCtrl mainCtrl;
+    private final ComponentFactory factory;
     private final ServerUtils server;
     private final ClientUtils client;
 
@@ -73,31 +71,43 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Card/* TODO
     @FXML
     private Label subTasksCount;
 
-    @Inject
-    public CardCtrl(MainCtrl mainCtrl, ServerUtils serverUtils, ClientUtils client) {
-        this.mainCtrl = mainCtrl;
-        this.server = serverUtils;
-        this.client = client;
+    @Getter
+    @Setter
+    @FXML
+    private FlowPane tagArea;
 
-//         I figured out these do nothing, but if anybody encounters any problems uncomment this
-//         Also notify me if that happens, treat this as a test, Błażej
-//
-//        FXMLLoader loader = new FXMLLoader(getClass().getResource("Card.fxml"));
-//        loader.setController(this);
-//        loader.setRoot(this);
+    @Inject
+    public CardCtrl(MainCtrl mainCtrl, ServerUtils server, ClientUtils client,
+                    ComponentFactory factory) {
+        this.mainCtrl = mainCtrl;
+        this.factory = factory;
+        this.server = server;
+        this.client = client;
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("Card.fxml"));
+        loader.setController(this);
+        loader.setRoot(this);
     }
 
     @Override
-    public Parent getNode() {
-        return cardView;
-    }
+    public Parent getNode() { return cardView; }
 
     @Override
     public void loadData(Card card) {
         this.card = card;
         title.setText(card.getTitle());
+        if (tagArea.getChildren() != null)
+            tagArea.getChildren().clear();
         description.setText(card.getDescription());
         client.getCardListCtrl(card.getCardList().getId()).replaceChild(card);
+        for (CardTag cardTag : server.getCardTags()) {
+            System.out.println(cardTag.toString());
+            if (cardTag.getCard().equals(card)) {
+                Tag tag = cardTag.getTag();
+                TagCtrl tagCtrl = factory.create(TagCtrl.class, tag);
+                tagCtrl.loadData(tag);
+                tagArea.getChildren().add(tagCtrl.getNode());
+            }
+        }
         if (client.getSelectedCardId() == card.getId()) {
             highlight();
             if (client.getEditedCardTitle() != null)
@@ -133,9 +143,17 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Card/* TODO
             alert.setHeaderText("You do not have permissions to edit this board.");
             alert.showAndWait();
         } else {
+            for(CardTag cardTag : server.getCardTags()) {
+                if (cardTag.getCard().equals(card)) {
+                    server.deleteCardTag(cardTag.getId());
+                }
+            }
             this.card = server.deleteCard(card.getId());
         }
-    }
+
+    }//with this we first delete the relation with cardTag
+
+
 
     public void refresh() {
         loadData(server.getCard(card.getId()));
@@ -149,7 +167,7 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Card/* TODO
     public void removeChildren() {
     }
 
-    public void replaceChild(Card card /* TODO: Change to Tag tag */) {
+    public void replaceChild(Tag tag) {
     }
 
     // CSS class that defines style for the highlighted card
@@ -227,7 +245,8 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Card/* TODO
         cardView.setViewOrder(0.0);
     }
 
-    public Transition getOpacityTransition(Node node, double initialOpacity, double finalOpacity, double duration) {
+    public Transition getOpacityTransition(Node node, double initialOpacity,
+                                           double finalOpacity, double duration) {
         FadeTransition ft = new FadeTransition(Duration.millis(duration), node);
         ft.setFromValue(initialOpacity);
         ft.setToValue(finalOpacity);
@@ -261,9 +280,7 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Card/* TODO
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // Hide buttons, unhighlight card
         deleteButton.setOpacity(0.0); editButton.setOpacity(0.0);
-        // Create show/hide transition for buttons
         final Duration ftDuration = Duration.millis(200);
         final Duration ftDelay = Duration.millis(200);
         final List<FadeTransition> fts = List.of(
@@ -272,15 +289,14 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Card/* TODO
         fts.forEach(ft -> {
             ft.setDelay(ftDelay);
             ft.setFromValue(0.0);
-            ft.setToValue(0.6);
-        });
+            ft.setToValue(0.6);});
         buttonsVisibilityPT = new ParallelTransition(fts.get(0), fts.get(1));
-        // Set button icons and behaviour
-        try (var binInputStream = getClass().getResourceAsStream("/client/images/bin.png");
-             var editInputStream = getClass().getResourceAsStream("/client/images/edit.png")) {
-            // Hover behaviour
-            applyButtonHoverStyle(deleteButton); applyButtonHoverStyle(editButton);
-            // Button graphic
+        try (var binInputStream =
+                     getClass().getResourceAsStream("/client/images/bin.png");
+             var editInputStream =
+                     getClass().getResourceAsStream("/client/images/edit.png")) {
+            applyButtonHoverStyle(deleteButton);
+            applyButtonHoverStyle(editButton);
             ImageView binIcon = new ImageView(new Image(binInputStream));
             ImageView editIcon = new ImageView(new Image(editInputStream));
             binIcon.setFitHeight(40); editIcon.setFitHeight(30);
@@ -292,8 +308,7 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Card/* TODO
         // Set card view event handlers
         cardView.setOnMouseEntered(event -> {
             focus();
-            client.changeSelection(card.getId());
-        });
+            client.changeSelection(card.getId());});
         cardView.setOnMouseExited(event -> unfocus());
         cardView.setOnDragDetected(event -> {
             Logger.log("Card " + getCard().getTitle() + " drag detected");
@@ -321,11 +336,7 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Card/* TODO
                 } catch (Exception e) {
                     return;
                 }
-                cardListStart.removeCard(card);
-                cardListEnd.addCardAtPosition(card, position);
-                this.card.setCardList(cardListEnd);
-                server.updateCardList(cardListStart); server.updateCardList(cardListEnd);
-                client.getBoardCtrl().refresh();
+                moveCardPosition(cardListStart, cardListEnd, position);
                 event.consume();
             }
         });
@@ -334,5 +345,26 @@ public class CardCtrl implements Component<Card>, DBEntityCtrl<Card, Card/* TODO
                 editCard();
             }
         });
+    }
+
+    private void moveCardPosition(CardList cardListStart, CardList cardListEnd, int position) {
+        List<CardTag> cardTags = new ArrayList<>();
+        for(CardTag cardTag : server.getCardTags()){
+            if(cardTag.getCard().equals(card)){
+                cardTags.add(cardTag);
+                server.deleteCardTag(cardTag.getId());
+            }
+        }
+        cardListStart.removeCard(card);
+        cardListEnd.addCardAtPosition(card, position);
+        this.card.setCardList(cardListEnd);
+        server.updateCardList(cardListStart);
+        server.updateCardList(cardListEnd);
+        Card card = server.getCard(server.getCardList(cardListEnd.getId()).getCards().get(position).getId());
+        for(CardTag cardTag : cardTags){
+            cardTag.setCard(card);
+            server.createCardTag(cardTag, client.getBoardCtrl().getBoard().getId());
+        }
+        client.getBoardCtrl().refresh();
     }
 }

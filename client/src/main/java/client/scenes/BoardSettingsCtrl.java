@@ -2,7 +2,11 @@ package client.scenes;
 
 import client.utils.*;
 import com.google.inject.Inject;
+
 import commons.Board;
+import commons.CardTag;
+import commons.Tag;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.CheckBox;
@@ -11,6 +15,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.layout.AnchorPane;
+
 
 public class BoardSettingsCtrl implements SceneCtrl {
 
@@ -74,6 +79,14 @@ public class BoardSettingsCtrl implements SceneCtrl {
         if (board == null) {
             Logger.log("No board selected", Logger.LogLevel.ERROR);
             throw new IllegalStateException("Something went wrong, no board selected!");
+        }
+        //this for loop is for deleting cardTags if a tag is in this board.
+        for(CardTag cardTag : server.getCardTags()){
+            for(Tag tag : board.getTagList()){
+                if(tag.equals(cardTag.getTag())){
+                    server.deleteCardTag(cardTag.getId());
+                }
+            }
         }
         clientPrefs.removeJoinedBoard(board.getId());
         server.deleteBoard(board.getId());

@@ -10,8 +10,8 @@ import javax.inject.Inject;
 
 public class PasswordProtectedCtrl implements SceneCtrl {
 
-    private MainCtrl mainCtrl;
-    private ExceptionHandler exceptionHandler;
+    private final MainCtrl mainCtrl;
+    private final ExceptionHandler exceptionHandler;
     @FXML
     private PasswordField passwordField;
 

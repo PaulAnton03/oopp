@@ -18,7 +18,7 @@ class BoardTest {
     @Test
     void toStringTest() {
         String boardOutput = board.toString();
-        String expectedOutput = "Board [id=0, name=title, password=null, cardLists=[]]";
+        String expectedOutput = "Board [id=0, name=title, password=null, cardLists=[], tags=[]]";
         assertEquals(expectedOutput, boardOutput);
     }
 

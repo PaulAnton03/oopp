@@ -21,9 +21,9 @@ public class ComponentFactory {
             CardListCtrl.class, "CardList.fxml",
             CardCtrl.class, "Card.fxml",
             BoardJoinCtrl.class, "BoardJoin.fxml",
+            TagCtrl.class, "Tag.fxml",
             SubTaskCtrl.class, "SubTask.fxml"
     );
-
     /**
      * Method for creating new components populated with data.
      * <pre>
@@ -48,10 +48,11 @@ public class ComponentFactory {
             client.getCardCtrls().put(data.getId(), (CardCtrl) ctrl);
         } else if (ctrlClass == CardListCtrl.class) {
             client.getCardListCtrls().put(data.getId(), (CardListCtrl) ctrl);
+        } else if (ctrlClass == TagCtrl.class){
+            client.getTagCtrls().put(data.getId(), (TagCtrl) ctrl);
         } else if (ctrlClass == SubTaskCtrl.class) {
             client.getSubTaskCtrls().put(data.getId(), (SubTaskCtrl) ctrl);
         }
-
         ctrl.loadData(data);
         return ctrl;
     }

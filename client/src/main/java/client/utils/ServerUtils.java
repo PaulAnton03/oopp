@@ -15,10 +15,7 @@
  */
 package client.utils;
 
-import commons.Board;
-import commons.Card;
-import commons.CardList;
-import commons.SubTask;
+import commons.*;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.client.Invocation;
@@ -226,6 +223,75 @@ public class ServerUtils {
         WebTarget webTarget = webTargetFromPath("/lists/delete/{id}").resolveTemplate("id", id);
         return webTargetAddDefault(webTarget).delete(new GenericType<>() {
         });
+    }
+
+    public List<Tag> getTagList() {
+        WebTarget webTarget = webTargetFromPath("/tags");
+        return webTargetAddDefault(webTarget).get(new GenericType<>() {
+        });
+    }
+
+    public Tag getTag(long id) {
+        WebTarget webTarget = webTargetFromPath("/tags/{id}").resolveTemplate("id", id);
+        return webTargetAddDefault(webTarget).get(new GenericType<>() {
+        });
+    }
+
+
+    public Tag updateTag(Tag tag, long boardId) {
+        WebTarget webTarget = webTargetFromPath("/tags/update/{id}").resolveTemplate("id", tag.getId())
+                .queryParam("boardId", boardId);
+        return webTargetAddDefault(webTarget).put(Entity.entity(tag, APPLICATION_JSON), Tag.class);
+    }
+
+    public Tag createTag(Tag tag, long boardId) {
+        WebTarget webTarget = webTargetFromPath("/tags/create")
+                .queryParam("boardId", boardId);
+        return webTargetAddDefault(webTarget).post(Entity.entity(tag, APPLICATION_JSON), Tag.class);
+    }
+
+    public Tag deleteTag(long id) {
+        WebTarget webTarget = webTargetFromPath("/tags/delete/{id}").resolveTemplate("id", id);
+        return webTargetAddDefault(webTarget).delete(new GenericType<>() {
+        });
+    }
+
+    public List<CardTag> getCardTags() {
+        WebTarget webTarget = webTargetFromPath("/cardtags");
+        return webTargetAddDefault(webTarget).get(new GenericType<>() {
+        });
+    }
+
+    public CardTag getCardTag(Long id) {
+        WebTarget webTarget = webTargetFromPath("/cardtags/{id}").resolveTemplate("id", id);
+        return webTargetAddDefault(webTarget).get(new GenericType<>() {
+        });
+    }
+    public CardTag createCardTag(CardTag cardTag, long boardId) {
+        WebTarget webTarget = webTargetFromPath("/cardtags/create").queryParam("boardId", boardId);
+        return webTargetAddDefault(webTarget).post(Entity.entity(cardTag, APPLICATION_JSON), CardTag.class);
+    }
+
+    public CardTag deleteCardTag(Long id) {
+        WebTarget webTarget = webTargetFromPath("/cardtags/delete/{id}").resolveTemplate("id", id);
+        return webTargetAddDefault(webTarget).delete(new GenericType<>() {
+        });
+    }
+
+    public CardTag updateCardTag(CardTag cardTag, Long cardtagId) {
+        WebTarget webTarget = webTargetFromPath("/cardtags/update/{id}").resolveTemplate("id", cardtagId);
+        return webTargetAddDefault(webTarget).put(Entity.entity(cardTag, APPLICATION_JSON), CardTag.class);
+    }
+
+    // For TESTING purpose
+    public Board getBoardTest() {
+        Board board = new Board("Testing board");
+        CardList list1 = new CardList("List 1");
+        CardList list2 = new CardList("List 2");
+        list1.addCard(new Card("Do the dishes", "In kitchen"));
+        list1.addCard(new Card("Do the homework", "Maths, Biology"));
+        list2.addCard(new Card("Title", "Only card in list 2"));
+        return board;
     }
 
     public void stop() {

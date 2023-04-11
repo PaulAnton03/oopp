@@ -5,7 +5,9 @@ import com.google.inject.Inject;
 
 import client.utils.ClientUtils;
 import client.utils.ServerUtils;
+import commons.Card;
 import commons.CardList;
+import commons.CardTag;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ColorPicker;
@@ -55,6 +57,14 @@ public class ListSettingsCtrl implements SceneCtrl {
     }
 
     public void deleteList() {
+        CardList cardList = client.getCardList(cardListId);
+        for(CardTag cardTag : server.getCardTags()){
+            for(Card card :  cardList.getCards()){
+                if(cardTag.getCard().equals(card)){
+                    server.deleteCardTag(cardTag.getId());
+                }
+            }
+        }
         server.deleteCardList(cardListId);
         resetForm();
         mainCtrl.showMainView();

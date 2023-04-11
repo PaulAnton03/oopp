@@ -1,0 +1,6 @@
+.tag {
+    -fx-background-radius: 10px;
+    -fx-border-color: #000000;
+    -fx-border-style: solid outside;
+    -fx-border-radius: 10px;
+}

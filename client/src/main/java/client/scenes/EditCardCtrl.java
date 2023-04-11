@@ -1,22 +1,30 @@
 package client.scenes;
 
-import javax.inject.Inject;
-
 import client.components.SubTaskCtrl;
+import client.components.TagCtrl;
 import client.utils.ClientUtils;
 import client.utils.ComponentFactory;
 import client.utils.ExceptionHandler;
 import client.utils.ServerUtils;
-import commons.Card;
-import commons.SubTask;
+import commons.*;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.control.ColorPicker;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 import lombok.Getter;
+import lombok.Setter;
 import org.springframework.messaging.simp.stomp.StompSession;
 
+import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,20 +34,41 @@ public class EditCardCtrl implements SceneCtrl {
     private final ClientUtils client;
     private final MainCtrl mainCtrl;
 
-    private final ComponentFactory factory;
+    private ComponentFactory factory;
 
     private final ExceptionHandler exceptionHandler;
+
+    @Getter
     private long cardId;
 
+    @FXML
+    private ColorPicker colourPicker;
+
+    @FXML
+    private Button addTagButton;
+
+    @FXML
+    private TextField tagField;
     @FXML
     private TextField changeTitle;
     @FXML
     private TextArea changeDesc;
 
+    @FXML
+    private FlowPane tagArea;
+
+    private Color color;
+
     @Getter
     @FXML
     private VBox subTaskView;
 
+    @FXML
+    private Text emptyErr;
+    @Getter
+    @Setter
+    @FXML
+    private Text tagAssignText;
     private final List<StompSession.Subscription> subscriptions = new ArrayList<>();
 
 
@@ -50,6 +79,7 @@ public class EditCardCtrl implements SceneCtrl {
         this.mainCtrl = mainCtrl;
         this.factory = factory;
         this.exceptionHandler = exceptionHandler;
+
     }
 
     public void saveCardChanges() {
@@ -65,12 +95,24 @@ public class EditCardCtrl implements SceneCtrl {
         mainCtrl.showMainView();
     }
 
-
     public void loadData(long cardId) {
+        resetState();
         this.cardId = cardId;
         Card card = client.getCard(cardId);
         changeTitle.setText(card.getTitle());
         changeDesc.setText(card.getDescription());
+        Board curBoard = client.getBoardCtrl().getBoard();
+        for (Tag tag : curBoard.getTagList()) {
+            TagCtrl tagCtrl = factory.create(TagCtrl.class, tag);
+            for (CardTag cardTag : server.getCardTags()) {
+                if (cardTag.getTag().equals(tag) && cardTag.getCard().equals(card)) {
+                    tagCtrl.setAssigned(true);
+                    break;
+                }
+            }
+            tagCtrl.loadData(tag);
+            tagArea.getChildren().add(tagCtrl.getNode());
+        }
         for (SubTask subTask : card.getSubtasks()) {
             SubTaskCtrl subTaskCtrl = factory.create(SubTaskCtrl.class, subTask);
             subTaskView.getChildren().add(subTaskCtrl.getNode());
@@ -80,7 +122,7 @@ public class EditCardCtrl implements SceneCtrl {
 
     public void registerForMessages() {
         long boardId = client.getCard(cardId).getCardList().getBoard().getId();
-
+        tagRegistration(boardId);
         /**
          * Create SubTask
          */
@@ -94,7 +136,6 @@ public class EditCardCtrl implements SceneCtrl {
             });
 
         }));
-
         /**
          * Remove SubTask
          */
@@ -120,7 +161,6 @@ public class EditCardCtrl implements SceneCtrl {
             });
 
         }));
-
         /**
          * Reorder SubTask up
          */
@@ -136,21 +176,49 @@ public class EditCardCtrl implements SceneCtrl {
             });
 
         }));
-
         /**
          * Reorder SubTask down
          */
-        subscriptions.add(server.registerForMessages("/topic/board/" + boardId + "/card/" + cardId + "/subtasks/reorder/down", SubTask.class, s -> {
+        subscriptions.add(server.registerForMessages("/topic/board/" + boardId + "/card/" + cardId +
+                "/subtasks/reorder/down", SubTask.class, s -> {Platform.runLater(new Runnable() {
+                    @Override
+                  public void run() {
+                        SubTaskCtrl ctrl = client.getSubTaskCtrl(s.getId());
+                        int currentIndex = subTaskView.getChildren().indexOf(ctrl.getNode());
+                        subTaskView.getChildren().remove(currentIndex);
+                        subTaskView.getChildren().add(currentIndex + 1, ctrl.getNode());
+                    }
+                });
+            }));
+    }
+
+    private void tagRegistration(long boardId) {
+        subscriptions.add(server.registerForMessages("/topic/board/" + boardId + "/tags/create", Tag.class, tag -> {
             Platform.runLater(new Runnable() {
                 @Override
                 public void run() {
-                    SubTaskCtrl ctrl = client.getSubTaskCtrl(s.getId());
-                    int currentIndex = subTaskView.getChildren().indexOf(ctrl.getNode());
-                    subTaskView.getChildren().remove(currentIndex);
-                    subTaskView.getChildren().add(currentIndex + 1, ctrl.getNode());
+                    client.getBoardCtrl().refresh();
+                    loadData(cardId);
                 }
             });
-
+        }));
+        subscriptions.add(server.registerForMessages("/topic/board/" + boardId + "/tags/delete", Tag.class, tag -> {
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    client.getBoardCtrl().refresh();
+                    loadData(cardId);
+                }
+            });
+        }));
+        subscriptions.add(server.registerForMessages("/topic/board/" + boardId + "/tags", Tag.class, tag -> {
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    client.getBoardCtrl().refresh();
+                    loadData(cardId);
+                }
+            });
         }));
     }
 
@@ -164,13 +232,59 @@ public class EditCardCtrl implements SceneCtrl {
     }
 
     public void cancel() {
+        server.updateCard(client.getCard(cardId));
+        client.getCardCtrl(cardId).refresh();
         resetState();
         mainCtrl.showMainView();
     }
 
+    @FXML
+    public void createTag() {
+        Card card = client.getCard(cardId);
+        System.out.println(card);
+        Board board = card.getCardList().getBoard();
+        System.out.println(card.getCardList());
+        System.out.println(board);
+        String tagText = "";
+        String tagColor = "";
+        if (tagField == null || tagField.getText().equals("")) {
+            emptyErr.setVisible(true);
+            return;
+        } else {
+            emptyErr.setVisible(false);
+            tagText = tagField.getText();
+        }
+        if (color == null) {
+            tagColor = "FFFFFF";
+        } else {
+            tagColor = color.toString();
+        }
+        Tag tag = new Tag();
+        tag.setText(tagText);
+        tag.setBoard(board); //because adding it to the board will save it
+        tag.setColor(tagColor);
+        server.createTag(tag, board.getId()); //this includes adding to board
+    }
+
+    @FXML
+    public void onKeyPressed(KeyEvent e) {
+        if (KeyCode.ESCAPE == e.getCode()) {
+            cancel();
+        }
+    }
+
+    public void pickColor(ActionEvent event) {
+        color = colourPicker.getValue();
+    }
+
+
     public void resetState() {
+        tagAssignText.setVisible(false);
+        emptyErr.setVisible(false);
         this.changeTitle.setText("");
         this.changeDesc.setText("");
+        this.tagField.setText("");
+        tagArea.getChildren().clear();
         subTaskView.getChildren().clear();
         subscriptions.forEach(StompSession.Subscription::unsubscribe);
         subscriptions.clear();

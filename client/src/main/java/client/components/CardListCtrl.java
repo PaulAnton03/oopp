@@ -41,6 +41,7 @@ public class CardListCtrl implements Component<CardList>, DBEntityCtrl<CardList,
 
     @Getter
     private CardList cardList;
+
     @FXML
     private Label title;
     @Getter

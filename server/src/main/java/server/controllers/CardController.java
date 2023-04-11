@@ -2,14 +2,14 @@ package server.controllers;
 
 import commons.Card;
 import commons.CardList;
+import commons.CardTag;
+import commons.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-import server.database.CardListRepository;
-import server.database.CardRepository;
-import server.database.SubTaskRepository;
+import server.database.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,14 +22,21 @@ public class CardController {
     private final CardRepository cardRepository;
     private final CardListRepository cardListRepository;
 
+    private final TagRepository tagRepository;
+
     private final SubTaskRepository subTaskRepository;
 
+    private final CardTagRepository cardTagRepository;
+
     public CardController(SimpMessagingTemplate messagingTemplate, CardRepository cardRepository,
-                          CardListRepository cardListRepository, SubTaskRepository subTaskRepository) {
+                          CardListRepository cardListRepository, SubTaskRepository subTaskRepository
+            , TagRepository tagRepository, CardTagRepository cardTagRepository) {
         this.messagingTemplate = messagingTemplate;
         this.cardRepository = cardRepository;
         this.cardListRepository = cardListRepository;
         this.subTaskRepository = subTaskRepository;
+        this.tagRepository = tagRepository;
+        this.cardTagRepository = cardTagRepository;
     }
 
     @GetMapping(path = {"", "/"})
@@ -106,6 +113,19 @@ public class CardController {
         Card updated = cardRepository.save(card);
         CardList cardList = cardListRepository.getById(card.getCardList().getId());
         messagingTemplate.convertAndSend("/topic/board/" + cardList.getBoard().getId() + "/cards", updated);
+        return ResponseEntity.ok(updated);
+    }
+
+    @PutMapping("/addTag/{id}")
+    public ResponseEntity<Card> addTag(@RequestBody Card card, @PathVariable("id") long id) {
+        final Optional<Card> optionalCard = cardRepository.findById(id);
+        if (optionalCard.isEmpty()) {
+            //  return ResponseEntity.notFound().build();
+        }
+        Optional<Tag> optionalTag = tagRepository.findById(id);
+        CardTag cardTag = new CardTag(card, optionalTag.get());
+        card.getCardTags().add(cardTag);
+        Card updated = cardRepository.save(card);
         return ResponseEntity.ok(updated);
     }
 

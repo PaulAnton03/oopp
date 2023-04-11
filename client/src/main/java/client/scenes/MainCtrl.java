@@ -24,6 +24,8 @@ import client.utils.KeyEventHandler;
 import client.utils.Logger;
 import client.utils.ServerUtils;
 import commons.Board;
+import commons.Card;
+import commons.Tag;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyEvent;
@@ -34,6 +36,8 @@ import javafx.util.Pair;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import javax.inject.Inject;
 
 public class MainCtrl {
     private final ServerUtils server;
@@ -68,6 +72,9 @@ public class MainCtrl {
     private EditCardCtrl editCardCtrl;
     private Scene editCard;
 
+    private TagSettingsCtrl tagSettingsCtrl;
+    private Scene tagSettingsScene;
+
     private AddListCtrl addListCtrl;
     private Scene addList;
 
@@ -83,12 +90,11 @@ public class MainCtrl {
 
     private ThemeEditorCtrl themeEditorCtrl;
     private Scene themeEdit;
-
     @Getter
     private SceneCtrl activeCtrl;
-
     @Inject
-    public MainCtrl(ServerUtils server, ClientUtils client, ComponentFactory factory, ClientPreferences clientPreferences) {
+    public MainCtrl(ServerUtils server, ClientUtils client,
+                    ComponentFactory factory, ClientPreferences clientPreferences) {
         this.server = server;
         this.client = client;
         this.factory = factory;
@@ -110,6 +116,7 @@ public class MainCtrl {
         private Pair<EditCardCtrl, Parent> editCard;
         private Pair<PasswordProtectedCtrl, Parent> pswProtected;
         private Pair<AdminPasswordCtrl, Parent> adminPsw;
+        private Pair<TagSettingsCtrl, Parent> tagSettings;
         private Pair<ThemeEditorCtrl, Parent> themeEditor;
     }
 
@@ -151,6 +158,9 @@ public class MainCtrl {
 
         this.themeEditorCtrl = builder.getThemeEditor().getKey();
         this.themeEdit = new Scene(builder.getThemeEditor().getValue());
+
+        this.tagSettingsCtrl = builder.tagSettings.getKey();
+        this.tagSettingsScene = new Scene(builder.getTagSettings().getValue());
 
         primaryStage.initStyle(StageStyle.UTILITY);
         primaryStage.setResizable(true);
@@ -233,7 +243,6 @@ public class MainCtrl {
             this.showJoin();
             return;
         }
-
         String password = clientPreferences.getPasswordForBoard(boardId).orElse(null);
         if (board.getPassword() != null && !board.getPassword().equals(password)) {
             Logger.log("Saved password for board " + boardId + " is not correct, cannot show main view.", Logger.LogLevel.WARN);
@@ -286,6 +295,12 @@ public class MainCtrl {
         showScene(themeEdit);
     }
 
+    public void showTagSettings(Tag tag, Card card){
+        primaryStage.setTitle("Tag Settings");
+        tagSettingsCtrl.loadData(tag, card);
+        primaryStage.setScene(tagSettingsScene);
+        activeCtrl = tagSettingsCtrl;
+    }
     public void stop() {
         server.stop();
     }

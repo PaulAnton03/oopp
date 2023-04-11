@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ColorPicker?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<BorderPane xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.TagSettingsCtrl">
+   <center>
+      <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="299.0" prefWidth="579.0">
+         <children>
+            <BorderPane layoutX="2.0" prefHeight="299.0" prefWidth="579.0">
+               <center>
+                  <VBox alignment="CENTER" prefHeight="224.0" prefWidth="355.0" spacing="10.0" BorderPane.alignment="CENTER">
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Tag Settings" wrappingWidth="131.693359375">
+                           <font>
+                              <Font size="24.0" />
+                           </font></Text>
+                        <Text fx:id="savedText" strokeType="OUTSIDE" strokeWidth="0.0" />
+                        <TextField fx:id="textField" alignment="CENTER" maxWidth="200.0" prefHeight="25.0" prefWidth="20.0">
+                           <VBox.margin>
+                              <Insets left="20.0" right="20.0" />
+                           </VBox.margin>
+                        </TextField>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Tag Color" wrappingWidth="116.693359375" />
+                        <ColorPicker fx:id="colorPicker" onAction="#pickColor" />
+                     </children>
+                  </VBox>
+               </center>
+               <bottom>
+                  <HBox alignment="CENTER" prefHeight="75.0" prefWidth="287.0" spacing="10.0" BorderPane.alignment="CENTER">
+                     <children>
+                        <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#cancelButtonAction" prefHeight="25.0" prefWidth="54.0" text="Back" />
+                        <Button fx:id="deleteButton" mnemonicParsing="false" onAction="#delete" text="Delete Tag" />
+                        <Button fx:id="button" mnemonicParsing="false" onAction="#saveTagChanges" text="Save" />
+                     </children>
+                  </HBox>
+               </bottom>
+            </BorderPane>
+         </children>
+      </AnchorPane>
+   </center>
+</BorderPane>

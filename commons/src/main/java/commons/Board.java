@@ -39,6 +39,11 @@ public class Board implements DBEntity {
 
     @NonNull
     private String fontColor;
+    private String color;
+
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<Tag> tagList = new ArrayList<>();
+
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @OrderColumn(name = "card_list_index")
     private List<CardList> cardLists = new ArrayList<>();
@@ -77,6 +82,29 @@ public class Board implements DBEntity {
         return true;
     }
 
+    public List<Tag> getTagList() {
+        return tagList;
+    }
+
+    public void setTagList(List<Tag> tagList) {
+        this.tagList = tagList;
+    }
+
+    public void addTag(Tag tag) {
+        tagList.add(tag);
+    }
+
+    public boolean removeTag(long id){
+        Tag tag = this.getTagList().stream().filter(c -> c.getId() == id).findFirst().orElse(null);
+        if(tag == null)
+            return false;
+        return removeTag(tag);
+    }
+    public boolean removeTag(Tag tag){
+        return this.tagList.remove(tag);
+    }
+
+
     /**
      * Removes a {@link CardList} from the board.
      *
@@ -104,9 +132,15 @@ public class Board implements DBEntity {
 
     @Override
     public String toString() {
-        return "Board [id=" + id + ", name=" + name + ", password=" + password + ", cardLists=" + cardLists + "]";
+        return "Board [id=" + id + ", name=" + name + ", password=" + password + ", cardLists="
+                + cardLists +", tags="+ tagList + "]";
     }
 
+
+    @JsonIgnore
+    private static boolean isNullOrEmpty(String s) {
+        return s == null || s.isEmpty();
+    }
 
     /**
      * @return Is {@link Board} valid for network transfer

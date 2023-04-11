@@ -1,12 +1,12 @@
 package client.scenes;
 
 import client.components.BoardCtrl;
+import client.components.CardCtrl;
+import client.components.CardListCtrl;
+import client.components.TagCtrl;
 import client.utils.*;
 import com.google.inject.Inject;
-import commons.Board;
-import commons.Card;
-import commons.CardList;
-import commons.SubTask;
+import commons.*;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -51,7 +51,8 @@ public class MainViewCtrl implements SceneCtrl {
     private boolean register = true;
 
     @Inject
-    public MainViewCtrl(ServerUtils server, ClientUtils client, MainCtrl mainCtrl, ComponentFactory factory, ExceptionHandler exceptionHandler) {
+    public MainViewCtrl(ServerUtils server, ClientUtils client, MainCtrl mainCtrl,
+                        ComponentFactory factory, ExceptionHandler exceptionHandler) {
         this.server = server;
         this.client = client;
         this.mainCtrl = mainCtrl;
@@ -129,7 +130,6 @@ public class MainViewCtrl implements SceneCtrl {
         if (register)
             registerForMessages();
     }
-
     /**
      * This method is used after loading the data in order to subscribe the client to different endpoints
      * and handle events related to deleting, creating, and updating cards and lists on the current board the
@@ -138,11 +138,6 @@ public class MainViewCtrl implements SceneCtrl {
     public void registerForMessages() {
         register = false;
         long boardId = client.getBoardCtrl().getBoard().getId();
-        /**
-         * This method call handles the deletion,addition and updating of a subtask on the current board by
-         * using the registerForMessages method of the server, which refreshes the CardCtrl of the subtask
-         * in question.
-         */
         subscriptions.add(server.registerForMessages("/topic/board/" + boardId + "/subtasks", SubTask.class, s -> {
             Platform.runLater(new Runnable() {
                 @Override
@@ -152,6 +147,7 @@ public class MainViewCtrl implements SceneCtrl {
                     client.postRefresh();
                 }});
         }));
+        tagRegistration(boardId);
         /**
          * This method call handles the deletion,addition and updating of a card on the current board by
          * using the registerForMessages method of the server, which refreshes the CardListCtrl of the card
@@ -220,5 +216,79 @@ public class MainViewCtrl implements SceneCtrl {
     @Override
     public void revalidate() {
 
+    }
+    private void tagRegistration(long boardId) {
+        subscriptions.add(server.registerForMessages("/topic/board/" + boardId + "/cardtags",
+                CardTag.class, c -> Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                client.getCardCtrl(c.getCard().getId()).refresh();
+                                client.postRefresh();
+
+                            } catch (Exception e) {
+                                System.out.println("Some exception in websockets of CardTags!");
+                            }
+                        }
+                    })));
+        subscriptions.add(server.registerForMessages("/topic/board/" + boardId + "/cardtags/create",
+                CardTag.class, c -> Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            client.getBoardCtrl().refresh();
+                            for (CardTag cardTag : server.getCardTags()) {
+                                CardCtrl cardCtrl = client.getCardCtrl(c.getCard().getId());
+                                cardCtrl.refresh();
+//                                mainCtrl.getActiveCtrl().revalidate();
+                                client.postRefresh();
+                            }
+                        } catch (Exception e) {
+                            System.out.println("Some exception in websockets of CardTags Creation!");
+                        }
+                    }
+                })));
+        subscriptions.add(server.registerForMessages("/topic/board/" + boardId + "/tags",
+                Tag.class, c -> {
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                client.getBoardCtrl().refresh();
+                                for (CardTag cardTag : server.getCardTags()) {
+                                    if (cardTag.getTag().equals(c)) {
+                                        TagCtrl tagCtrl = client.getTagCtrl(c.getId());
+                                        tagCtrl.refresh(cardTag.getCard());
+//                                        mainCtrl.getActiveCtrl().revalidate();
+                                    }
+                                }
+                            } catch (Exception ignored) {}
+                        }
+                    });
+                }));
+        subscriptions.add(server.registerForMessages("/topic/board/" + boardId + "/tags/delete",
+                Tag.class, c -> {
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                Board board = client.getBoardCtrl().getBoard();
+                                client.getBoardCtrl().refresh();
+                                if(board != null){
+                                    for(CardList cardList : board.getCardLists()){
+                                        CardListCtrl cardListCtrl = client.getCardListCtrl(cardList.getId());
+                                        cardListCtrl.refresh();
+                                    }
+                                }else{
+                                    System.out.println("Board is null, removed tag could not be refreshed from" +
+                                            " other clients!");
+                                }
+                            } catch (Exception e) {
+                                System.out.println("Some exception in websockets of tags!");
+                            }
+
+                        }
+                    });
+                }));
     }
 }

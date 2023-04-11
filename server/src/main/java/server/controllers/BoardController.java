@@ -111,7 +111,6 @@ public class BoardController {
 
     @PutMapping("/update/{id}")
     public ResponseEntity<Board> update(@RequestBody Board board, @PathVariable("id") long id) {
-        System.out.println("test1");
         if (!board.isNetworkValid()) {
             return ResponseEntity.badRequest().build();
         }

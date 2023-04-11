@@ -34,7 +34,17 @@ public class Card implements DBEntity {
     @OrderColumn(name = "card_index")
     @JsonIncludeProperties("id")
     @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     private CardList cardList;
+
+
+
+    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    @JoinTable(name = "cards_cards_tags",
+            joinColumns = @JoinColumn(name = "card_id"),
+            inverseJoinColumns = @JoinColumn(name = "card_tag_id"))
+    private List<CardTag> cardTags = new ArrayList<>();
+
 
     @NonNull
     private String title;
