@@ -46,7 +46,7 @@
                         <Font name="System Bold" size="14.0" />
                      </font>
                   </Label>
-                  <TextField fx:id="boardId" layoutX="24.0" layoutY="88.0" prefHeight="24.0" prefWidth="154.0" promptText="Board Id" />
+                  <TextField fx:id="boardId" layoutX="24.0" layoutY="88.0" prefHeight="24.0" prefWidth="154.0" promptText="Invite key" />
                   <Button fx:id="btnJoin" layoutX="66.0" layoutY="127.0" mnemonicParsing="false" onAction="#onJoin" prefHeight="15.0" prefWidth="65.0" text="ENTER">
                      <font>
                         <Font size="9.0" />

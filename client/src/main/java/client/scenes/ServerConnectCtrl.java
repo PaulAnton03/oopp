@@ -42,7 +42,7 @@ public class ServerConnectCtrl implements SceneCtrl {
 
         // Parse the invite key
         // The key format is: "join-talio#<server address>#<board id>(#<password>)"
-        if (!inviteKey.matches("^join-talio#.{5,30}#[0-9]+(?:#.+)?$")) {
+        if (!inviteKey.matches("^join-talio#.{5,}#[0-9]+(?:#.+)?$")) {
             throw new RuntimeException("The invite key is invalid, maybe copy it again");
         }
         String[] parts = inviteKey.split("#");
