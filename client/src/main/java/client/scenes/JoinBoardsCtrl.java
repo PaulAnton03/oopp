@@ -143,7 +143,7 @@ public class JoinBoardsCtrl implements SceneCtrl {
             throw new RuntimeException("The invite key cannot be empty");
         }
 
-        if (!inviteKey.matches("^join-talio#.{5,30}#[0-9]+(?:#.+)?$")) {
+        if (!inviteKey.matches("^join-talio#.{5,}#[0-9]+(?:#.+)?$")) {
             throw new RuntimeException("The invite key is invalid, maybe copy it again");
         }
         String[] parts = inviteKey.split("#");
