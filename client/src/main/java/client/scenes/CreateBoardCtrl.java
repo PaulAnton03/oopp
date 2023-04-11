@@ -67,12 +67,7 @@ public class CreateBoardCtrl implements SceneCtrl {
         ThemeUtils.Theme theme = ThemeUtils.Theme.valueOf(themePicker.getValue());
         if(theme == null) theme = ThemeUtils.Theme.getPredefinedThemes().get(0);
         loadBoard(newBoard, theme);
-        Board addedBoard = null;
-        try {
-            addedBoard = server.addBoard(newBoard);
-        } catch (Exception e) {
-            throw new IllegalStateException("Board with name \"" + newBoard.getName() + "\" already exists");
-        }
+        final Board addedBoard = server.addBoard(newBoard);
         Logger.log("Added board " + addedBoard);
 
         final CardList cardList = new CardList("TODO");

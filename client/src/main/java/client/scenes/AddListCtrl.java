@@ -24,6 +24,9 @@ public class AddListCtrl implements SceneCtrl {
     }
 
     public CardList getList() {
+        if(title.getText().isEmpty()) {
+            throw new IllegalStateException("List must have a title");
+        }
         CardList cardList = new CardList(title.getText());
         cardList.setBoard(client.getBoardCtrl().getBoard());
         if (cardList.getBoard() == null) {
